@@ -1,0 +1,27 @@
+# Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+MemoryCaptures/
+# Visual Studio
+.vs/
+*.csproj
+*.sln
+*.suo
+*.user
+*.unityproj
+*.pidb
+*.booproj
+# Python
+ai/backend/.venv/
+ai/backend/__pycache__/
+*.pyc
+# OS
+.DS_Store
+Thumbs.db
+# Data exports temp
+ai/data/exports/*.tmp
