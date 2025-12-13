@@ -1,0 +1,833 @@
+fileFormatVersion: 2
+guid: 076197847ba151147b3f5ca6d92ef0fd
+AssetOrigin:
+  serializedVersion: 1
+  productId: 226253
+  packageName: Primo - Minimalist Main Menu Pack
+  packageVersion: 1.3
+  assetPath: Assets/GabrielBissonnette/Primo - Main Menu Pack/UI/UI - MainMenu.psb
+  uploadId: 687485
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: b2a9591990af98743ba3ff7cf1000886, type: 3}
+  textureImporterSettings:
+    alphaSource: 1
+    mipMapMode: 0
+    enableMipMap: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+    convertToNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
+    isReadable: 0
+    streamingMipmaps: 1
+    streamingMipmapsPriority: 0
+    vTOnly: 0
+    ignoreMipmapLimit: 0
+    nPOTScale: 1
+    sRGBTexture: 1
+    spriteMode: 2
+    spriteExtrude: 1
+    spriteMeshType: 1
+    alignment: 0
+    spritePivot: {x: 0.5, y: 0.5}
+    spritePixelsToUnits: 100
+    spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+    spriteGenerateFallbackPhysicsShape: 0
+    generateCubemap: 6
+    cubemapConvolution: 0
+    seamlessCubemap: 0
+    alphaIsTransparency: 1
+    spriteTessellationDetail: -1
+    textureType: 8
+    textureShape: 1
+    singleChannelComponent: 0
+    flipbookRows: 0
+    flipbookColumns: 0
+    ignorePngGamma: 0
+    cookieMode: 0
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
+    normalMap: 0
+    textureFormat: 0
+    maxTextureSize: 0
+    lightmap: 0
+    compressionQuality: 0
+    linearTexture: 0
+    grayScaleToAlpha: 0
+    rGBM: 0
+    cubemapConvolutionSteps: 0
+    cubemapConvolutionExponent: 0
+    maxTextureSizeSet: 0
+    compressionQualitySet: 0
+    textureFormatSet: 0
+    applyGammaDecoding: 0
+  singleSpriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+    spritePosition: {x: 0, y: 0}
+  multiSpriteImportData: []
+  layeredSpriteImportData:
+  - name: discord
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 1433
+      width: 514
+      height: 394
+    spriteID: 85b6992be801a734fa81bbaa409bb57d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 1433}
+    spritePosition: {x: 1748, y: 95}
+  - name: instagram
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 896
+      y: 1468
+      width: 435
+      height: 436
+    spriteID: e02ae10bf517d7e4d831cf0a13e75dc8
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 896, y: 1468}
+    spritePosition: {x: 2341, y: 74}
+  - name: twitter
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 896
+      y: 1056
+      width: 498
+      height: 404
+    spriteID: e1624a711578ee445b0eca2a5302caed
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 896, y: 1056}
+    spritePosition: {x: 2869, y: 90}
+  - name: Handle
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 526
+      y: 1433
+      width: 282
+      height: 282
+    spriteID: d01e0fc6459299c419f5fedde3009067
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 524, y: 1432}
+    spritePosition: {x: 1028, y: 74}
+  - name: Background
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 884
+      height: 1421
+    spriteID: 8e3732e0ed948274e9713334e26dbf38
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 2, y: 3}
+    spritePosition: {x: 51, y: 63}
+  - name: arrow
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 1402
+      y: 1056
+      width: 526
+      height: 310
+    spriteID: d499a87a860e5364bb01a65ab952e219
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 1402, y: 1056}
+    spritePosition: {x: 1007, y: 464}
+  - name: Button4
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 896
+      y: 4
+      width: 1079
+      height: 255
+    spriteID: 702c8a7ac5a650d4695270195d4cfd9e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 894, y: 3}
+    spritePosition: {x: 2187, y: 841}
+  - name: Button3
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 896
+      y: 267
+      width: 981
+      height: 255
+    spriteID: 2c0adaa212e5b1647af32c8b6a1fde2e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 894, y: 266}
+    spritePosition: {x: 2262, y: 1172}
+  - name: Button2
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 896
+      y: 530
+      width: 981
+      height: 255
+    spriteID: 5110f7cf8a5d6e64398aceb31b40283e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 894, y: 529}
+    spritePosition: {x: 2262, y: 1484}
+  - name: Button
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 896
+      y: 793
+      width: 981
+      height: 257
+    spriteID: 549719fa497392b43a6105b5d52c45c8
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 894, y: 792}
+    spritePosition: {x: 2262, y: 1796}
+  spriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+    spritePosition: {x: 0, y: 0}
+  rigSpriteImportData:
+  - name: discord
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 1433
+      width: 514
+      height: 394
+    spriteID: 85b6992be801a734fa81bbaa409bb57d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 1433}
+    spritePosition: {x: 1748, y: 95}
+  - name: instagram
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 896
+      y: 1468
+      width: 435
+      height: 436
+    spriteID: e02ae10bf517d7e4d831cf0a13e75dc8
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 896, y: 1468}
+    spritePosition: {x: 2341, y: 74}
+  - name: twitter
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 896
+      y: 1056
+      width: 498
+      height: 404
+    spriteID: e1624a711578ee445b0eca2a5302caed
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 896, y: 1056}
+    spritePosition: {x: 2869, y: 90}
+  - name: Handle
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 526
+      y: 1433
+      width: 282
+      height: 282
+    spriteID: d01e0fc6459299c419f5fedde3009067
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 524, y: 1432}
+    spritePosition: {x: 1028, y: 74}
+  - name: Background
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 884
+      height: 1421
+    spriteID: 8e3732e0ed948274e9713334e26dbf38
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 2, y: 3}
+    spritePosition: {x: 51, y: 63}
+  - name: arrow
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 1402
+      y: 1056
+      width: 526
+      height: 310
+    spriteID: d499a87a860e5364bb01a65ab952e219
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 1402, y: 1056}
+    spritePosition: {x: 1007, y: 464}
+  - name: Button4
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 896
+      y: 4
+      width: 1079
+      height: 255
+    spriteID: 702c8a7ac5a650d4695270195d4cfd9e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 894, y: 3}
+    spritePosition: {x: 2187, y: 841}
+  - name: Button3
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 896
+      y: 267
+      width: 981
+      height: 255
+    spriteID: 2c0adaa212e5b1647af32c8b6a1fde2e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 894, y: 266}
+    spritePosition: {x: 2262, y: 1172}
+  - name: Button2
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 896
+      y: 530
+      width: 981
+      height: 255
+    spriteID: 5110f7cf8a5d6e64398aceb31b40283e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 894, y: 529}
+    spritePosition: {x: 2262, y: 1484}
+  - name: Button
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 896
+      y: 793
+      width: 981
+      height: 257
+    spriteID: 549719fa497392b43a6105b5d52c45c8
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 894, y: 792}
+    spritePosition: {x: 2262, y: 1796}
+  sharedRigSpriteImportData: []
+  mosaicSpriteImportData: []
+  platformSettings:
+  - name: Default
+    overridden: 1
+    ignorePlatformSupport: 0
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  mosaicLayers: 1
+  characterMode: 1
+  documentPivot: {x: 0, y: 0}
+  documentAlignment: 7
+  importHiddenLayers: 0
+  layerMappingOption: 2
+  generatePhysicsShape: 0
+  paperDollMode: 0
+  keepDupilcateSpriteName: 0
+  padding: 4
+  spriteSizeExpand: 0
+  skeletonAssetReferenceID: 
+  pipeline: {instanceID: 0}
+  pipelineVersion: 
+  spritePackingTag: 
+  resliceFromLayer: 0
+  pSDLayerImportSetting: []
+  psdLayers:
+  - name: discord
+    spriteName: discord
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 85b6992be801a734fa81bbaa409bb57d
+    layerID: 54
+    mosaicPosition: {x: 4, y: 1433}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: instagram
+    spriteName: instagram
+    isGroup: 0
+    parentIndex: -1
+    spriteID: e02ae10bf517d7e4d831cf0a13e75dc8
+    layerID: 52
+    mosaicPosition: {x: 896, y: 1468}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: twitter
+    spriteName: twitter
+    isGroup: 0
+    parentIndex: -1
+    spriteID: e1624a711578ee445b0eca2a5302caed
+    layerID: 18
+    mosaicPosition: {x: 896, y: 1056}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Handle
+    spriteName: Handle
+    isGroup: 0
+    parentIndex: -1
+    spriteID: d01e0fc6459299c419f5fedde3009067
+    layerID: 50
+    mosaicPosition: {x: 526, y: 1433}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Background
+    spriteName: Background
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 8e3732e0ed948274e9713334e26dbf38
+    layerID: 49
+    mosaicPosition: {x: 4, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: arrow
+    spriteName: arrow
+    isGroup: 0
+    parentIndex: -1
+    spriteID: d499a87a860e5364bb01a65ab952e219
+    layerID: 70
+    mosaicPosition: {x: 1402, y: 1056}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Button4
+    spriteName: Button4
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 702c8a7ac5a650d4695270195d4cfd9e
+    layerID: 66
+    mosaicPosition: {x: 896, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Button3
+    spriteName: Button3
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 2c0adaa212e5b1647af32c8b6a1fde2e
+    layerID: 61
+    mosaicPosition: {x: 896, y: 267}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Button2
+    spriteName: Button2
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 5110f7cf8a5d6e64398aceb31b40283e
+    layerID: 59
+    mosaicPosition: {x: 896, y: 530}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Button
+    spriteName: Button
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 549719fa497392b43a6105b5d52c45c8
+    layerID: 28
+    mosaicPosition: {x: 896, y: 793}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Fond 1
+    spriteName: 
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 1248781121eb8c247b4af957206a540d
+    layerID: 60
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 0
+  mosaicPSDLayers: []
+  rigPSDLayers:
+  - name: discord
+    spriteName: discord
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 85b6992be801a734fa81bbaa409bb57d
+    layerID: 54
+    mosaicPosition: {x: 4, y: 1433}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: instagram
+    spriteName: instagram
+    isGroup: 0
+    parentIndex: -1
+    spriteID: e02ae10bf517d7e4d831cf0a13e75dc8
+    layerID: 52
+    mosaicPosition: {x: 896, y: 1468}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: twitter
+    spriteName: twitter
+    isGroup: 0
+    parentIndex: -1
+    spriteID: e1624a711578ee445b0eca2a5302caed
+    layerID: 18
+    mosaicPosition: {x: 896, y: 1056}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Handle
+    spriteName: Handle
+    isGroup: 0
+    parentIndex: -1
+    spriteID: d01e0fc6459299c419f5fedde3009067
+    layerID: 50
+    mosaicPosition: {x: 526, y: 1433}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Background
+    spriteName: Background
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 8e3732e0ed948274e9713334e26dbf38
+    layerID: 49
+    mosaicPosition: {x: 4, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: arrow
+    spriteName: arrow
+    isGroup: 0
+    parentIndex: -1
+    spriteID: d499a87a860e5364bb01a65ab952e219
+    layerID: 70
+    mosaicPosition: {x: 1402, y: 1056}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Button4
+    spriteName: Button4
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 702c8a7ac5a650d4695270195d4cfd9e
+    layerID: 66
+    mosaicPosition: {x: 896, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Button3
+    spriteName: Button3
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 2c0adaa212e5b1647af32c8b6a1fde2e
+    layerID: 61
+    mosaicPosition: {x: 896, y: 267}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Button2
+    spriteName: Button2
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 5110f7cf8a5d6e64398aceb31b40283e
+    layerID: 59
+    mosaicPosition: {x: 896, y: 530}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Button
+    spriteName: Button
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 549719fa497392b43a6105b5d52c45c8
+    layerID: 28
+    mosaicPosition: {x: 896, y: 793}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Fond 1
+    spriteName: 
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 1248781121eb8c247b4af957206a540d
+    layerID: 60
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 0
+  sharedRigPSDLayers: []
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  spriteSizeExpandChanged: 0
+  generateGOHierarchy: 0
+  textureAssetName: UI Texture
+  prefabAssetName: UI Prefab
+  spriteLibAssetName: UI Sprite Lib
+  skeletonAssetName: 
+  secondarySpriteTextures: []
