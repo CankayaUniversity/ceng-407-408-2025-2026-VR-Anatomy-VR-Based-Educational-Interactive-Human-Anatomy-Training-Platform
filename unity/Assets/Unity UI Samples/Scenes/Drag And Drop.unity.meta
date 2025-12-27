@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 40116c4af15e1444f8e21d1de1f4678f
+DefaultImporter:
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 25468
+  packageName: 'Unity Samples: UI'
+  packageVersion: 1.2.2
+  assetPath: Assets/Unity UI Samples/Scenes/Drag And Drop.unity
+  uploadId: 424775

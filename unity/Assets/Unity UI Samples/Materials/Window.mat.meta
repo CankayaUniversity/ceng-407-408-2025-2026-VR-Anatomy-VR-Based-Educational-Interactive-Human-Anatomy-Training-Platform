@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 3cc66b78ab25c204f9b4d415d02e3abe
+NativeFormatImporter:
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 25468
+  packageName: 'Unity Samples: UI'
+  packageVersion: 1.2.2
+  assetPath: Assets/Unity UI Samples/Materials/Window.mat
+  uploadId: 424775

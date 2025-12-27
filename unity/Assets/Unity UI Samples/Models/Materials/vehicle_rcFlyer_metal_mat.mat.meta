@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 879f5ab2d2a90614db855e052b3e2f20
+NativeFormatImporter:
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 25468
+  packageName: 'Unity Samples: UI'
+  packageVersion: 1.2.2
+  assetPath: Assets/Unity UI Samples/Models/Materials/vehicle_rcFlyer_metal_mat.mat
+  uploadId: 424775

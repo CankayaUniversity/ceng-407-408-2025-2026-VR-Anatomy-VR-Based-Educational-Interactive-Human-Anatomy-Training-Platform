@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: d5545059c6381d848ab3d612c68f2669
+DefaultImporter:
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 25468
+  packageName: 'Unity Samples: UI'
+  packageVersion: 1.2.2
+  assetPath: Assets/Unity UI Samples/Scenes/RenderTexture.unity
+  uploadId: 424775

@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 27342824cec2ee64ab208b2396c0d82c
+NativeFormatImporter:
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 25468
+  packageName: 'Unity Samples: UI'
+  packageVersion: 1.2.2
+  assetPath: Assets/Unity UI Samples/Models/Materials/vehicle_rcFlyer_dome_mat.mat
+  uploadId: 424775

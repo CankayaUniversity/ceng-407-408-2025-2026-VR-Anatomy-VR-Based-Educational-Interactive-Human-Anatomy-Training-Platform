@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 838436750d0cf48a685923371f66cea6
+DefaultImporter:
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 25468
+  packageName: 'Unity Samples: UI'
+  packageVersion: 1.2.2
+  assetPath: Assets/Unity UI Samples/Scenes/Draggable Panel.unity
+  uploadId: 424775

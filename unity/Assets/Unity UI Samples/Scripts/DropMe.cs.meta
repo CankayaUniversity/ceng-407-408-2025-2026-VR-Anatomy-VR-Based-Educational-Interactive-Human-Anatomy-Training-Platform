@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 266dee177694435468095e35de5218cc
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 25468
+  packageName: 'Unity Samples: UI'
+  packageVersion: 1.2.2
+  assetPath: Assets/Unity UI Samples/Scripts/DropMe.cs
+  uploadId: 424775

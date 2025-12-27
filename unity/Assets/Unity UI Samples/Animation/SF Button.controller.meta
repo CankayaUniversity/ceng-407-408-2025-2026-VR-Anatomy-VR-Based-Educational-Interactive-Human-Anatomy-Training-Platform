@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: c454080d636f840038dc8f37941751b3
+NativeFormatImporter:
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 25468
+  packageName: 'Unity Samples: UI'
+  packageVersion: 1.2.2
+  assetPath: Assets/Unity UI Samples/Animation/SF Button.controller
+  uploadId: 424775

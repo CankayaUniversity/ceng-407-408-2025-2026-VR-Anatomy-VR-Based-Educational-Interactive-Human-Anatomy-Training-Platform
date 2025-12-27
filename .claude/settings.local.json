@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__UnityMCP__manage_editor",
+      "Bash(cat:*)",
+      "mcp__UnityMCP__manage_asset",
+      "mcp__UnityMCP__manage_scene"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: b6a1cf4e3eeaf9a4ca38bf8acb910a6d
+NativeFormatImporter:
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 25468
+  packageName: 'Unity Samples: UI'
+  packageVersion: 1.2.2
+  assetPath: Assets/Unity UI Samples/Prefabs/SF Slider.prefab
+  uploadId: 424775

@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: a1a76cb6763ca8a4ab0450fc989edb19
+NativeFormatImporter:
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 25468
+  packageName: 'Unity Samples: UI'
+  packageVersion: 1.2.2
+  assetPath: Assets/Unity UI Samples/Animation/Panel/Panel.controller
+  uploadId: 424775

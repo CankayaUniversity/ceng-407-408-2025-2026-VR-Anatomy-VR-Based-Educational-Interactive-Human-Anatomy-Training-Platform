@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 8a0cab5ff0a9b465bbc169d7ad27a67f
+NativeFormatImporter:
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 25468
+  packageName: 'Unity Samples: UI'
+  packageVersion: 1.2.2
+  assetPath: Assets/Unity UI Samples/Prefabs/SF Grid Button.prefab
+  uploadId: 424775

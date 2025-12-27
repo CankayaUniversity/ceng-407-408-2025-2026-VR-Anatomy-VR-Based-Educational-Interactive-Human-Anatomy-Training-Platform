@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 8012ff454d5542d42b8e21afcc52ee2f
+NativeFormatImporter:
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 25468
+  packageName: 'Unity Samples: UI'
+  packageVersion: 1.2.2
+  assetPath: Assets/Unity UI Samples/Animation/Settings/SettingsMenu.controller
+  uploadId: 424775
