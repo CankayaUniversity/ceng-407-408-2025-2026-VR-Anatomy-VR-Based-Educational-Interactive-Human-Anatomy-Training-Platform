@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>VR Anatomy Assistant</title>
+  <link rel="stylesheet" href="chatbox.css" />
+</head>
+<body>
+  <div class="scene">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="grid"></div>
+  </div>
+
+  <div class="chat-shell">
+   
+
+    <div class="chat-container">
+      <header class="chat-header">
+        <div class="avatar">🧠</div>
+        <div class="titles">
+          <div class="title">VR Anatomy Asistanı</div>
+          <div class="subtitle">Ders kitabı tabanlı yardımcı</div>
+        </div>
+        <div class="status">
+          <span class="dot"></span>
+          Aktif
+        </div>
+      </header>
+
+      <div class="chat-messages" id="messages">
+        <div class="message bot">
+          Merhaba 👋  
+          Ben <b>VR Anatomy Asistanı</b>.  
+          Anatomi ile ilgili sorularını ders kitabına dayalı olarak cevaplarım.
+        </div>
+      </div>
+
+      <div class="chat-input">
+        <div class="input-pill">
+          <button id="micBtn"
+                  class="icon-button"
+                  onclick="startListening(document.getElementById('questionInput'))">
+            🎤
+          </button>
+
+          <input id="questionInput"
+                 placeholder="Anatomi ile ilgili bir soru sor..."
+                 onkeydown="if(event.key==='Enter') sendMessage()" />
+
+          <button class="send-btn" onclick="sendMessage()">
+            Gönder
+            <span class="pulse"></span>
+          </button>
+        </div>
+        <div class="input-hint">Enter ile gönder • 🎤 ile konuş</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+const messagesDiv = document.getElementById("messages");
+const input = document.getElementById("questionInput");
+
+function addMessage(text, sender) {
+  const div = document.createElement("div");
+  div.className = "message " + sender;
+
+  if (sender === "bot") {
+    div.innerHTML = `
+      <div class="bot-text">${text}</div>
+      <button class="tts-btn">🔊 Dinle</button>
+    `;
+
+    const btn = div.querySelector(".tts-btn");
+
+    btn.onclick = () => {
+      if (!isSpeaking) {
+        speakText(text);
+        btn.textContent = "⏹️ Durdur";
+      } else {
+        stopSpeaking();
+        btn.textContent = "🔊 Dinle";
+      }
+    };
+
+  } else {
+    div.textContent = text;
+  }
+
+  messagesDiv.appendChild(div);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function fillPrompt(text) {
+  input.value = text;
+  input.focus();
+}
+
+async function sendMessage() {
+  const question = input.value.trim();
+  if (!question) return;
+
+  addMessage(question, "user");
+  input.value = "";
+
+  addMessage("Yanıt hazırlanıyor...", "bot");
+
+  try {
+    const res = await fetch("http://127.0.0.1:8000/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question })
+    });
+
+    const data = await res.json();
+    messagesDiv.lastChild.remove();
+    addMessage(data.answer, "bot");
+  
+
+  } catch {
+    messagesDiv.lastChild.remove();
+    addMessage("Sunucuya bağlanılamadı.", "bot");
+  }
+}
+  </script>
+
+  <script src="tts.js"></script>
+  <script src="stt.js"></script>
+</body>
+</html>
