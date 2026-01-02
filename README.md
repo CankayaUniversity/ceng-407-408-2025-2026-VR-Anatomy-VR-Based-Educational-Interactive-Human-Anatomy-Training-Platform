@@ -64,7 +64,7 @@ Due to scope and budget constraints, the project focuses on two core systems:
 ### VR Client
 - Unity (XR)
 - OpenXR / XR Interaction Toolkit (depending on project setup)
-- Target device: VR headset (e.g., Meta Quest family) *(confirm in your course setup)*
+- Target device: VR headset (Meta Quest 2)
 
 ### AI Tutor (if enabled)
 - Python backend (e.g., FastAPI)
