@@ -1,3 +1,9 @@
+<div align="center">
+  
+<img width="465" height="855" alt="Resim3" src="https://github.com/user-attachments/assets/1f8babd7-59df-43e5-b78f-6b6372e63cc1" />
+
+</div>
+
 # VR Anatomy — VR-Based Educational Interactive Human Anatomy Training Platform
 
 An interactive Virtual Reality (VR) learning application designed to support introductory human anatomy education with immersive 3D exploration, structured learning flows, and AI-assisted guidance.
@@ -23,6 +29,7 @@ VR Anatomy aims to complement traditional anatomy learning methods (2D atlases, 
 Due to scope and budget constraints, the project focuses on two core systems:
 
 - **Musculoskeletal System** (e.g., bones, major muscle groups; staged content delivery)
+
 - **Circulatory System** (including the heart; staged content delivery)
 
 > Content is delivered iteratively. Modules/features may be marked as **Planned** or **In Progress** depending on the sprint stage.
@@ -66,7 +73,7 @@ Due to scope and budget constraints, the project focuses on two core systems:
 - OpenXR / XR Interaction Toolkit (depending on project setup)
 - Target device: VR headset (Meta Quest 2)
 
-### AI Tutor (if enabled)
+### AI Tutor
 - Python backend (e.g., FastAPI)
 - Retrieval-Augmented Generation (RAG)
 - Vector search / indexing (optional: Azure AI Search or alternatives)
