@@ -39,7 +39,7 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene("06_About");
     }
 
-// Hakkında
+    // Ayarlar
     public void LoadSettings()
     {
         SceneManager.LoadScene("07_Settings");
