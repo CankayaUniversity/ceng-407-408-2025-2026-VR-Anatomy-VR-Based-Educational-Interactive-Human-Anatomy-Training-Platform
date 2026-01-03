@@ -173,7 +173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1187,15 +1187,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 511460916389169201, guid: f94aad79363f6824da1e144c5cd65ebc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.024
       objectReference: {fileID: 0}
     - target: {fileID: 511460916389169201, guid: f94aad79363f6824da1e144c5cd65ebc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.24
+      value: 1.352
       objectReference: {fileID: 0}
     - target: {fileID: 511460916389169201, guid: f94aad79363f6824da1e144c5cd65ebc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.477
+      value: 0.538
       objectReference: {fileID: 0}
     - target: {fileID: 511460916389169201, guid: f94aad79363f6824da1e144c5cd65ebc, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4141,8 +4141,8 @@ MeshCollider:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1658168126}
-  - {fileID: 791745658}
   - {fileID: 1197844848}
+  - {fileID: 1658168126}
   - {fileID: 7126103}
   - {fileID: 1176366147}
+  - {fileID: 791745658}
