@@ -348,6 +348,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 972130019962598239, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2316941433487712125, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
       propertyPath: m_Camera
       value: 
@@ -435,6 +439,10 @@ PrefabInstance:
     - target: {fileID: 5656568915642060434, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
       propertyPath: m_Name
       value: --AnatomyLabMenu--
+      objectReference: {fileID: 0}
+    - target: {fileID: 8857032532116960455, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
