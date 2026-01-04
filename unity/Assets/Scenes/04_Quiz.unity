@@ -203,8 +203,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -922,7 +922,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e7bacc0dfc8d724c9eea25b298b0c37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalQuizTime: 120
+  totalQuizTime: 20
   ui: {fileID: 834759466}
 --- !u!1001 &747623108
 PrefabInstance:
@@ -1741,6 +1741,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 576702613}
     m_Modifications:
+    - target: {fileID: 62174155465516108, guid: ab757e84aa6c9e8429407fbe4f607e99, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1388.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 62174155465516108, guid: ab757e84aa6c9e8429407fbe4f607e99, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 559.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 62174155465516108, guid: ab757e84aa6c9e8429407fbe4f607e99, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -15.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 62174155465516108, guid: ab757e84aa6c9e8429407fbe4f607e99, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -2.3
+      objectReference: {fileID: 0}
     - target: {fileID: 1869755926792598253, guid: ab757e84aa6c9e8429407fbe4f607e99, type: 3}
       propertyPath: m_Name
       value: RationalePopup

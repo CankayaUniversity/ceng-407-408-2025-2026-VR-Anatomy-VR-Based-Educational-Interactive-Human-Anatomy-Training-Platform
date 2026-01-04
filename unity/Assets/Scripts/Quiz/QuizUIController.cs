@@ -96,7 +96,7 @@ public class QuizUIController : MonoBehaviour
 
     public void ShowQuizFinished()
     {
-        questionText.text = "Quiz Finished!";
+        questionText.text = "Time's up! Quiz finished.";
         ClearButtons();
         nextButton.gameObject.SetActive(false);
 
