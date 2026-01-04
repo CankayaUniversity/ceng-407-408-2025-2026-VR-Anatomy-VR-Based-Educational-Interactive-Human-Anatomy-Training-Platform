@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "VRAnatomy_Back",
+    "maps": [
+        {
+            "name": "Gameplay",
+            "id": "672dc305-8094-467a-a70d-58974b463833",
+            "actions": [
+                {
+                    "name": "BackToMenu",
+                    "type": "Button",
+                    "id": "8d48fed2-487d-45b1-ae8b-9b50441035bf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "dd45acd5-8c34-4728-923a-8a1f5ac81065",
+                    "path": "<XRController>{LeftHand}/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BackToMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

@@ -28,7 +28,7 @@
                     "name": "Is Tracked",
                     "type": "Button",
                     "id": "6bb4e248-e42b-47c3-b66c-79566508ca74",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -93,30 +93,8 @@
                 },
                 {
                     "name": "",
-                    "id": "4d22c160-9642-4784-bed3-f108d9099185",
-                    "path": "<HandheldARInputDevice>/devicePosition",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Position",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "e2017383-a3f6-4c46-acb1-012b8eece9cc",
                     "path": "<XRHMD>/centerEyeRotation",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Rotation",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "30a88e64-475a-4a1c-aca0-80b6a2bc3327",
-                    "path": "<HandheldARInputDevice>/deviceRotation",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -331,7 +309,7 @@
                 {
                     "name": "Position",
                     "type": "Value",
-                    "id": "83a7af0b-87e3-42c3-a909-95fbf8091e4f",
+                    "id": "3acf96af-6e00-4386-8444-7bcfb82c73e9",
                     "expectedControlType": "Vector3",
                     "processors": "",
                     "interactions": "",
@@ -501,8 +479,19 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "",
+                    "id": "754caee8-644f-4274-9f66-331792e2f212",
+                    "path": "<XRController>{LeftHand}/deviceRotation",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
                     "name": "Vector 3 Fallback",
-                    "id": "14aeff85-d719-43ff-a124-b1cd7ca8686d",
+                    "id": "615ee665-c3f1-4dc8-8946-58df8935478c",
                     "path": "Vector3Fallback",
                     "interactions": "",
                     "processors": "",
@@ -513,8 +502,8 @@
                 },
                 {
                     "name": "first",
-                    "id": "abf752ec-feee-4d51-b530-f0870f48acc9",
-                    "path": "<XRController>{LeftHand}/pointerPosition",
+                    "id": "5b0c6a89-7594-4c18-89a0-a41c10fb20ab",
+                    "path": "<XRController>{RightHand}/pointerPosition",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -524,8 +513,8 @@
                 },
                 {
                     "name": "second",
-                    "id": "6580b669-0651-401c-9779-85ef22689130",
-                    "path": "<XRController>{LeftHand}/devicePosition",
+                    "id": "0183be40-f970-4090-939f-6b65750c240e",
+                    "path": "<XRController>{RightHand}/devicePosition",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -535,14 +524,25 @@
                 },
                 {
                     "name": "third",
-                    "id": "ae101942-9eaa-4c53-a388-cafc3fd89bdf",
-                    "path": "<XRHandDevice>{LeftHand}/devicePosition",
+                    "id": "b1c02db6-25fd-4bb1-91a6-40ade231cf1f",
+                    "path": "<XRHandDevice>{RightHand}/devicePosition",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Position",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "d5aaa65e-4aca-4909-8de1-0eb5253f0a4c",
+                    "path": "<XRController>{LeftHand}/devicePosition",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 },
                 {
                     "name": "",
@@ -976,6 +976,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Secondary Button",
+                    "type": "Button",
+                    "id": "5c5a2622-f51d-4d6d-8515-6dd951e9b841",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1286,6 +1295,17 @@
                     "action": "Translate Manipulation",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4ea3e97f-cc41-4013-bd2e-047696a04d46",
+                    "path": "<XRController>{LeftHand}/{SecondaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Secondary Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -1594,6 +1614,17 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "",
+                    "id": "893d51b3-f9d7-4a25-8aba-06e269efea70",
+                    "path": "<XRController>{RightHand}/deviceRotation",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
                     "name": "Vector 3 Fallback",
                     "id": "74e968f1-ad08-4a82-a68d-764517faecef",
                     "path": "Vector3Fallback",
@@ -1636,6 +1667,17 @@
                     "action": "Position",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "a3e2758f-519d-4356-9af7-264ea21798b1",
+                    "path": "<XRController>{RightHand}/devicePosition",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 },
                 {
                     "name": "",
