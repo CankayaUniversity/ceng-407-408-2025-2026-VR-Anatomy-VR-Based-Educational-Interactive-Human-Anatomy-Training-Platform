@@ -354,7 +354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 511460916389169201}
   m_Layer: 0
-  m_Name: skull_opt1
+  m_Name: Skull
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
