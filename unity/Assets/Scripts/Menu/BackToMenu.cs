@@ -48,14 +48,8 @@ public class BackToMenu : MonoBehaviour
     }
 
     public void GoBackToMenu()
-    {
-        // Optional: clear UI selection to avoid stuck focus in some scenes
-        if (EventSystem.current != null)
-            EventSystem.current.SetSelectedGameObject(null);
-
-       
-        SceneManager.LoadScene(menuSceneName);
-
-
-    }
+{
+    NavigationState.ResetAll();
+    SceneManager.LoadScene(menuSceneName);
+}
 }
