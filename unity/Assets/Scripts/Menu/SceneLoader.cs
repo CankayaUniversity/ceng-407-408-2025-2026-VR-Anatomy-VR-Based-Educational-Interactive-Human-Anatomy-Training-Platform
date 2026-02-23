@@ -9,12 +9,22 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene("01_MenuDeneme");
     }
 
+    public void SetModeLearn()
+{
+    NavigationState.CurrentEntryMode = EntryMode.Learn;
+}
+
+public void SetModeFreeExplore()
+{
+    NavigationState.CurrentEntryMode = EntryMode.FreeExplore;
+}
+
     // Hareket Sistemi VR sahnesi
-    public void LoadMotionSystem()
-    {
-        // Eski davranış: panel bilgisi kaydetmez
-        SceneManager.LoadScene("02_MotionSystem");
-    }
+    public void LoadMotionSystemSubUnit(int subUnitInt)
+{
+    NavigationState.SelectedMotionSubUnit = (MotionSubUnit)subUnitInt;
+    SceneManager.LoadScene("02_MotionSystem");
+}
 
     public void LoadMotionSystemFromMenuPanel(string currentMenuPanelName)
     {
