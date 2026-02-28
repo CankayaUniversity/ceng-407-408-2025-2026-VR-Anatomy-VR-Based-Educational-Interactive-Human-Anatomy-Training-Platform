@@ -5,7 +5,7 @@ public class SceneLoader : MonoBehaviour
 {
     public void LoadMenu()
     {
-        SceneManager.LoadScene("01_MenuDeneme");
+        SceneManager.LoadScene("01_Menu");
     }
 
     public void SetModeLearn()

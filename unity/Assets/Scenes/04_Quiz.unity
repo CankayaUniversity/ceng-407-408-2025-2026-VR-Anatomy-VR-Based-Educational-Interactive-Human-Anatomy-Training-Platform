@@ -1755,6 +1755,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
     - target: {fileID: 4274365239816312433, guid: 094ab6737cf0d1c488020ebc8032676f, type: 3}
+      propertyPath: menuSceneName
+      value: 01_Menu
+      objectReference: {fileID: 0}
+    - target: {fileID: 4274365239816312433, guid: 094ab6737cf0d1c488020ebc8032676f, type: 3}
       propertyPath: backActionPath
       value: XRI Left Interaction/Secondary Button
       objectReference: {fileID: 0}
