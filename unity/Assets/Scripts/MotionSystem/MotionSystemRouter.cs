@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 public class MotionSystemRouter : MonoBehaviour
 {
     [Header("Mode Roots")]
@@ -37,22 +38,54 @@ public class MotionSystemRouter : MonoBehaviour
     }
 
     private void ApplySubUnit()
+{
+    var selected = NavigationState.SelectedMotionSubUnit;
+
+    Debug.Log($"[Router] ApplySubUnit -> Selected={selected}");
+
+    if (groups == null || groups.Length == 0)
     {
-        var selected = NavigationState.SelectedMotionSubUnit;
+        Debug.LogWarning("[Router] groups EMPTY!");
+        return;
+    }
 
-        if (groups == null || groups.Length == 0) return;
+    bool found = false;
 
-        if (selected == MotionSubUnit.None)
-        {
-            foreach (var g in groups)
-                if (g.root != null) g.root.SetActive(showAllWhenNone);
-            return;
-        }
-
+    if (selected == MotionSubUnit.None)
+    {
         foreach (var g in groups)
         {
-            if (g.root == null) continue;
-            g.root.SetActive(g.subUnit == selected);
+            if (g.root == null)
+            {
+                Debug.LogWarning($"[Router] Root NULL for {g.subUnit}");
+                continue;
+            }
+            g.root.SetActive(showAllWhenNone);
         }
+        return;
+    }
+
+    foreach (var g in groups)
+    {
+        if (g.root == null)
+        {
+            Debug.LogWarning($"[Router] Root NULL for {g.subUnit}");
+            continue;
+        }
+
+        bool active = (g.subUnit == selected);
+        if (active) found = true;
+
+        Debug.Log($"[Router]   {g.subUnit} -> {(active ? "ON" : "off")} | root={g.root.name} | parentActive={g.root.transform.parent?.gameObject.activeInHierarchy}");
+        g.root.SetActive(active);
+    }
+
+    if (!found)
+        Debug.LogError($"[Router] Selected subunit ({selected}) NOT FOUND in groups list!");
+    }
+    private void OnEnable()
+    {
+    ApplyMode();
+    ApplySubUnit();
     }
 }

@@ -30,6 +30,7 @@ public class MenuRestoreOnStart : MonoBehaviour
             {
                 if (p != null && p.name == target)
                 {
+                    Debug.Log($"[MenuRestore] wanted='{NavigationState.ReturnMenuPanelName}'");
                     p.SetActive(true);
                     return;
                 }
@@ -37,6 +38,11 @@ public class MenuRestoreOnStart : MonoBehaviour
         }
 
         // 3) Bulamazsa main menu
-        if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
+        if (mainMenuPanel != null)
+        {
+            Debug.LogWarning($"[MenuRestore] Panel not found: '{NavigationState.ReturnMenuPanelName}'. Falling back to MainMenu.");
+            mainMenuPanel.SetActive(true);
+        }
+        
     }
 }
