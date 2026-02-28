@@ -131,6 +131,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BackToMenuManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4274365239816312433, guid: 094ab6737cf0d1c488020ebc8032676f, type: 3}
+      propertyPath: menuSceneName
+      value: 01_Menu
+      objectReference: {fileID: 0}
     - target: {fileID: 5698275172736818006, guid: 094ab6737cf0d1c488020ebc8032676f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.0476694
