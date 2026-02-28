@@ -1,43 +1,49 @@
 public static class NavigationState
 {
-    public static string ReturnMenuPanelName = "MainMenuPanel";
+    // Menüde en son seçilen ünite/alt menü id (istersen kullanırsın)
+    public static string lastSelectedUnitId;
 
-    // ✅ Yeni: Menüden hangi modla girildi?
-    public static EntryMode CurrentEntryMode = EntryMode.None;
+    // Menüye geri dönünce hangi panel açılacak?
+    public static string ReturnMenuPanelName;
 
-    // Motion System sahnesinde hangi alt ünite açılacak?
-    public static MotionSubUnit SelectedMotionSubUnit = MotionSubUnit.None;
+    // Hangi moddan girildi? (Learn / FreeExplore)
+    public static EntryMode CurrentEntryMode { get; set; } = EntryMode.Learn;
 
-    public static void ResetToMainMenuPanel()
+    // Hareket sistemi içinde hangi alt ünite seçildi?
+    public static MotionSubUnit SelectedMotionSubUnit { get; set; } = MotionSubUnit.None;
+
+    // Sadece runtime state temizliği (menü geri dönüş bilgisini silmez)
+    public static void ClearRuntimeOnly()
     {
-        ReturnMenuPanelName = "MainMenuPanel";
-    }
-
-    public static void ResetMotionSelection()
-    {
+        // lastSelectedUnitId aynı kalsın
+        // ReturnMenuPanelName aynı kalsın
         SelectedMotionSubUnit = MotionSubUnit.None;
+        // Mode’u da istersen koru, istersen resetle:
+        // CurrentEntryMode = EntryMode.Learn;
     }
 
-    // ✅ İstersen menüye dönünce her şeyi temizle
     public static void ResetAll()
     {
-        ReturnMenuPanelName = "MainMenuPanel";
-        CurrentEntryMode = EntryMode.None;
+        lastSelectedUnitId = null;
+        ReturnMenuPanelName = null;
+        CurrentEntryMode = EntryMode.Learn;
         SelectedMotionSubUnit = MotionSubUnit.None;
     }
 }
 
 public enum EntryMode
 {
-    None = 0,
-    Learn = 1,
-    FreeExplore = 2
+    Learn = 0,
+    FreeExplore = 1
 }
 
 public enum MotionSubUnit
 {
     None = 0,
-    BonesoftheHeadandFace = 1,
+
+    // Bunları senin menü seçeneklerine göre genişletebilirsin.
+    // Şimdilik örnekler:
+    HeadFaceBones = 1,
     Rib = 2,
     Spine = 3,
     UpperExtremityBones = 4,
