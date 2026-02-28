@@ -1,21 +1,23 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public class BackToMenu : MonoBehaviour
 {
     [Header("Menu")]
-    [SerializeField] private string menuSceneName = "01_Menu";
+    [SerializeField] private string menuSceneName = "01_MenuDeneme";
 
     [Header("Input (Optional)")]
+    [Tooltip("If set, this Input Action triggers back-to-menu (recommended for VR controllers).")]
     [SerializeField] private InputActionReference backToMenuAction;
 
-    [Header("Keyboard fallback (simulator/PC)")]
+    [Header("Keyboard fallback (works in simulator/PC)")]
     [SerializeField] private Key backKey = Key.M;
 
     private void OnEnable()
     {
-        if (backToMenuAction?.action != null)
+        if (backToMenuAction != null)
         {
             backToMenuAction.action.performed += OnBackAction;
             backToMenuAction.action.Enable();
@@ -24,7 +26,7 @@ public class BackToMenu : MonoBehaviour
 
     private void OnDisable()
     {
-        if (backToMenuAction?.action != null)
+        if (backToMenuAction != null)
         {
             backToMenuAction.action.performed -= OnBackAction;
             backToMenuAction.action.Disable();
@@ -33,16 +35,21 @@ public class BackToMenu : MonoBehaviour
 
     private void Update()
     {
+        // Keyboard fallback
         if (Keyboard.current != null && Keyboard.current[backKey].wasPressedThisFrame)
+        {
             GoBackToMenu();
+        }
     }
 
-    private void OnBackAction(InputAction.CallbackContext ctx) => GoBackToMenu();
+    private void OnBackAction(InputAction.CallbackContext ctx)
+    {
+        GoBackToMenu();
+    }
 
     public void GoBackToMenu()
 {
-    Debug.Log($"[BackToMenu] ReturnPanel='{NavigationState.ReturnMenuPanelName}' lastSelectedUnitId='{NavigationState.lastSelectedUnitId}' Mode={NavigationState.CurrentEntryMode} SubUnit={(int)NavigationState.SelectedMotionSubUnit}");
-    NavigationState.ClearRuntimeOnly(); // panel bilgisini silmez
+    NavigationState.ResetAll();
     SceneManager.LoadScene(menuSceneName);
 }
 }
