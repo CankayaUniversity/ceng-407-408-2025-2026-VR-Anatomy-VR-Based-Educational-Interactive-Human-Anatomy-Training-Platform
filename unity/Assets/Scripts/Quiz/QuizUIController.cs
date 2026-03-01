@@ -91,6 +91,17 @@ public class QuizUIController : MonoBehaviour
 
     public void UpdateTimer(float time)
     {
+        // time < 0 => süresiz soru
+        if (time < 0f)
+        {
+            if (timerText != null)
+                timerText.gameObject.SetActive(false);
+            return;
+        }
+
+        if (timerText != null)
+            timerText.gameObject.SetActive(true);
+
         timerText.text = Mathf.CeilToInt(time).ToString();
     }
 

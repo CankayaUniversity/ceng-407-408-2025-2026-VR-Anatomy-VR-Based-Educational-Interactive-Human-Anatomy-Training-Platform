@@ -42,6 +42,9 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene("03_CirculationSystem");
     }
 
+    // ----------------------------
+    // QUIZ - Genel (eski)
+    // ----------------------------
     public void LoadQuiz()
     {
         SceneManager.LoadScene("04_Quiz");
@@ -53,6 +56,36 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene("04_Quiz");
     }
 
+    // ----------------------------
+    // ✅ QUIZ - Kategori seçerek yükleme (YENİ)
+    // ----------------------------
+    public void LoadBasicConceptsQuiz()
+    {
+        NavigationState.CurrentQuizCategory = QuizCategory.BasicConcepts;
+        SceneManager.LoadScene("04_Quiz");
+    }
+
+    public void LoadMotionSystemQuiz()
+    {
+        NavigationState.CurrentQuizCategory = QuizCategory.MotionSystem;
+        SceneManager.LoadScene("04_Quiz");
+    }
+
+    public void LoadCirculationSystemQuiz()
+    {
+        NavigationState.CurrentQuizCategory = QuizCategory.CirculationSystem;
+        SceneManager.LoadScene("04_Quiz");
+    }
+
+    public void LoadAllQuestionsQuiz()
+    {
+        NavigationState.CurrentQuizCategory = QuizCategory.AllQuestions;
+        SceneManager.LoadScene("04_Quiz");
+    }
+
+    // ----------------------------
+    // Diğer sahneler
+    // ----------------------------
     public void LoadAIChat()
     {
         SceneManager.LoadScene("05_AIChat");
