@@ -1,0 +1,57 @@
+{
+    "version": 1,
+    "name": "VRAnatomy_InputActions",
+    "maps": [
+        {
+            "name": "FreeExplore",
+            "id": "c9c402b9-159b-46d1-ab44-b642523e389a",
+            "actions": [
+                {
+                    "name": "ToggleHeldName",
+                    "type": "Button",
+                    "id": "68679783-9b63-4241-84fe-7244150b6b43",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "d5a243cf-472c-4170-9371-b99e0360a896",
+                    "path": "<XRController>{RightHand}/{PrimaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleHeldName",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ba41ad4f-5ba4-411b-9805-761fb2d50358",
+                    "path": "<XRSimulatedHMD>/{PrimaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleHeldName",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2f620731-3b8f-4c8a-a5c9-ef324f12c319",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleHeldName",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

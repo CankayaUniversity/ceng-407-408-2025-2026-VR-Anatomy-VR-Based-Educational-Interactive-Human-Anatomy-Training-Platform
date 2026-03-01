@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 8bb4a3d7c9e8eb34092f0a1b70e0e063
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - rightHand: {instanceID: 0}
+  - leftHand: {instanceID: 0}
+  - toggleAction: {fileID: -1128250654785301347, guid: 0acb5d62861787642a8c83c72045e607, type: 3}
+  - panelRoot: {instanceID: 0}
+  - nameText: {instanceID: 0}
+  - movementDb: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
