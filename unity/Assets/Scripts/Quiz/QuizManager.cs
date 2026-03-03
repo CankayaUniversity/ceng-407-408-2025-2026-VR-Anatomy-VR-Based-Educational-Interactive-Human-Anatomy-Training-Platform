@@ -26,6 +26,10 @@ public class QuizManager : MonoBehaviour
     private bool quizFinished = false;
     private bool isTimerPaused = false;
 
+    // ✅ NEW: time-up state (sadece 1 kez tetiklensin + şıklar kilitlensin)
+    private bool timeUpHandled = false;
+    private bool questionLocked = false;
+
     void Start()
     {
         LoadQuestionsByCategory();
@@ -48,9 +52,31 @@ public class QuizManager : MonoBehaviour
 
         if (remainingTime <= 0f)
         {
-            // Süre bitti => bu soruyu bitir, quiz'i bitir veya otomatik ileri (senin tercihin)
-            EndQuiz();
+            // ✅ Eskiden: EndQuiz();
+            // ✅ Şimdi: quiz bitmesin, bu soruyu "time up" olarak göster + Next ile devam ettir
+            if (!timeUpHandled)
+            {
+                HandleTimeUp();
+            }
         }
+    }
+
+    private void HandleTimeUp()
+    {
+        timeUpHandled = true;
+        questionLocked = true;
+        isTimerPaused = true;
+
+        remainingTime = 0f;
+        ui.UpdateTimer(0f);
+
+        // ✅ Burada "quiz finished" yerine, normalde cevap seçince çıkan result + next akışını göstereceğiz.
+        // Bunun için UI'ya küçük bir fonksiyon ekleyeceğiz: ui.ShowTimeUpResult(...)
+        ui.ShowTimeUpResult("Süreniz doldu. Cevap işaretlenmediği için bu soru boş sayıldı.");
+
+        // Not: Next butonunun tıklaması zaten UI'da QuizManager.NextQuestion() çağırıyorsa
+        // ekstra bir şey yapmamıza gerek yok.
+        // Eğer UI next butonunu "answer sonrası" aktif ediyorsa, ShowTimeUpResult onunla aynı paneli açmalı.
     }
 
     void LoadQuestionsByCategory()
@@ -115,9 +141,13 @@ public class QuizManager : MonoBehaviour
             return;
         }
 
+        // ✅ NEW: yeni soruya geçerken state reset
+        timeUpHandled = false;
+        questionLocked = false;
+        isTimerPaused = false;
+
         // ✅ Normalize: Basic/Motion/Matching hepsi UI alanlarına otursun
         Question q = NormalizeForUI(questionList.questions[currentQuestionIndex]);
-        isTimerPaused = false; // yeni soru geldi, timer tekrar akabilir
 
         // ✅ Per-question time limit:
         // Kural: time_limit_sec <= 0 => süresiz
@@ -131,19 +161,13 @@ public class QuizManager : MonoBehaviour
         else
         {
             // Süresiz soru: timer'ı kapat/hide et
-            // (QuizUIController'da bunu desteklemek için küçük bir ek öneriyorum, aşağıda)
             ui.UpdateTimer(-1f);
         }
 
         // ✅ doc_type'a göre gösterim
         if (!string.IsNullOrEmpty(q.doc_type) && q.doc_type.Equals("matching", StringComparison.OrdinalIgnoreCase))
         {
-            // Eğer UI'da matching ekranı varsa burada çağıracağız.
-            // Şimdilik güvenli fallback: matching olduğunu logla + normal show çağır (istersen farklı yaparsın).
             Debug.Log($"[QuizManager] Matching question: {q.id}");
-
-            // UI'nızda ShowMatchingQuestion yoksa bile kırılmasın diye normal ShowQuestion'a düşürüyoruz.
-            // İleride UI'a ShowMatchingQuestion eklersen burayı ona çeviririz.
             ui.ShowQuestion(q);
             return;
         }
@@ -154,7 +178,6 @@ public class QuizManager : MonoBehaviour
     // ✅ Basic + Movement + Matching normalize
     Question NormalizeForUI(Question raw)
     {
-        // Kopya üzerinden çalışalım ki orijinal veri bozulmasın
         Question q = new Question
         {
             id = raw.id,
@@ -170,12 +193,10 @@ public class QuizManager : MonoBehaviour
 
             rationale = raw.rationale,
 
-            // normalize edilecek alanlar
             body = raw.body,
             A = raw.A, B = raw.B, C = raw.C, D = raw.D,
             answer = raw.answer,
 
-            // ham alanları da koru
             question_text = raw.question_text,
             option_a = raw.option_a,
             option_b = raw.option_b,
@@ -185,11 +206,9 @@ public class QuizManager : MonoBehaviour
             data = raw.data
         };
 
-        // 1) Eğer body boşsa question_text'ten doldur
         if (string.IsNullOrWhiteSpace(q.body) && !string.IsNullOrWhiteSpace(q.question_text))
             q.body = q.question_text;
 
-        // 2) Eğer A/B/C/D boşsa ama option_a.. varsa Basic format
         bool hasABCD = !(string.IsNullOrWhiteSpace(q.A) && string.IsNullOrWhiteSpace(q.B) && string.IsNullOrWhiteSpace(q.C) && string.IsNullOrWhiteSpace(q.D));
         if (!hasABCD)
         {
@@ -199,12 +218,9 @@ public class QuizManager : MonoBehaviour
             if (!string.IsNullOrWhiteSpace(q.option_d)) q.D = q.option_d;
         }
 
-        // 3) Basic correct_answer varsa ve answer boşsa, answer'ı harfe çek
         if (string.IsNullOrWhiteSpace(q.answer) && !string.IsNullOrWhiteSpace(q.correct_answer))
             q.answer = q.correct_answer.Trim();
 
-        // 4) Movement format: data içinde options[] var, answer içinde {"correct_index":n} var
-        // true_false / mcq_single için A/B/C/D'yi data.options'tan üret
         if (!string.IsNullOrWhiteSpace(q.data))
         {
             try
@@ -212,24 +228,20 @@ public class QuizManager : MonoBehaviour
                 var parsed = JsonUtility.FromJson<OptionsWrapper>(q.data);
                 if (parsed != null && parsed.options != null && parsed.options.Length > 0)
                 {
-                    // sadece A,B gerekli olabilir; ama güvenli şekilde dolduralım
                     q.A = parsed.options.Length > 0 ? parsed.options[0] : q.A;
                     q.B = parsed.options.Length > 1 ? parsed.options[1] : q.B;
                     q.C = parsed.options.Length > 2 ? parsed.options[2] : q.C;
                     q.D = parsed.options.Length > 3 ? parsed.options[3] : q.D;
                 }
             }
-            catch { /* data matching olabilir; ignore */ }
+            catch { /* ignore */ }
         }
 
-        // answer JSON ise correct_index -> "A/B/C/D"
         if (!string.IsNullOrWhiteSpace(q.answer) && q.answer.TrimStart().StartsWith("{"))
         {
-            // matching mi?
             if (!string.IsNullOrEmpty(q.doc_type) && q.doc_type.Equals("matching", StringComparison.OrdinalIgnoreCase))
             {
-                // matching: answer JSON pairs olarak kalabilir. UI bunu ayrıca işleyecek.
-                // burada dokunmuyoruz
+                // matching: dokunma
             }
             else
             {
@@ -245,7 +257,6 @@ public class QuizManager : MonoBehaviour
             }
         }
 
-        // time_limit_sec boş/NaN JSON'da genelde 0 gelmeli; ama güvenlik:
         if (q.time_limit_sec < 0) q.time_limit_sec = 0;
 
         return q;
@@ -279,20 +290,19 @@ public class QuizManager : MonoBehaviour
     {
         if (quizFinished) return;
 
+        // ✅ NEW: süre dolduysa / soru kilitliyse tıklamayı yok say
+        if (questionLocked) return;
+
         Question q = NormalizeForUI(questionList.questions[currentQuestionIndex]);
 
-        // Matching sorular için (ileride UI değişince) burada ayrı kontrol yapılacak.
         if (!string.IsNullOrEmpty(q.doc_type) && q.doc_type.Equals("matching", StringComparison.OrdinalIgnoreCase))
         {
-            // Şimdilik: matching UI geldikten sonra burada evaluate edeceğiz.
-            // Crash etmesin diye sadece finished/result gösterme yapmıyoruz.
             Debug.Log("[QuizManager] SubmitAnswer called for matching question - evaluation TBD.");
             return;
         }
 
         isTimerPaused = true;
-        
-        // selectedOption burada "A/B/C/D" harfi olarak gelmeli
+
         ui.ShowAnswerResult(
             correctOption: q.answer,
             selectedOption: selectedOption,

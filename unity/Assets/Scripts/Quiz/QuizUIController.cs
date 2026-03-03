@@ -31,6 +31,7 @@ public class QuizUIController : MonoBehaviour
 
         nextButton.gameObject.SetActive(false);
 
+        // ✅ Her yeni soruda popup kapalı
         rationalePopup.Hide();
 
         ClearButtons();
@@ -72,7 +73,7 @@ public class QuizUIController : MonoBehaviour
                 btn.SetWrong();
         }
 
-        //  SHOW POPUP ONLY IF ANSWER IS WRONG
+        // SHOW POPUP ONLY IF ANSWER IS WRONG
         if (!isCorrect && !string.IsNullOrEmpty(rationale))
         {
             rationalePopup.Show(rationale);
@@ -81,12 +82,34 @@ public class QuizUIController : MonoBehaviour
         nextButton.gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// ✅ QuizManager time-up olunca burayı çağırıyor.
+    /// İstek: Popup çıkmasın, seçenekler görünmesin, sadece mesaj + Devam kalsın.
+    /// </summary>
+    public void ShowTimeUpResult(string message)
+    {
+        // Mesaj
+        questionText.text = message;
+
+        // ✅ Popup istemiyoruz (kesin kapat)
+        rationalePopup.Hide();
+
+        // ✅ Seçenekler görünmesin (tamamen sil)
+        ClearButtons();
+
+        // ✅ Devam butonu görünsün
+        nextButton.gameObject.SetActive(true);
+    }
+
     private void OnNextButtonPressed()
     {
-        if (rationalePopup.isPopupOpen== false)
-        {
-            quizManager.NextQuestion();
-        }
+        // ✅ Popup kullanmayacağız dediğin için bu kontrolü kaldırmak en temiz çözüm.
+        // (Zaten time-up'ta popup yok; yanlış cevapta popup varsa da kullanıcı popup'ı kapatmadan geçemesin
+        // istiyorsan aşağıdaki satırı geri ekleyebilirsin.)
+        quizManager.NextQuestion();
+
+        // Eğer "popup açıkken next çalışmasın" istiyorsan şu şekilde kullan:
+        // if (rationalePopup.isPopupOpen == false) quizManager.NextQuestion();
     }
 
     public void UpdateTimer(float time)
@@ -105,12 +128,14 @@ public class QuizUIController : MonoBehaviour
         timerText.text = Mathf.CeilToInt(time).ToString();
     }
 
+    /// <summary>
+    /// ✅ Bu artık "gerçek quiz bitti" ekranı.
+    /// </summary>
     public void ShowQuizFinished()
     {
-        questionText.text = "Time's up! Quiz finished.";
+        questionText.text = "Quiz tamamlandı!";
         ClearButtons();
         nextButton.gameObject.SetActive(false);
-
         rationalePopup.Hide();
     }
 
