@@ -14,7 +14,7 @@ public class RagApiClient : MonoBehaviour
     [SerializeField] private TMP_Text answerText;
 
     [Header("API")]
-    [SerializeField] private string apiUrl = "http://127.0.0.1:8000/ask";
+  [SerializeField] private string apiUrl = "http://127.0.0.1:8001/ask";
 
     [Serializable]
     private class AskRequest

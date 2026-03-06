@@ -305,7 +305,7 @@ MonoBehaviour:
   questionInput: {fileID: 1929558922}
   askButton: {fileID: 736500870}
   answerText: {fileID: 1160254746}
-  apiUrl: http://127.0.0.1:8000/ask
+  apiUrl: http://127.0.0.1:8001/ask
 --- !u!1 &736500866
 GameObject:
   m_ObjectHideFlags: 0
