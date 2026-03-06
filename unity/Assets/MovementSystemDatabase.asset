@@ -1,0 +1,938 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 678fe2176251a03499da0cc90065d158, type: 3}
+  m_Name: MovementSystemDatabase
+  m_EditorClassIdentifier: 
+  entries:
+  - id: os_frontale
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Frontale
+    topic: Movement System
+    region: Head_Face
+    tags: "neurocranium; kafa; kafatas\u0131; yass\u0131 kemik; al\u0131n"
+    body: "Al\u0131n kemi\u011Fidir ve kafan\u0131n \xF6n \xFCst b\xF6l\xFCm\xFCnde
+      bulunur. "
+    steps: "[\"Do\u011Fumda iki par\xE7a halinde iken 5-6 ya\u015Flar\u0131nda kemikle\u015Ferek
+      tek kemi\u011Fe d\xF6n\xFC\u015F\xFCr.\", \"Kafan\u0131n \xFCst b\xF6l\xFCm\xFCnde
+      iki Os Parietale ile eklem yapar.\", \"Ka\u015F kemerleri ve orbitan\u0131n
+      tavan\u0131n\u0131 olu\u015Fturur.\", \"Orbitan\u0131n \xFCst i\xE7 k\u0131sm\u0131nda
+      2 adet sin\xFCs\xFC vard\u0131r.\"]"
+    source: "Ders kitab\u0131 s.54"
+  - id: os_occipitale
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Occipitale
+    topic: Movement System
+    region: Head_Face
+    tags: "neurocranium; kafa; kafatas\u0131; yass\u0131 kemik; artkafa; foramen
+      magnum"
+    body: "Artkafa kemi\u011Fidir ve kafan\u0131n arka alt b\xF6l\xFCm\xFCnde yer
+      al\u0131r."
+    steps: "[\"Omurgan\u0131n ilk omuru ile eklem yapar.\", \"Kafatas\u0131 bo\u015Flu\u011Funun
+      omurga kanal\u0131 ile ba\u011Flant\u0131s\u0131n\u0131 sa\u011Flayan foramen
+      magnum bu kemik \xFCzerindedir.\"]"
+    source: "Ders kitab\u0131 s.54"
+  - id: os_sphenoidale
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Sphenoidale
+    topic: Movement System
+    region: Head_Face
+    tags: "neurocranium; kafa; kafatas\u0131; d\xFCzensiz; temel; taban; sella turcica"
+    body: "Temel kemiktir ve kafan\u0131n taban\u0131nda artkafa ve \u015Fakak kemi\u011Finin
+      \xF6n\xFCnde yer al\u0131r."
+    steps: "[\"B\xFCt\xFCn kafa kemikleri ve baz\u0131 y\xFCz kemikleri ile eklem
+      yapar.\", \"G\xF6vdesinin \xFCst k\u0131sm\u0131ndaki sella turcica b\xF6l\xFCm\xFCne
+      hipofiz bezi yerle\u015Fmi\u015Ftir.\", \"G\xF6vde k\u0131sm\u0131nda 2 adet
+      sin\xFCs\xFC vard\u0131r.\"]"
+    source: "Ders kitab\u0131 s.54"
+  - id: os_ethmoidale
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Ethmoidale
+    topic: Movement System
+    region: Head_Face
+    tags: "neurocranium; kafa; kafatas\u0131; d\xFCzensiz; kalbur; burun"
+    body: "Kalbur kemi\u011Fidir ve os sphenoidale ile kafa taban\u0131n\u0131n \xF6n\xFCnde
+      yer al\u0131r."
+    steps: "[\"Burun b\xF6lmesinin \xFCst k\u0131sm\u0131n\u0131 olu\u015Fturur.\",
+      \"Concha nasalis superior ve concha nasalis media bu kemi\u011Fin uzant\u0131s\u0131d\u0131r.\",
+      \"2 adet sin\xFCs\xFC vard\u0131r.\"]"
+    source: "Ders kitab\u0131 s.54"
+  - id: os_parietale
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Parietale
+    topic: Movement System
+    region: Head_Face
+    tags: "neurocranium; kafa; kafatas\u0131; yass\u0131 kemik; duvar; sutura sagittalis;
+      \xE7ift"
+    body: "Duvar kemiktir ve kafatas\u0131n\u0131n \xFCst yan duvar\u0131n\u0131
+      olu\u015Fturur."
+    steps: "[\"2 adet Os Parietale vard\u0131r.\", \"\u0130ki Os Parietale kafan\u0131n
+      \xFCst b\xF6l\xFCm\xFCnde birbiriyle eklem yapar (sutura sagittalis).\"]"
+    source: "Ders kitab\u0131 s.54"
+  - id: os_temporale
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Temporale
+    topic: Movement System
+    region: Head_Face
+    tags: "neurocranium; kafa; kafatas\u0131; d\xFCzensiz; \u015Fakak; kulak; mastoit;
+      \xE7ift"
+    body: "\u015Eakak kemi\u011Fidir ve kulaklar\u0131n \xF6n \xFCst b\xF6l\xFCm\xFCnde
+      2 adet bulunur."
+    steps: "[\"\u0130\xE7inden d\u0131\u015F kulak yolu ge\xE7er.\", \"Kula\u011F\u0131n
+      arkas\u0131nda mastoit \xE7\u0131k\u0131nt\u0131s\u0131 vard\u0131r.\", \"Kafan\u0131n
+      tek oynar kemi\u011Fi Os Temporale ile Os Mandibula aras\u0131nda bulunur.\"]"
+    source: "Ders kitab\u0131 s.54"
+  - id: os_mandibula
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Mandibula
+    topic: Movement System
+    region: Head_Face
+    tags: "viscerocranium; kafa; y\xFCz; \xE7ene; alt \xE7ene; d\xFCzensiz; hareketli;
+      temporomandibularis; di\u015F"
+    body: "Alt \xE7ene kemi\u011Fidir ve Os Temporale ile alt \xE7ene eklemini (art.
+      temporomandibularis) olu\u015Fturur. "
+    steps: "[\"Y\xFCz b\xF6lgesinin en b\xFCy\xFCk ve en kuvvetli kemi\u011Fidir.\",
+      \"\xDCzerinde alt di\u015Flerin s\u0131raland\u0131\u011F\u0131 di\u015F kemeri
+      bulunur.\"]"
+    source: "Ders kitab\u0131 s.55"
+  - id: os_vomer
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Vomer
+    topic: Movement System
+    region: Head_Face
+    tags: "viscerocranium; kafa; y\xFCz; yass\u0131 kemik; burun; sapan"
+    body: "Sapan kemi\u011Fidir ve burun b\xF6lmesinin arka alt k\u0131sm\u0131n\u0131
+      olu\u015Fturur."
+    steps: 
+    source: "Ders kitab\u0131 s.55"
+  - id: os_maxilla
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Maxilla
+    topic: Movement System
+    region: Head_Face
+    tags: "viscerocranium; kafa; y\xFCz; \xE7ene; \xFCst \xE7ene; d\xFCzensiz; damak;
+      di\u015F; \xE7ift"
+    body: "\xDCst \xE7ene kemi\u011Fidir ve dama\u011F\u0131n b\xFCy\xFCk b\xF6l\xFCm\xFC
+      ile g\xF6z \xE7ukurunun alt k\u0131sm\u0131n\u0131 olu\u015Fturur."
+    steps: "[\"2 adet Os Maxilla vard\u0131r.\", \"G\xF6vdesinde 2 adet sin\xFCs
+      vard\u0131r.\", \"Alt taraf\u0131nda \xFCst di\u015F kemeri bulunur.\"]"
+    source: "Ders kitab\u0131 s.55"
+  - id: os_zygomaticum
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Zygomaticum
+    topic: Movement System
+    region: Head_Face
+    tags: "viscerocranium; kafa; y\xFCz; elmac\u0131k; zigomatik; d\xFCzensiz; \xE7ift"
+    body: "G\xF6z \xE7ukurunun alt d\u0131\u015F (lateral) b\xF6l\xFCm\xFCnde yer
+      al\u0131r. "
+    steps: "[\"2 adet Os Zygomaticum vard\u0131r.\", \"Y\xFCzdeki elmac\u0131k t\xFCmse\u011Fini
+      olu\u015Fturur.\", \"Sa\u011Flam ve dayan\u0131kl\u0131 bir kemiktir.\"]"
+    source: "Ders kitab\u0131 s.55"
+  - id: os_nasale
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Nasale
+    topic: Movement System
+    region: Head_Face
+    tags: "viscerocranium; kafa; y\xFCz; burun; nazal; yass\u0131 kemik; \xE7ift"
+    body: "Burun s\u0131rt\u0131n\u0131n arka b\xF6l\xFCm\xFCn\xFC olu\u015Fturur."
+    steps: "[\"2 adet Os Nasale vard\u0131r.\"]"
+    source: "Ders kitab\u0131 s.55"
+  - id: os_lacrimale
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Lacrimale
+    topic: Movement System
+    region: Head_Face
+    tags: "viscerocranium; kafa; y\xFCz; lakrimal; g\xF6zya\u015F\u0131; yass\u0131
+      kemik; k\xFC\xE7\xFCk; ince; \xE7ift"
+    body: "G\xF6z \xE7ukurunun i\xE7 yan duvar\u0131n\u0131n \xF6n taraf\u0131nda
+      yer al\u0131r. "
+    steps: "[\"2 adet Os Lacrimale vard\u0131r.\", \"Y\xFCz kemiklerinin en k\xFC\xE7\xFC\u011F\xFC
+      ve en incesidir.\", \"\u0130\xE7 tarafta g\xF6zya\u015F\u0131 kanal\u0131 ile
+      kom\u015Fudur.\"]"
+    source: "Ders kitab\u0131 s.55"
+  - id: os_palatinum
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Palatinum
+    topic: Movement System
+    region: Head_Face
+    tags: "viscerocranium; kafa; y\xFCz; palatin; d\xFCzensiz; \xE7ift; damak"
+    body: "\xDCst \xE7ene kemi\u011Fi ile beraber a\u011F\u0131z bo\u015Flu\u011Funun
+      tavan\u0131n\u0131 olu\u015Fturur."
+    steps: "[\"2 adet Os Palatinum vard\u0131r.\"]"
+    source: "Ders kitab\u0131 s.55"
+  - id: concha_nasalis_inferior
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Concha Nasalis Inferior
+    topic: Movement System
+    region: Head_Face
+    tags: "viscerocranium; kafa; y\xFCz; alt; burun; d\xFCzensiz; \xE7ift; konka"
+    body: "Burun bo\u015Flu\u011Funun d\u0131\u015F yan duvar\u0131nda bulunur."
+    steps: "[\"2 adet Concha Nasalis Inferior vard\u0131r.\", \"Burun bo\u015Flu\u011Fu
+      d\u0131\u015F yan duvar\u0131ndaki 3 konkadan alttakini olu\u015Fturur.\"]"
+    source: "Ders kitab\u0131 s.55"
+  - id: columna_vertebralis
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Columna Vertebralis
+    topic: Movement System
+    region: Trunk
+    tags: "columna vertebralis; omurga; omurga kanal\u0131; lordoz; kifoz; omurilik"
+    body: "G\xF6vdenin y\xFCk\xFCn\xFC ta\u015F\u0131yan kemik kolondur. Uzunlu\u011Fu
+      eri\u015Fkin bir erkekte yakla\u015F\u0131k 70 cm"
+    steps: " kad\u0131nda ise 60 cm\u2019dir. V\xFCcudun dorsal b\xF6lgesinde artkafa
+      kemi\u011Finin alt\u0131ndan ba\u015Flay\u0131p pelvise kadar uzan\u0131r.
+      Bu kemik kolonda her bir omur deli\u011Finin \xFCst \xFCste gelmesiyle omurga
+      kanal\u0131 (canalis vertebralis) olu\u015Fur. Omurgaya yandan bak\u0131ld\u0131\u011F\u0131nda
+      d\xF6rt e\u011Frilik g\xF6r\xFCl\xFCr. Bunlar"
+    source: " boyun ve bel b\xF6lgesinde lordoz"
+  - id: vertebrae_cervicales
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Vertebrae cervicales
+    topic: Movement System
+    region: Trunk
+    tags: columna vertebralis; omurga; vertebrae cervicales; omur; vertebra; boyun;
+      atlas; axis; lordoz
+    body: "7 adet boyun omuru bulunur ve C1-C7 sembolleri ile g\xF6sterilirler. C1
+      omura atlas"
+    steps: " C2 omura axis ad\u0131 verilir. Atlas \xFCst tarafta foramen magnumu
+      \xE7evreleyecek \u015Fekilde artkafa kemi\u011Fi"
+    source: ' alt tarafta ise axisle eklem yapar.'
+  - id: vertebrae_thoracicae
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Vertebrae thoracicae
+    topic: Movement System
+    region: Trunk
+    tags: "columna vertebralis; omurga; vertebrae thoracicae; omur; vertebra; g\xF6\u011F\xFCs;
+      kifoz"
+    body: "12 adet g\xF6\u011F\xFCs omuru bulunur ve T1-T12 sembolleri ile g\xF6sterilirler.
+      Kaburgalarla eklem yaparlar. "
+    steps: "[\"Do\u011Fal kifoz e\u011Frili\u011Fi olu\u015Ftururlar.\", \"Hareketleri
+      boyun omurlar\u0131na k\u0131yasla daha s\u0131n\u0131rl\u0131d\u0131r.\"]"
+    source: "Ders kitab\u0131 s.59"
+  - id: vertebrae_lumbales
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Vertebrae lumbales
+    topic: Movement System
+    region: Trunk
+    tags: "columna vertebralis; omurga; vertebrae lumbales; omur; vertebra; bel;
+      lordoz; b\xFCy\xFCk; sa\u011Flam"
+    body: "5 adet bel omuru bulunur ve L1-L5 sembolleri ile g\xF6sterilirler."
+    steps: "[\"Do\u011Fal lordoz e\u011Frili\u011Fi olu\u015Ftururlar.\", \"G\xF6vdesi
+      en b\xFCy\xFCk ve en sa\u011Flam omurlar lumbal b\xF6lgededir.\", \"V\xFCcut
+      a\u011F\u0131rl\u0131\u011F\u0131n\u0131n b\xFCy\xFCk k\u0131sm\u0131n\u0131
+      ta\u015F\u0131rlar.\"]"
+    source: "Ders kitab\u0131 s.59"
+  - id: vertebrae_sacrale
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Vertebrae sacrale (os sacrum)
+    topic: Movement System
+    region: Trunk
+    tags: "columna vertebralis; omurga; vertebrae sacrale; os sacrum; omur; vertebra;
+      kuyruk sokumu; sa\u011Fr\u0131; promontorium; kifoz; kemik"
+    body: "5 adet sa\u011Fr\u0131 omuru bulunur ve S1-S5 sembolleri ile g\xF6sterilirler.
+      Bu b\xF6lgedeki omurlar yeti\u015Fkinlerde kayna\u015F\u0131p bir kemi\u011Fe
+      d\xF6n\xFC\u015F\xFCr."
+    steps: "[\"Do\u011Fal kifoz e\u011Frili\u011Fi olu\u015Ftururlar.\", \"Promontorium
+      ad\u0131 verilen \xE7\u0131k\u0131nt\u0131 S1'in g\xF6vdesinin \xFCst kenar\u0131nda
+      bulunur.\", \"V\xFCcudun a\u011F\u0131rl\u0131k merkezi S2\u2019nin 2-2,5 cm
+      \xF6n\xFCne denk gelir.\"]"
+    source: "Ders kitab\u0131 s.59"
+  - id: vertebrae_coccygea
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Vertebrae coccygea (os coccyge)
+    topic: Movement System
+    region: Trunk
+    tags: columna vertebralis; omurga; vertebrae coccygea; os coccyge; omur; vertebra;
+      kuyruk; kemik
+    body: "4 adet kuyruk omuru bulunur ve Co1-Co4 sembolleri ile g\xF6sterilirler.
+      Bu b\xF6lgedeki omurlar yeti\u015Fkinlerde kayna\u015F\u0131p bir kemi\u011Fe
+      d\xF6n\xFC\u015F\xFCr."
+    steps: "[\"S5 ile Co1 aras\u0131nda disk yoktur.\"]"
+    source: "Ders kitab\u0131 s.59"
+  - id: thoracic_cage
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: "G\xF6\u011F\xFCs kafesi"
+    topic: Movement System
+    region: Trunk
+    tags: "thoracic cage; g\xF6\u011F\xFCs kafesi; g\xF6\u011F\xFCs bo\u015Flu\u011Fu;
+      koruma"
+    body: "\xD6nde g\xF6\u011F\xFCs tahtas\u0131 kemi\u011Fi (Os Sternum) ile 12
+      \xE7ift kaburgadan (Ossa Costae) olu\u015Fur. Arka b\xF6l\xFCm\xFCnde g\xF6\u011F\xFCs"
+    steps: 
+    source: 
+  - id: "omurlar\u0131 bulunur. G\xF6\u011F\xFCs kafesinin i\xE7 k\u0131sm\u0131na
+      g\xF6\u011F\xFCs bo\u015Flu\u011Fu denir. Bu bo\u015Flukta kalp ve akci\u011Fer
+      gibi \xF6nemli organlar bulunur.;;Ders kitab\u0131 s.60"
+    valence: 
+    doc_type: 
+    content_type: 
+    title: 
+    topic: 
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: os_sternum
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Sternum
+    topic: Movement System
+    region: Trunk
+    tags: "thoracic cage; g\xF6\u011F\xFCs kafesi; os sternum; g\xF6\u011F\xFCs tahtas\u0131
+      kemi\u011Fi; manubrium sterni; sternum sap\u0131; corpus sterni; sternum"
+    body: 
+    steps: 
+    source: 
+  - id: "g\xF6vdesi"
+    valence: ' processus xiphoideus'
+    doc_type: " han\xE7ersi \xE7\u0131k\u0131nt\u0131;\xDC\xE7 k\u0131s\u0131mdan
+      olu\u015Fur. \xDCstteki k\u0131sm\u0131na sternum sap\u0131 (manubrium sterni)"
+    content_type: " ortadaki k\u0131sm\u0131na sternum"
+    title: 
+    topic: 
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: "g\xF6vdesi (corpus sterni) ve u\xE7 k\u0131sm\u0131na ise han\xE7ersi \xE7\u0131k\u0131nt\u0131
+      (processus xiphoideus) denir.;[Manubrium sterni hem k\xF6pr\xFCc\xFCk kemi\u011Fi
+      (clavicula) hem de 1 ve 2\u2019nci kaburga ile eklem yapar."
+    valence: " Corpus sterni her iki taraf\u0131nda bulunan 2 ve 7\u2019nci kaburgalarla
+      eklem yapar."
+    doc_type: " Processus xiphoideus kaburgalarla eklem yapmaz.];Ders kitab\u0131
+      s.60"
+    content_type: 
+    title: 
+    topic: 
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: ossa_costae
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Ossa Costae
+    topic: Movement System
+    region: Trunk
+    tags: "thoracic cage; g\xF6\u011F\xFCs kafesi; ossa costae; kaburga; kosta; ger\xE7ek
+      kaburga; yalanc\u0131 kaburga; y\xFCzen kaburga"
+    body: "Ba\u015F k\u0131s\u0131mlar\u0131 (caput costae) arkada g\xF6\u011F\xFCs
+      omurlar\u0131yla eklem yapar. Kaburgalar sternuma ba\u011Flanma \xF6zelliklerine
+      g\xF6re iki gruba ayr\u0131l\u0131r. Sternumla do\u011Frudan eklem yapan ilk
+      7 \xE7ift kaburgaya ger\xE7ek kaburga denir. Son 5 \xE7ift kaburgaya ise yalanc\u0131
+      kaburga denir. Yalanc\u0131 kaburgalar\u0131n ilk 3 \xE7iftinin (8"
+    steps: " 9 ve 10\u2019uncu) k\u0131k\u0131rdaklar\u0131 \xF6nce kendi aralar\u0131nda
+      birle\u015Fip 7\u2019nci kaburgan\u0131n k\u0131k\u0131rda\u011F\u0131na kat\u0131l\u0131r
+      ve sternumla dolayl\u0131 eklem yapar. Son 2 \xE7ift yalanc\u0131 kaburga (11
+      ve 12\u2019nci) kaslar\u0131n i\xE7inde serbest olarak sonlan\u0131r ve y\xFCzen
+      kaburga olarak adland\u0131r\u0131l\u0131r."
+    source: 
+  - id: os_clavicula
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Clavicula
+    topic: Movement System
+    region: Upper_Extremity
+    tags: "cingulum membri superioris; omuz; k\xF6pr\xFCc\xFCk kemi\u011Fi; k\xF6pr\xFC"
+    body: "Her iki omzun \xF6n taraf\u0131nda hem k\xFCrek kemi\u011Fi hem de sternum
+      ile eklem yapar. V\xFCcutta en s\u0131k k\u0131r\u0131lan"
+    steps: 
+    source: 
+  - id: "kemiktir. Omuzla g\xF6\u011F\xFCs aras\u0131nda k\xF6pr\xFC g\xF6revi yapar.
+      Kemikle\u015Fmeye ilk ba\u015Flayan kemiktir.;;Ders kitab\u0131 s.61"
+    valence: 
+    doc_type: 
+    content_type: 
+    title: 
+    topic: 
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: os_scapula
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Scapula
+    topic: Movement System
+    region: Upper_Extremity
+    tags: "cingulum membri superioris; omuz; k\xFCrek kemi\u011Fi; acromion; korakoid
+      \xE7\u0131k\u0131nt\u0131; processus coracoideus; glenoid \xE7ukur; cavitas
+      glenoidalis"
+    body: "Her iki omzun arka b\xF6lgesinde T2-T7 aras\u0131nda yer al\u0131r. Arkadan
+      d\u0131\u015F yana do\u011Fru uzanan \xE7\u0131k\u0131nt\u0131s\u0131na acromion
+      denir. Acromion \xE7\u0131k\u0131nt\u0131s\u0131 k\xF6pr\xFCc\xFCk kemi\u011Fi
+      ile eklem yapar. \xDCst d\u0131\u015F yanda \xF6ne do\u011Fru uzanan ve baz\u0131
+      kaslar\u0131n tutundu\u011Fu gagaya benzer \xE7\u0131k\u0131nt\u0131s\u0131na
+      korakoid \xE7\u0131k\u0131nt\u0131 (processus coracoideus) denir. \xDCst d\u0131\u015F
+      kenar\u0131nda ise kol kemi\u011Fiyle eklem yapan glenoid \xE7ukur (cavitas
+      glenoidalis) bulunur."
+    steps: 
+    source: "Ders kitab\u0131 s.61"
+  - id: os_humerus
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Humerus
+    topic: Movement System
+    region: Upper_Extremity
+    tags: "brachium; kol; kol kemi\u011Fi; uzun; caput humeri; humerus ba\u015F\u0131;
+      trochlea humeri; humerus makaras\u0131; capitulum humeri; humerus ba\u015F\xE7\u0131\u011F\u0131"
+    body: "Omuz ve dirsek eklemi aras\u0131nda bulunan kemiktir. Humerus ba\u015F\u0131
+      (caput humeri)"
+    steps: " k\xFCrek kemi\u011Fi ile eklem (omuz eklemi) yapar. Alt ucu iki \xF6n
+      kol kemi\u011Fi ile eklem (dirsek eklemi) yapar. \u0130\xE7 yandaki dirsek
+      kemi\u011Fi ile eklem yapan k\u0131sm\u0131na humerus makaras\u0131 (trochlea
+      humeri) ve d\u0131\u015F yandaki d\xF6ner kemikle eklem yapan k\u0131sm\u0131na
+      humerus ba\u015F\xE7\u0131\u011F\u0131 (capitulum humeri) denir."
+    source: "[\"\xDCst ekstremitenin en uzun kemi\u011Fidir.\"]"
+  - id: os_ulna
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Ulna
+    topic: Movement System
+    region: Upper_Extremity
+    tags: "antebrachium; \xF6n kol; dirsek kemi\u011Fi; olecranon; dirsek \xE7\u0131k\u0131nt\u0131s\u0131;
+      caput ulnae; ulna ba\u015F\u0131; ser\xE7e parmak"
+    body: "Ser\xE7e parmak taraf\u0131ndaki kemiktir. Humerus ile eklem yapan \xFCst
+      ucuna olecranon (dirsek \xE7\u0131k\u0131nt\u0131s\u0131) denir. Ulna ba\u015F\u0131
+      (caput ulnae) a\u015Fa\u011F\u0131da olup bilek eklemine kat\u0131l\u0131r."
+    steps: 
+    source: "Ders kitab\u0131 s.62"
+  - id: os_radius
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Radius
+    topic: Movement System
+    region: Upper_Extremity
+    tags: "antebrachium; \xF6n kol; d\xF6ner kemik; caput radii; radius ba\u015F\u0131;
+      ba\u015Fparmak"
+    body: "Ba\u015Fparmak taraf\u0131ndaki kemiktir. \xDCstteki radius ba\u015F\u0131
+      (caput radii) humerus ile eklem yapar. Anatomik duru\u015Fta ulna ile paraleldir.
+      \xD6ne uzat\u0131lan elin avu\xE7 i\xE7i a\u015Fa\u011F\u0131 \xE7evrildi\u011Finde
+      bu kemik ulnan\u0131n \xFCzerine do\u011Fru d\xF6ner. Alt ucu bilek eklemine
+      kat\u0131l\u0131r."
+    steps: 
+    source: "Ders kitab\u0131 s.62"
+  - id: ossa_carpi
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Ossa Carpi
+    topic: Movement System
+    region: Upper_Extremity
+    tags: "manus; el; bilek; el bile\u011Fi"
+    body: "El bile\u011Finde 4\u2019erli iki s\u0131ra halinde 8 k\u0131sa kemik
+      bulunur. \xD6n kol kemikleri ile el tara\u011F\u0131 kemikleri aras\u0131nda
+      yer al\u0131r. Kaslar ve ba\u011Flarla birbirine s\u0131k\u0131ca ba\u011Fland\u0131klar\u0131
+      i\xE7in hareketleri k\u0131s\u0131tl\u0131d\u0131r."
+    steps: 
+    source: "Ders kitab\u0131 s.63"
+  - id: ossa_metacarpi
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Ossa Metacarpi
+    topic: Movement System
+    region: Upper_Extremity
+    tags: manus; el; tarak; el tarak
+    body: "Avu\xE7 i\xE7i ve el s\u0131rt\u0131n\u0131n iskeletini olu\u015Fturan
+      5 uzun kemiktir. El bile\u011Fi kemikleri ile parmak kemikleri aras\u0131nda
+      bulunur."
+    steps: 
+    source: "Ders kitab\u0131 s.63"
+  - id: ossa_digitorum_manus
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Ossa Digitorum Manus (Phalanges)
+    topic: Movement System
+    region: Upper_Extremity
+    tags: manus; el; parmak; el parmak
+    body: "Be\u015F parmakta toplam 14 kemik bulunur. Kemik say\u0131s\u0131 ba\u015Fparmakta
+      2 di\u011Fer parmaklarda 3\u2019er tanedir."
+    steps: 
+    source: "Ders kitab\u0131 s.63"
+  - id: os_coxa
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Coxa
+    topic: Movement System
+    region: Lower_Extremity
+    tags: "alt ekstremite; kal\xE7a; pelvis; \xE7ift; d\xFCzensiz; acetabulum"
+    body: "Pelvisin yan duvar\u0131n\u0131 olu\u015Fturan ve uyluk kemi\u011Fi ile
+      eklem yapan kal\xE7a kemi\u011Fidir."
+    steps: "[\"D\u0131\u015F y\xFCz\xFCnde femur ile eklem yapan \xE7anak \u015Feklinde
+      acetabulum bulunur.\", \"Sa\u011F ve sol olmak \xFCzere 2 adet os coxae vard\u0131r.\",
+      \"Sakrum ile birlikte pelvis bo\u015Flu\u011Funu olu\u015Fturur.\", \"\xDC\xE7
+      kemi\u011Fin birle\u015Fmesiyle olu\u015Fur.\", \"15\u201316 ya\u015Flar\u0131nda
+      kayna\u015Farak tek kemik haline gelir.\"]"
+    source: "Ders kitab\u0131 s.64"
+  - id: os_ilium
+    valence: 
+    doc_type: 
+    content_type: 
+    title: 
+    topic: 
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: ;learn;entry;bone;Os Ilium
+    valence: 
+    doc_type: 
+    content_type: 
+    title: 
+    topic: 
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: ;Movement System;Lower_Extremity;alt ekstremite
+    valence: " kal\xE7a"
+    doc_type: ' pelvis'
+    content_type: " \xFCst"
+    title: " yass\u0131"
+    topic: " ilium;Os coxae\u2019nin \xFCst b\xF6l\xFCm\xFCn\xFC olu\u015Fturan geni\u015F
+      kemiktir.;[Os coxae\u2019nin en geni\u015F par\xE7as\u0131d\u0131r."
+    region: " Pelvisin \xFCst b\xF6l\xFCm\xFCn\xFC olu\u015Fturur."
+    tags: " Arkada sakrumdan ba\u015Flayarak \xF6ne do\u011Fru geni\u015F bir kavis
+      \xE7izer."
+    body: " \xD6nde os pubis ile birle\u015Fir.];Ders kitab\u0131 s.64"
+    steps: 
+    source: 
+  - id: os_pubis
+    valence: 
+    doc_type: 
+    content_type: 
+    title: 
+    topic: 
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: ;learn;entry;bone;Os Pubis;Movement System;Lower_Extremity;alt ekstremite
+    valence: " kal\xE7a"
+    doc_type: ' pelvis'
+    content_type: " \xF6n"
+    title: ' pubis'
+    topic: " eklem;Os coxae\u2019nin \xF6n b\xF6l\xFCm\xFCn\xFC olu\u015Fturan kemiktir.;[Os
+      coxae\u2019nin \xF6n b\xF6l\xFCm\xFCn\xFC olu\u015Fturur."
+    region: " Kar\u015F\u0131l\u0131kl\u0131 iki \xE7at\u0131 kemi\u011Fi \xF6n alt
+      tarafta birbiriyle eklemle\u015Fir];Ders kitab\u0131 s.64"
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: os_ischii
+    valence: 
+    doc_type: 
+    content_type: 
+    title: 
+    topic: 
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: ;learn;entry;bone;Os Ischii;Movement System;Lower_Extremity;alt ekstremite
+    valence: " kal\xE7a"
+    doc_type: ' pelvis'
+    content_type: ' alt'
+    title: ' arka'
+    topic: " ischii;Os coxae\u2019nin alt-arka b\xF6l\xFCm\xFCn\xFC olu\u015Fturan
+      kemiktir.;[Oturur pozisyonda g\xF6vde a\u011F\u0131rl\u0131\u011F\u0131n\u0131
+      ta\u015F\u0131r."
+    region: " \xC7at\u0131 kemi\u011Fiyle beraber foramen obturatumu olu\u015Fturur];Ders
+      kitab\u0131 s.64"
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: os_femur
+    valence: 
+    doc_type: 
+    content_type: 
+    title: 
+    topic: 
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: ;learn;entry;bone;Os Femur;Movement System;Lower_Extremity;alt ekstremite
+    valence: ' uyluk'
+    doc_type: ' uzun'
+    content_type: " \xE7ift"
+    title: " femur;\u0130skeletin en b\xFCy\xFCk, en uzun ve en sa\u011Flam kemi\u011Fidir.;[Femur
+      ba\u015F\u0131 (caput femoris) kal\xE7a kemi\u011Finin acetabulum \xE7ukuru
+      ile eklem yapar."
+    topic: " Alt ucunda kaval kemi\u011Fi ile eklem yapan iki yumrusu (condylus)
+      bulunur.];Ders kitab\u0131 s.64"
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: os_patella
+    valence: 
+    doc_type: 
+    content_type: 
+    title: 
+    topic: 
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: ;learn;entry;bone;Os Patella;Movement System;Lower_Extremity;alt ekstremite
+    valence: ' uyluk'
+    doc_type: ' diz'
+    content_type: " susams\u0131"
+    title: " patella;V\xFCcudun en b\xFCy\xFCk susams\u0131 kemi\u011Fidir.;[D\xF6rt
+      ba\u015Fl\u0131 femur kas\u0131n\u0131n tendonu i\xE7ine yerle\u015Fmi\u015Ftir"
+    topic: " Femur ile eklem yaparak diz eklemine kat\u0131l\u0131r.];Ders kitab\u0131
+      s.64"
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: os_tibia
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Os Tibia
+    topic: Movement System
+    region: Lower_Extremity
+    tags: "alt ekstremite; bald\u0131r; i\xE7; uzun; tibia"
+    body: "Bald\u0131r b\xF6lgesinin i\xE7 yan\u0131nda bulunan b\xFCy\xFCk kemiktir."
+    steps: "[\"Tibia ba\u015F\u0131 (caput tibia) yukar\u0131da femur ile eklem yapar\",
+      \"Alt ucu ayak bile\u011Fi eklemine kat\u0131l\u0131r.\", \"D\u0131\u015F yan\u0131nda
+      kam\u0131\u015F kemikle eklem yapar.\"]"
+    source: "Ders kitab\u0131 s.64"
+  - id: os_fibula
+    valence: 
+    doc_type: 
+    content_type: 
+    title: 
+    topic: 
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: ;learn;entry;bone;Os Fibula;Movement System;Lower_Extremity;alt ekstremite
+    valence: " bald\u0131r"
+    doc_type: " d\u0131\u015F"
+    content_type: ' ince'
+    title: " fibula;Bald\u0131r b\xF6lgesinde yer alan ince kemiktir.;[Diz eklemine
+      kat\u0131lmaz."
+    topic: " Kemik ba\u015F\u0131 tibia kemi\u011Finin d\u0131\u015F yan\u0131ndaki
+      yumru ile eklem yapar."
+    region: " Alt ucu ayak bile\u011Fi eklemine kat\u0131l\u0131r.];Ders kitab\u0131
+      s.64"
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: ossa_tarsi
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Ossa Tarsi
+    topic: Movement System
+    region: Lower_Extremity
+    tags: "alt ekstremite; ayak; ayak bile\u011Fi; k\u0131sa; tarsal"
+    body: "Ayak bile\u011Finde yer alan k\u0131sa kemik grubudur."
+    steps: "[\"Ayak bile\u011Finde iki s\u0131ra halinde dizilmi\u015F 7 k\u0131sa
+      kemik bulunur.\", \"Bald\u0131r kemikleri ile ayak tarak kemikleri aras\u0131nda
+      yer al\u0131r.\", \"A\u015F\u0131k kemi\u011Fi (os talus), tibia ve fibula
+      ile ayak bile\u011Fi eklemini olu\u015Fturur.\", \"Ayak bile\u011Findeki en
+      b\xFCy\xFCk kemik topuk kemi\u011Fidir (os calcaneus).\"]"
+    source: "Ders kitab\u0131 s.65"
+  - id: ossa_metatarsi
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Ossa Metatarsi
+    topic: Movement System
+    region: Lower_Extremity
+    tags: alt ekstremite; ayak; tarak; uzun; metatarsal
+    body: "Ayak taban\u0131 ve ayak s\u0131rt\u0131n\u0131n iskeletini olu\u015Fturan
+      kemik grubudur."
+    steps: "[\"5 uzun kemikten olu\u015Fur.\", \"Ayak bile\u011Fi kemikleri ile ayak
+      parmak kemikleri aras\u0131nda yer al\u0131r.\"]"
+    source: "Ders kitab\u0131 s.65"
+  - id: ossa_digitorum_pedis
+    valence: learn
+    doc_type: entry
+    content_type: bone
+    title: Ossa Digitorum Pedis
+    topic: Movement System
+    region: Lower_Extremity
+    tags: alt ekstremite; ayak; parmak; falanks
+    body: "Ayak parmaklar\u0131n\u0131 olu\u015Fturan kemik grubudur."
+    steps: "[\"Ba\u015Fparmakta 2 parmak kemi\u011Fi bulunur.\", \"Di\u011Fer parmaklarda
+      3\u2019er tane parmak kemi\u011Fi bulunur.\", \"Toplam 14 parmak kemi\u011Finden
+      olu\u015Fur.\"]"
+    source: "Ders kitab\u0131 s.65"
+  - id: sutura
+    valence: 
+    doc_type: 
+    content_type: 
+    title: 
+    topic: 
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: ;learn;entry;Joint;Sutura;Movement System;Joints;eklem
+    valence: ' oynamaz'
+    doc_type: ' fibroz'
+    content_type: ' sutura'
+    title: 
+    topic: 
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: ";Kafa kemikleri aras\u0131nda bulunan oynamaz, diki\u015F tarz\u0131 eklemdir.;;Ders
+      kitab\u0131 s.67"
+    valence: 
+    doc_type: 
+    content_type: 
+    title: 
+    topic: 
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: gomphosis
+    valence: 
+    doc_type: 
+    content_type: 
+    title: 
+    topic: 
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: ;learn;entry;Joint;Gomphosis;Movement System;Joints;eklem
+    valence: ' oynamaz'
+    doc_type: ' fibroz'
+    content_type: " gomphosis;Di\u015F k\xF6k\xFC ile \xE7ene kemi\u011Fi aras\u0131nda
+      bulunan oynamaz eklemdir.;;Ders kitab\u0131 s.67"
+    title: 
+    topic: 
+    region: 
+    tags: 
+    body: 
+    steps: 
+    source: 
+  - id: syndesmosis
+    valence: learn
+    doc_type: entry
+    content_type: Joint
+    title: Syndesmosis
+    topic: Movement System
+    region: Joints
+    tags: eklem; oynamaz; fibroz; syndesmosis
+    body: "Kemik y\xFCzlerinin birbirine ligamentlerle ba\u011Fland\u0131\u011F\u0131
+      oynamaz eklemdir."
+    steps: "[\"Kemik y\xFCzleri birbirine ligamentlerle s\u0131k\u0131ca ba\u011Flanm\u0131\u015Ft\u0131r.\",
+      \"\xD6rnek: Ulna ile radius aras\u0131ndaki eklem.\"]"
+    source: "Ders kitab\u0131 s.67"
+  - id: synchondrosis
+    valence: learn
+    doc_type: entry
+    content_type: Joint
+    title: Synchondrosis
+    topic: Movement System
+    region: Joints
+    tags: "eklem; yar\u0131 oynar; synchondrosis; kartilaginoz; hiyalin k\u0131k\u0131rdak;
+      sternum; kosta; epifiz plak"
+    body: "Eklem y\xFCzleri aras\u0131nda hiyalin k\u0131k\u0131rdak bulunan yar\u0131
+      oynar eklemdir."
+    steps: "[\"\xD6rnek: Kaburgalar ile sternum aras\u0131ndaki eklemler.\", \"\xD6rnek:
+      Uzun kemiklerin epifiz plaklar\u0131.\"]"
+    source: "Ders kitab\u0131 s.67"
+  - id: symphysis
+    valence: learn
+    doc_type: entry
+    content_type: Joint
+    title: Symphysis
+    topic: Movement System
+    region: Joints
+    tags: "eklem; yar\u0131 oynar; kartilaginoz; fibroz k\u0131k\u0131rdak; disk;
+      pelvis; omur"
+    body: "Eklem y\xFCzleri aras\u0131nda fibroz k\u0131k\u0131rdak yap\u0131s\u0131nda
+      disk bulunan yar\u0131 oynar eklemdir."
+    steps: "[\"\xD6rnek: Pubis kemikleri aras\u0131ndaki eklem (symphysis pubis).\",
+      \"\xD6rnek: Omurlar aras\u0131ndaki eklemler (symphysis intervertebralis).\"]"
+    source: "Ders kitab\u0131 s.67"
+  - id: art_temporomandibularis
+    valence: learn
+    doc_type: entry
+    content_type: Joint
+    title: Art. Temporomandibularis
+    topic: Movement System
+    region: Joints
+    tags: "eklem; oynar; temporomandibular; \xE7ene; kafa"
+    body: "Kafa b\xF6lgesinin tek oynar eklemidir."
+    steps: "[\"Temporal ve mandibular kemik aras\u0131nda bulunur.\", \"Alt \xE7eneyi
+      d\u0131\u015F yana, i\xE7 yana, \xF6ne ve arkaya do\u011Fru hareket ettirir.\",
+      \"Alt \xE7eneyi yukar\u0131 ve a\u015Fa\u011F\u0131 do\u011Fru hareket ettirir.\"]"
+    source: "Ders kitab\u0131 s.70"
+  - id: art_atlantooccipitalis
+    valence: learn
+    doc_type: entry
+    content_type: Joint
+    title: Art. Atlantooccipitalis
+    topic: Movement System
+    region: Joints
+    tags: eklem; oynar; atlantooccipital; atlas; oksipital
+    body: "Oksipital kemik ile atlas aras\u0131ndaki oynar eklemdir."
+    steps: "[\"Ba\u015Fa fleksiyon, ekstansiyon ve biraz da lateral fleksiyon yapt\u0131r\u0131r.\"]"
+    source: "Ders kitab\u0131 s.70"
+  - id: art_atlantoaxialis
+    valence: learn
+    doc_type: entry
+    content_type: Joint
+    title: Art. Atlantoaxialis
+    topic: Movement System
+    region: Joints
+    tags: eklem; oynar; atlantoaxial; atlas; eksen
+    body: "Atlas ile eksen aras\u0131ndaki oynar eklemdir."
+    steps: "[\"Ba\u015Fa rotasyon hareketi yapt\u0131r\u0131r.\"]"
+    source: "Ders kitab\u0131 s.70"
+  - id: art_humeri
+    valence: learn
+    doc_type: entry
+    content_type: Joint
+    title: Art. Humeri
+    topic: Movement System
+    region: Joints
+    tags: eklem; oynar; omuz; humerus; skapula
+    body: "Humerus ba\u015F\u0131 ile skapula kemi\u011Fi aras\u0131ndaki oynar eklemdir."
+    steps: "[\"V\xFCcudun en fazla hareket yetene\u011Fine sahip eklemidir.\",  \"Kola
+      t\xFCm hareketleri yapt\u0131r\u0131r.\"]"
+    source: "Ders kitab\u0131 s.70"
+  - id: art_cubiti
+    valence: learn
+    doc_type: entry
+    content_type: Joint
+    title: Art. Cubiti
+    topic: Movement System
+    region: Joints
+    tags: eklem; oynar; dirsek; humerus; ulna; radius
+    body: Humerus
+    steps: " ulna ve radius kemikleri aras\u0131ndaki oynar eklemdir."
+    source: "[\"\xDC\xE7 ayr\u0131 eklemden olu\u015Fur.\", \"Hem fleksiyon ve ekstansiyon
+      hem de pronasyon ve supinasyon yapt\u0131r\u0131r.\"]"
+  - id: art_ radiocarpalis
+    valence: learn
+    doc_type: entry
+    content_type: Joint
+    title: Art. Radiocarpalis
+    topic: Movement System
+    region: Joints
+    tags: "eklem; oynar; el bile\u011Fi; radius; karpal"
+    body: "Proksimaldeki \xFC\xE7 karpal kemik ile radius kemi\u011Fi aras\u0131ndaki
+      oynar eklemdir."
+    steps: "[\"Ulna kemi\u011Fi bu ekleme girmez.\", \"El bile\u011Fine fleksiyon
+      , ekstansiyon, abd\xFCksiyon, add\xFCksiyon, sirk\xFCmd\xFCksiyon yapt\u0131r\u0131r.\"]"
+    source: "Ders kitab\u0131 s.70"
+  - id: art_coxae
+    valence: learn
+    doc_type: entry
+    content_type: Joint
+    title: Art. Coxae
+    topic: Movement System
+    region: Joints
+    tags: "eklem; oynar; kal\xE7a; acetabulum; femur"
+    body: "Kal\xE7a kemi\u011Finin acetabulum \xE7ukuru ile femur ba\u015F\u0131
+      aras\u0131ndaki oynar eklemdir."
+    steps: "[\"Baca\u011Fa t\xFCm hareketleri yapt\u0131r\u0131r.\"]"
+    source: "Ders kitab\u0131 s.70"
+  - id: art_genus
+    valence: learn
+    doc_type: entry
+    content_type: Joint
+    title: Art. Genus
+    topic: Movement System
+    region: Joints
+    tags: eklem; oynar; diz; femur; tibia; patella
+    body: "V\xFCcudun en b\xFCy\xFCk ve karma\u015F\u0131k eklemlerinden biridir."
+    steps: "[\"Femur, tibia ve patella kemikleri aras\u0131ndad\u0131r.\", \"Fibula
+      kemi\u011Fi bu ekleme kat\u0131lmaz.\", \"Eklem y\xFCzleri aras\u0131nda menisk\xFCsler
+      vard\u0131r.\", \"Eklem \xF6n y\xFCz\xFCnde patella bulunur.\", \"Dize fleksiyon
+      ve ekstansiyon yapt\u0131r\u0131r.\", \"Yar\u0131 fleksiyonda biraz i\xE7 ve
+      d\u0131\u015F rotasyon yapt\u0131r\u0131r.\"]"
+    source: "Ders kitab\u0131 s.71"
