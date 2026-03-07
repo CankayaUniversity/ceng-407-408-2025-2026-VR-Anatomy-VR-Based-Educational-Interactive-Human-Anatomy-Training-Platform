@@ -1,0 +1,2635 @@
+[
+  {
+    "id": "os_frontale_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Os Frontale - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "neurocranium; kafa; os frontale; kafatası; alın; kemikleşmek; doğum",
+    "level": "medium",
+    "question_text": "Os Frontale, doğumda 2 parça halinde olup 1–2 yaşlarında kemikleşerek tek parça hâline dönüşür.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Kaç yaşında kemikleştiğine dikkat et.",
+    "rationale": "Ders kitabına göre os frontale doğumda iki parçalıdır ve 5–6 yaşlarında tek kemik hâline gelir.",
+    "source": "Ders kitabı s.54"
+  },
+  {
+    "id": "foramen_magnum_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Foramen Magnum - Konumu",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "neurocranium; kafa; delik; omurga; kafatası; omurga kanalı; omurilik; artkafa",
+    "level": "medium",
+    "question_text": "Omurilik, sinir ve damarların içinden geçtiği foramen magnum hangi kemik üzerinde bulunur?",
+    "data": {
+      "options": [
+        "Os Temporale",
+        "Os Occipitale",
+        "Os Palatinum",
+        "Os Sphenoidale"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Omuriliğin kafatasına girdiği arka ve alt kısmı oluşturan kemiği düşün.",
+    "rationale": "Ders kitabına göre, kafatası boşluğunun omurga kanalı ile bağlantısını sağlayan Foramen Magnum, Os Occipitale üzerindedir.",
+    "source": "Ders kitabı s.54"
+  },
+  {
+    "id": "os_sphenoidale_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Os Sphenoidale - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "neurocranium; kafa; os sphenoidale; kafatası; temel; sella turcica; hipofiz bezi",
+    "level": "medium",
+    "question_text": "Os Sphenoidalenin gövdesinin üst kısmındaki sella turcica denilen bölümüne hipofiz bezi yerleşmiştir.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Sella turcica denilen yapının hangi bez için özel bir yer oluşturduğunu düşün.",
+    "source": "Ders kitabı s.54"
+  },
+  {
+    "id": "os_parietale_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Os Parietale - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "neurocranium; kafa; duvar kemiği; çift; üst kısım; kafatası; os parietale",
+    "level": "medium",
+    "question_text": "Os Parietale kafatasının alt kısmında yer alır ve tek kemiktir.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Os parietalenin hem konumuna hem de çift mi tek mi olduğuna dikkat et.",
+    "rationale": "Ders kitabına göre kafatasının üst yan duvarını oluşturur ve çift kemiktir.",
+    "source": "Ders kitabı s.54"
+  },
+  {
+    "id": "os_temporale_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Os Temporale - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "neurocranium; kafa; şakak kemiği; os temporale; dış kulak yolu; mastoit; çift; kafatası",
+    "level": "medium",
+    "question_text": "Os Temporale, kulakların ön üst bölümünde yer alır. İçinden dış kulak yolu geçer ve alt çene kemiği ile kafanın tek oynar eklemini oluşturur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Şakak kemiğinin kulak bölgesi ve alt çene ile ilişkisini hatırla.",
+    "source": "Ders kitabı s.54"
+  },
+  {
+    "id": "os_ethmoidale_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Os Ethmoidale - Temel Bilgi",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "neurocranium; kafa; sinüs; kafatası; kalbur; burun",
+    "level": "hard",
+    "question_text": "Aşağıdakilerden hangisi Os Ethmoidale ile ilgili doğru bir ifadedir?",
+    "data": {
+      "options": [
+        "Kafatasının arka-alt kısmında yer alır ve foramen magnum’u içerir.",
+        "Kafanın ön kısmında, burun boşluğunun üst kısmında bulunur ve 2 adet sinüs içerir.",
+        "Kafatasının üst yan duvarını oluşturur ve çift kemiktir.",
+        "Kafanın ön kısmında yer alır ve orbitanın tavanını oluşturur."
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Burun boşluğunun üst kısmında bulunan ve sinüs içeren kemiği düşün.",
+    "rationale": "Ders kitabına göre, Os ethmoidale kafatası tabanında ve burun boşluğunun üst kısmında yer alan, kalbur görünümlü bir kemiktir. İki adet ethmoidal sinüs içerir ve concha nasalis superior ile media bu kemiğin uzantılarıdır.",
+    "source": "Ders kitabı s.54"
+  },
+  {
+    "id": "os_frontale_tf_02",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Os Frontale - T/F (2)",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "neurocranium; kafa; os frontale; üst; kafatası; alın",
+    "level": "medium",
+    "question_text": "Burun bölmesinin üst kısmını oluşturan kemik Os Frontaledir.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Burun bölmesinin üst kısmını oluşturan kemiğin frontal değil farklı bir kemik olduğunu hatırla.",
+    "rationale": "Ders kitabına göre, burun bölmesinin üst kısmını oluşturan kemik Os Ethmoidaledir.",
+    "source": "Ders kitabı s.54"
+  },
+  {
+    "id": "os_parietale_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Os Parietale - Eklem",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "neurocranium; kafa; duvar kemiği; üst kısım; kafatası; os parietale; eklem; sutura sagittalis",
+    "level": "medium",
+    "question_text": "Os Parietale kemiği, kafanın üst bölümünde hangi kemik ile eklem yapar?",
+    "data": {
+      "options": [
+        "Os Frontale",
+        "Os Occipitale",
+        " Os Parietale",
+        "Os Temporale"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Kafanın üst kısmında iki aynı kemik birbirine sutura sagittalis ile bağlanır.",
+    "rationale": "Ders kitabına göre, iki Os Parietale kafanın üst bölümünde birbiriyle (sutura sagittalis) eklem yapar.",
+    "source": "Ders kitabı s.54"
+  },
+  {
+    "id": "os_mandibula_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Yüz  Kemikleri - Temel Bilgi",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "viscerocranium; yüz; yüz kemikleri; os mandibula; alt çene; büyük; kuvvet; çene; kafa",
+    "level": "easy",
+    "question_text": "Yüz bölgesinin en büyük ve en kuvvetli kemiği hangisidir?",
+    "data": {
+      "options": [
+        "Os Maxilla",
+        "Os Zygomaticum",
+        "Os Palatinum",
+        "Os Mandibula"
+      ]
+    },
+    "answer": {
+      "correct_index": 3
+    },
+    "hint": "Yüz bölgesinde hem en büyük hem de en güçlü kemiği düşün.",
+    "rationale": "Ders kitabına göre, yüz bölgesinin en büyük ve en kuvvetli kemiği Os Mandibula kemiğidir.",
+    "source": "Ders kitabı s.55"
+  },
+  {
+    "id": "arcus_dentales_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Diş Kemerleri - Konumu",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "viscerocranium; yüz; diş kemerleri; os mandibula; os maxilla; çene; alt çene; üst çene; kafa",
+    "level": "medium",
+    "question_text": "Alt diş kemeri ile üst diş kemeri sırası ile hangi yüz kemiklerinde bulunur?",
+    "data": {
+      "options": [
+        "Os Mandibula - Os Maxilla",
+        "Os Mandibula - Os Palatinum",
+        "Os Maxilla - Os Mandibula",
+        "Os Palatinum - Os Mandibula"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Alt diş kemeri alt çenede, üst diş kemeri ise üst çenede bulunur.",
+    "rationale": "Ders kitabına göre, alt çene kemiği olan Os Mandibulada alt diş kemeri bulunurken üst çene kemiği olan Os Maxillada da üst diş kemeri bulunur.",
+    "source": "Ders kitabı s.55"
+  },
+  {
+    "id": "os_vomer_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Os Vomer - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "viscerocranium; yüz; kafa; burun; sapan",
+    "level": "medium",
+    "question_text": "Os vomer, burun bölmesinin arka alt kısmını oluşturur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Vomerin burun septumunun hangi bölümünü oluşturduğunu hatırla.",
+    "source": "Ders kitabı s.55"
+  },
+  {
+    "id": "os_maxilla_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Os Maxilla - Konumu ve Görevleri",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "viscerocranium; yüz; çene; üst çene; kafa; damak; diş; çift",
+    "level": "hard",
+    "question_text": "Aşağıdaki ifadelerden hangisi Os maxilla için yanlıştır?",
+    "data": {
+      "options": [
+        "Ağız boşluğunun tavanının büyük kısmını oluşturur.",
+        "Göz çukurunun alt duvarını sınırlar.",
+        "Gövdesinde iki adet sinüs bulunur.",
+        "Kafatasının arka alt kısmında, foramen magnum çevresinde yer alır."
+      ]
+    },
+    "answer": {
+      "correct_index": 3
+    },
+    "hint": "Foramen magnum ile ilişkili olan kemik yüz kemiği değil, kafatasının arka-alt kısmındaki kemiktir.",
+    "rationale": "Ders kitabına göre bu ifade yanlıştır çünkü foramen magnum, kafatasının arka alt kısmında bulunan Os occipitale üzerinde yer alır; Os maxilla ise yüz bölgesinde, üst çeneyi oluşturur.",
+    "source": "Ders kitabı s.55"
+  },
+  {
+    "id": "os_zygomaticum_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Os Zygomaticum - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "viscerocranium; yüz; elmacık; zigomatik; kafa; çift",
+    "level": "medium",
+    "question_text": "Os zygomaticum, viscerocranium’un orta hattında yer alır ve burun boşluğunun tavanını oluşturur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Elmacık kemiğinin orta hatta mı yoksa yüzün yan tarafında mı bulunduğunu düşün.",
+    "rationale": "Ders kitabına göre Os zygomaticum, viscerocranium’un yan tarafında yer alan çift bir kemiktir. Göz çukurunun alt-dış duvarını ve elmacık çıkıntısını oluşturur; burun boşluğunun tavanında bulunmaz.",
+    "source": "Ders kitabı s.55"
+  },
+  {
+    "id": "os_nasale_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Os Nasale - Konumu",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "viscerocranium; yüz; burun; nazal; çift; kafa",
+    "level": "medium",
+    "question_text": "Aşağıdakilerden hangisi Os nasale ile ilgili doğru bir ifadedir?",
+    "data": {
+      "options": [
+        "Burun boşluğunun alt kısmında yer alır ve tek kemiktir.",
+        "Burun sırtının arka bölümünü oluşturur ve çift kemiktir.",
+        "Burun septumunun ön kısmını oluşturur ve düzensiz şekillidir.",
+        "Göz çukurunun dış duvarında bulunur ve elmacık çıkıntısını oluşturur."
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Os nasale çift kemiktir ve burun sırtının bir bölümünü oluşturur.",
+    "rationale": "Ders kitabına göre Os nasale, yüz iskeletine ait çift ve yassı bir kemiktir. Burun sırtının arka kısmını oluşturur ve orta hatta birbirine simetrik olarak birleşir.",
+    "source": "Ders kitabı s.55"
+  },
+  {
+    "id": "os_lacrimale_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Os Lacrimale - Konumu ve Komşuluğu",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "viscerocranium; yüz; lakrimal; gözyaşı; kafa; küçük; ince; çift; orbita iç duvar",
+    "level": "hard",
+    "question_text": "Aşağıdaki ifadelerden hangisi Os lacrimale için doğrudur?",
+    "data": {
+      "options": [
+        "Göz çukurunun dış yan duvarında yer alır ve elmacık kemiğiyle eklem yapar.",
+        "Yüz kemiklerinin en büyüklerinden biridir ve burun boşluğunun arka kısmını oluşturur.",
+        "Göz çukurunun iç yan duvarının ön bölümünde bulunur ve gözyaşı kanalıyla komşudur.",
+        "Kafatası tabanında yer alır ve ethmoidal sinüsleri barındırır."
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Gözyaşı kanalıyla komşu olan küçük kemiğin orbita içinde hangi duvarda bulunduğunu düşün.",
+    "rationale": "Ders kitabına göre Os lacrimale, yüz kemiklerinin en küçük ve en ince olanıdır. Orbita’nın iç yan duvarının ön kısmında yer alır ve gözyaşı kanalı (ductus nasolacrimalis) ile komşudur.",
+    "source": "Ders kitabı s.55"
+  },
+  {
+    "id": "os_palatinum_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Os Palatinum - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "viscerocranium; yüz; palatin; kafa; çift; damak",
+    "level": "medium",
+    "question_text": "Os palatinum, maksilla ile birlikte sert damağın arka kısmını oluşturur ve ağız boşluğunun tavanının şekillenmesine katkı sağlar.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Sert damağın arka kısmını oluşturan kemikleri hatırla.",
+    "source": "Ders kitabı s.55"
+  },
+  {
+    "id": "concha_nasalis_inferior_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Concha Nasalis Inferior - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "viscerocranium; yüz; alt; burun; kafa; çift; konka",
+    "level": "medium",
+    "question_text": "Concha nasalis inferior, burun boşluğunun üst yan duvarında bulunur ve orta konkayı oluşturur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Alt konkanın konumuna dikkat et; üstte değil daha aşağıdadır.",
+    "rationale": "Ders kitabına göre Concha nasalis inferior, burun boşluğunun dış yan duvarında yer alır ve alttaki konkadır, orta konkayı oluşturmaz. Üst, orta ve alt olmak üzere üç konka bulunur; bunlardan yalnızca alt konka ayrı bir kemiktir.",
+    "source": "Ders kitabı s.55"
+  },
+  {
+    "id": "concha_nasalis_inferior_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Concha Nasalis Inferior - Konumu",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "viscerocranium; yüz; alt; burun; kafa; çift; konka",
+    "level": "medium",
+    "question_text": "Aşağıdakilerden hangisi Concha nasalis inferior ile ilgili doğru bir ifadedir?",
+    "data": {
+      "options": [
+        "Burun boşluğunun yan (lateral) duvarında yer alır.",
+        "Burun septumunu (vomer) oluşturan kemik çıkıntıdır.",
+        "Orbita (göz çukuru) medial duvarının ana parçasıdır.",
+        "Etmoid kemiğin uzantısı olup üst burun yolunu sınırlar."
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Concha nasalis inferior burun boşluğunun septumunda değil yan duvarındadır.",
+    "rationale": "Ders kitabına göre Concha nasalis inferior, burun boşluğunun dış yan duvarında yer alır.",
+    "source": "Ders kitabı s.55"
+  },
+  {
+    "id": "os_palatinum_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Os Palatinum - Konumu",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "viscerocranium; yüz; palatin; kafa; çift; damak",
+    "level": "medium",
+    "question_text": "Aşağıdakilerden hangisi Os palatinum ile ilgili doğru bir ifadedir?",
+    "data": {
+      "options": [
+        "Burun bölmesinin (septum nasi) arka-alt kısmını tek başına oluşturur.",
+        "Üst çene kemiği (maxilla) ile birlikte ağız boşluğunun tavanını, yani sert damağı oluşturur.",
+        "Göz çukurunun iç yan duvarının ön kısmında bulunan, yüz kemiklerinin en küçük kemiğidir.",
+        "Tek ve hareketli olan tek yüz kemiğidir."
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Os palatinumun sert damağın oluşumuna katkısını hatırla.",
+    "rationale": "Ders kitabına göre Os palatinum üst çene kemiği ile beraber ağız boşluğunun tavanını oluşturur.",
+    "source": "Ders kitabı s.55"
+  },
+  {
+    "id": "os_lacrimale_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Os Lacrimale - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Head_Face",
+    "tags": "viscerocranium; yüz; lakrimal; gözyaşı; kafa; küçük; ince; çift; orbita iç duvar",
+    "level": "medium",
+    "question_text": "Os lacrimale, yüz kemiklerinin en küçüğü ve en incesidir.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Yüz kemikleri içinde en küçük ve en ince olan kemiği düşün.",
+    "source": "Ders kitabı s.55"
+  },
+  {
+    "id": "columna_vertebralis_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Lordoz Görülen Bölgeler",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "columna vertebralis; omurga; eğrilik; lordoz; boyun; bel; arka",
+    "level": "medium",
+    "question_text": "Lordoz omurganın hangi bölgelerinde görülür?",
+    "data": {
+      "options": [
+        "Boyun ve Göğüs",
+        "Boyun ve Bel",
+        "Bel ve Sakrum",
+        "Göğüs ve Sakrum"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Lordozun boyun ve bel bölgelerinde görülen eğrilik olduğunu hatırla.",
+    "rationale": "Ders kitabına göre lordoz yani omurganın arkaya doğru eğilmesi, boyun ve bel bölgesinde görülür.",
+    "source": "Ders kitabı s.58"
+  },
+  {
+    "id": "columna_vertebralis_mcq_02",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Kifoz Görülen Bölgeler",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "columna vertebralis; omurga; eğrilik; kifoz; göğüs; sakrum; ön",
+    "level": "medium",
+    "question_text": "Kifoz omurganın hangi bölgelerinde görülür?",
+    "data": {
+      "options": [
+        "Göğüs ve Bel",
+        "Boyun ve Sakrum",
+        "Göğüs ve Sakrum",
+        "Bel ve Boyun"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Kifozun göğüs ve sakrum bölgelerinde görüldüğünü düşün.",
+    "rationale": "Ders kitabına göre kifoz yani omurganın öne doğru eğilmesi, göğüs ve sakrum bölgesinde görülür.",
+    "source": "Ders kitabı s.58"
+  },
+  {
+    "id": "columna_vertebralis_mcq_03",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Omurganın Görevleri",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "columna vertebralis; omurga; görev; taşıma; hareket;  koruma; barındırma",
+    "level": "medium",
+    "question_text": "Aşağıdakilerden hangisi omurganın görevlerinden biri değildir?",
+    "data": {
+      "options": [
+        "Baş, boyun ve gövdenin ağırlığını taşır.",
+        "Başın ve gövdenin hareketlerini sağlar.",
+        "Omuriliği barındırır ve korur.",
+        "Kanda oksijen ve karbondioksit değişimini sağlayarak solunumu gerçekleştirir."
+      ]
+    },
+    "answer": {
+      "correct_index": 3
+    },
+    "hint": "Omurganın görevleri destek, hareket ve koruma ile ilgilidir; solunum gaz değişimiyle değil.",
+    "rationale": "Ders kitabına göre omurga taşıma, hareket ve koruma işlerini yapar.",
+    "source": "Ders kitabı s.58"
+  },
+  {
+    "id": "columna_vertebralis_matching_01",
+    "valence": "assess",
+    "doc_type": "matching",
+    "title": "Omurlar ve sembolleri",
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "columna vertebralis; omurga; omur; vertebra; boyun; vertebrae cervicales; göğüs; vertebrae thoracicae; bel; vertebrae lumbales; sağrı; kuyruk sokumu; vertebrae sacrale; os sacrum; kuyruk; vertebrae coccygea; os coccyge; sembol",
+    "level": "medium",
+    "question_text": "Aşağıdaki omur bölgelerini doğru semboller ile eşleştiriniz.",
+    "data": {
+      "left": [
+        "Vertebrae cervicales",
+        "Vertebrae lumbales",
+        "Vertebrae sacrale",
+        "Vertebrae thoracicae",
+        "Vertebrae coccygea"
+      ],
+      "right": [
+        "T1-T12",
+        "L1-L5",
+        "C1-C7",
+        "Co1-Co4",
+        "S1-S5"
+      ],
+      "shuffle_right": true
+    },
+    "answer": {
+      "pairs": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          3
+        ]
+      ]
+    },
+    "source": "Ders kitabı s.59"
+  },
+  {
+    "id": "vertebra_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Omurların Kemikleşmesi",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "columna vertebralis; omurga; omur; vertebra; kemik; sakrum; os sacrum; vertebrae sacrale; sağrı; koksiks; os coccyge; vertebrae coccygea; kuyruk sokumu",
+    "level": "medium",
+    "question_text": "Yetişkinlerde kendi aralarında kaynaşıp birer kemiğe dönüşen omurlar hangileridir?",
+    "data": {
+      "options": [
+        "Vertebrae cervicales ve Vertebrae coccygea",
+        "Vertebrae lumbales ve Vertebrae sacrale",
+        "Vertebrae sacrale ve Vertebrae coccygea",
+        "Vertebrae lumbales ve Vertebrae cervicales"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Yetişkinde kaynaşarak tek kemik hâline gelen omur gruplarını düşün.",
+    "rationale": "Ders kitabına göre yetişkinlerde sakrum (sağrı) ve koksiks (kuyruk sokumu) omurları kendi aralarında kaynaşıp birer kemiğe dönüşür.",
+    "source": "Ders kitabı s.59"
+  },
+  {
+    "id": "vertebrae_cervicales_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Boyun omurları - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "columna vertebralis; omurga; vertebrae cervicales; omur; vertebra; boyun; atlas; axis",
+    "level": "easy",
+    "question_text": "C1 omura atlas, C2 omura eksen (axis) adı verilir.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "İlk iki boyun omurunun özel isimlerini hatırla.",
+    "source": "Ders kitabı s.59"
+  },
+  {
+    "id": "vertebrae_cervicales_tf_02",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Boyun omurları - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "columna vertebralis; omurga; vertebrae cervicales; omur; vertebra; boyun; atlas; axis; hareket",
+    "level": "medium",
+    "question_text": "C1 omurunun artkafa kemiği ve C2 omuru ile yaptığı eklemler kafanın hareketini sağlar.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Atlas ve axisin baş hareketlerindeki rolünü düşün.",
+    "source": "Ders kitabı s.59"
+  },
+  {
+    "id": "vertebrae_cervicales_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Boyun omurları sayısı",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "columna vertebralis; omurga; vertebrae cervicales; omur; vertebra; boyun; sayı",
+    "level": "easy",
+    "question_text": "Boyun bölgesinde kaç adet omur bulunur?",
+    "data": {
+      "options": [
+        "5",
+        "7",
+        "4",
+        "12"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Boyun omurlarının sembolü C1’den başlar ve C7’ye kadar gider.",
+    "rationale": "Ders kitabına göre 7 adet boyun omuru vardır ve C1-C7 sembolü ile gösterilirler.",
+    "source": "Ders kitabı s.59"
+  },
+  {
+    "id": "vertebrae_thoracicae_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Göğüs omurları sayısı",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "columna vertebralis; omurga; vertebrae thoracicae; omur; vertebra; göğüs; sayı",
+    "level": "easy",
+    "question_text": "Göğüs bölgesinde kaç adet omur bulunur?",
+    "data": {
+      "options": [
+        "4",
+        "7",
+        "12",
+        "5"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Göğüs omurları kaburga sayısıyla uyumlu olacak şekilde hatırlanabilir.",
+    "rationale": "Ders kitabına göre 12 adet göğüs omuru vardır ve T1-T12 sembolü ile gösterilirler.",
+    "source": "Ders kitabı s.59"
+  },
+  {
+    "id": "vertebrae_lumbales_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Bel omurları - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "columna vertebralis; omurga; vertebrae lumbales; omur; vertebra; bel; büyük; sağlam",
+    "level": "medium",
+    "question_text": "Gövdesi en büyük ve en sağlam omurlar lumbal bölgededir.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Vücut ağırlığını en çok taşıyan omurların daha büyük ve sağlam olması beklenir.",
+    "source": "Ders kitabı s.59"
+  },
+  {
+    "id": "vertebrae_lumbales_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Bel omurları sayısı",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "columna vertebralis; omurga; vertebrae lumbales; omur; vertebra; bel; sayı",
+    "level": "easy",
+    "question_text": "Bel bölgesinde kaç adet omur bulunur?",
+    "data": {
+      "options": [
+        "4",
+        "5",
+        "7",
+        "12"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Bel omurlarının sayısını L1-L5 sembolünden hatırla.",
+    "rationale": "Ders kitabına göre 5 adet boyun omuru vardır ve L1-L5 sembolü ile gösterilirler.",
+    "source": "Ders kitabı s.59"
+  },
+  {
+    "id": "vertebrae_sacrale_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Vücudun ağırlık merkezi - Konumu",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "columna vertebralis; omurga; vertebrae sacrale; os sacrum; omur; vertebra; kuyruk sokumu; sağrı; ağırlık; merkez; ağırlık merkezi",
+    "level": "hard",
+    "question_text": "Vücudun ağırlık merkezi hangi bölgedeki omurların önüne denk gelir?",
+    "data": {
+      "options": [
+        "Boyun omurları",
+        "Göğüs omurları",
+        "Bel omurları",
+        "Sağrı omurları"
+      ]
+    },
+    "answer": {
+      "correct_index": 3
+    },
+    "hint": "Ağırlık merkezinin S2 seviyesinin önüne denk geldiğini hatırla.",
+    "rationale": "Ders kitabına göre vücudun ağırlık merkezi S2’nin 2-2,5 cm önüne denk gelir.",
+    "source": "Ders kitabı s.59"
+  },
+  {
+    "id": "vertebrae_sacrale_mcq_02",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Sağrı omurları sayısı",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "columna vertebralis; omurga; vertebrae sacrale; os sacrum; omur; vertebra; kuyruk sokumu; sağrı; sayı",
+    "level": "easy",
+    "question_text": "Sağrı bölgesinde kaç adet omur bulunur?",
+    "data": {
+      "options": [
+        "4",
+        "12",
+        "7",
+        "5"
+      ]
+    },
+    "answer": {
+      "correct_index": 3
+    },
+    "hint": "Sağrı omurlarının sembolü S1’den başlar ve S5’e kadar gider.",
+    "rationale": "Ders kitabına göre 5 adet sağrı omuru vardır ve S1-S5 sembolü ile gösterilirler.",
+    "source": "Ders kitabı s.59"
+  },
+  {
+    "id": "vertebrae_coccygea_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Kuyruk omurları sayısı",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "columna vertebralis; omurga; vertebrae coccygea; os coccyge; omur; vertebra; kuyruk; sayı",
+    "level": "easy",
+    "question_text": "Kuyruk bölgesinde kaç adet omur bulunur?",
+    "data": {
+      "options": [
+        "12",
+        "7",
+        "4",
+        "5"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Kuyruk sokumu omurlarının sayısını Co1-Co4 sembolünden hatırla.",
+    "rationale": "Ders kitabına göre 4 adet kuyruk omuru vardır ve Co1-Co4 sembolü ile gösterilirler.",
+    "source": "Ders kitabı s.59"
+  },
+  {
+    "id": "os_sternum_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Göğüs tahtası kemiği yapısı",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "thoracic cage; göğüs kafesi; os sternum; göğüs tahtası kemiği; manubrium sterni; sternum sapı; corpus sterni; sternum\ngövdesi; processus xiphoideus; hançersi çıkıntı",
+    "level": "medium",
+    "question_text": "Göğüs tahtası kemiğini oluşturan 3 kısmın üstten alta doğru isimleri nelerdir?",
+    "data": {
+      "options": [
+        "hançersi çıkıntı/sternum gövdesi/sternum sapı",
+        "sternum sapı/sternum gövdesi/hançersi çıkıntı",
+        "sternum gövdesi/hançersi çıkıntı/sternum sapı",
+        "sternum gövdesi/sternum sapı/hançersi çıkıntı"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Sternumun bölümlerini yukarıdan aşağıya sıralarken sap, gövde ve uç kısmı düşün.",
+    "rationale": "Ders kitabına göre göğüs tahtası kemiğinin üstteki kısmına sternum sapı (manubrium sterni), ortadaki kısmına sternum gövdesi (corpus sterni) ve uç kısmına ise hançersi çıkıntı (processus xiphoideus) denir.",
+    "source": "Ders kitabı s.60"
+  },
+  {
+    "id": "os_sternum_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Göğüs tahtası kemiği - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "thoracic cage; göğüs kafesi; os sternum; göğüs tahtası kemiği; processus xiphoideus; hançersi çıkıntı; eklem",
+    "level": "medium",
+    "question_text": "Hançersi çıkıntı, kaburgalarla eklem yapmaz.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Processus xiphoideusun kaburgalarla eklem yapıp yapmadığına dikkat et.",
+    "source": "Ders kitabı s.60"
+  },
+  {
+    "id": "ossa_costae_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Kaburgalar - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Trunk",
+    "tags": "thoracic cage; göğüs kafesi; ossa costae; kaburga; kosta; yalancı kaburga",
+    "level": "hard",
+    "question_text": "Yalancı kaburgaların kıkırdakları önce kendi aralarında birleşip 7’nci kaburganın kıkırdağına katılır ve sternumla dolaylı eklem yapar.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Yalancı kaburgaların hepsi aynı şekilde sternuma ulaşmaz; son iki çifte dikkat et.",
+    "rationale": "Ders kitabına göre yalancı kaburgaların ilk 3 çiftinin kıkırdakları önce kendi aralarında birleşip 7’nci kaburganın kıkırdağına katılır ve sternumla dolaylı eklem yapar. Son 2 çift yalancı kaburga kasların içinde serbest olarak sonlanır.",
+    "source": "Ders kitabı s.60"
+  },
+  {
+    "id": "os_clavicula_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Köprücük kemiği - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Upper_Extremity",
+    "tags": "cingulum membri superioris; omuz; köprücük kemiği; köprü; kırılgan",
+    "level": "medium",
+    "question_text": "Vücutta en sık kırılan kemik köprücük kemiğidir.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Vücutta en sık kırılan kemiğin hangisi olduğunu düşün.",
+    "source": "Ders kitabı s.61"
+  },
+  {
+    "id": "os_clavicula_tf_02",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Köprücük kemiği - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Upper_Extremity",
+    "tags": "cingulum membri superioris; omuz; köprücük kemiği; köprü; kemikleşme",
+    "level": "medium",
+    "question_text": "Kemikleşmeye ilk başlayan kemik köprücük kemiğidir.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Kemikleşmeye en erken başlayan kemiği hatırla.",
+    "source": "Ders kitabı s.61"
+  },
+  {
+    "id": "os_scapula_matching_01",
+    "valence": "assess",
+    "doc_type": "matching",
+    "title": "Kürek kemiği bölgeleri isimleri",
+    "topic": "Movement System",
+    "region": "Upper_Extremity",
+    "tags": "cingulum membri superioris; omuz; kürek kemiği; acromion; korakoid çıkıntı; processus coracoideus; glenoid çukur; cavitas glenoidalis",
+    "level": "medium",
+    "question_text": "Kürek kemiğinin bölgelerini isimleriyle eşleştiriniz.",
+    "data": {
+      "left": [
+        "Köprücük kemiği ile eklem yapan dış yana doğru uzanan çıkıntı",
+        "Üst dış yanda öne doğru uzanan ve bazı kasların tutunduğu gagaya benzer çıkıntı",
+        "Kol kemiğiyle eklem yapan üst dış kenarı"
+      ],
+      "right": [
+        "cavitas glenoidalis",
+        "acromion",
+        "processus coracoideus"
+      ],
+      "shuffle_right": true
+    },
+    "answer": {
+      "pairs": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          0
+        ]
+      ]
+    },
+    "source": "Ders kitabı s.61"
+  },
+  {
+    "id": "os_humerus_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Kol kemiği - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Upper_Extremity",
+    "tags": "brachium; kol; kol kemiği; uzun",
+    "level": "easy",
+    "question_text": "Os Humerus, üst ekstremitenin en uzun kemiğidir.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Üst ekstremitedeki en uzun kemiğin hangisi olduğunu düşün.",
+    "source": "Ders kitabı s.62"
+  },
+  {
+    "id": "os_humerus_matching_01",
+    "valence": "assess",
+    "doc_type": "matching",
+    "title": "Kol kemiği bölgeleri isimleri",
+    "topic": "Movement System",
+    "region": "Upper_Extremity",
+    "tags": "brachium; kol; kol kemiği; caput humeri; humerus başı; trochlea humeri; humerus makarası; capitulum humeri; humerus başçığı",
+    "level": "medium",
+    "question_text": "Kol kemiğinin bölgelerini isimleriyle eşleştiriniz.",
+    "data": {
+      "left": [
+        "trochlea humeri",
+        "caput humeri",
+        "capitulum humeri"
+      ],
+      "right": [
+        "Kürek kemiği ile eklem (omuz eklemi) yapar.",
+        "İç yandaki dirsek kemiği ile eklem yapar.",
+        "Dış yandaki döner kemikle eklem yapar."
+      ],
+      "shuffle_right": true
+    },
+    "answer": {
+      "pairs": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          2
+        ]
+      ]
+    },
+    "source": "Ders kitabı s.62"
+  },
+  {
+    "id": "os_ulna_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Dirsek kemiği - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Upper_Extremity",
+    "tags": "antebrachium; ön kol; dirsek kemiği; olecranon; dirsek çıkıntısı; caput ulnae; ulna başı; bilek; bilek eklemi",
+    "level": "hard",
+    "question_text": "Dirsek kemiğinin humerus ile eklem yapan üst ucuna caput ulnae, bilek eklemine katılan kısma ise olecranon denir.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Olecranon ve caput ulnae isimlerinin hangi uçlara ait olduğunu karıştırma.",
+    "rationale": "Ders kitabına göre dirsek kemiğinin humerus ile eklem yapan üst ucuna olecranon (dirsek çıkıntısı), bilek eklemine katılan kısma ise caput ulnae (ulna başı) denir.",
+    "source": "Ders kitabı s.62"
+  },
+  {
+    "id": "os_radius_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Döner kemik - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Upper_Extremity",
+    "tags": "antebrachium; ön kol; döner kemik; avuç içi",
+    "level": "medium",
+    "question_text": "Öne uzatılan elin avuç içi aşağı çevrildiğinde os radius, ulnanın üzerine doğru döner.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Pronasyon sırasında radiusun ulna ile ilişkisini gözünde canlandır.",
+    "source": "Ders kitabı s.62"
+  },
+  {
+    "id": "os_radius_tf_02",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Ön kol bölgesi - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Upper_Extremity",
+    "tags": "antebrachium; ön kol; döner kemik; paralel; dirsek kemiği",
+    "level": "medium",
+    "question_text": "Anatomik duruşta os ulna ile os radius paraleldir.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Anatomik duruşta radius ve ulna çapraz değil yan yana uzanır.",
+    "source": "Ders kitabı s.62"
+  },
+  {
+    "id": "manus_matching_01",
+    "valence": "assess",
+    "doc_type": "matching",
+    "title": "El bölgesi kemikleri isimleri",
+    "topic": "Movement System",
+    "region": "Upper_Extremity",
+    "tags": "manus; el; bilek; el bileği; tarak; el tarak; parmak; el parmak",
+    "level": "medium",
+    "question_text": "El bölgesinde bulunan kemikleri açıklamaları ile eşleştiriniz.",
+    "data": {
+      "left": [
+        "Ossa Carpi",
+        "Ossa Metacarpi",
+        "Ossa Digitorum Manus (Phalanges)"
+      ],
+      "right": [
+        "4’erli iki sıra halinde 8 kısa kemik bulunur.",
+        "Avuç içi ve el sırtının iskeletini oluşturan 5 uzun kemiktir.",
+        "Beş parmakta toplam 14 kemik bulunur."
+      ],
+      "shuffle_right": true
+    },
+    "answer": {
+      "pairs": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ]
+    },
+    "source": "Ders kitabı s.63"
+  },
+  {
+    "id": "ossa_digitorum_manus_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Parmak kemikleri - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Upper_Extremity",
+    "tags": "manus; el; parmak; el parmak; sayı",
+    "level": "easy",
+    "question_text": "Parmak kemiklerinin sayısı başparmakta 2 diğer parmaklarda 3’er tanedir.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Başparmağın falanks sayısını diğer parmaklarla karşılaştır.",
+    "source": "Ders kitabı s.63"
+  },
+  {
+    "id": "lower_extremity_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Alt Ekstremite - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; kemik; kemik sayısı",
+    "level": "medium",
+    "question_text": "Alt ekstremitede tek tarafta toplam 31 kemik bulunur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Tek alt ekstremitedeki kemik sayısını toplam olarak düşün.",
+    "source": "Ders kitabı s.65"
+  },
+  {
+    "id": "os_coxa_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Os Coxa- T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; kalça; pelvis; çift; düzensiz; acetabulum",
+    "level": "medium",
+    "question_text": "Os coxa üç ayrı kemiğin birleşmesiyle oluşur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Os coxanın tek kemik gibi görünse de gelişimsel olarak kaç parçadan oluştuğunu hatırla.",
+    "source": "Ders kitabı s.64"
+  },
+  {
+    "id": "os_fibula_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Os Fibula- T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; baldır; dış; ince; fibula",
+    "level": "medium",
+    "question_text": "Os fibula diz ekleminin oluşumuna doğrudan katılır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Fibulanın diz eklemine doğrudan katılıp katılmadığına dikkat et.",
+    "rationale": "Ders kitabına göre, fibula diz ekleminin oluşumuna doğrudan katılmaz.",
+    "source": "Ders kitabı s.64"
+  },
+  {
+    "id": "os_patella_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Os Patella- T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; uyluk; diz; susamsı; patella",
+    "level": "medium",
+    "question_text": "Patella femur ile eklem yaparak diz eklemine katılır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Patellanın diz ekleminde femurla ilişkisini düşün.",
+    "source": "Ders kitabı s.64"
+  },
+  {
+    "id": "os_talus_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Os Talus - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; ayak bileği; kalkaneus",
+    "level": "medium",
+    "question_text": "Ayak bileğindeki en büyük kemik os talus’tur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Ayak bölgesindeki en büyük kemiğin talus mu calcaneus mu olduğunu hatırla.",
+    "rationale": "Ders kitabına göre, ayak bileğindeki en büyük kemik os calcaneus’tur.",
+    "source": "Ders kitabı s.65"
+  },
+  {
+    "id": "os_coxa_tf_02",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Os Coxa- T/F (2)",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; kalça; pelvis; çift; düzensiz; acetabulum",
+    "level": "medium",
+    "question_text": "Os coxa, doğumdan itibaren tek kemik hâlindedir ve gelişim sürecinde üç parçaya ayrılır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Os coxa doğumda tek kemik değildir; gelişim sırasını düşün.",
+    "rationale": "Ders kitabına göre, os coxa başlangıçta üç ayrı kemikten (ilium, pubis, ischii) oluşur ve 15-16 yaşlarında kaynaşarak tek kemik hâline gelir.",
+    "source": "Ders kitabı s.64"
+  },
+  {
+    "id": "os_fibula_tf_02",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Os Fibula- T/F (2)",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; baldır; dış; ince; fibula",
+    "level": "medium",
+    "question_text": "Fibula kemiği diz ekleminin oluşumuna katılmaz ancak tibia ile eklem yapar.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Fibulanın tibia ile ilişkisini ve diz eklemine katılıp katılmadığını ayır.",
+    "source": "Ders kitabı s.64"
+  },
+  {
+    "id": "ossa_tarsi_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Ossa Tarsi - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; ayak; ayak bileği; kısa; tarsal",
+    "level": "medium",
+    "question_text": "Her iki ayakta toplam 14 adet ossa tarsi bulunur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Tek ayakta 7 tarsal kemik olduğunu hatırlarsan toplamı bulabilirsin.",
+    "source": "Ders kitabı s.65"
+  },
+  {
+    "id": "ossa_digitorum_pedis_tf01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Ossa Digitorum Pedis - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; ayak ; ayak kemikleri; falanks; kemik sayısı",
+    "level": "medium",
+    "question_text": "Her iki alt ekstremitede bulunan toplam 62 kemiğin 28 tanesini ossa digitorum pedis oluşturur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Bir ayakta 14 falanks varsa iki tarafta kaç tane olur diye düşün.",
+    "source": "Ders kitabı s.65"
+  },
+  {
+    "id": "lower_extremity_tf_02",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Alt Ekstremite - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; kemik sayısı; metatars; falanks; analiz",
+    "level": "hard",
+    "question_text": "Tek alt ekstremitede bulunan ossa metatarsi ve ossa digitorum pedis kemiklerinin toplam sayısı, ossa tarsi kemiklerinin sayısından fazladır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Metatars ve falanks kemiklerinin toplamını tarsal kemiklerle karşılaştır.",
+    "rationale": "Ders kitabına göre, tek ayakta 5 ossa metatarsi ve 14 ossa digitorum pedis olmak üzere toplam 19 kemik bulunur. Ossa tarsi sayısı ise 7'dir. 19, 7'den fazladır.",
+    "source": "Ders kitabı s.65"
+  },
+  {
+    "id": "os_coxa_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Os Coxa - Bileşenleri",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; kalça; pelvis; çift; düzensiz; acetabulum",
+    "level": "easy",
+    "question_text": "Aşağıdakilerden hangisi kalça kemiğini (Os coxa) oluşturan kemiklerden biri değildir?",
+    "data": {
+      "options": [
+        "Os ilium",
+        "Os pubis",
+        "Os ischii",
+        "Os femur"
+      ]
+    },
+    "answer": {
+      "correct_index": 3
+    },
+    "hint": "Os coxayı oluşturan kemikler pelvise aittir; uzun uyluk kemiği bunlardan biri değildir.",
+    "rationale": "Ders kitabına göre, os femur kalça kemiğini oluşturan kemikler arasında yer almaz.",
+    "source": "Ders kitabı s.64"
+  },
+  {
+    "id": "caput_femoris_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Femur Başı - Eklem Yüzeyi",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; ;kalça; femur; kalça eklemi",
+    "level": "easy",
+    "question_text": "Femur başı (caput femoris) hangi yapı ile eklem yapar?",
+    "data": {
+      "options": [
+        "Tibia",
+        "Acetabulum",
+        "Os sacrum",
+        "Os pubis"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Femur başının kalça ekleminde oturduğu çukuru düşün.",
+    "rationale": "Ders kitabına göre, femur başı acetabulum ile eklem yapar.",
+    "source": "Ders kitabı s.64"
+  },
+  {
+    "id": "tibia_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Tibia - Üst Eklem İlişkisi",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; baldır; iç; uzun; tibia",
+    "level": "easy",
+    "question_text": "Tibia'nın üst kısmı hangi kemik ile eklem yapar?",
+    "data": {
+      "options": [
+        "Patella",
+        "Fibula",
+        "Femur",
+        "Talus"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Tibianın üstte diz eklemine hangi kemikle katıldığını hatırla.",
+    "rationale": "Ders kitabına göre, tibia üstte femur ile eklem yapar.",
+    "source": "Ders kitabı s.64"
+  },
+  {
+    "id": "ossa_metatarsi_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Ossa Metatarsi - Kemik Sayısı",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; ayak; tarak; uzun; metatarsal",
+    "level": "easy",
+    "question_text": "Tek ayakta kaç adet ossa metatarsi bulunur?",
+    "data": {
+      "options": [
+        "5",
+        "7",
+        "10",
+        "14"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Tek ayaktaki tarak kemiklerinin sayısını el tarak kemikleriyle benzetebilirsin.",
+    "rationale": "Ders kitabına göre, tek ayakta 5 metatars kemiği bulunur.",
+    "source": "Ders kitabı s.65"
+  },
+  {
+    "id": "ossa_digitorum_pedis_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Ayak Parmak Kemik Sayısı - Toplam Hesaplama",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; ayak ; ayak kemikleri; falanks; kemik sayısı; analiz sorusu",
+    "level": "hard",
+    "question_text": "Tek ayakta bulunan falanks (ossa digitorum pedis) kemiklerinin toplam sayısı ve dağılımı hangi seçenekte doğru verilmiştir?",
+    "data": {
+      "options": [
+        "Toplam 14 kemik; başparmak 2, diğer parmaklar 3'er kemikten oluşur",
+        "Toplam 15 kemik; tüm parmaklar 3'er kemikten oluşur",
+        "Toplam 12 kemik; başparmak 2, diğer parmaklar 2'şer kemikten oluşur",
+        "Toplam 16 kemik; başparmak 3, diğer parmaklar 3'er kemikten oluşur"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Başparmakta 2, diğer parmaklarda 3’er falanks bulunduğunu düşün.",
+    "rationale": "Ders kitabına göre, tek ayakta toplam 14 falanks kemiği bulunur. Başparmak 2 kemikten, diğer dört parmak ise 3'er kemikten oluşur (2 + 12 = 14).",
+    "source": "Ders kitabı s.65"
+  },
+  {
+    "id": "os_talus_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Talus - Eklem İlişkisi",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; ayak bileği; kalkaneus",
+    "level": "medium",
+    "question_text": "Talus kemiği aşağıdaki kemiklerden hangileri ile doğrudan eklem yapar?",
+    "data": {
+      "options": [
+        "Tibia ve fibula",
+        "Tibia ve femur",
+        "Fibula ve calcaneus",
+        "Femur ve tibia"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Ayak bileği ekleminde talus hangi bacak kemikleriyle temas eder, onu düşün.",
+    "rationale": "Ders kitabına göre, talus tibia ve fibula ile eklem yaparak ayak bileği eklemini oluşturur.",
+    "source": "Ders kitabı s.64"
+  },
+  {
+    "id": "os_fibula_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Os Fibula Özellik",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Lower_Extremity",
+    "tags": "alt ekstremite; baldır; dış; ince; fibula",
+    "level": "medium",
+    "question_text": "Aşağıdakilerden hangisi fibula kemiğinin özelliklerinden biridir?",
+    "data": {
+      "options": [
+        "Diz ekleminin oluşumuna doğrudan katılır",
+        "Vücudun en uzun kemiğidir",
+        "Tibia'ya destek sağlar ve diz eklemine katılmaz",
+        "Femur başı ile eklem yapar"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Fibulanın ince bir destek kemiği olduğunu ve diz eklemine doğrudan katılmadığını hatırla.",
+    "rationale": "Ders kitabına göre, fibula tibia'ya destek sağlar; diz eklemine katılmaz.",
+    "source": "Ders kitabı s.64"
+  },
+  {
+    "id": "syndesmosis_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Syndesmosis -T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; oynamaz; fibroz; syndesmosis",
+    "level": "medium",
+    "question_text": "Syndesmosis eklemlerde kemik yüzleri arasında hiyalin kıkırdak bulunur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Syndesmosis fibröz bir eklemdir; arada kıkırdak değil bağ dokusu bulunur.",
+    "rationale": "Ders kitabına göre, sindesmoz fibröz (lifli) bağ dokusu ile bağlanmış oynayamaz eklem tipidir; hiyalin kıkırdak bulunmaz.",
+    "source": "Ders kitabı s.67"
+  },
+  {
+    "id": "sinovial_joint_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Sinovyal  Zar - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; sinovyal eklem; sinovyal sıvı; eklem kapsülü",
+    "level": "medium",
+    "question_text": "Sinovyal zar, eklem boşluğuna sinovyal sıvı salgılayarak eklem yüzlerinin beslenmesini ve sürtünmeye karşı korunmasını sağlar.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Sinovyal zarın görevi eklem sıvısı üretmek ve eklem yüzlerini korumaktır.",
+    "source": "Ders kitabı s.68"
+  },
+  {
+    "id": "oynar_eklem_hareket_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Pronasyon Hareketi - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; eklem hareketleri; pronasyon; rotasyon; ön kol",
+    "level": "hard",
+    "question_text": "Pronasyon, eklemin dışa doğru döndürülmesi olup lateral rotasyon ile aynı hareketi ifade eder.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Pronasyon ile lateral rotasyon aynı hareket değildir; ön kola odaklan.",
+    "rationale": "Ders kitabına göre, pronasyon radiusun ulna üzerine dönmesidir; lateral rotasyon ise eklemin dışa doğru döndürülmesidir. Aynı hareket değildir.",
+    "source": "Ders kitabı s.69"
+  },
+  {
+    "id": "oynar_eklem_hareket_tf_02",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Tek Eksenli Eklem Hareketi - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; tek eksenli eklem; hareket ekseni",
+    "level": "hard",
+    "question_text": "Tek eksenli eklemler yalnızca bir eksen etrafında hareket yapabilir ve bu eklemler hem fleksiyon-ekstansiyon hem de rotasyon hareketlerini birlikte gerçekleştirebilir.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Tek eksenli eklemler yalnızca tek bir eksen çevresinde hareket eder.",
+    "rationale": "Ders kitabına göre, tek eksenli eklemler yalnızca bir eksen etrafında hareket yapar; birden fazla hareket tipini birlikte yapamaz.",
+    "source": "Ders kitabı s.70"
+  },
+  {
+    "id": "art_genus_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Diz Eklemine Katılan Kemikler - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; oynar; diz; femur; tibia; patella",
+    "level": "medium",
+    "question_text": "Diz eklemi femur, tibia, patella ve fibula kemikleri arasında oluşur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Diz eklemine katılan kemikleri düşünürken fibulayı ayrıca sorgula.",
+    "rationale": "Ders kitabına göre, diz eklemi femur, tibia ve patella arasında oluşur; fibula diz eklemine katılmaz.",
+    "source": "Ders kitabı s.71"
+  },
+  {
+    "id": "symphysis_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Symphysis - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; yarı oynar; symphysis; fibroz kıkırdak",
+    "level": "medium",
+    "question_text": "Symphysis tipi yarı oynar eklemlerde eklem yüzleri arasında fibroz kıkırdak yapısında bir disk bulunur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Symphysis tipinde eklem yüzleri arasında nasıl bir kıkırdak yapı bulunduğunu hatırla.",
+    "source": "Ders kitabı s.67"
+  },
+  {
+    "id": "sinovial_joint_tf_02",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Sinovyal  Eklem- T/F (2)",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; sinovyal eklem; kapsül; sinovyal zar",
+    "level": "medium",
+    "question_text": "Sinovyal eklem kapsülü tek katmanlı olup yalnızca fibröz zardan oluşur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Sinovyal eklem kapsülü tek katmanlı değil, iki tabakalıdır.",
+    "rationale": "Ders kitabına göre, sinovyal eklem kapsülü iki katmandan oluşur: dışta fibröz zar, içte sinovyal zar bulunur.",
+    "source": "Ders kitabı s.68"
+  },
+  {
+    "id": "joint_movements_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Çok Eksenli Eklem - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; çok eksenli; sirkümdüksiyon; omuz",
+    "level": "hard",
+    "question_text": "Çok eksenli eklemler yalnızca iki eksen etrafında hareket yapabilir ve sirkümdüksiyon gerçekleştiremez.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Çok eksenli eklemler sadece iki değil birden fazla eksende hareket edebilir.",
+    "rationale": "Ders kitabına göre, çok eksenli eklemler transvers, sagittal ve vertikal eksenlerde hareket yapabilir ve sirkümdüksiyon gerçekleştirebilir.",
+    "source": "Ders kitabı s.70"
+  },
+  {
+    "id": "joint_dislocation_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Çıkık - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; çıkık; eklem yaralanmaları",
+    "level": "medium",
+    "question_text": "Çıkık durumunda eklem yüzleri geçici olarak ayrılır ve kemikler kısa sürede anatomik konumlarına döner.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Çıkık ile burkulma arasındaki farkın kalıcılık durumunda olduğunu düşün.",
+    "rationale": "Ders kitabına göre, çıkık eklemi oluşturan kemiklerin anatomik pozisyonlarını kaybederek eklem yüzlerinin kalıcı olarak ayrılması durumudur; geçici değildir.",
+    "source": "Ders kitabı s.71"
+  },
+  {
+    "id": "joint_sprain_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Burkulma - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; burkulma; eklem yaralanmaları",
+    "level": "medium",
+    "question_text": "Burkulma, eklemi oluşturan kemiklerin anatomik pozisyonlarını kaybetmesi sonucu eklem yüzlerinin kalıcı olarak ayrılmasıdır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Burkulmada ayrılma geçicidir, kalıcı ayrılma ise çıkıktır.",
+    "rationale": "Ders kitabına göre, burkulma eklemi oluşturan kemiklerin ani olarak anatomik pozisyonlarını kaybederek eklem yüzlerinin geçici olarak ayrılmasıdır; kalıcı değildir",
+    "source": "Ders kitabı s.71"
+  },
+  {
+    "id": "fibrous_joint_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Fibröz - Eklem Türleri",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; fibröz eklem; sutura; gomphosis; sindesmoz",
+    "level": "medium",
+    "question_text": "Aşağıdakilerden hangisi fibröz eklem türlerinden biri değildir?",
+    "data": {
+      "options": [
+        "Sutura",
+        "Gomphosis",
+        "Sindesmoz",
+        "Synchondrosis"
+      ]
+    },
+    "answer": {
+      "correct_index": 3
+    },
+    "hint": "Fibröz eklemleri düşünürken kıkırdak içeren eklem tipini ele.",
+    "rationale": "Ders kitabına göre, synchondrosis yarı oynar (kartilaginöz) eklemdir; fibröz eklem değildir.",
+    "source": "Ders kitabı s.67"
+  },
+  {
+    "id": "synovial_joint_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Sinovyal - Eklem Özellikleri",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; sinovyal eklem; eklem kapsülü; sinovyal sıvı",
+    "level": "medium",
+    "question_text": "Sinovyal eklemleri diğer eklem tiplerinden ayıran en önemli özellik aşağıdakilerden hangisidir?",
+    "data": {
+      "options": [
+        "Kemiklerin doğrudan fibröz bağ ile bağlanması",
+        "Eklem boşluğu ve sinovyal sıvı bulunması",
+        "Eklem yüzleri arasında fibroz kıkırdak bulunması",
+        "Hareket yeteneğinin olmaması"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Sinovyal eklemi ayıran temel özellik eklem boşluğu ve sinovyal sıvıdır.",
+    "rationale": "Ders kitabına göre, sinovyal eklemleri ayıran temel özellik eklem boşluğu ve sinovyal sıvı bulunmasıdır.",
+    "source": "Ders kitabı s.68"
+  },
+  {
+    "id": "joint_movements_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Eklem Hareketi",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; eklem hareketleri; fleksiyon; açı değişimi",
+    "level": "easy",
+    "question_text": "Eklem yüzleri arasındaki açının küçülmesini ifade eden hareket aşağıdakilerden hangisidir?",
+    "data": {
+      "options": [
+        "Ekstansiyon",
+        "Abdüksiyon",
+        "Fleksiyon",
+        "Rotasyon"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Eklem açısının küçülmesi hangi hareketti, onu düşün.",
+    "rationale": "Ders kitabına göre, eklem yüzleri arasındaki açının azalması fleksiyon olarak adlandırılır.",
+    "source": "Ders kitabı s.69"
+  },
+  {
+    "id": "joint_movements_mcq_02",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Tek Eksenli Eklem Hareketi",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; tek eksenli; hareket ekseni",
+    "level": "medium",
+    "question_text": "Tek eksenli bir eklem aşağıdaki hareket kombinasyonlarından hangisini yapabilir?",
+    "data": {
+      "options": [
+        "Fleksiyon ve ekstansiyon",
+        "Fleksiyon, abdüksiyon ve rotasyon",
+        "Abdüksiyon ve addüksiyon",
+        "Rotasyon ve sirkümdüksiyon"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Tek eksenli eklemler en tipik olarak tek düzlemde bükülme-açılma yapar.",
+    "rationale": "Ders kitabına göre, tek eksenli eklemler yalnızca bir eksen etrafında hareket yapar; genellikle fleksiyon ve ekstansiyon gerçekleştirir.",
+    "source": "Ders kitabı s.70"
+  },
+  {
+    "id": "joint_movements_mcq_03",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Pronasyon - Tanımı",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; eklem hareketleri; pronasyon; ön kol; radius",
+    "level": "medium",
+    "question_text": "Pronasyon hareketi aşağıdakilerden hangisi ile doğru tanımlanır?",
+    "data": {
+      "options": [
+        "Radiusun ulna üzerine dönmesi",
+        "Eklemin dışa doğru döndürülmesi",
+        "Ayağın içe doğru döndürülmesi",
+        "Eklem yüzleri arasındaki açının artması"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Pronasyonda hareket eden kemik radius olup ulna üzerine döner.",
+    "rationale": "Ders kitabına göre, pronasyon radius kemiğinin ulna üzerine dönmesidir.",
+    "source": "Ders kitabı s.69"
+  },
+  {
+    "id": "synchondrosis_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Synchondrosis - Özelliği",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; yarı oynar; synchondrosis; hiyalin kıkırdak",
+    "level": "medium",
+    "question_text": "Synchondrosis tipi yarı oynar eklemlerde eklem yüzleri arasında aşağıdakilerden hangisi bulunur?",
+    "data": {
+      "options": [
+        "Hiyalin kıkırdak",
+        "Fibroz kıkırdak disk",
+        "Sinovyal sıvı",
+        "Eklem boşluğu"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Synchondrosis tipinde eklem yüzleri arasında hangi tür kıkırdak olduğunu hatırla.",
+    "rationale": "Ders kitabına göre, synchondrosis tipi yarı oynar eklemlerde eklem yüzleri arasında hiyalin kıkırdak bulunur.",
+    "source": "Ders kitabı s.67"
+  },
+  {
+    "id": "joint_movements_mcq_04",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Sirkümdüksiyon - Hareketi",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem ; eklem hareketleri; sirkümdüksiyon; çok eksenli",
+    "level": "hard",
+    "question_text": "Sirkümdüksiyon hareketi aşağıdakilerin hangisinin ardışık birleşimiyle oluşur?",
+    "data": {
+      "options": [
+        "Fleksiyon, abdüksiyon, ekstansiyon ve addüksiyon",
+        "Rotasyon ve inversiyon",
+        "Ekstansiyon ve pronasyon",
+        "Abdüksiyon ve eversiyon"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Sirkümdüksiyon tek bir hareket değil, birkaç hareketin ardışık birleşimidir.",
+    "rationale": "Ders kitabına göre, sirkümdüksiyon fleksiyon, abdüksiyon, ekstansiyon ve addüksiyon hareketlerinin dairesel şekilde ardışık tekrarıdır.",
+    "source": "Ders kitabı s.69"
+  },
+  {
+    "id": "joint_movements_mcq_05",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Eksen–Hareket Eşleştirmesi",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; eklem harketleri; eksen; rotasyon; fleksiyon",
+    "level": "hard",
+    "question_text": "Aşağıdaki eşleştirmelerden hangisi doğrudur?",
+    "data": {
+      "options": [
+        "Transvers eksen – Fleksiyon/Ekstansiyon",
+        "Sagittal eksen – Fleksiyon/Ekstansiyon",
+        "Vertikal eksen – Abdüksiyon/Addüksiyon",
+        "Transvers eksen – Rotasyon"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Fleksiyon ve ekstansiyonun hangi eksen etrafında gerçekleştiğini düşün.",
+    "rationale": "Ders kitabına göre, transvers eksen etrafında fleksiyon ve ekstansiyon hareketi gerçekleşir.",
+    "source": "Ders kitabı s.69"
+  },
+  {
+    "id": "dislocation_sprain_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Çıkık - Burkulma Karşılaştırması",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem; çıkık; burkulma; yaralanma",
+    "level": "medium",
+    "question_text": "Aşağıdakilerden hangisi çıkık ile burkulma arasındaki temel farktır?",
+    "data": {
+      "options": [
+        "Çıkıkta ayrılma kalıcıdır, burkulmada geçicidir",
+        "Burkulmada kemikler kalıcı olarak ayrılır",
+        "Çıkık yalnızca fibröz eklemlerde görülür",
+        "Burkulma sinovyal sıvının azalmasıdır"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Çıkıkta ayrılma kalıcı, burkulmada ise geçicidir.",
+    "rationale": "Ders kitabına göre, çıkıkta eklem yüzleri kalıcı olarak ayrılır; burkulmada ayrılma geçicidir.",
+    "source": "Ders kitabı s.71"
+  },
+  {
+    "id": "joint_movements_mcq_06",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Pronasyon–Supinasyon Eksen Analizi",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Joints",
+    "tags": "eklem ; eklem hareketleri; pronasyon; supinasyon; eksen; rotasyon",
+    "level": "hard",
+    "question_text": "Pronasyon ve supinasyon hareketleri aşağıdaki eksenlerden hangisi etrafında gerçekleşir?",
+    "data": {
+      "options": [
+        "Vertikal eksen",
+        "Transvers eksen",
+        "Sagittal eksen",
+        "Belirli bir eksen yoktur"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Pronasyon ve supinasyon rotasyon tipi hareketlerdir; rotasyonun eksenini düşün.",
+    "rationale": "Ders kitabına göre, pronasyon ve supinasyon vertikal eksen etrafında gerçekleşen rotasyon hareketleridir.",
+    "source": "Ders kitabı s.69"
+  },
+  {
+    "id": "muscle_duty_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Kasların Görevleri",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; görev; ısı; hareket; koruma",
+    "level": "hard",
+    "question_text": "Aşağıdakilerden kaç tanesi doğrudur?\n\n1. Kaslar, kemik ve eklem yardımıyla hareketi sağlar.\n2. Kaslar kasılarak ısı üretir.\n3. İç organların etrafını sararak onları dış etkilerden korur.\n4. Kan dolaşımı, sindirim ve boşaltım gibi işlevleri gerçekleştirir.",
+    "data": {
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ]
+    },
+    "answer": {
+      "correct_index": 3
+    },
+    "hint": "Dört maddenin de kasların temel görevleri arasında olup olmadığını tek tek kontrol et.",
+    "source": "Ders kitabı s.72"
+  },
+  {
+    "id": "muscle_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Kas uçları",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas;  uç; origo; insertio",
+    "level": "hard",
+    "question_text": "Aşağıdaki bilgilerin sırasıyla doğru veya yanlış olduğunu bulunuz.\n\n1. Kasın kemiklere yapışan başlangıç ucuna origo (orijin), sonlanma ucuna ise insertio (insersiyo) adı verilir.\n2. Orijin genellikle gövdeye yakın insersiyo ise gövdeye uzak uçtur.\n3. Kas kasıldığında hareketsiz veya az hareketli olan uç orijin, hareketli uç ise insersiyodur.",
+    "data": {
+      "options": [
+        "Doğru-Yanlış-Doğru",
+        "Doğru-Doğru-Yanlış",
+        "Yanlış-Yanlış-Yanlış",
+        "Doğru-Doğru-Doğru"
+      ]
+    },
+    "answer": {
+      "correct_index": 3
+    },
+    "hint": "Origo daha sabit, insertio daha hareketli uç olarak düşünülür.",
+    "source": "Ders kitabı s.73"
+  },
+  {
+    "id": "muscle_type_matching_01",
+    "valence": "assess",
+    "doc_type": "matching",
+    "title": "Kas çeşitleri",
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; çeşit; gövde şekli; baş sayısı; büyüklük; yaptıkları işlev",
+    "level": "medium",
+    "question_text": "Aşağıdaki kas çeşitlerini eşleştiriniz.",
+    "data": {
+      "left": [
+        "quadriceps",
+        "trapezoid",
+        "latissimus",
+        "supinator"
+      ],
+      "right": [
+        "Gövde şekline göre",
+        "Yaptıkları işleve göre",
+        "Baş sayısına göre",
+        "Büyüklüklerine göre"
+      ],
+      "shuffle_right": true
+    },
+    "answer": {
+      "pairs": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    "source": "Ders kitabı s.72"
+  },
+  {
+    "id": "muscle_matching_01",
+    "valence": "assess",
+    "doc_type": "matching",
+    "title": "Yardımcı elemanlar",
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; yardımcı eleman; tendon; fascia; sinovyal; bursa synovialis; vagina synovialis tendinis",
+    "level": "medium",
+    "question_text": "Aşağıdaki yardımcı elemanları özellikleri ile eşleştiriniz.",
+    "data": {
+      "left": [
+        "Tendon",
+        "Fascia",
+        "Bursa synovialis",
+        "Vagina synovialis tendinis"
+      ],
+      "right": [
+        "Kasların hem tek tek hem de toplu halde kasılmasına yardım eder.",
+        "Kasların kemiklere tutunmasını sağlayan yapıdır.",
+        "Kemik veya diğer sert kısımlardan geçen tendonları bir kılıf gibi saran, içinde sinovyal sıvı bulunan kesedir.",
+        "Çıkıntılı kemik kısımlar ile kas ve tendon arasına koruyucu bir yastık gibi giren, içinde sinovyal sıvı bulunan kesedir."
+      ],
+      "shuffle_right": true
+    },
+    "answer": {
+      "pairs": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          2
+        ]
+      ]
+    },
+    "source": "Ders kitabı s.75"
+  },
+  {
+    "id": "head_muscle_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Mimik/Çiğneme kasları",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; yüz; kafa; mimik; çiğneme",
+    "level": "hard",
+    "question_text": "Aşağıdaki kasların sırasıyla mimik mi çiğneme mi olduğunu bulunuz.\n\n1. M. Temporalis\n2. M. Orbicularis Oris\n3. M. Risorius\n4. M. Masseter",
+    "data": {
+      "options": [
+        "Çiğneme-Mimik-Çiğneme-Mimik",
+        "Mimik-Çiğneme-Mimik-Çiğneme",
+        "Çiğneme-Mimik-Mimik Çiğneme",
+        "Mimik-Çiğneme-Çiğneme Mimik"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "M. temporalis ve M. masseter çiğneme; orbicularis oris ve risorius mimik kasıdır.",
+    "source": "Ders kitabı s.76"
+  },
+  {
+    "id": "neck_muscle_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "SCM - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; boyun; fleksiyon; kalın; yüzeysel",
+    "level": "hard",
+    "question_text": "M. Sternocleidomastoideus, tek taraflı kasılınca başı kendi tarafına eğer, yüzü karşı tarafa baktırır. Çift taraflı kasılırsa başa fleksiyon yaptırır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "SCM’nin tek taraflı ve çift taraflı kasılmalarındaki etkileri ayrı ayrı düşün.",
+    "source": "Ders kitabı s.76"
+  },
+  {
+    "id": "trunk_muscle_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "M. Pectoralis - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; göğüs; soluk",
+    "level": "medium",
+    "question_text": "M. Pectoralis Minor, derin ve kuvvetli soluk almaya yardım eden göğüs kasıdır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Derin ve kuvvetli soluk almaya yardım eden göğüs kasının major mu minor mu olduğuna dikkat et.",
+    "rationale": "Ders kitabına göre, M. Pectoralis Major derin ve kuvvetli soluk almaya yardım eden göğüs kasıdır.",
+    "source": "Ders kitabı s.77"
+  },
+  {
+    "id": "trunk_muscle_tf_02",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "M. Subclavius - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; göğüs; köprücük; koruma; damar; sinir",
+    "level": "medium",
+    "question_text": "M. Subclavius, koltuk altı damar ve sinir ağını korur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Köprücük kemiğinin altında bulunan bu kasın koruyucu görevini düşün.",
+    "source": "Ders kitabı s.77"
+  },
+  {
+    "id": "trunk_muscle_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Soluk alma kasları",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; göğüs; derin; diyafram; soluk alma",
+    "level": "medium",
+    "question_text": "Soluk almayı sağlayan esas kas hangisidir?",
+    "data": {
+      "options": [
+        "Diaphragma",
+        "M. Serratus Anterior",
+        "M. Intercostales Externi",
+        "M. Pectoralis Minor"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Soluk almanın ana motor gücü olan kubbe şeklindeki kası düşün.",
+    "rationale": "Ders kitabına göre, Diyafragma soluk almayı sağlayan esas kastır.",
+    "source": "Ders kitabı s.78"
+  },
+  {
+    "id": "trunk_muscle_tf_03",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Diyafram - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; göğüs; derin; diyafram; kasılma; gevşeme",
+    "level": "medium",
+    "question_text": "Diyafragma kasıldığında göğüs boşluğunu genişleterek soluk almayı sağlar. Gevşediğinde ise soluk verme gerçekleşir.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Diyafram kasıldığında aşağı iner ve göğüs boşluğunun hacmini artırır.",
+    "source": "Ders kitabı s.78"
+  },
+  {
+    "id": "trunk_muscle_tf_04",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "M. Serratus Posterior Superior - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; sırt; kaburga; kasılma; genişletme",
+    "level": "hard",
+    "question_text": "M. Serratus Posterior Superior kası kasıldığı zaman kaburgaları yukarı doğru kaldırarak göğüs boşluğunu daraltır ve soluk vermeye yardımcı olur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Superior kasın kaburgaları yukarı mı aşağı mı çektiğini ve bunun soluk alma mı verme mi sağladığını düşün.",
+    "rationale": "Ders kitabına göre, M. Serratus Posterior Superior kası kasıldığı zaman kaburgaları yukarı doğru kaldırarak göğüs boşluğunu genişletir ve soluk almaya yardımcı olur.",
+    "source": "Ders kitabı s.79"
+  },
+  {
+    "id": "trunk_muscle_tf_05",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "M. Serratus Posterior Inferior - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; sırt; kaburga; kasılma; daraltma",
+    "level": "hard",
+    "question_text": "M. Serratus Posterior Inferior kası kasıldığı zaman kaburgaları aşağı doğru çekerek göğüs boşluğunu genişletir ve soluk almaya yardımcı olur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Inferior kasın kaburgaları hangi yöne çektiğine ve göğüs boşluğunu genişletip genişletmediğine dikkat et.",
+    "rationale": "Ders kitabına göre, M. Serratus Posterior Inferior kası kasıldığı zaman kaburgaları aşağı doğru çekerek göğüs boşluğunu daraltır ve soluk vermeye yardımcı olur.",
+    "source": "Ders kitabı s.79"
+  },
+  {
+    "id": "muscle_duty_mcq_02",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Karın kaslarının görevleri",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; karın; görev; koruma; fleksiyon; rotasyon; dışkı; idrar; doğum",
+    "level": "hard",
+    "question_text": "Aşağıdakilerden kaç tanesi karın kaslarının görevleridir?\n\n1. Karın boşluğundaki organları saran ve koruyan kaslardır.\n2. Organlara basınç uygulayarak dışkı ve idrar yapmaya yardımcı olur.\n3. Gövdenin fleksiyon ve rotasyonunu sağlar.\n4. Doğuma yardımcı olur.",
+    "data": {
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ]
+    },
+    "answer": {
+      "correct_index": 3
+    },
+    "hint": "Karın kaslarının görevlerini tek tek düşün; koruma, basınç oluşturma, hareket ve doğumla ilişkilerini kontrol et.",
+    "source": "Ders kitabı s.79"
+  },
+  {
+    "id": "upper_extremity_muscle_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Omuz kasları rotasyon - T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; üst ekstremite; kol; rotasyon; iç; dış; omuz",
+    "level": "medium",
+    "question_text": "M. Teres Major kası kola iç rotasyon yaptırır, M. Teres Minor kası ise kola dış rotasyon yaptırır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Teres major ile teres minor kaslarının iç ve dış rotasyon görevlerini karşılaştır.",
+    "source": "Ders kitabı s.80"
+  },
+  {
+    "id": "upper_extremity_muscle_tf_02",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Kol kası -T/F",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; üst esktremite; kol; el; fleksör; ekstansör",
+    "level": "medium",
+    "question_text": "Elin fleksör kasları ön kolun ön bölümünde, elin ekstansör kasları ise ön kolun arka bölümünde yer alır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Fleksiyon yapan kaslar genellikle ön tarafta, ekstansiyon yapan kaslar ise arka tarafta bulunur.",
+    "source": "Ders kitabı s.81"
+  },
+  {
+    "id": "lower_extremity_muscle_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Uyluk kasları",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; alt ekstremite; uyluk; kalça; fleksör; ekstansör; abdüktör",
+    "level": "hard",
+    "question_text": "Uyluğun en güçlü fleksör, ekstansör ve abdüktör kasları sırasıyla hangileridir?",
+    "data": {
+      "options": [
+        "M. Gluteus Maximus-M. Iliopsoas-M. Gluteus Medius",
+        "M. Iliopsoas-M. Gluteus Maximus-M. Gluteus Medius",
+        "M. Gluteus Medius-M. Gluteus Maximus-M. Iliopsoas",
+        "M. Iliopsoas-M. Gluteus Medius-M. Gluteus Maximus"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Kalça fleksiyonu, ekstansiyonu ve abdüksiyonu yapan en güçlü kasları sırasıyla düşün.",
+    "source": "Ders kitabı s.81"
+  },
+  {
+    "id": "lower_extremity_muscle_mcq_02",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Vücudun uzun kası",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; alt ekstremite; uyluk; uzun",
+    "level": "medium",
+    "question_text": "Vücudun en uzun kası hangisidir?",
+    "data": {
+      "options": [
+        "M. Iliopsoas",
+        "M. Rectus Abdominis",
+        "M. Latissimus Dorsi",
+        "M. Sartorius"
+      ]
+    },
+    "answer": {
+      "correct_index": 3
+    },
+    "hint": "Leğen kemiğinden başlayıp uyluğun ön-iç tarafından geçerek tibianın üst kısmına uzanan uzun kası düşün.",
+    "rationale": "Ders kitabına göre, leğen kemiğinden başlayıp ön iç yanından geçerek tibia kemiğinin üst ucunda sonlanan kas olan M. Sartorius vücudun en uzun kasıdır.",
+    "source": "Ders kitabı s.82"
+  },
+  {
+    "id": "lower_extremity_muscle_mcq_03",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Aşil tendon",
+    "time_limit_sec": 30,
+    "topic": "Movement System",
+    "region": "Muscle",
+    "tags": "kas; alt ekstremite; baldır; aşil tendon",
+    "level": "medium",
+    "question_text": "Aşil tendonunu oluşturan kas hangisidir? ",
+    "data": {
+      "options": [
+        "M. Tibialis Posterior",
+        "Hamstring Grubu Kaslar",
+        "M. Triceps Surae",
+        "M. Sartorius"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Baldırın arka kısmında bulunan ve topuk kemiğine Aşil tendonu ile bağlanan kas grubunu düşün.",
+    "rationale": "Ders kitabına göre, M. Triceps Surae iki kas tibianın üst ucundan başlayıp aşil tendonunu oluşturduktan sonra topuk kemiğinde sonlanır.",
+    "source": "Ders kitabı s.83"
+  }
+]

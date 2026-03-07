@@ -27,13 +27,15 @@ public class QuizUIController : MonoBehaviour
 
     public void ShowQuestion(Question q)
     {
-        questionText.text = q.body;
+        // Soru metni için önce body, yoksa helper metod
+        if (!string.IsNullOrWhiteSpace(q.body))
+            questionText.text = q.body;
+        else
+            questionText.text = q.GetQuestionText();
 
         nextButton.gameObject.SetActive(false);
 
-        // ✅ Her yeni soruda popup kapalı
         rationalePopup.Hide();
-
         ClearButtons();
 
         CreateButton("A", q.A);
@@ -44,11 +46,17 @@ public class QuizUIController : MonoBehaviour
 
     void CreateButton(string key, string text)
     {
-        if (string.IsNullOrEmpty(text))
+        if (string.IsNullOrWhiteSpace(text))
             return;
 
         Button btn = Instantiate(answerButtonPrefab, answerContainer);
         AnswerButtonUI buttonUI = btn.GetComponent<AnswerButtonUI>();
+
+        if (buttonUI == null)
+        {
+            Debug.LogError("[QuizUIController] AnswerButtonUI component not found on answerButtonPrefab.");
+            return;
+        }
 
         buttonUI.Setup(key, text, this);
         spawnedButtons.Add(buttonUI);
@@ -73,7 +81,6 @@ public class QuizUIController : MonoBehaviour
                 btn.SetWrong();
         }
 
-        // SHOW POPUP ONLY IF ANSWER IS WRONG
         if (!isCorrect && !string.IsNullOrEmpty(rationale))
         {
             rationalePopup.Show(rationale);
@@ -82,39 +89,21 @@ public class QuizUIController : MonoBehaviour
         nextButton.gameObject.SetActive(true);
     }
 
-    /// <summary>
-    /// ✅ QuizManager time-up olunca burayı çağırıyor.
-    /// İstek: Popup çıkmasın, seçenekler görünmesin, sadece mesaj + Devam kalsın.
-    /// </summary>
     public void ShowTimeUpResult(string message)
     {
-        // Mesaj
         questionText.text = message;
-
-        // ✅ Popup istemiyoruz (kesin kapat)
         rationalePopup.Hide();
-
-        // ✅ Seçenekler görünmesin (tamamen sil)
         ClearButtons();
-
-        // ✅ Devam butonu görünsün
         nextButton.gameObject.SetActive(true);
     }
 
     private void OnNextButtonPressed()
     {
-        // ✅ Popup kullanmayacağız dediğin için bu kontrolü kaldırmak en temiz çözüm.
-        // (Zaten time-up'ta popup yok; yanlış cevapta popup varsa da kullanıcı popup'ı kapatmadan geçemesin
-        // istiyorsan aşağıdaki satırı geri ekleyebilirsin.)
         quizManager.NextQuestion();
-
-        // Eğer "popup açıkken next çalışmasın" istiyorsan şu şekilde kullan:
-        // if (rationalePopup.isPopupOpen == false) quizManager.NextQuestion();
     }
 
     public void UpdateTimer(float time)
     {
-        // time < 0 => süresiz soru
         if (time < 0f)
         {
             if (timerText != null)
@@ -128,9 +117,6 @@ public class QuizUIController : MonoBehaviour
         timerText.text = Mathf.CeilToInt(time).ToString();
     }
 
-    /// <summary>
-    /// ✅ Bu artık "gerçek quiz bitti" ekranı.
-    /// </summary>
     public void ShowQuizFinished()
     {
         questionText.text = "Quiz tamamlandı!";

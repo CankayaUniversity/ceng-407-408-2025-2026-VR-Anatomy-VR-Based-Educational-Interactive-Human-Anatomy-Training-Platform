@@ -11,28 +11,33 @@ public class QuestionList
 public class Question
 {
     // -----------------------------
-    // Ana metadata (her dataset)
+    // Ana metadata
     // -----------------------------
     public string id;
     public string valence;
-    public string doc_type;        // "mcq_single", "true_false", "matching", ...
+    public string doc_type;
     public string title;
     public string tags;
     public string source;
 
-    public string topic;           // movement excelinde var
-    public string region;          // movement excelinde var
-    public string concept_type;    // basic excelinde olabilir (varsa kaybetmeyelim)
+    public string topic;
+    public string region;
+    public string concept_type;
 
     // -----------------------------
-    // Süre (soru bazlı)
+    // Ek alanlar
     // -----------------------------
-    // Kural: 0 veya negatif => "süresiz"
-    // Excel boş gelirse genelde 0/NaN gibi dönüşür; JSON üretirken 0 basmak en temizi.
+    public string level;
+    public string hint;
+    public string rationale;
+
+    // -----------------------------
+    // Süre
+    // -----------------------------
     public int time_limit_sec;
 
     // -----------------------------
-    // UI'nin en stabil kullandığı alanlar (normalize edilmiş)
+    // Eski basic concept yapısı
     // -----------------------------
     public string body;
 
@@ -41,24 +46,119 @@ public class Question
     public string C;
     public string D;
 
-    // MCQ için standart: "A"/"B"/"C"/"D"
-    // Movement datasetinde answer bazen JSON string olabilir -> normalize aşamasında letter’a çevireceğiz.
-    public string answer;
+    // Eski datasetler için düz cevap alanı
+    public string answer_text;
 
-    public string rationale;
-
-    // -----------------------------
-    // Ham excel alanları (kayıpsız olsun)
-    // -----------------------------
-    // Basic excel
+    // Basic excel alanları
     public string question_text;
     public string option_a;
     public string option_b;
     public string option_c;
     public string option_d;
-    public string correct_answer;  // genelde "A"/"B"/"C"/"D"
+    public string correct_answer;
 
-    // Movement excel (mcq/true_false/matching)
-    public string data;            // JSON string: {"options":[...]} veya {"left":[...],"right":[...]}
-    // answer zaten yukarıda var; movement'ta JSON string gelebiliyor: {"correct_index":1} veya {"pairs":[[0,2],...]}
+    // -----------------------------
+    // Yeni motion dataset yapısı
+    // -----------------------------
+    public QuestionData data;
+    public QuestionAnswer answer;
+
+    public string GetQuestionText()
+    {
+        if (!string.IsNullOrWhiteSpace(question_text))
+            return question_text;
+
+        if (!string.IsNullOrWhiteSpace(body))
+            return body;
+
+        return string.Empty;
+    }
+
+    public List<string> GetOptions()
+    {
+        if (data != null && data.options != null && data.options.Count > 0)
+            return data.options;
+
+        List<string> options = new List<string>();
+
+        if (!string.IsNullOrWhiteSpace(option_a)) options.Add(option_a);
+        if (!string.IsNullOrWhiteSpace(option_b)) options.Add(option_b);
+        if (!string.IsNullOrWhiteSpace(option_c)) options.Add(option_c);
+        if (!string.IsNullOrWhiteSpace(option_d)) options.Add(option_d);
+
+        if (options.Count > 0)
+            return options;
+
+        if (!string.IsNullOrWhiteSpace(A)) options.Add(A);
+        if (!string.IsNullOrWhiteSpace(B)) options.Add(B);
+        if (!string.IsNullOrWhiteSpace(C)) options.Add(C);
+        if (!string.IsNullOrWhiteSpace(D)) options.Add(D);
+
+        return options;
+    }
+
+    public int GetCorrectIndex()
+    {
+        if (answer != null)
+            return answer.correct_index;
+
+        if (!string.IsNullOrWhiteSpace(correct_answer))
+            return LetterToIndex(correct_answer);
+
+        if (!string.IsNullOrWhiteSpace(answer_text))
+            return LetterToIndex(answer_text);
+
+        return -1;
+    }
+
+    private int LetterToIndex(string letter)
+    {
+        switch (letter.Trim().ToUpper())
+        {
+            case "A": return 0;
+            case "B": return 1;
+            case "C": return 2;
+            case "D": return 3;
+            default: return -1;
+        }
+    }
+
+    public bool IsMatching()
+    {
+        return doc_type == "matching";
+    }
+
+    public bool IsChoiceQuestion()
+    {
+        return doc_type == "mcq_single" || doc_type == "true_false" || string.IsNullOrWhiteSpace(doc_type);
+    }
+
+    public int GetTimeLimit()
+    {
+        return time_limit_sec;
+    }
+}
+
+[Serializable]
+public class QuestionData
+{
+    public List<string> options;
+
+    public List<string> left;
+    public List<string> right;
+    public bool shuffle_right;
+}
+
+[Serializable]
+public class QuestionAnswer
+{
+    public int correct_index;
+    public List<MatchPair> pairs;
+}
+
+[Serializable]
+public class MatchPair
+{
+    public int first;
+    public int second;
 }
