@@ -111,6 +111,35 @@ public class Question
         return -1;
     }
 
+    public List<string> GetMatchingLeft()
+    {
+        if (data != null && data.left != null)
+            return data.left;
+
+        return new List<string>();
+    }
+
+    public List<string> GetMatchingRight()
+    {
+        if (data != null && data.right != null)
+            return data.right;
+
+        return new List<string>();
+    }
+
+    public List<MatchPair> GetMatchingPairs()
+    {
+        if (answer != null && answer.pairs != null)
+            return answer.pairs;
+
+        return new List<MatchPair>();
+    }
+
+    public bool ShouldShuffleMatchingRight()
+    {
+        return data != null && data.shuffle_right;
+    }
+
     private int LetterToIndex(string letter)
     {
         switch (letter.Trim().ToUpper())
@@ -125,12 +154,17 @@ public class Question
 
     public bool IsMatching()
     {
-        return doc_type == "matching";
+        return !string.IsNullOrWhiteSpace(doc_type) && doc_type.Trim().ToLower() == "matching";
     }
 
     public bool IsChoiceQuestion()
     {
-        return doc_type == "mcq_single" || doc_type == "true_false" || string.IsNullOrWhiteSpace(doc_type);
+        if (string.IsNullOrWhiteSpace(doc_type))
+            return true;
+
+        string type = doc_type.Trim().ToLower();
+
+        return type == "mcq_single" || type == "true_false";
     }
 
     public int GetTimeLimit()
@@ -159,6 +193,6 @@ public class QuestionAnswer
 [Serializable]
 public class MatchPair
 {
-    public int first;
-    public int second;
+    public int leftIndex;
+    public int rightIndex;
 }

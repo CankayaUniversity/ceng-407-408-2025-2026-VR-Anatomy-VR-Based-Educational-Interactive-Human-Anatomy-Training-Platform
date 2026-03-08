@@ -13,10 +13,19 @@ public class QuizUIController : MonoBehaviour
     public Button nextButton;
     public RationalePopupUI rationalePopup;
 
+    [Header("Question Type Panels")]
+    public GameObject multipleChoicePanel;
+    public GameObject matchingPanel;
+
+    [Header("Matching UI")]
+    public Transform matchingContainer;
+    public MatchingRowUI matchingRowPrefab;
+
     [Header("Manager")]
     public QuizManager quizManager;
 
     private List<AnswerButtonUI> spawnedButtons = new List<AnswerButtonUI>();
+    private List<MatchingRowUI> spawnedMatchingRows = new List<MatchingRowUI>();
 
     private void Start()
     {
@@ -27,21 +36,93 @@ public class QuizUIController : MonoBehaviour
 
     public void ShowQuestion(Question q)
     {
-        // Soru metni için önce body, yoksa helper metod
         if (!string.IsNullOrWhiteSpace(q.body))
             questionText.text = q.body;
         else
             questionText.text = q.GetQuestionText();
 
         nextButton.gameObject.SetActive(false);
-
         rationalePopup.Hide();
+
         ClearButtons();
+        ClearMatchingRows();
+
+        if (q.IsMatching())
+        {
+            if (multipleChoicePanel != null)
+                multipleChoicePanel.SetActive(false);
+
+            if (matchingPanel != null)
+                matchingPanel.SetActive(true);
+
+            ShowMatchingQuestion(q);
+
+            Debug.Log("Matching soru gösteriliyor: " + q.GetQuestionText());
+        }
+        else
+        {
+            if (matchingPanel != null)
+                matchingPanel.SetActive(false);
+
+            if (multipleChoicePanel != null)
+                multipleChoicePanel.SetActive(true);
+
+            ShowChoiceQuestion(q);
+        }
+    }
+
+    void ShowChoiceQuestion(Question q)
+    {
+        List<string> options = q.GetOptions();
+
+        if (options != null && options.Count > 0)
+        {
+            for (int i = 0; i < options.Count; i++)
+            {
+                string optionKey = ((char)('A' + i)).ToString();
+                CreateButton(optionKey, options[i]);
+            }
+
+            return;
+        }
 
         CreateButton("A", q.A);
         CreateButton("B", q.B);
         CreateButton("C", q.C);
         CreateButton("D", q.D);
+    }
+
+    void ShowMatchingQuestion(Question q)
+    {
+        List<string> leftItems = q.GetMatchingLeft();
+        List<string> rightItems = q.GetMatchingRight();
+
+        if (leftItems == null || rightItems == null || leftItems.Count == 0 || rightItems.Count == 0)
+        {
+            Debug.LogWarning("Matching verisi boş.");
+            return;
+        }
+
+        if (matchingContainer == null)
+        {
+            Debug.LogWarning("matchingContainer atanmadı.");
+            return;
+        }
+
+        if (matchingRowPrefab == null)
+        {
+            Debug.LogWarning("matchingRowPrefab atanmadı.");
+            return;
+        }
+
+        List<string> dropdownOptions = new List<string>(rightItems);
+
+        for (int i = 0; i < leftItems.Count; i++)
+        {
+            MatchingRowUI row = Instantiate(matchingRowPrefab, matchingContainer);
+            row.Setup(leftItems[i], dropdownOptions);
+            spawnedMatchingRows.Add(row);
+        }
     }
 
     void CreateButton(string key, string text)
@@ -93,7 +174,16 @@ public class QuizUIController : MonoBehaviour
     {
         questionText.text = message;
         rationalePopup.Hide();
+
         ClearButtons();
+        ClearMatchingRows();
+
+        if (multipleChoicePanel != null)
+            multipleChoicePanel.SetActive(false);
+
+        if (matchingPanel != null)
+            matchingPanel.SetActive(false);
+
         nextButton.gameObject.SetActive(true);
     }
 
@@ -120,7 +210,16 @@ public class QuizUIController : MonoBehaviour
     public void ShowQuizFinished()
     {
         questionText.text = "Quiz tamamlandı!";
+
         ClearButtons();
+        ClearMatchingRows();
+
+        if (multipleChoicePanel != null)
+            multipleChoicePanel.SetActive(false);
+
+        if (matchingPanel != null)
+            matchingPanel.SetActive(false);
+
         nextButton.gameObject.SetActive(false);
         rationalePopup.Hide();
     }
@@ -131,5 +230,16 @@ public class QuizUIController : MonoBehaviour
             Destroy(child.gameObject);
 
         spawnedButtons.Clear();
+    }
+
+    void ClearMatchingRows()
+    {
+        if (matchingContainer == null)
+            return;
+
+        foreach (Transform child in matchingContainer)
+            Destroy(child.gameObject);
+
+        spawnedMatchingRows.Clear();
     }
 }

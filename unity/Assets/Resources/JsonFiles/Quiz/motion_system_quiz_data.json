@@ -601,26 +601,26 @@
     },
     "answer": {
       "pairs": [
-        [
-          0,
-          2
-        ],
-        [
-          1,
-          1
-        ],
-        [
-          2,
-          4
-        ],
-        [
-          3,
-          0
-        ],
-        [
-          4,
-          3
-        ]
+        {
+          "leftIndex": 0,
+          "rightIndex": 2
+        },
+        {
+          "leftIndex": 1,
+          "rightIndex": 1
+        },
+        {
+          "leftIndex": 2,
+          "rightIndex": 4
+        },
+        {
+          "leftIndex": 3,
+          "rightIndex": 0
+        },
+        {
+          "leftIndex": 4,
+          "rightIndex": 3
+        }
       ]
     },
     "source": "Ders kitabı s.59"
@@ -1020,18 +1020,18 @@
     },
     "answer": {
       "pairs": [
-        [
-          0,
-          1
-        ],
-        [
-          1,
-          2
-        ],
-        [
-          2,
-          0
-        ]
+        {
+          "leftIndex": 0,
+          "rightIndex": 1
+        },
+        {
+          "leftIndex": 1,
+          "rightIndex": 2
+        },
+        {
+          "leftIndex": 2,
+          "rightIndex": 0
+        }
       ]
     },
     "source": "Ders kitabı s.61"
@@ -1084,18 +1084,18 @@
     },
     "answer": {
       "pairs": [
-        [
-          0,
-          1
-        ],
-        [
-          1,
-          0
-        ],
-        [
-          2,
-          2
-        ]
+        {
+          "leftIndex": 0,
+          "rightIndex": 1
+        },
+        {
+          "leftIndex": 1,
+          "rightIndex": 0
+        },
+        {
+          "leftIndex": 2,
+          "rightIndex": 2
+        }
       ]
     },
     "source": "Ders kitabı s.62"
@@ -1195,18 +1195,18 @@
     },
     "answer": {
       "pairs": [
-        [
-          0,
-          0
-        ],
-        [
-          1,
-          1
-        ],
-        [
-          2,
-          2
-        ]
+        {
+          "leftIndex": 0,
+          "rightIndex": 0
+        },
+        {
+          "leftIndex": 1,
+          "rightIndex": 1
+        },
+        {
+          "leftIndex": 2,
+          "rightIndex": 2
+        }
       ]
     },
     "source": "Ders kitabı s.63"
@@ -2225,22 +2225,22 @@
     },
     "answer": {
       "pairs": [
-        [
-          0,
-          2
-        ],
-        [
-          1,
-          0
-        ],
-        [
-          2,
-          3
-        ],
-        [
-          3,
-          1
-        ]
+        {
+          "leftIndex": 0,
+          "rightIndex": 2
+        },
+        {
+          "leftIndex": 1,
+          "rightIndex": 0
+        },
+        {
+          "leftIndex": 2,
+          "rightIndex": 3
+        },
+        {
+          "leftIndex": 3,
+          "rightIndex": 1
+        }
       ]
     },
     "source": "Ders kitabı s.72"
@@ -2272,22 +2272,22 @@
     },
     "answer": {
       "pairs": [
-        [
-          0,
-          1
-        ],
-        [
-          1,
-          0
-        ],
-        [
-          2,
-          3
-        ],
-        [
-          3,
-          2
-        ]
+        {
+          "leftIndex": 0,
+          "rightIndex": 1
+        },
+        {
+          "leftIndex": 1,
+          "rightIndex": 0
+        },
+        {
+          "leftIndex": 2,
+          "rightIndex": 3
+        },
+        {
+          "leftIndex": 3,
+          "rightIndex": 2
+        }
       ]
     },
     "source": "Ders kitabı s.75"
