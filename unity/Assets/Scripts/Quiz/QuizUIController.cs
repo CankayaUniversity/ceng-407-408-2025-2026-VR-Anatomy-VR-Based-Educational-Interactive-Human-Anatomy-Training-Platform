@@ -8,6 +8,7 @@ public class QuizUIController : MonoBehaviour
     [Header("UI References")]
     public TMP_Text questionText;
     public TMP_Text timerText;
+    public GameObject timerRoot;
     public Transform answerContainer;
     public Button answerButtonPrefab;
     public Button nextButton;
@@ -18,14 +19,17 @@ public class QuizUIController : MonoBehaviour
     public GameObject matchingPanel;
 
     [Header("Matching UI")]
-    public Transform matchingContainer;
-    public MatchingRowUI matchingRowPrefab;
+    public Transform leftColumn;
+    public Transform rightColumn;
+    public MatchingItemUI leftItemPrefab;
+    public MatchingItemUI rightItemPrefab;
 
     [Header("Manager")]
     public QuizManager quizManager;
 
     private List<AnswerButtonUI> spawnedButtons = new List<AnswerButtonUI>();
-    private List<MatchingRowUI> spawnedMatchingRows = new List<MatchingRowUI>();
+    private List<MatchingItemUI> spawnedLeftItems = new List<MatchingItemUI>();
+    private List<MatchingItemUI> spawnedRightItems = new List<MatchingItemUI>();
 
     private void Start()
     {
@@ -45,10 +49,13 @@ public class QuizUIController : MonoBehaviour
         rationalePopup.Hide();
 
         ClearButtons();
-        ClearMatchingRows();
+        ClearMatchingItems();
 
         if (q.IsMatching())
         {
+            if (timerRoot != null)
+                timerRoot.SetActive(false);
+
             if (multipleChoicePanel != null)
                 multipleChoicePanel.SetActive(false);
 
@@ -61,6 +68,9 @@ public class QuizUIController : MonoBehaviour
         }
         else
         {
+            if (timerRoot != null)
+                timerRoot.SetActive(true);
+
             if (matchingPanel != null)
                 matchingPanel.SetActive(false);
 
@@ -103,25 +113,30 @@ public class QuizUIController : MonoBehaviour
             return;
         }
 
-        if (matchingContainer == null)
+        if (leftColumn == null || rightColumn == null)
         {
-            Debug.LogWarning("matchingContainer atanmadı.");
+            Debug.LogWarning("LeftColumn veya RightColumn atanmadı.");
             return;
         }
 
-        if (matchingRowPrefab == null)
+        if (leftItemPrefab == null || rightItemPrefab == null)
         {
-            Debug.LogWarning("matchingRowPrefab atanmadı.");
+            Debug.LogWarning("Matching item prefabları atanmadı.");
             return;
         }
-
-        List<string> dropdownOptions = new List<string>(rightItems);
 
         for (int i = 0; i < leftItems.Count; i++)
         {
-            MatchingRowUI row = Instantiate(matchingRowPrefab, matchingContainer);
-            row.Setup(leftItems[i], dropdownOptions);
-            spawnedMatchingRows.Add(row);
+            MatchingItemUI leftItem = Instantiate(leftItemPrefab, leftColumn);
+            leftItem.Setup(leftItems[i]);
+            spawnedLeftItems.Add(leftItem);
+        }
+
+        for (int i = 0; i < rightItems.Count; i++)
+        {
+            MatchingItemUI rightItem = Instantiate(rightItemPrefab, rightColumn);
+            rightItem.Setup(rightItems[i]);
+            spawnedRightItems.Add(rightItem);
         }
     }
 
@@ -176,7 +191,7 @@ public class QuizUIController : MonoBehaviour
         rationalePopup.Hide();
 
         ClearButtons();
-        ClearMatchingRows();
+        ClearMatchingItems();
 
         if (multipleChoicePanel != null)
             multipleChoicePanel.SetActive(false);
@@ -196,15 +211,16 @@ public class QuizUIController : MonoBehaviour
     {
         if (time < 0f)
         {
-            if (timerText != null)
-                timerText.gameObject.SetActive(false);
+            if (timerRoot != null)
+                timerRoot.SetActive(false);
             return;
         }
 
-        if (timerText != null)
-            timerText.gameObject.SetActive(true);
+        if (timerRoot != null)
+            timerRoot.SetActive(true);
 
-        timerText.text = Mathf.CeilToInt(time).ToString();
+        if (timerText != null)
+            timerText.text = Mathf.CeilToInt(time).ToString();
     }
 
     public void ShowQuizFinished()
@@ -212,7 +228,7 @@ public class QuizUIController : MonoBehaviour
         questionText.text = "Quiz tamamlandı!";
 
         ClearButtons();
-        ClearMatchingRows();
+        ClearMatchingItems();
 
         if (multipleChoicePanel != null)
             multipleChoicePanel.SetActive(false);
@@ -232,14 +248,21 @@ public class QuizUIController : MonoBehaviour
         spawnedButtons.Clear();
     }
 
-    void ClearMatchingRows()
+    void ClearMatchingItems()
     {
-        if (matchingContainer == null)
-            return;
+        if (leftColumn != null)
+        {
+            foreach (Transform child in leftColumn)
+                Destroy(child.gameObject);
+        }
 
-        foreach (Transform child in matchingContainer)
-            Destroy(child.gameObject);
+        if (rightColumn != null)
+        {
+            foreach (Transform child in rightColumn)
+                Destroy(child.gameObject);
+        }
 
-        spawnedMatchingRows.Clear();
+        spawnedLeftItems.Clear();
+        spawnedRightItems.Clear();
     }
 }
