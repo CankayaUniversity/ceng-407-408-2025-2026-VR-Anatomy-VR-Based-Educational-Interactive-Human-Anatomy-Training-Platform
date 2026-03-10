@@ -23,6 +23,7 @@ public class QuizUIController : MonoBehaviour
     public Transform rightColumn;
     public MatchingItemUI leftItemPrefab;
     public MatchingItemUI rightItemPrefab;
+    public Button confirmButton;
 
     [Header("Manager")]
     public QuizManager quizManager;
@@ -31,11 +32,24 @@ public class QuizUIController : MonoBehaviour
     private List<MatchingItemUI> spawnedLeftItems = new List<MatchingItemUI>();
     private List<MatchingItemUI> spawnedRightItems = new List<MatchingItemUI>();
 
+    // Matching state
+    private Dictionary<int, int> playerMatches = new Dictionary<int, int>();
+    private Dictionary<int, int> correctMatches = new Dictionary<int, int>();
+    private bool matchingSubmitted = false;
+
     private void Start()
     {
         nextButton.gameObject.SetActive(false);
         nextButton.onClick.RemoveAllListeners();
         nextButton.onClick.AddListener(OnNextButtonPressed);
+
+        if (confirmButton != null)
+        {
+            confirmButton.gameObject.SetActive(false);
+            confirmButton.interactable = false;
+            confirmButton.onClick.RemoveAllListeners();
+            confirmButton.onClick.AddListener(OnConfirmMatchingPressed);
+        }
     }
 
     public void ShowQuestion(Question q)
@@ -50,6 +64,7 @@ public class QuizUIController : MonoBehaviour
 
         ClearButtons();
         ClearMatchingItems();
+        ResetMatchingState();
 
         if (q.IsMatching())
         {
@@ -61,6 +76,12 @@ public class QuizUIController : MonoBehaviour
 
             if (matchingPanel != null)
                 matchingPanel.SetActive(true);
+
+            if (confirmButton != null)
+            {
+                confirmButton.gameObject.SetActive(true);
+                confirmButton.interactable = false;
+            }
 
             ShowMatchingQuestion(q);
 
@@ -76,6 +97,12 @@ public class QuizUIController : MonoBehaviour
 
             if (multipleChoicePanel != null)
                 multipleChoicePanel.SetActive(true);
+
+            if (confirmButton != null)
+            {
+                confirmButton.gameObject.SetActive(false);
+                confirmButton.interactable = false;
+            }
 
             ShowChoiceQuestion(q);
         }
@@ -125,19 +152,25 @@ public class QuizUIController : MonoBehaviour
             return;
         }
 
+        // DOĞRU EŞLEŞMELERİ BURADA YÜKLE
+        LoadCorrectMatches(q);
+
         for (int i = 0; i < leftItems.Count; i++)
         {
             MatchingItemUI leftItem = Instantiate(leftItemPrefab, leftColumn);
-            leftItem.Setup(leftItems[i]);
+            leftItem.Setup(leftItems[i], i, true, this);
             spawnedLeftItems.Add(leftItem);
         }
 
         for (int i = 0; i < rightItems.Count; i++)
         {
             MatchingItemUI rightItem = Instantiate(rightItemPrefab, rightColumn);
-            rightItem.Setup(rightItems[i]);
+            rightItem.Setup(rightItems[i], i, false, this);
             spawnedRightItems.Add(rightItem);
         }
+
+        RefreshMatchingVisuals();
+        UpdateConfirmButtonState();
     }
 
     void CreateButton(string key, string text)
@@ -199,6 +232,9 @@ public class QuizUIController : MonoBehaviour
         if (matchingPanel != null)
             matchingPanel.SetActive(false);
 
+        if (confirmButton != null)
+            confirmButton.gameObject.SetActive(false);
+
         nextButton.gameObject.SetActive(true);
     }
 
@@ -236,6 +272,9 @@ public class QuizUIController : MonoBehaviour
         if (matchingPanel != null)
             matchingPanel.SetActive(false);
 
+        if (confirmButton != null)
+            confirmButton.gameObject.SetActive(false);
+
         nextButton.gameObject.SetActive(false);
         rationalePopup.Hide();
     }
@@ -264,5 +303,133 @@ public class QuizUIController : MonoBehaviour
 
         spawnedLeftItems.Clear();
         spawnedRightItems.Clear();
+    }
+
+    void ResetMatchingState()
+    {
+        playerMatches.Clear();
+        correctMatches.Clear();
+        matchingSubmitted = false;
+    }
+
+    void LoadCorrectMatches(Question q)
+    {
+        correctMatches.Clear();
+
+        List<MatchPair> pairs = q.GetMatchingPairs();
+
+        if (pairs == null || pairs.Count == 0)
+        {
+            Debug.LogWarning("Matching cevap çiftleri bulunamadı.");
+            return;
+        }
+
+        for (int i = 0; i < pairs.Count; i++)
+        {
+            MatchPair pair = pairs[i];
+            correctMatches[pair.leftIndex] = pair.rightIndex;
+        }
+    }
+
+    public void RegisterMatch(int leftIndex, int rightIndex)
+    {
+        if (matchingSubmitted)
+            return;
+
+        // Aynı right item başka bir left ile eşleşmişse kaldır
+        List<int> keysToRemove = new List<int>();
+
+        foreach (var pair in playerMatches)
+        {
+            if (pair.Value == rightIndex && pair.Key != leftIndex)
+                keysToRemove.Add(pair.Key);
+        }
+
+        foreach (int key in keysToRemove)
+            playerMatches.Remove(key);
+
+        // Aynı left için yeni right ata
+        playerMatches[leftIndex] = rightIndex;
+
+        Debug.Log($"Eşleşme kaydedildi: Left {leftIndex} -> Right {rightIndex}");
+        Debug.Log($"Toplam eşleşme sayısı: {playerMatches.Count}");
+
+        RefreshMatchingVisuals();
+        UpdateConfirmButtonState();
+    }
+
+    void RefreshMatchingVisuals()
+    {
+        foreach (var item in spawnedLeftItems)
+            item.ResetVisual();
+
+        foreach (var item in spawnedRightItems)
+            item.ResetVisual();
+
+        foreach (var pair in playerMatches)
+        {
+            int leftIndex = pair.Key;
+            int rightIndex = pair.Value;
+
+            if (leftIndex >= 0 && leftIndex < spawnedLeftItems.Count)
+                spawnedLeftItems[leftIndex].SetMatched(true);
+
+            if (rightIndex >= 0 && rightIndex < spawnedRightItems.Count)
+                spawnedRightItems[rightIndex].SetMatched(true);
+        }
+    }
+
+    void UpdateConfirmButtonState()
+    {
+        if (confirmButton == null)
+            return;
+
+        confirmButton.interactable =
+            spawnedLeftItems.Count > 0 &&
+            playerMatches.Count == spawnedLeftItems.Count;
+    }
+
+    void OnConfirmMatchingPressed()
+    {
+        if (matchingSubmitted)
+            return;
+
+        if (playerMatches.Count != spawnedLeftItems.Count)
+            return;
+
+        matchingSubmitted = true;
+
+        foreach (var pair in playerMatches)
+        {
+            int leftIndex = pair.Key;
+            int rightIndex = pair.Value;
+
+            bool isCorrect = false;
+
+            if (correctMatches.ContainsKey(leftIndex))
+                isCorrect = (correctMatches[leftIndex] == rightIndex);
+
+            if (leftIndex >= 0 && leftIndex < spawnedLeftItems.Count)
+            {
+                if (isCorrect) spawnedLeftItems[leftIndex].SetCorrect();
+                else spawnedLeftItems[leftIndex].SetWrong();
+            }
+
+            if (rightIndex >= 0 && rightIndex < spawnedRightItems.Count)
+            {
+                if (isCorrect) spawnedRightItems[rightIndex].SetCorrect();
+                else spawnedRightItems[rightIndex].SetWrong();
+            }
+        }
+
+        if (confirmButton != null)
+            confirmButton.interactable = false;
+
+        nextButton.gameObject.SetActive(true);
+    }
+
+    public bool IsMatchingSubmitted()
+    {
+        return matchingSubmitted;
     }
 }

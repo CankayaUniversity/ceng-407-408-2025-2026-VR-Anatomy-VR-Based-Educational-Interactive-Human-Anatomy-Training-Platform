@@ -135,6 +135,19 @@ public class Question
         return new List<MatchPair>();
     }
 
+    public int GetMatchingRightIndexForLeft(int leftIndex)
+    {
+        List<MatchPair> pairs = GetMatchingPairs();
+
+        for (int i = 0; i < pairs.Count; i++)
+        {
+            if (pairs[i].leftIndex == leftIndex)
+                return pairs[i].rightIndex;
+        }
+
+        return -1;
+    }
+
     public bool ShouldShuffleMatchingRight()
     {
         return data != null && data.shuffle_right;
