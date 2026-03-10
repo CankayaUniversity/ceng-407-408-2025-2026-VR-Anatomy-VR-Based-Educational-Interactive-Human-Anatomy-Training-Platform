@@ -8,33 +8,120 @@ public class QuizUIController : MonoBehaviour
     [Header("UI References")]
     public TMP_Text questionText;
     public TMP_Text timerText;
+    public GameObject timerRoot;
     public Transform answerContainer;
     public Button answerButtonPrefab;
     public Button nextButton;
     public RationalePopupUI rationalePopup;
 
+    [Header("Question Type Panels")]
+    public GameObject multipleChoicePanel;
+    public GameObject matchingPanel;
+
+    [Header("Matching UI")]
+    public Transform leftColumn;
+    public Transform rightColumn;
+    public MatchingItemUI leftItemPrefab;
+    public MatchingItemUI rightItemPrefab;
+    public Button confirmButton;
+
     [Header("Manager")]
     public QuizManager quizManager;
 
     private List<AnswerButtonUI> spawnedButtons = new List<AnswerButtonUI>();
+    private List<MatchingItemUI> spawnedLeftItems = new List<MatchingItemUI>();
+    private List<MatchingItemUI> spawnedRightItems = new List<MatchingItemUI>();
+
+    // Matching state
+    private Dictionary<int, int> playerMatches = new Dictionary<int, int>();
+    private Dictionary<int, int> correctMatches = new Dictionary<int, int>();
+    private bool matchingSubmitted = false;
 
     private void Start()
     {
         nextButton.gameObject.SetActive(false);
         nextButton.onClick.RemoveAllListeners();
         nextButton.onClick.AddListener(OnNextButtonPressed);
+
+        if (confirmButton != null)
+        {
+            confirmButton.gameObject.SetActive(false);
+            confirmButton.interactable = false;
+            confirmButton.onClick.RemoveAllListeners();
+            confirmButton.onClick.AddListener(OnConfirmMatchingPressed);
+        }
     }
 
     public void ShowQuestion(Question q)
     {
-        questionText.text = q.body;
+        if (!string.IsNullOrWhiteSpace(q.body))
+            questionText.text = q.body;
+        else
+            questionText.text = q.GetQuestionText();
 
         nextButton.gameObject.SetActive(false);
-
-        // ✅ Her yeni soruda popup kapalı
         rationalePopup.Hide();
 
         ClearButtons();
+        ClearMatchingItems();
+        ResetMatchingState();
+
+        if (q.IsMatching())
+        {
+            if (timerRoot != null)
+                timerRoot.SetActive(false);
+
+            if (multipleChoicePanel != null)
+                multipleChoicePanel.SetActive(false);
+
+            if (matchingPanel != null)
+                matchingPanel.SetActive(true);
+
+            if (confirmButton != null)
+            {
+                confirmButton.gameObject.SetActive(true);
+                confirmButton.interactable = false;
+            }
+
+            ShowMatchingQuestion(q);
+
+            Debug.Log("Matching soru gösteriliyor: " + q.GetQuestionText());
+        }
+        else
+        {
+            if (timerRoot != null)
+                timerRoot.SetActive(true);
+
+            if (matchingPanel != null)
+                matchingPanel.SetActive(false);
+
+            if (multipleChoicePanel != null)
+                multipleChoicePanel.SetActive(true);
+
+            if (confirmButton != null)
+            {
+                confirmButton.gameObject.SetActive(false);
+                confirmButton.interactable = false;
+            }
+
+            ShowChoiceQuestion(q);
+        }
+    }
+
+    void ShowChoiceQuestion(Question q)
+    {
+        List<string> options = q.GetOptions();
+
+        if (options != null && options.Count > 0)
+        {
+            for (int i = 0; i < options.Count; i++)
+            {
+                string optionKey = ((char)('A' + i)).ToString();
+                CreateButton(optionKey, options[i]);
+            }
+
+            return;
+        }
 
         CreateButton("A", q.A);
         CreateButton("B", q.B);
@@ -42,13 +129,63 @@ public class QuizUIController : MonoBehaviour
         CreateButton("D", q.D);
     }
 
+    void ShowMatchingQuestion(Question q)
+    {
+        List<string> leftItems = q.GetMatchingLeft();
+        List<string> rightItems = q.GetMatchingRight();
+
+        if (leftItems == null || rightItems == null || leftItems.Count == 0 || rightItems.Count == 0)
+        {
+            Debug.LogWarning("Matching verisi boş.");
+            return;
+        }
+
+        if (leftColumn == null || rightColumn == null)
+        {
+            Debug.LogWarning("LeftColumn veya RightColumn atanmadı.");
+            return;
+        }
+
+        if (leftItemPrefab == null || rightItemPrefab == null)
+        {
+            Debug.LogWarning("Matching item prefabları atanmadı.");
+            return;
+        }
+
+        // DOĞRU EŞLEŞMELERİ BURADA YÜKLE
+        LoadCorrectMatches(q);
+
+        for (int i = 0; i < leftItems.Count; i++)
+        {
+            MatchingItemUI leftItem = Instantiate(leftItemPrefab, leftColumn);
+            leftItem.Setup(leftItems[i], i, true, this);
+            spawnedLeftItems.Add(leftItem);
+        }
+
+        for (int i = 0; i < rightItems.Count; i++)
+        {
+            MatchingItemUI rightItem = Instantiate(rightItemPrefab, rightColumn);
+            rightItem.Setup(rightItems[i], i, false, this);
+            spawnedRightItems.Add(rightItem);
+        }
+
+        RefreshMatchingVisuals();
+        UpdateConfirmButtonState();
+    }
+
     void CreateButton(string key, string text)
     {
-        if (string.IsNullOrEmpty(text))
+        if (string.IsNullOrWhiteSpace(text))
             return;
 
         Button btn = Instantiate(answerButtonPrefab, answerContainer);
         AnswerButtonUI buttonUI = btn.GetComponent<AnswerButtonUI>();
+
+        if (buttonUI == null)
+        {
+            Debug.LogError("[QuizUIController] AnswerButtonUI component not found on answerButtonPrefab.");
+            return;
+        }
 
         buttonUI.Setup(key, text, this);
         spawnedButtons.Add(buttonUI);
@@ -73,7 +210,6 @@ public class QuizUIController : MonoBehaviour
                 btn.SetWrong();
         }
 
-        // SHOW POPUP ONLY IF ANSWER IS WRONG
         if (!isCorrect && !string.IsNullOrEmpty(rationale))
         {
             rationalePopup.Show(rationale);
@@ -82,59 +218,63 @@ public class QuizUIController : MonoBehaviour
         nextButton.gameObject.SetActive(true);
     }
 
-    /// <summary>
-    /// ✅ QuizManager time-up olunca burayı çağırıyor.
-    /// İstek: Popup çıkmasın, seçenekler görünmesin, sadece mesaj + Devam kalsın.
-    /// </summary>
     public void ShowTimeUpResult(string message)
     {
-        // Mesaj
         questionText.text = message;
-
-        // ✅ Popup istemiyoruz (kesin kapat)
         rationalePopup.Hide();
 
-        // ✅ Seçenekler görünmesin (tamamen sil)
         ClearButtons();
+        ClearMatchingItems();
 
-        // ✅ Devam butonu görünsün
+        if (multipleChoicePanel != null)
+            multipleChoicePanel.SetActive(false);
+
+        if (matchingPanel != null)
+            matchingPanel.SetActive(false);
+
+        if (confirmButton != null)
+            confirmButton.gameObject.SetActive(false);
+
         nextButton.gameObject.SetActive(true);
     }
 
     private void OnNextButtonPressed()
     {
-        // ✅ Popup kullanmayacağız dediğin için bu kontrolü kaldırmak en temiz çözüm.
-        // (Zaten time-up'ta popup yok; yanlış cevapta popup varsa da kullanıcı popup'ı kapatmadan geçemesin
-        // istiyorsan aşağıdaki satırı geri ekleyebilirsin.)
         quizManager.NextQuestion();
-
-        // Eğer "popup açıkken next çalışmasın" istiyorsan şu şekilde kullan:
-        // if (rationalePopup.isPopupOpen == false) quizManager.NextQuestion();
     }
 
     public void UpdateTimer(float time)
     {
-        // time < 0 => süresiz soru
         if (time < 0f)
         {
-            if (timerText != null)
-                timerText.gameObject.SetActive(false);
+            if (timerRoot != null)
+                timerRoot.SetActive(false);
             return;
         }
 
-        if (timerText != null)
-            timerText.gameObject.SetActive(true);
+        if (timerRoot != null)
+            timerRoot.SetActive(true);
 
-        timerText.text = Mathf.CeilToInt(time).ToString();
+        if (timerText != null)
+            timerText.text = Mathf.CeilToInt(time).ToString();
     }
 
-    /// <summary>
-    /// ✅ Bu artık "gerçek quiz bitti" ekranı.
-    /// </summary>
     public void ShowQuizFinished()
     {
         questionText.text = "Quiz tamamlandı!";
+
         ClearButtons();
+        ClearMatchingItems();
+
+        if (multipleChoicePanel != null)
+            multipleChoicePanel.SetActive(false);
+
+        if (matchingPanel != null)
+            matchingPanel.SetActive(false);
+
+        if (confirmButton != null)
+            confirmButton.gameObject.SetActive(false);
+
         nextButton.gameObject.SetActive(false);
         rationalePopup.Hide();
     }
@@ -145,5 +285,151 @@ public class QuizUIController : MonoBehaviour
             Destroy(child.gameObject);
 
         spawnedButtons.Clear();
+    }
+
+    void ClearMatchingItems()
+    {
+        if (leftColumn != null)
+        {
+            foreach (Transform child in leftColumn)
+                Destroy(child.gameObject);
+        }
+
+        if (rightColumn != null)
+        {
+            foreach (Transform child in rightColumn)
+                Destroy(child.gameObject);
+        }
+
+        spawnedLeftItems.Clear();
+        spawnedRightItems.Clear();
+    }
+
+    void ResetMatchingState()
+    {
+        playerMatches.Clear();
+        correctMatches.Clear();
+        matchingSubmitted = false;
+    }
+
+    void LoadCorrectMatches(Question q)
+    {
+        correctMatches.Clear();
+
+        List<MatchPair> pairs = q.GetMatchingPairs();
+
+        if (pairs == null || pairs.Count == 0)
+        {
+            Debug.LogWarning("Matching cevap çiftleri bulunamadı.");
+            return;
+        }
+
+        for (int i = 0; i < pairs.Count; i++)
+        {
+            MatchPair pair = pairs[i];
+            correctMatches[pair.leftIndex] = pair.rightIndex;
+        }
+    }
+
+    public void RegisterMatch(int leftIndex, int rightIndex)
+    {
+        if (matchingSubmitted)
+            return;
+
+        // Aynı right item başka bir left ile eşleşmişse kaldır
+        List<int> keysToRemove = new List<int>();
+
+        foreach (var pair in playerMatches)
+        {
+            if (pair.Value == rightIndex && pair.Key != leftIndex)
+                keysToRemove.Add(pair.Key);
+        }
+
+        foreach (int key in keysToRemove)
+            playerMatches.Remove(key);
+
+        // Aynı left için yeni right ata
+        playerMatches[leftIndex] = rightIndex;
+
+        Debug.Log($"Eşleşme kaydedildi: Left {leftIndex} -> Right {rightIndex}");
+        Debug.Log($"Toplam eşleşme sayısı: {playerMatches.Count}");
+
+        RefreshMatchingVisuals();
+        UpdateConfirmButtonState();
+    }
+
+    void RefreshMatchingVisuals()
+    {
+        foreach (var item in spawnedLeftItems)
+            item.ResetVisual();
+
+        foreach (var item in spawnedRightItems)
+            item.ResetVisual();
+
+        foreach (var pair in playerMatches)
+        {
+            int leftIndex = pair.Key;
+            int rightIndex = pair.Value;
+
+            if (leftIndex >= 0 && leftIndex < spawnedLeftItems.Count)
+                spawnedLeftItems[leftIndex].SetMatched(true);
+
+            if (rightIndex >= 0 && rightIndex < spawnedRightItems.Count)
+                spawnedRightItems[rightIndex].SetMatched(true);
+        }
+    }
+
+    void UpdateConfirmButtonState()
+    {
+        if (confirmButton == null)
+            return;
+
+        confirmButton.interactable =
+            spawnedLeftItems.Count > 0 &&
+            playerMatches.Count == spawnedLeftItems.Count;
+    }
+
+    void OnConfirmMatchingPressed()
+    {
+        if (matchingSubmitted)
+            return;
+
+        if (playerMatches.Count != spawnedLeftItems.Count)
+            return;
+
+        matchingSubmitted = true;
+
+        foreach (var pair in playerMatches)
+        {
+            int leftIndex = pair.Key;
+            int rightIndex = pair.Value;
+
+            bool isCorrect = false;
+
+            if (correctMatches.ContainsKey(leftIndex))
+                isCorrect = (correctMatches[leftIndex] == rightIndex);
+
+            if (leftIndex >= 0 && leftIndex < spawnedLeftItems.Count)
+            {
+                if (isCorrect) spawnedLeftItems[leftIndex].SetCorrect();
+                else spawnedLeftItems[leftIndex].SetWrong();
+            }
+
+            if (rightIndex >= 0 && rightIndex < spawnedRightItems.Count)
+            {
+                if (isCorrect) spawnedRightItems[rightIndex].SetCorrect();
+                else spawnedRightItems[rightIndex].SetWrong();
+            }
+        }
+
+        if (confirmButton != null)
+            confirmButton.interactable = false;
+
+        nextButton.gameObject.SetActive(true);
+    }
+
+    public bool IsMatchingSubmitted()
+    {
+        return matchingSubmitted;
     }
 }
