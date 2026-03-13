@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Fully self-configuring menu intro system.
@@ -33,10 +34,7 @@ public class MenuIntroManager : MonoBehaviour
     private Coroutine _introCoroutine;
     private bool _introRunning;
     private GameObject _skipButtonGO;
-
-    // =====================================================================
-    // Auto-Bootstrap
-    // =====================================================================
+    private GameObject _menuInputBlocker;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void RegisterSceneCallback()
@@ -59,10 +57,6 @@ public class MenuIntroManager : MonoBehaviour
         var go = new GameObject("MenuIntroManager");
         go.AddComponent<MenuIntroManager>();
     }
-
-    // =====================================================================
-    // Lookup tables
-    // =====================================================================
 
     private static readonly string[] ButtonNames =
     {
@@ -88,28 +82,24 @@ public class MenuIntroManager : MonoBehaviour
         "Audio/Intro/intro_06_hakkinda"
     };
 
-    // =====================================================================
-    // Lifecycle
-    // =====================================================================
-
-    private IEnumerator Start()
+    private void Start()
     {
-        yield return null;
         Configure();
         BeginIntro();
+        StartCoroutine(ClearInitialSelectionRoutine());
     }
 
     private void OnDestroy()
     {
         if (_skipButton != null)
             _skipButton.onClick.RemoveListener(SkipIntro);
+
         if (_skipButtonGO != null)
             Destroy(_skipButtonGO);
-    }
 
-    // =====================================================================
-    // Configuration — always rebuilds from scratch
-    // =====================================================================
+        if (_menuInputBlocker != null)
+            Destroy(_menuInputBlocker);
+    }
 
     private void Configure()
     {
@@ -128,19 +118,20 @@ public class MenuIntroManager : MonoBehaviour
             return;
         }
 
-        // CanvasGroup on MainMenuPanel
         _menuCanvasGroup = mmp.GetComponent<CanvasGroup>();
         if (_menuCanvasGroup == null)
             _menuCanvasGroup = mmp.gameObject.AddComponent<CanvasGroup>();
 
-        // Welcome clip
+        _menuCanvasGroup.alpha = 1f;
+        _menuCanvasGroup.interactable = true;
+        _menuCanvasGroup.blocksRaycasts = true;
+
         _welcomeClip = Resources.Load<AudioClip>(WelcomeAudioPath);
         if (_welcomeClip == null)
             Debug.LogWarning($"[MenuIntro] Welcome clip yüklenemedi: {WelcomeAudioPath}");
         else
             Debug.Log($"[MenuIntro] Welcome clip OK: {_welcomeClip.length:F1}s");
 
-        // Steps — always built fresh
         var list = new List<IntroStep>();
         for (int i = 0; i < ButtonNames.Length; i++)
         {
@@ -154,6 +145,8 @@ public class MenuIntroManager : MonoBehaviour
             var hl = btnT.GetComponent<MenuItemHighlighter>();
             if (hl == null)
                 hl = btnT.gameObject.AddComponent<MenuItemHighlighter>();
+
+            hl.ResetToNormal();
 
             AudioClip clip = Resources.Load<AudioClip>(StepAudioPaths[i]);
             if (clip != null)
@@ -169,18 +162,87 @@ public class MenuIntroManager : MonoBehaviour
                 postDelay = 0.5f
             });
         }
+
         _steps = list.ToArray();
         Debug.Log($"[MenuIntro] {_steps.Length} adım yapılandırıldı.");
 
-        // Skip button — child of MainMenuPanel, ignores parent CanvasGroup
+        CreateMenuInputBlocker(mmp);
+
         _skipButtonGO = CreateSkipButton(mmp);
         _skipButton = _skipButtonGO.GetComponent<Button>();
         _skipButton.onClick.AddListener(SkipIntro);
+
+        ShowSkipButton(false);
+        ResetAllHighlighters();
+        ForceClearEventSystemSelection();
     }
 
-    // =====================================================================
-    // Skip Button
-    // =====================================================================
+    private IEnumerator ClearInitialSelectionRoutine()
+    {
+        ForceClearEventSystemSelection();
+        yield return null;
+        ForceClearEventSystemSelection();
+        yield return new WaitForEndOfFrame();
+        ForceClearEventSystemSelection();
+        ResetAllHighlighters();
+    }
+
+    private void ForceClearEventSystemSelection()
+    {
+        if (EventSystem.current != null)
+            EventSystem.current.SetSelectedGameObject(null);
+    }
+
+    private void CreateMenuInputBlocker(Transform parent)
+    {
+        _menuInputBlocker = new GameObject(
+            "MenuInputBlocker",
+            typeof(RectTransform),
+            typeof(Image),
+            typeof(CanvasGroup)
+        );
+
+        _menuInputBlocker.transform.SetParent(parent, false);
+        _menuInputBlocker.layer = parent.gameObject.layer;
+
+        RectTransform rect = _menuInputBlocker.GetComponent<RectTransform>();
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+        rect.SetAsLastSibling();
+
+        Image img = _menuInputBlocker.GetComponent<Image>();
+        img.color = new Color(0f, 0f, 0f, 0f);
+        img.raycastTarget = true;
+
+        CanvasGroup cg = _menuInputBlocker.GetComponent<CanvasGroup>();
+        cg.alpha = 1f;
+        cg.interactable = true;
+        cg.blocksRaycasts = false;
+    }
+
+    private void SetMenuInputLocked(bool locked)
+    {
+        if (_menuCanvasGroup != null)
+        {
+            _menuCanvasGroup.alpha = 1f;
+            _menuCanvasGroup.interactable = true;
+            _menuCanvasGroup.blocksRaycasts = true;
+        }
+
+        if (_menuInputBlocker != null)
+        {
+            var cg = _menuInputBlocker.GetComponent<CanvasGroup>();
+            if (cg != null)
+                cg.blocksRaycasts = locked;
+
+            if (_skipButtonGO != null)
+                _skipButtonGO.transform.SetAsLastSibling();
+        }
+
+        ForceClearEventSystemSelection();
+    }
 
     private GameObject CreateSkipButton(Transform parent)
     {
@@ -188,7 +250,6 @@ public class MenuIntroManager : MonoBehaviour
         go.transform.SetParent(parent, false);
         go.layer = parent.gameObject.layer;
 
-        // CanvasGroup so it stays clickable when parent is non-interactable
         var cg = go.AddComponent<CanvasGroup>();
         cg.ignoreParentGroups = true;
 
@@ -197,19 +258,26 @@ public class MenuIntroManager : MonoBehaviour
         rect.anchorMin = new Vector2(0.5f, 0.5f);
         rect.anchorMax = new Vector2(0.5f, 0.5f);
         rect.pivot = new Vector2(0.5f, 0.5f);
-        rect.anchoredPosition = new Vector2(0f, -105f);
-        rect.sizeDelta = new Vector2(130f, 45f);
+        rect.anchoredPosition = new Vector2(0f, -108f);
+        rect.sizeDelta = new Vector2(160f, 48f);
 
         var img = go.AddComponent<Image>();
-        img.color = new Color(0.18f, 0.18f, 0.18f, 0.85f);
+        img.color = new Color(0.22f, 0.30f, 0.42f, 0.78f);
+        img.type = Image.Type.Sliced;
+        img.pixelsPerUnitMultiplier = 1f;
+
+        var outline = go.AddComponent<Outline>();
+        outline.effectColor = new Color(0.50f, 0.72f, 0.95f, 0.50f);
+        outline.effectDistance = new Vector2(2f, -2f);
 
         var btn = go.AddComponent<Button>();
-        var colors = btn.colors;
-        colors.normalColor = new Color(0.18f, 0.18f, 0.18f, 0.85f);
-        colors.highlightedColor = new Color(0.35f, 0.35f, 0.35f, 1f);
-        colors.pressedColor = new Color(0.12f, 0.12f, 0.12f, 1f);
-        colors.selectedColor = colors.normalColor;
-        btn.colors = colors;
+        var cb = btn.colors;
+        cb.normalColor = new Color(0.22f, 0.30f, 0.42f, 0.78f);
+        cb.highlightedColor = new Color(0.32f, 0.48f, 0.70f, 0.95f);
+        cb.pressedColor = new Color(0.16f, 0.22f, 0.34f, 0.95f);
+        cb.selectedColor = cb.normalColor;
+        cb.fadeDuration = 0.12f;
+        btn.colors = cb;
 
         var textGO = new GameObject("Text", typeof(RectTransform));
         textGO.transform.SetParent(go.transform, false);
@@ -222,24 +290,26 @@ public class MenuIntroManager : MonoBehaviour
         textRect.offsetMax = Vector2.zero;
 
         var tmp = textGO.AddComponent<TextMeshProUGUI>();
-        tmp.text = "Geç >>";
-        tmp.fontSize = 28;
+        tmp.text = "Tanıtımı Geç";
+        tmp.fontSize = 24;
+        tmp.fontStyle = FontStyles.Normal;
         tmp.alignment = TextAlignmentOptions.Center;
-        tmp.color = Color.white;
+        tmp.color = new Color(0.90f, 0.95f, 1f, 1f);
 
         return go;
     }
-
-    // =====================================================================
-    // Intro Control
-    // =====================================================================
 
     private void BeginIntro()
     {
         if (_introRunning || _steps == null || _steps.Length == 0) return;
 
-        SetMenuInteractable(false);
+        ResetAllHighlighters();
+        SetMenuInputLocked(true);
         ShowSkipButton(true);
+
+        if (_skipButtonGO != null)
+            _skipButtonGO.transform.SetAsLastSibling();
+
         _introCoroutine = StartCoroutine(IntroSequence());
     }
 
@@ -248,10 +318,6 @@ public class MenuIntroManager : MonoBehaviour
         if (!_introRunning) return;
         CleanUp();
     }
-
-    // =====================================================================
-    // Core Sequence
-    // =====================================================================
 
     private IEnumerator IntroSequence()
     {
@@ -269,7 +335,6 @@ public class MenuIntroManager : MonoBehaviour
             var step = _steps[i];
             if (step.menuItem == null) continue;
 
-            DimAllExcept(i);
             step.menuItem.Highlight();
 
             if (step.voiceClip != null)
@@ -285,10 +350,6 @@ public class MenuIntroManager : MonoBehaviour
         Finish();
     }
 
-    // =====================================================================
-    // Helpers
-    // =====================================================================
-
     private void PlayClip(AudioClip clip)
     {
         _voiceSource.Stop();
@@ -296,42 +357,36 @@ public class MenuIntroManager : MonoBehaviour
         _voiceSource.Play();
     }
 
-    private void DimAllExcept(int activeIndex)
-    {
-        for (int i = 0; i < _steps.Length; i++)
-        {
-            if (i == activeIndex || _steps[i].menuItem == null) continue;
-            _steps[i].menuItem.SetDimmed();
-        }
-    }
-
     private void ResetAllHighlighters()
     {
         if (_steps == null) return;
+
         foreach (var step in _steps)
+        {
             if (step.menuItem != null)
                 step.menuItem.ResetToNormal();
-    }
-
-    private void SetMenuInteractable(bool value)
-    {
-        if (_menuCanvasGroup == null) return;
-        _menuCanvasGroup.interactable = value;
+        }
     }
 
     private void ShowSkipButton(bool show)
     {
         if (_skipButtonGO != null)
+        {
             _skipButtonGO.SetActive(show);
+            if (show)
+                _skipButtonGO.transform.SetAsLastSibling();
+        }
     }
 
     private void Finish()
     {
         _introRunning = false;
         _introCoroutine = null;
+
         ResetAllHighlighters();
-        SetMenuInteractable(true);
+        SetMenuInputLocked(false);
         ShowSkipButton(false);
+        ForceClearEventSystemSelection();
     }
 
     private void CleanUp()
@@ -342,18 +397,24 @@ public class MenuIntroManager : MonoBehaviour
             _introCoroutine = null;
         }
 
-        _voiceSource.Stop();
+        if (_voiceSource != null)
+            _voiceSource.Stop();
+
         _introRunning = false;
         ResetAllHighlighters();
-        SetMenuInteractable(true);
+        SetMenuInputLocked(false);
         ShowSkipButton(false);
+        ForceClearEventSystemSelection();
     }
 
     private static Canvas FindMenuCanvas()
     {
         foreach (var c in FindObjectsByType<Canvas>(FindObjectsSortMode.None))
+        {
             if (c.gameObject.name.Contains("AnatomyLabMenu"))
                 return c;
+        }
+
         return null;
     }
 
@@ -363,9 +424,11 @@ public class MenuIntroManager : MonoBehaviour
         {
             var child = parent.GetChild(i);
             if (child.name == name) return child;
+
             var found = FindChildRecursive(child, name);
             if (found != null) return found;
         }
+
         return null;
     }
 }
