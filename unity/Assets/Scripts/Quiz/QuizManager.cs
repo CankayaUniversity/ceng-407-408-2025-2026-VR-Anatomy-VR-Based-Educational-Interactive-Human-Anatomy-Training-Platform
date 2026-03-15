@@ -98,15 +98,47 @@ public class QuizManager : MonoBehaviour
             return;
         }
 
-        Question[] loadedQuestions = JsonHelper.FromJson<Question>(jsonFile.text);
+        string json = jsonFile.text?.Trim();
 
-        if (loadedQuestions == null || loadedQuestions.Length == 0)
+        if (string.IsNullOrEmpty(json))
         {
+            Debug.LogError("[QuizManager] JSON file is empty.");
             questionList = new QuestionList { questions = new List<Question>() };
+            return;
         }
-        else
+
+        try
         {
-            questionList = new QuestionList { questions = new List<Question>(loadedQuestions) };
+            // 1) Eğer kök dizi ise
+            if (json.StartsWith("["))
+            {
+                Question[] loadedQuestions = JsonHelper.FromJson<Question>(json);
+
+                if (loadedQuestions == null || loadedQuestions.Length == 0)
+                    questionList = new QuestionList { questions = new List<Question>() };
+                else
+                    questionList = new QuestionList { questions = new List<Question>(loadedQuestions) };
+            }
+            // 2) Eğer kökte "questions" objesi varsa
+            else if (json.StartsWith("{"))
+            {
+                QuestionList loadedList = JsonUtility.FromJson<QuestionList>(json);
+
+                if (loadedList == null || loadedList.questions == null || loadedList.questions.Count == 0)
+                    questionList = new QuestionList { questions = new List<Question>() };
+                else
+                    questionList = loadedList;
+            }
+            else
+            {
+                Debug.LogError("[QuizManager] Unknown JSON format.");
+                questionList = new QuestionList { questions = new List<Question>() };
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[QuizManager] Failed to parse JSON: {e.Message}");
+            questionList = new QuestionList { questions = new List<Question>() };
         }
 
         Debug.Log($"[QuizManager] Loaded questions count = {questionList.questions.Count}");
