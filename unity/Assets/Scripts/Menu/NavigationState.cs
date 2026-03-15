@@ -14,6 +14,7 @@ public static class NavigationState
 
     // ✅ QUIZ: Menüden hangi quiz kategorisi seçildi?
     public static QuizCategory CurrentQuizCategory { get; set; } = QuizCategory.AllQuestions;
+    public static bool SkipMenuIntroOnce = false;
 
     // Sadece runtime state temizliği (menü geri dönüş bilgisini silmez)
     public static void ClearRuntimeOnly()
