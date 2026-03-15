@@ -40,9 +40,10 @@ public class BackToMenu : MonoBehaviour
     private void OnBackAction(InputAction.CallbackContext ctx) => GoBackToMenu();
 
     public void GoBackToMenu()
-{
-    Debug.Log($"[BackToMenu] ReturnPanel='{NavigationState.ReturnMenuPanelName}' lastSelectedUnitId='{NavigationState.lastSelectedUnitId}' Mode={NavigationState.CurrentEntryMode} SubUnit={(int)NavigationState.SelectedMotionSubUnit}");
-    NavigationState.ClearRuntimeOnly(); // panel bilgisini silmez
-    SceneManager.LoadScene(menuSceneName);
-}
+    {
+        Debug.Log("[BackToMenu] Returning to menu and skipping intro once.");
+        NavigationState.SkipMenuIntroOnce = true;
+        NavigationState.ClearRuntimeOnly();
+        SceneManager.LoadScene(menuSceneName);
+    }
 }

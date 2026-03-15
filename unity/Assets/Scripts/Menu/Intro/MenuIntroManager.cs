@@ -85,6 +85,15 @@ public class MenuIntroManager : MonoBehaviour
     private void Start()
     {
         Configure();
+
+        if (NavigationState.SkipMenuIntroOnce)
+        {
+            Debug.Log("[MenuIntro] Intro bu dönüşte atlandı.");
+            NavigationState.SkipMenuIntroOnce = false;
+            StartCoroutine(ClearInitialSelectionRoutine());
+            return;
+        }
+
         BeginIntro();
         StartCoroutine(ClearInitialSelectionRoutine());
     }
