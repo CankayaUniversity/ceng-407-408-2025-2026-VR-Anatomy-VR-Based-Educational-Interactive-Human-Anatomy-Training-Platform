@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
 
 public class QuizUIController : MonoBehaviour
@@ -13,6 +14,8 @@ public class QuizUIController : MonoBehaviour
     public Button answerButtonPrefab;
     public Button nextButton;
     public RationalePopupUI rationalePopup;
+    public Button hintButton;
+    public HintPopupUI hintPopup;
 
     [Header("Question Type Panels")]
     public GameObject multipleChoicePanel;
@@ -24,6 +27,9 @@ public class QuizUIController : MonoBehaviour
     public MatchingItemUI leftItemPrefab;
     public MatchingItemUI rightItemPrefab;
     public Button confirmButton;
+
+    [Header("Hint Settings")]
+    public float hintDelay = 7f;
 
     [Header("Manager")]
     public QuizManager quizManager;
@@ -37,11 +43,28 @@ public class QuizUIController : MonoBehaviour
     private Dictionary<int, int> correctMatches = new Dictionary<int, int>();
     private bool matchingSubmitted = false;
 
+    // Hint state
+    private Coroutine hintCoroutine;
+    private Question currentQuestion;
+    private bool hintShownForCurrentQuestion = false;
+
     private void Start()
     {
         nextButton.gameObject.SetActive(false);
         nextButton.onClick.RemoveAllListeners();
         nextButton.onClick.AddListener(OnNextButtonPressed);
+
+        if (hintButton != null)
+        {
+            hintButton.gameObject.SetActive(false);
+            hintButton.onClick.RemoveAllListeners();
+            hintButton.onClick.AddListener(OnHintButtonPressed);
+        }
+
+        if (hintPopup != null)
+        {
+            hintPopup.Hide();
+        }
 
         if (confirmButton != null)
         {
@@ -54,6 +77,9 @@ public class QuizUIController : MonoBehaviour
 
     public void ShowQuestion(Question q)
     {
+        currentQuestion = q;
+        ResetHintUI();
+
         if (!string.IsNullOrWhiteSpace(q.body))
             questionText.text = q.body;
         else
@@ -106,6 +132,8 @@ public class QuizUIController : MonoBehaviour
 
             ShowChoiceQuestion(q);
         }
+
+        TryStartHintTimer(q);
     }
 
     void ShowChoiceQuestion(Question q)
@@ -152,7 +180,6 @@ public class QuizUIController : MonoBehaviour
             return;
         }
 
-        // DOĞRU EŞLEŞMELERİ BURADA YÜKLE
         LoadCorrectMatches(q);
 
         for (int i = 0; i < leftItems.Count; i++)
@@ -193,6 +220,9 @@ public class QuizUIController : MonoBehaviour
 
     public void OnAnswerSelected(string optionKey)
     {
+        if (hintPopup != null)
+            hintPopup.Hide();
+
         quizManager.SubmitAnswer(optionKey);
     }
 
@@ -220,6 +250,8 @@ public class QuizUIController : MonoBehaviour
 
     public void ShowTimeUpResult(string message)
     {
+        ResetHintUI();
+
         questionText.text = message;
         rationalePopup.Hide();
 
@@ -261,6 +293,8 @@ public class QuizUIController : MonoBehaviour
 
     public void ShowQuizFinished()
     {
+        ResetHintUI();
+
         questionText.text = "Quiz tamamlandı!";
 
         ClearButtons();
@@ -336,7 +370,6 @@ public class QuizUIController : MonoBehaviour
         if (matchingSubmitted)
             return;
 
-        // Aynı right item başka bir left ile eşleşmişse kaldır
         List<int> keysToRemove = new List<int>();
 
         foreach (var pair in playerMatches)
@@ -348,7 +381,6 @@ public class QuizUIController : MonoBehaviour
         foreach (int key in keysToRemove)
             playerMatches.Remove(key);
 
-        // Aynı left için yeni right ata
         playerMatches[leftIndex] = rightIndex;
 
         Debug.Log($"Eşleşme kaydedildi: Left {leftIndex} -> Right {rightIndex}");
@@ -391,6 +423,9 @@ public class QuizUIController : MonoBehaviour
 
     void OnConfirmMatchingPressed()
     {
+        if (hintPopup != null)
+            hintPopup.Hide();
+
         if (matchingSubmitted)
             return;
 
@@ -426,6 +461,66 @@ public class QuizUIController : MonoBehaviour
             confirmButton.interactable = false;
 
         nextButton.gameObject.SetActive(true);
+    }
+
+    void ResetHintUI()
+    {
+        hintShownForCurrentQuestion = false;
+
+        if (hintCoroutine != null)
+        {
+            StopCoroutine(hintCoroutine);
+            hintCoroutine = null;
+        }
+
+        if (hintButton != null)
+            hintButton.gameObject.SetActive(false);
+
+        if (hintPopup != null)
+            hintPopup.Hide();
+    }
+
+    void TryStartHintTimer(Question q)
+    {
+        if (q == null)
+            return;
+
+        if (string.IsNullOrWhiteSpace(q.hint))
+            return;
+
+        if (hintCoroutine != null)
+            StopCoroutine(hintCoroutine);
+
+        hintCoroutine = StartCoroutine(ShowHintButtonAfterDelay());
+    }
+
+    IEnumerator ShowHintButtonAfterDelay()
+    {
+        yield return new WaitForSeconds(hintDelay);
+
+        hintShownForCurrentQuestion = true;
+
+        if (hintButton != null)
+            hintButton.gameObject.SetActive(true);
+
+        hintCoroutine = null;
+    }
+
+    void OnHintButtonPressed()
+    {
+        if (currentQuestion == null)
+            return;
+
+        if (string.IsNullOrWhiteSpace(currentQuestion.hint))
+            return;
+
+        if (hintPopup == null)
+            return;
+
+        if (hintPopup.IsOpen())
+            hintPopup.Hide();
+        else
+            hintPopup.Show(currentQuestion.hint);
     }
 
     public bool IsMatchingSubmitted()
