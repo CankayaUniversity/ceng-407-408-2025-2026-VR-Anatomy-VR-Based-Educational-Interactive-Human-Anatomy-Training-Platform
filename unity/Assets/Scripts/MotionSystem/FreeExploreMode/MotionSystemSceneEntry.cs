@@ -5,7 +5,21 @@ public class MotionSystemSceneEntry : MonoBehaviour
     [Header("References")]
     [SerializeField] private FreeExploreController freeExploreController;
 
+    [Header("Startup")]
+    [SerializeField] private bool autoStartOnSceneEnter = true;
+
     private void Start()
+    {
+        if (!autoStartOnSceneEnter)
+        {
+            Debug.Log("[MotionSystemSceneEntry] Auto start disabled for this scene.");
+            return;
+        }
+
+        TryEnterFromNavigationState();
+    }
+
+    public void StartFromNavigationState()
     {
         TryEnterFromNavigationState();
     }

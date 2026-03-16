@@ -25,4 +25,6 @@ public class HandSelectionDebug : MonoBehaviour
                       " hasSelection=" + leftInteractor.hasSelection +
                       " first=" + (leftInteractor.hasSelection ? leftInteractor.firstInteractableSelected?.transform.name : ""));
     }
+
+    
 }
