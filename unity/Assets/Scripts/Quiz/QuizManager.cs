@@ -1,12 +1,35 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class QuizManager : MonoBehaviour
 {
     [Header("Config (Fallback)")]
     [Tooltip("Soru süresizse timer gösterilmez. Bu değer sadece istersen fallback olarak kullanılabilir.")]
     public float totalQuizTime = 120f;
+
+    [Header("Motion System Quiz Settings")]
+    public int questionsPerRegion = 5;
+
+    private readonly string[] motionRegions = new string[]
+    {
+        "Head_Face",
+        "Trunk",
+        "Upper_Extremity",
+        "Lower_Extremity",
+        "Joints",
+        "Muscle"
+    };
+
+    [Header("Basic Concepts Quiz Settings")]
+    public int questionsPerConceptType = 5;
+
+    private readonly string[] basicConceptTypes = new string[]
+    {
+        "Latin",
+        "Abbreviation"
+    };
 
     [Header("References")]
     public QuizUIController ui;
@@ -65,6 +88,76 @@ public class QuizManager : MonoBehaviour
         ui.UpdateTimer(0f);
 
         ui.ShowTimeUpResult("Süreniz doldu. Cevap işaretlenmediği için bu soru boş sayıldı.");
+    }
+
+    private List<Question> BuildMotionSystemQuiz(List<Question> allMotionQuestions)
+    {
+        List<Question> finalQuizQuestions = new List<Question>();
+
+        foreach (string region in motionRegions)
+        {
+            List<Question> regionQuestions = allMotionQuestions
+                .Where(q => !string.IsNullOrEmpty(q.region) &&
+                            q.region.Trim().Equals(region, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(q => UnityEngine.Random.value)
+                .ToList();
+
+            Debug.Log($"[QuizManager] Region {region} question count: {regionQuestions.Count}");
+
+            if (regionQuestions.Count < questionsPerRegion)
+            {
+                Debug.LogError(
+                    $"Quiz başlatılamadı. Region {region} içinde en az {questionsPerRegion} soru olmalı. " +
+                    $"Bulunan: {regionQuestions.Count}"
+                );
+                return null;
+            }
+
+            finalQuizQuestions.AddRange(regionQuestions.Take(questionsPerRegion));
+        }
+
+        finalQuizQuestions = finalQuizQuestions
+            .OrderBy(q => UnityEngine.Random.value)
+            .ToList();
+
+        Debug.Log($"[QuizManager] Final Motion System quiz question count: {finalQuizQuestions.Count}");
+
+        return finalQuizQuestions;
+    }
+
+    private List<Question> BuildBasicConceptsQuiz(List<Question> allBasicQuestions)
+    {
+        List<Question> finalQuizQuestions = new List<Question>();
+
+        foreach (string conceptType in basicConceptTypes)
+        {
+            List<Question> conceptQuestions = allBasicQuestions
+                .Where(q => !string.IsNullOrEmpty(q.concept_type) &&
+                            q.concept_type.Trim().Equals(conceptType, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(q => UnityEngine.Random.value)
+                .ToList();
+
+            Debug.Log($"[QuizManager] ConceptType {conceptType} question count: {conceptQuestions.Count}");
+
+            if (conceptQuestions.Count < questionsPerConceptType)
+            {
+                Debug.LogError(
+                    $"Quiz başlatılamadı. ConceptType {conceptType} içinde en az {questionsPerConceptType} soru olmalı. " +
+                    $"Bulunan: {conceptQuestions.Count}"
+                );
+                return null;
+            }
+
+            finalQuizQuestions.AddRange(conceptQuestions.Take(questionsPerConceptType));
+        }
+
+        finalQuizQuestions = finalQuizQuestions
+            .OrderBy(q => UnityEngine.Random.value)
+            .ToList();
+
+        Debug.Log($"[QuizManager] Final Basic Concepts quiz question count: {finalQuizQuestions.Count}");
+
+        return finalQuizQuestions;
     }
 
     void LoadQuestionsByCategory()
@@ -139,6 +232,34 @@ public class QuizManager : MonoBehaviour
         {
             Debug.LogError($"[QuizManager] Failed to parse JSON: {e.Message}");
             questionList = new QuestionList { questions = new List<Question>() };
+        }
+
+        if (NavigationState.CurrentQuizCategory == QuizCategory.BasicConcepts)
+        {
+            List<Question> selectedQuestions = BuildBasicConceptsQuiz(questionList.questions);
+
+            if (selectedQuestions == null || selectedQuestions.Count != basicConceptTypes.Length * questionsPerConceptType)
+            {
+                Debug.LogError("[QuizManager] Basic Concepts quiz oluşturulamadı.");
+                questionList = new QuestionList { questions = new List<Question>() };
+                return;
+            }
+
+            questionList.questions = selectedQuestions;
+        }
+
+        if (NavigationState.CurrentQuizCategory == QuizCategory.MotionSystem)
+        {
+            List<Question> selectedQuestions = BuildMotionSystemQuiz(questionList.questions);
+
+            if (selectedQuestions == null || selectedQuestions.Count != motionRegions.Length * questionsPerRegion)
+            {
+                Debug.LogError("[QuizManager] Motion System quiz oluşturulamadı.");
+                questionList = new QuestionList { questions = new List<Question>() };
+                return;
+            }
+
+            questionList.questions = selectedQuestions;
         }
 
         Debug.Log($"[QuizManager] Loaded questions count = {questionList.questions.Count}");

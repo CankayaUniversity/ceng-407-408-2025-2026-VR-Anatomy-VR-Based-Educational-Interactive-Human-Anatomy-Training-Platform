@@ -220,9 +220,7 @@ public class QuizUIController : MonoBehaviour
 
     public void OnAnswerSelected(string optionKey)
     {
-        if (hintPopup != null)
-            hintPopup.Hide();
-
+        ResetHintUI();
         quizManager.SubmitAnswer(optionKey);
     }
 
@@ -423,8 +421,7 @@ public class QuizUIController : MonoBehaviour
 
     void OnConfirmMatchingPressed()
     {
-        if (hintPopup != null)
-            hintPopup.Hide();
+        ResetHintUI();
 
         if (matchingSubmitted)
             return;
