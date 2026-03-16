@@ -61,6 +61,34 @@ public class FreeExploreController : MonoBehaviour
         _activeSequence = StartCoroutine(RunSequence(definition));
     }
 
+    public void PrepareForTutorialMode()
+    {
+        if (_activeSequence != null)
+        {
+            StopCoroutine(_activeSequence);
+            _activeSequence = null;
+        }
+
+        SetRotationEnabled(false);
+
+        if (visibilityController != null)
+        {
+            visibilityController.RebuildVisibilityRoots();
+            visibilityController.HideAll();
+        }
+
+        if (visualController != null)
+        {
+            visualController.ResetVisualState();
+        }
+
+        if (interactionController != null)
+        {
+            interactionController.CacheInteractables();
+            interactionController.DisableAllInteractions();
+        }
+    }
+
     private SequenceDefinition FindDefinition(MotionSubUnit subUnit)
     {
         for (int i = 0; i < sequenceDefinitions.Count; i++)
@@ -75,9 +103,6 @@ public class FreeExploreController : MonoBehaviour
     private IEnumerator RunSequence(SequenceDefinition definition)
     {
         ResetSequenceState();
-
-        // Scene startup race condition fix
-        yield return null;
 
         ShowOverview(definition);
 
@@ -108,7 +133,7 @@ public class FreeExploreController : MonoBehaviour
         if (visibilityController != null)
         {
             visibilityController.RebuildVisibilityRoots();
-            visibilityController.ShowAll();
+            visibilityController.HideAll();
         }
 
         if (visualController != null)
@@ -132,13 +157,11 @@ public class FreeExploreController : MonoBehaviour
 
         if (visualController != null)
         {
-            // Overview sırasında dim / highlight yok
             visualController.ResetVisualState();
         }
 
         if (interactionController != null)
         {
-            // Overview sırasında hiçbir şey tutulamasın
             interactionController.DisableAllInteractions();
         }
     }
@@ -147,7 +170,6 @@ public class FreeExploreController : MonoBehaviour
     {
         if (visibilityController != null)
         {
-            // Focus'ta da context görünür kalsın
             visibilityController.ShowOnly(definition.contextObjects);
         }
 
@@ -158,7 +180,6 @@ public class FreeExploreController : MonoBehaviour
 
         if (interactionController != null)
         {
-            // Sadece doğru objeler tutulabilir olsun
             interactionController.EnableOnly(definition.interactionTargets);
         }
     }
