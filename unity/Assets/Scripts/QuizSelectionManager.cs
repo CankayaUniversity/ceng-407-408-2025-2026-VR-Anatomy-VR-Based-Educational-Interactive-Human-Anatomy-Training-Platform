@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class QuizSelectionManager : MonoBehaviour
 {
@@ -13,6 +14,13 @@ public class QuizSelectionManager : MonoBehaviour
     [SerializeField] private Button backButton;
 
     private QuizCategory selectedCategory;
+    private bool countdownRunning;
+
+    static readonly string IntroInfoText =
+        "Bu test 30 sorudan olu\u015Fmaktad\u0131r.\n\n" +
+        "\u00C7oktan se\u00E7meli sorular i\u00E7in 30 saniye s\u00FCreniz vard\u0131r.\n\n" +
+        "Zorland\u0131\u011F\u0131n\u0131z sorularda \u0130pucu butonunu kullanabilirsiniz.\n\n" +
+        "Haz\u0131r oldu\u011Funuzda Ba\u015Fla butonuna basarak teste ba\u015Flayabilirsiniz.";
 
     private void Start()
     {
@@ -25,7 +33,66 @@ public class QuizSelectionManager : MonoBehaviour
         WireQuizTopicButtons();
 
         if (introPanel != null)
+        {
             introPanel.SetActive(false);
+            SetupIntroPanel();
+        }
+    }
+
+    private void SetupIntroPanel()
+    {
+        var introTextObj = introPanel.transform.Find("IntroText");
+        if (introTextObj != null)
+        {
+            var tr = introTextObj.GetComponent<RectTransform>();
+            if (tr != null)
+            {
+                tr.anchorMin = new Vector2(0.06f, 0.20f);
+                tr.anchorMax = new Vector2(0.94f, 0.80f);
+                tr.anchoredPosition = Vector2.zero;
+                tr.sizeDelta = Vector2.zero;
+            }
+
+            var tmp = introTextObj.GetComponent<TextMeshProUGUI>();
+            if (tmp != null)
+            {
+                tmp.text = IntroInfoText;
+                tmp.alignment = TextAlignmentOptions.Center;
+                tmp.lineSpacing = 5f;
+                tmp.paragraphSpacing = 10f;
+                tmp.enableAutoSizing = true;
+                tmp.fontSizeMin = 12;
+                tmp.fontSizeMax = 26;
+            }
+        }
+
+        if (startButton != null)
+        {
+            var r = startButton.GetComponent<RectTransform>();
+            if (r != null)
+            {
+                r.anchorMin = new Vector2(0.65f, 0.06f);
+                r.anchorMax = new Vector2(0.88f, 0.16f);
+                r.anchoredPosition = Vector2.zero;
+                r.sizeDelta = Vector2.zero;
+            }
+            if (startButton.GetComponent<VRButtonEffect>() == null)
+                startButton.gameObject.AddComponent<VRButtonEffect>();
+        }
+
+        if (backButton != null)
+        {
+            var r = backButton.GetComponent<RectTransform>();
+            if (r != null)
+            {
+                r.anchorMin = new Vector2(0.12f, 0.06f);
+                r.anchorMax = new Vector2(0.35f, 0.16f);
+                r.anchoredPosition = Vector2.zero;
+                r.sizeDelta = Vector2.zero;
+            }
+            if (backButton.GetComponent<VRButtonEffect>() == null)
+                backButton.gameObject.AddComponent<VRButtonEffect>();
+        }
     }
 
     private void WireQuizTopicButtons()
@@ -76,12 +143,23 @@ public class QuizSelectionManager : MonoBehaviour
 
     private void OnStartClicked()
     {
+        if (countdownRunning) return;
+        countdownRunning = true;
+
+        if (startButton != null) startButton.interactable = false;
+        if (backButton != null) backButton.interactable = false;
+
         NavigationState.CurrentQuizCategory = selectedCategory;
-        SceneManager.LoadScene("04_Quiz");
+
+        var countdown = gameObject.AddComponent<QuizCountdown>();
+        countdown.OnCountdownComplete += () => SceneManager.LoadScene("04_Quiz");
+        countdown.StartCountdown(introPanel.transform);
     }
 
     private void OnBackClicked()
     {
+        if (countdownRunning) return;
+
         if (introPanel != null)
             introPanel.SetActive(false);
 
