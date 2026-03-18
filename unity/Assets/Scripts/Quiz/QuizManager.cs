@@ -2,7 +2,16 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
 
+[Serializable]
+public class RegionQuizState
+{
+    public string regionName;
+    public int askedCount = 0;
+    public string currentLevel = "medium";
+    public List<string> askedQuestionIds = new List<string>();
+}
 public class QuizManager : MonoBehaviour
 {
     [Header("Config (Fallback)")]
@@ -41,6 +50,12 @@ public class QuizManager : MonoBehaviour
     public string allQuestionsJsonPath = "JsonFiles/Quiz/quiz_data";
 
     private QuestionList questionList;
+    private Dictionary<string, List<Question>> motionQuestionsByRegion = new Dictionary<string, List<Question>>();
+    
+    private Dictionary<string, RegionQuizState> regionStates = new Dictionary<string, RegionQuizState>();
+    private List<string> motionRegionQueue = new List<string>();
+    private Question currentQuestion;
+    private string currentQuestionRegion;
     private int currentQuestionIndex = 0;
 
     private float remainingTime;
@@ -51,13 +66,22 @@ public class QuizManager : MonoBehaviour
     private bool timeUpHandled = false;
     private bool questionLocked = false;
 
-    void Start()
+    private IEnumerator Start()
     {
+        yield return null;
+
         LoadQuestionsByCategory();
         ShuffleQuestions();
 
         currentQuestionIndex = 0;
         PrepareCurrentQuestionAndShow();
+    }
+
+    public enum LevelChangeDirection
+    {
+        Down,
+        Stay,
+        Up
     }
 
     void Update()
@@ -90,6 +114,69 @@ public class QuizManager : MonoBehaviour
         ui.ShowTimeUpResult("Süreniz doldu. Cevap işaretlenmediği için bu soru boş sayıldı.");
     }
 
+    private void BuildMotionQuestionPools(List<Question> allMotionQuestions)
+    {
+        motionQuestionsByRegion.Clear();
+
+        foreach (string region in motionRegions)
+        {
+            List<Question> regionQuestions = allMotionQuestions
+                .Where(q => !string.IsNullOrWhiteSpace(q.region) &&
+                            q.GetNormalizedRegion().Equals(region, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            motionQuestionsByRegion[region] = regionQuestions;
+
+            Debug.Log($"[POOL DEBUG] Region={region} | Total Questions={regionQuestions.Count}");
+
+            int easyCount = regionQuestions.Count(q => q.IsLevel("easy"));
+            int mediumCount = regionQuestions.Count(q => q.IsLevel("medium"));
+            int hardCount = regionQuestions.Count(q => q.IsLevel("hard"));
+
+            Debug.Log($"[POOL] Region={region} | Easy={easyCount} | Medium={mediumCount} | Hard={hardCount}");
+        }
+    }
+
+    private void InitializeMotionRegionStates()
+    {
+        regionStates.Clear();
+
+        foreach (string region in motionRegions)
+        {
+            RegionQuizState state = new RegionQuizState
+            {
+                regionName = region,
+                askedCount = 0,
+                currentLevel = "medium",
+                askedQuestionIds = new List<string>()
+            };
+
+            regionStates[region] = state;
+        }
+    }
+
+    private void BuildMotionRegionQueue()
+    {
+        motionRegionQueue.Clear();
+
+        foreach (string region in motionRegions)
+        {
+            for (int i = 0; i < questionsPerRegion; i++)
+            {
+                motionRegionQueue.Add(region);
+            }
+        }
+
+        motionRegionQueue = motionRegionQueue
+            .OrderBy(x => UnityEngine.Random.value)
+            .ToList();
+
+        Debug.Log("[QUEUE] Motion region queue created:");
+        foreach (string region in motionRegionQueue)
+        {
+            Debug.Log("[QUEUE ITEM] " + region);
+        }
+    }
     private List<Question> BuildMotionSystemQuiz(List<Question> allMotionQuestions)
     {
         List<Question> finalQuizQuestions = new List<Question>();
@@ -160,8 +247,78 @@ public class QuizManager : MonoBehaviour
         return finalQuizQuestions;
     }
 
+    public void OnMatchingQuestionAnswered(LevelChangeDirection direction)
+    {
+        if (NavigationState.CurrentQuizCategory != QuizCategory.MotionSystem)
+            return;
+
+        if (string.IsNullOrWhiteSpace(currentQuestionRegion) || !regionStates.ContainsKey(currentQuestionRegion))
+            return;
+
+        RegionQuizState state = regionStates[currentQuestionRegion];
+
+        string oldLevel = state.currentLevel;
+
+        switch (direction)
+        {
+            case LevelChangeDirection.Up:
+                state.currentLevel = GetNextLevel(state.currentLevel, true);
+                break;
+
+            case LevelChangeDirection.Down:
+                state.currentLevel = GetNextLevel(state.currentLevel, false);
+                break;
+
+            case LevelChangeDirection.Stay:
+                // level değişmiyor
+                break;
+        }
+
+        Debug.Log(
+            $"[MATCHING LEVEL UPDATE] Region={currentQuestionRegion} | Direction={direction} | OldLevel={oldLevel} | NewLevel={state.currentLevel}"
+        );
+    }
+
+    private string GetNextLevel(string currentLevel, bool answeredCorrect)
+    {
+        string normalized = string.IsNullOrWhiteSpace(currentLevel)
+            ? "medium"
+            : currentLevel.Trim().ToLower();
+
+        if (answeredCorrect)
+        {
+            switch (normalized)
+            {
+                case "easy":
+                    return "medium";
+                case "medium":
+                    return "hard";
+                case "hard":
+                    return "hard";
+                default:
+                    return "medium";
+            }
+        }
+        else
+        {
+            switch (normalized)
+            {
+                case "hard":
+                    return "medium";
+                case "medium":
+                    return "easy";
+                case "easy":
+                    return "easy";
+                default:
+                    return "medium";
+            }
+        }
+    }
+
     void LoadQuestionsByCategory()
     {
+        Debug.Log("[TEST] Entered LoadQuestionsByCategory");
+
         string selectedPath = allQuestionsJsonPath;
 
         switch (NavigationState.CurrentQuizCategory)
@@ -234,18 +391,13 @@ public class QuizManager : MonoBehaviour
             questionList = new QuestionList { questions = new List<Question>() };
         }
 
-        if (NavigationState.CurrentQuizCategory == QuizCategory.BasicConcepts)
+        if (NavigationState.CurrentQuizCategory == QuizCategory.MotionSystem)
         {
-            List<Question> selectedQuestions = BuildBasicConceptsQuiz(questionList.questions);
+            BuildMotionQuestionPools(questionList.questions);
+            InitializeMotionRegionStates();
+            BuildMotionRegionQueue();
 
-            if (selectedQuestions == null || selectedQuestions.Count != basicConceptTypes.Length * questionsPerConceptType)
-            {
-                Debug.LogError("[QuizManager] Basic Concepts quiz oluşturulamadı.");
-                questionList = new QuestionList { questions = new List<Question>() };
-                return;
-            }
-
-            questionList.questions = selectedQuestions;
+            questionList.questions = new List<Question>();
         }
 
         if (NavigationState.CurrentQuizCategory == QuizCategory.MotionSystem)
@@ -263,6 +415,82 @@ public class QuizManager : MonoBehaviour
         }
 
         Debug.Log($"[QuizManager] Loaded questions count = {questionList.questions.Count}");
+        foreach (Question q in questionList.questions)
+        {
+            Debug.Log(
+                $"[Question Debug] id={q.id} | region={q.GetNormalizedRegion()} | topic={q.topic} | level(raw)={q.level} | level(normalized)={q.GetNormalizedLevel()}"
+            );
+        }
+    }
+
+    private List<string> GetLevelPriorityOrder(string targetLevel)
+    {
+        string normalized = string.IsNullOrWhiteSpace(targetLevel)
+            ? "medium"
+            : targetLevel.Trim().ToLower();
+
+        switch (normalized)
+        {
+            case "easy":
+                return new List<string> { "easy", "medium", "hard" };
+
+            case "hard":
+                return new List<string> { "hard", "medium", "easy" };
+
+            case "medium":
+            default:
+                return new List<string> { "medium", "easy", "hard" };
+        }
+    }
+
+    private Question GetNextMotionSystemQuestion()
+    {
+        if (motionRegionQueue.Count == 0)
+            return null;
+
+        string region = motionRegionQueue[0];
+        motionRegionQueue.RemoveAt(0);
+
+        currentQuestionRegion = region;
+
+        RegionQuizState state = regionStates[region];
+
+        string targetLevel = state.askedCount < 2 ? "medium" : state.currentLevel;
+
+        List<string> levelPriority = GetLevelPriorityOrder(targetLevel);
+        List<Question> availableQuestions = new List<Question>();
+        string actualSelectedLevel = string.Empty;
+
+        foreach (string level in levelPriority)
+        {
+            availableQuestions = motionQuestionsByRegion[region]
+                .Where(q => q.IsLevel(level) && !state.askedQuestionIds.Contains(q.id))
+                .OrderBy(q => UnityEngine.Random.value)
+                .ToList();
+
+            if (availableQuestions.Count > 0)
+            {
+                actualSelectedLevel = level;
+                break;
+            }
+        }
+
+        if (availableQuestions.Count == 0)
+        {
+            Debug.LogError($"[ADAPTIVE] No available question found for region {region}");
+            return null;
+        }
+
+        Question selected = availableQuestions[0];
+
+        state.askedCount++;
+        state.askedQuestionIds.Add(selected.id);
+
+        Debug.Log(
+            $"[ADAPTIVE] Selected Question | region={region} | askedCount={state.askedCount} | targetLevel={targetLevel} | actualLevel={actualSelectedLevel} | selectedId={selected.id} | selectedLevel={selected.GetNormalizedLevel()}"
+        );
+
+        return selected;
     }
 
     void ShuffleQuestions()
@@ -277,28 +505,30 @@ public class QuizManager : MonoBehaviour
     }
 
     void PrepareCurrentQuestionAndShow()
+{
+    if (NavigationState.CurrentQuizCategory == QuizCategory.MotionSystem)
     {
-        if (questionList == null || questionList.questions == null || questionList.questions.Count == 0)
-        {
-            EndQuiz();
-            return;
-        }
-
-        if (currentQuestionIndex >= questionList.questions.Count)
-        {
-            EndQuiz();
-            return;
-        }
-
         timeUpHandled = false;
         questionLocked = false;
         isTimerPaused = false;
 
-        Question q = NormalizeForUI(questionList.questions[currentQuestionIndex]);
+        currentQuestion = GetNextMotionSystemQuestion();
+
+        if (currentQuestion == null)
+        {
+            EndQuiz();
+            return;
+        }
+
+        Question q = NormalizeForUI(currentQuestion);
 
         Debug.Log("===== CURRENT QUESTION DEBUG =====");
         Debug.Log("id: " + q.id);
         Debug.Log("doc_type: " + q.doc_type);
+        Debug.Log("topic: " + q.topic);
+        Debug.Log("region: " + q.region);
+        Debug.Log("level: " + q.level);
+        Debug.Log("normalized level: " + q.GetNormalizedLevel());
         Debug.Log("body: " + q.body);
         Debug.Log("question_text: " + q.question_text);
         Debug.Log("rationale: " + q.rationale);
@@ -308,28 +538,6 @@ public class QuizManager : MonoBehaviour
         Debug.Log("D: " + q.D);
         Debug.Log("answer_text: " + q.answer_text);
         Debug.Log("time_limit_sec: " + q.time_limit_sec);
-
-        if (q.data != null && q.data.options != null)
-        {
-            Debug.Log("data.options count: " + q.data.options.Count);
-            for (int i = 0; i < q.data.options.Count; i++)
-            {
-                Debug.Log("option[" + i + "]: " + q.data.options[i]);
-            }
-        }
-        else
-        {
-            Debug.Log("data.options is NULL");
-        }
-
-        if (q.answer != null)
-        {
-            Debug.Log("answer.correct_index: " + q.answer.correct_index);
-        }
-        else
-        {
-            Debug.Log("answer is NULL");
-        }
 
         isTimedQuestion = q.time_limit_sec > 0;
 
@@ -343,15 +551,12 @@ public class QuizManager : MonoBehaviour
             ui.UpdateTimer(-1f);
         }
 
-        if (!string.IsNullOrEmpty(q.doc_type) && q.doc_type.Equals("matching", StringComparison.OrdinalIgnoreCase))
-        {
-            Debug.Log($"[QuizManager] Matching question: {q.id}");
-            ui.ShowQuestion(q);
-            return;
-        }
-
         ui.ShowQuestion(q);
+        return;
     }
+}
+
+    // mevcut eski yapı aşağıda aynen kalsın
 
     Question NormalizeForUI(Question raw)
     {
@@ -364,10 +569,10 @@ public class QuizManager : MonoBehaviour
             time_limit_sec = raw.time_limit_sec,
             tags = raw.tags,
             source = raw.source,
-            topic = raw.topic,
-            region = raw.region,
-            concept_type = raw.concept_type,
-            level = raw.level,
+            topic = string.IsNullOrWhiteSpace(raw.topic) ? string.Empty : raw.topic.Trim(),
+            region = raw.GetNormalizedRegion(),
+            concept_type = string.IsNullOrWhiteSpace(raw.concept_type) ? string.Empty : raw.concept_type.Trim(),
+            level = raw.GetNormalizedLevel(),
             hint = raw.hint,
 
             rationale = raw.rationale,
@@ -449,7 +654,11 @@ public class QuizManager : MonoBehaviour
         if (quizFinished) return;
         if (questionLocked) return;
 
-        Question q = NormalizeForUI(questionList.questions[currentQuestionIndex]);
+        Question sourceQuestion = NavigationState.CurrentQuizCategory == QuizCategory.MotionSystem
+            ? currentQuestion
+            : questionList.questions[currentQuestionIndex];
+
+        Question q = NormalizeForUI(sourceQuestion);
 
         if (!string.IsNullOrEmpty(q.doc_type) && q.doc_type.Equals("matching", StringComparison.OrdinalIgnoreCase))
         {
@@ -459,6 +668,32 @@ public class QuizManager : MonoBehaviour
 
         isTimerPaused = true;
         questionLocked = true;
+
+        bool isCorrect = selectedOption == q.answer_text;
+
+        if (NavigationState.CurrentQuizCategory == QuizCategory.MotionSystem)
+        {
+            if (!string.IsNullOrWhiteSpace(currentQuestionRegion) && regionStates.ContainsKey(currentQuestionRegion))
+            {
+                RegionQuizState state = regionStates[currentQuestionRegion];
+
+                string oldLevel = state.currentLevel;
+                string questionLevel = q.GetNormalizedLevel();
+
+                if (state.askedCount >= 2)
+                {
+                    state.currentLevel = GetNextLevel(state.currentLevel, isCorrect);
+                }
+                else
+                {
+                    state.currentLevel = GetNextLevel(questionLevel, isCorrect);
+                }
+
+                Debug.Log(
+                    $"[LEVEL UPDATE] Region={currentQuestionRegion} | QuestionId={q.id} | QuestionLevel={questionLevel} | AnswerCorrect={isCorrect} | OldStateLevel={oldLevel} | NewStateLevel={state.currentLevel} | AskedCount={state.askedCount}"
+                );
+            }
+        }
 
         ui.ShowAnswerResult(
             correctOption: q.answer_text,
@@ -471,7 +706,11 @@ public class QuizManager : MonoBehaviour
     {
         if (quizFinished) return;
 
-        currentQuestionIndex++;
+        if (NavigationState.CurrentQuizCategory != QuizCategory.MotionSystem)
+        {
+            currentQuestionIndex++;
+        }
+
         PrepareCurrentQuestionAndShow();
     }
 

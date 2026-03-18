@@ -298,6 +298,9 @@ public class QuizUIController : MonoBehaviour
         ClearButtons();
         ClearMatchingItems();
 
+        if (timerRoot != null)
+        timerRoot.SetActive(false);
+
         if (multipleChoicePanel != null)
             multipleChoicePanel.SetActive(false);
 
@@ -431,6 +434,9 @@ public class QuizUIController : MonoBehaviour
 
         matchingSubmitted = true;
 
+        int correctCount = 0;
+        int totalCount = playerMatches.Count;
+
         foreach (var pair in playerMatches)
         {
             int leftIndex = pair.Key;
@@ -440,6 +446,8 @@ public class QuizUIController : MonoBehaviour
 
             if (correctMatches.ContainsKey(leftIndex))
                 isCorrect = (correctMatches[leftIndex] == rightIndex);
+            if (isCorrect)
+                correctCount++;
 
             if (leftIndex >= 0 && leftIndex < spawnedLeftItems.Count)
             {
@@ -452,6 +460,30 @@ public class QuizUIController : MonoBehaviour
                 if (isCorrect) spawnedRightItems[rightIndex].SetCorrect();
                 else spawnedRightItems[rightIndex].SetWrong();
             }
+        }
+
+        float accuracy = (float)correctCount / totalCount;
+
+        QuizManager.LevelChangeDirection direction;
+
+        if (accuracy >= 1f)
+        {
+            direction = QuizManager.LevelChangeDirection.Up;
+        }
+        else if (accuracy >= 0.5f)
+        {
+            direction = QuizManager.LevelChangeDirection.Stay;
+        }
+        else
+        {
+            direction = QuizManager.LevelChangeDirection.Down;
+        }
+
+        Debug.Log($"[MATCHING RESULT] Correct={correctCount}/{totalCount} | Accuracy={accuracy} | Direction={direction}");
+
+        if (quizManager != null)
+        {
+            quizManager.OnMatchingQuestionAnswered(direction);
         }
 
         if (confirmButton != null)
