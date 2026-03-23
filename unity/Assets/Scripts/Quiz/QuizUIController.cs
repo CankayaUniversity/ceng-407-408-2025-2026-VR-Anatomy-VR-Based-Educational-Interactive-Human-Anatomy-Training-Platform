@@ -484,6 +484,8 @@ public class QuizUIController : MonoBehaviour
         if (quizManager != null)
         {
             quizManager.OnMatchingQuestionAnswered(direction);
+            quizManager.RecordMatchingQuestionResult(currentQuestion, correctCount, totalCount);
+            
         }
 
         if (confirmButton != null)
