@@ -28,6 +28,16 @@ public class QuizUIController : MonoBehaviour
     public MatchingItemUI rightItemPrefab;
     public Button confirmButton;
 
+    [Header("Quiz Result UI")]
+    public GameObject quizCompletedPanel;
+
+    public TMP_Text generalCorrectText;
+    public TMP_Text generalWrongText;
+    public TMP_Text generalSuccessText;
+
+    public Transform regionResultsContent;
+    public RegionResultRowUI regionResultRowPrefab;
+
     [Header("Hint Settings")]
     public float hintDelay = 7f;
 
@@ -77,6 +87,9 @@ public class QuizUIController : MonoBehaviour
 
     public void ShowQuestion(Question q)
     {
+        if (quizCompletedPanel != null)
+            quizCompletedPanel.SetActive(false);
+
         currentQuestion = q;
         ResetHintUI();
 
@@ -314,6 +327,63 @@ public class QuizUIController : MonoBehaviour
         rationalePopup.Hide();
     }
 
+    public void ShowQuizFinishedResults(
+        int totalCorrect,
+        int totalWrong,
+        float overallAverageScore,
+        List<RegionAnalysisResult> regionAnalysis)
+    {
+        ResetHintUI();
+
+        ClearButtons();
+        ClearMatchingItems();
+
+        if (timerRoot != null)
+            timerRoot.SetActive(false);
+
+        if (multipleChoicePanel != null)
+            multipleChoicePanel.SetActive(false);
+
+        if (matchingPanel != null)
+            matchingPanel.SetActive(false);
+
+        if (confirmButton != null)
+            confirmButton.gameObject.SetActive(false);
+
+        nextButton.gameObject.SetActive(false);
+        rationalePopup.Hide();
+
+        if (questionText != null)
+            questionText.text = "";
+
+        // PANELİ AÇ
+        if (quizCompletedPanel != null)
+            quizCompletedPanel.SetActive(true);
+
+        // GENEL SONUÇ
+        if (generalCorrectText != null)
+            generalCorrectText.text = $"Correct: {totalCorrect}";
+
+        if (generalWrongText != null)
+            generalWrongText.text = $"Wrong: {totalWrong}";
+
+        if (generalSuccessText != null)
+            generalSuccessText.text = $"Success: %{overallAverageScore * 100f:0}";
+
+        // ESKİ SATIRLARI TEMİZLE
+        ClearRegionResultRows();
+
+        // YENİ SATIRLARI EKLE
+        if (regionResultsContent == null || regionResultRowPrefab == null || regionAnalysis == null)
+            return;
+
+        foreach (RegionAnalysisResult region in regionAnalysis)
+        {
+            RegionResultRowUI row = Instantiate(regionResultRowPrefab, regionResultsContent);
+            row.Setup(region);
+        }
+    }
+
     void ClearButtons()
     {
         foreach (Transform child in answerContainer)
@@ -492,6 +562,17 @@ public class QuizUIController : MonoBehaviour
             confirmButton.interactable = false;
 
         nextButton.gameObject.SetActive(true);
+    }
+
+    void ClearRegionResultRows()
+    {
+        if (regionResultsContent == null)
+            return;
+
+        for (int i = regionResultsContent.childCount - 1; i >= 0; i--)
+        {
+            Destroy(regionResultsContent.GetChild(i).gameObject);
+        }
     }
 
     void ResetHintUI()

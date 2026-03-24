@@ -941,6 +941,12 @@ public class QuizManager : MonoBehaviour
         quizFinished = true;
         BuildFinalQuizAnalysis();
         PrintQuizAnalysisToConsole();
-        ui.ShowQuizFinished();
+
+        ui.ShowQuizFinishedResults(
+            finalTotalCorrect,
+            finalTotalWrong,
+            finalOverallAverageScore,
+            finalRegionAnalysis
+        );
     }
 }
