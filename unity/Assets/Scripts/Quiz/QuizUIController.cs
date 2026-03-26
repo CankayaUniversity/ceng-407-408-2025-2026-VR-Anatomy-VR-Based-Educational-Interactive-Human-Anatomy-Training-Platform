@@ -30,9 +30,12 @@ public class QuizUIController : MonoBehaviour
 
     [Header("Quiz Result UI")]
     public GameObject quizCompletedPanel;
+    public GameObject regionResultsHeader;
+    public TMP_Text resultsTitleText;
 
     public TMP_Text generalCorrectText;
     public TMP_Text generalWrongText;
+    public TMP_Text generalUnansweredText;
     public TMP_Text generalSuccessText;
 
     public Transform regionResultsContent;
@@ -330,6 +333,7 @@ public class QuizUIController : MonoBehaviour
     public void ShowQuizFinishedResults(
         int totalCorrect,
         int totalWrong,
+        int totalUnanswered,
         float overallAverageScore,
         List<RegionAnalysisResult> regionAnalysis)
     {
@@ -362,13 +366,25 @@ public class QuizUIController : MonoBehaviour
 
         // GENEL SONUÇ
         if (generalCorrectText != null)
-            generalCorrectText.text = $"Correct: {totalCorrect}";
+            generalCorrectText.text = $"Doğru: {totalCorrect}";
 
         if (generalWrongText != null)
-            generalWrongText.text = $"Wrong: {totalWrong}";
+            generalWrongText.text = $"Yanlış: {totalWrong}";
+
+        if (generalUnansweredText != null)
+            generalUnansweredText.text = $"Boş: {totalUnanswered}";
 
         if (generalSuccessText != null)
-            generalSuccessText.text = $"Success: %{overallAverageScore * 100f:0}";
+            generalSuccessText.text = $"Başarı oranı: %{overallAverageScore * 100f:0}";
+
+        if (regionResultsContent != null)
+            regionResultsContent.gameObject.SetActive(true);
+
+        if (regionResultsHeader != null)
+            regionResultsHeader.SetActive(true);
+        
+        if (resultsTitleText != null)
+            resultsTitleText.text = "Genel Test Sonuçları";
 
         // ESKİ SATIRLARI TEMİZLE
         ClearRegionResultRows();
@@ -382,6 +398,65 @@ public class QuizUIController : MonoBehaviour
             RegionResultRowUI row = Instantiate(regionResultRowPrefab, regionResultsContent);
             row.Setup(region);
         }
+    }
+
+    public void ShowBasicConceptsFinishedResults(
+        int totalCorrect,
+        int totalWrong,
+        int totalUnanswered,
+        float overallAverageScore)
+    {
+        ResetHintUI();
+
+        ClearButtons();
+        ClearMatchingItems();
+
+        if (timerRoot != null)
+            timerRoot.SetActive(false);
+
+        if (multipleChoicePanel != null)
+            multipleChoicePanel.SetActive(false);
+
+        if (matchingPanel != null)
+            matchingPanel.SetActive(false);
+
+        if (confirmButton != null)
+            confirmButton.gameObject.SetActive(false);
+
+        if (nextButton != null)
+            nextButton.gameObject.SetActive(false);
+
+        if (rationalePopup != null)
+            rationalePopup.Hide();
+
+        if (questionText != null)
+            questionText.text = "";
+
+        if (quizCompletedPanel != null)
+            quizCompletedPanel.SetActive(true);
+
+        if (generalCorrectText != null)
+            generalCorrectText.text = $"Doğru: {totalCorrect}";
+
+        if (generalWrongText != null)
+            generalWrongText.text = $"Yanlış: {totalWrong}";
+
+        if (generalUnansweredText != null)
+            generalUnansweredText.text = $"Boş: {totalUnanswered}";
+
+        if (generalSuccessText != null)
+            generalSuccessText.text = $"Başarı: %{overallAverageScore * 100f:0}";
+
+        if (regionResultsContent != null)
+            regionResultsContent.gameObject.SetActive(false);
+
+        if (regionResultsHeader != null)
+            regionResultsHeader.SetActive(false);
+        
+        if (resultsTitleText != null)
+            resultsTitleText.text = "Quiz Tamamlandı";
+
+        ClearRegionResultRows();
     }
 
     void ClearButtons()

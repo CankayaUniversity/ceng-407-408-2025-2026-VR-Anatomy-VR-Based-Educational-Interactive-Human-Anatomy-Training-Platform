@@ -23,6 +23,7 @@ public class QuestionResult
     public string docType;
 
     public bool isCorrect;
+    public bool isUnanswered;
     public float scoreRatio;
 
     public string selectedAnswer;
@@ -43,6 +44,7 @@ public class RegionAnalysisResult
     public int totalQuestions;
     public int wrongCount;
     public int correctCount;
+    public int unansweredCount; 
     public float averageScoreRatio;
     public RegionPerformanceStatus status;
 }
@@ -95,6 +97,7 @@ public class QuizManager : MonoBehaviour
     private int finalTotalQuestions = 0;
     private int finalTotalCorrect = 0;
     private int finalTotalWrong = 0;
+    private int finalTotalUnanswered = 0;
     private float finalOverallAverageScore = 0f;
     private int currentQuestionIndex = 0;
 
@@ -149,6 +152,14 @@ public class QuizManager : MonoBehaviour
 
         remainingTime = 0f;
         ui.UpdateTimer(0f);
+
+        Question sourceQuestion = NavigationState.CurrentQuizCategory == QuizCategory.MotionSystem
+            ? currentQuestion
+            : questionList.questions[currentQuestionIndex];
+
+        Question q = NormalizeForUI(sourceQuestion);
+
+        RecordUnansweredQuestionResult(q);
 
         ui.ShowTimeUpResult("Süreniz doldu. Cevap işaretlenmediği için bu soru boş sayıldı.");
     }
@@ -654,6 +665,7 @@ public class QuizManager : MonoBehaviour
             level = q.GetNormalizedLevel(),
             docType = q.doc_type,
             isCorrect = isCorrect,
+            isUnanswered = false,
             scoreRatio = isCorrect ? 1f : 0f,
             selectedAnswer = selectedOption,
             correctAnswer = q.answer_text
@@ -682,6 +694,7 @@ public class QuizManager : MonoBehaviour
             level = q.GetNormalizedLevel(),
             docType = q.doc_type,
             isCorrect = isCorrect,
+            isUnanswered = false,
             scoreRatio = accuracy,
             selectedAnswer = $"{correctCount}/{totalCount}",
             correctAnswer = $"{totalCount}/{totalCount}"
@@ -692,6 +705,27 @@ public class QuizManager : MonoBehaviour
         Debug.Log(
             $"[RESULT] Matching | id={result.questionId} | region={result.region} | level={result.level} | accuracy={result.scoreRatio}"
         );
+    }
+
+    private void RecordUnansweredQuestionResult(Question q)
+    {
+        QuestionResult result = new QuestionResult
+        {
+            questionId = q.id,
+            topic = q.topic,
+            region = q.region,
+            level = q.GetNormalizedLevel(),
+            docType = q.doc_type,
+            isCorrect = false,
+            isUnanswered = true,
+            scoreRatio = 0f,
+            selectedAnswer = "Unanswered",
+            correctAnswer = q.answer_text
+        };
+
+        quizResults.Add(result);
+
+        Debug.Log($"[RESULT] Unanswered | id={result.questionId} | region={result.region} | level={result.level}");
     }
 
     private List<RegionAnalysisResult> BuildRegionAnalysis()
@@ -706,8 +740,12 @@ public class QuizManager : MonoBehaviour
         {
             int totalQuestions = group.Count();
             int correctCount = group.Count(x => x.isCorrect);
-            int wrongCount = group.Count(x => !x.isCorrect);
-            float averageScoreRatio = group.Average(x => x.scoreRatio);
+            int unansweredCount = group.Count(x => x.isUnanswered);
+            int wrongCount = group.Count(x => !x.isCorrect && !x.isUnanswered);
+
+            float averageScoreRatio = totalQuestions > 0
+                ? (float)correctCount / totalQuestions
+                : 0f;
 
             RegionAnalysisResult result = new RegionAnalysisResult
             {
@@ -715,16 +753,17 @@ public class QuizManager : MonoBehaviour
                 totalQuestions = totalQuestions,
                 correctCount = correctCount,
                 wrongCount = wrongCount,
+                unansweredCount = unansweredCount,
                 averageScoreRatio = averageScoreRatio,
-                status = GetRegionPerformanceStatus(wrongCount, totalQuestions)
+                status = GetRegionPerformanceStatus(correctCount, totalQuestions)
             };
 
             analysisResults.Add(result);
         }
 
         analysisResults = analysisResults
-            .OrderByDescending(r => r.wrongCount)
-            .ThenBy(r => r.averageScoreRatio)
+            .OrderBy(r => r.averageScoreRatio)
+            .ThenByDescending(r => r.unansweredCount + r.wrongCount)
             .ToList();
 
         return analysisResults;
@@ -734,7 +773,8 @@ public class QuizManager : MonoBehaviour
     {
         finalTotalQuestions = quizResults.Count;
         finalTotalCorrect = quizResults.Count(r => r.isCorrect);
-        finalTotalWrong = quizResults.Count(r => !r.isCorrect);
+        finalTotalUnanswered = quizResults.Count(r => r.isUnanswered);
+        finalTotalWrong = quizResults.Count(r => !r.isCorrect && !r.isUnanswered);
         finalOverallAverageScore = quizResults.Count > 0 ? quizResults.Average(r => r.scoreRatio) : 0f;
 
         finalRegionAnalysis = BuildRegionAnalysis();
@@ -747,6 +787,7 @@ public class QuizManager : MonoBehaviour
         Debug.Log($"[ANALYSIS] Total Questions: {finalTotalQuestions}");
         Debug.Log($"[ANALYSIS] Total Correct: {finalTotalCorrect}");
         Debug.Log($"[ANALYSIS] Total Wrong: {finalTotalWrong}");
+        Debug.Log($"[ANALYSIS] Total Unanswered: {finalTotalUnanswered}");
         Debug.Log($"[ANALYSIS] Overall Average Score Ratio: {finalOverallAverageScore:F2}");
 
         Debug.Log("========== REGION ANALYSIS ==========");
@@ -754,22 +795,24 @@ public class QuizManager : MonoBehaviour
         foreach (RegionAnalysisResult region in finalRegionAnalysis)
         {
             Debug.Log(
-                $"[REGION ANALYSIS] Region={region.region} | Total={region.totalQuestions} | Correct={region.correctCount} | Wrong={region.wrongCount} | AvgScore={region.averageScoreRatio:F2} | Status={region.status}"
+                $"[REGION ANALYSIS] Region={region.region} | Total={region.totalQuestions} | Correct={region.correctCount} | Wrong={region.wrongCount} | Unanswered={region.unansweredCount} | AvgScore={region.averageScoreRatio:F2} | Status={region.status}"
             );
         }
 
         Debug.Log("====================================");
     }
 
-    private RegionPerformanceStatus GetRegionPerformanceStatus(int wrongCount, int totalQuestions)
+    private RegionPerformanceStatus GetRegionPerformanceStatus(int correctCount, int totalQuestions)
     {
         if (totalQuestions <= 0)
             return RegionPerformanceStatus.Green;
 
-        if (wrongCount >= 4)
+        float ratio = (float)correctCount / totalQuestions;
+
+        if (ratio < 0.4f)
             return RegionPerformanceStatus.Red;
 
-        if (wrongCount >= 2)
+        if (ratio < 0.8f)
             return RegionPerformanceStatus.Yellow;
 
         return RegionPerformanceStatus.Green;
@@ -942,11 +985,24 @@ public class QuizManager : MonoBehaviour
         BuildFinalQuizAnalysis();
         PrintQuizAnalysisToConsole();
 
+    if (NavigationState.CurrentQuizCategory == QuizCategory.BasicConcepts)
+    {
+        ui.ShowBasicConceptsFinishedResults(
+            finalTotalCorrect,
+            finalTotalWrong,
+            finalTotalUnanswered,
+            finalOverallAverageScore
+        );
+    }
+    else
+    {
         ui.ShowQuizFinishedResults(
             finalTotalCorrect,
             finalTotalWrong,
+            finalTotalUnanswered,
             finalOverallAverageScore,
             finalRegionAnalysis
         );
+    }
     }
 }

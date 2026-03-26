@@ -15,7 +15,7 @@ public class RegionResultRowUI : MonoBehaviour
             regionNameText.text = FormatRegionName(data.region);
 
         if (countsText != null)
-            countsText.text = $"Correct: {data.correctCount}   Wrong: {data.wrongCount}";
+            countsText.text = $"Doğru: {data.correctCount}   Yanlış: {data.wrongCount}   Boş: {data.unansweredCount}";
 
         if (successText != null)
             successText.text = $"%{data.averageScoreRatio * 100f:0}";
@@ -53,8 +53,30 @@ public class RegionResultRowUI : MonoBehaviour
     private string FormatRegionName(string rawName)
     {
         if (string.IsNullOrWhiteSpace(rawName))
-            return "Unknown";
+            return "Bilinmiyor";
 
-        return rawName.Replace("_", " ");
+        switch (rawName)
+        {
+            case "Head_Face":
+                return "Baş Kemikleri";
+
+            case "Muscle":
+                return "Kaslar";
+
+            case "Joints":
+                return "Eklemler";
+
+            case "Trunk":
+                return "Gövde Kemikleri";
+
+            case "Upper_Extremity":
+                return "Üst Ekstremite Kemikleri";
+
+            case "Lower_Extremity":
+                return "Alt Ekstremite Kemikleri";
+
+            default:
+                return rawName.Replace("_", " ");
+        }
     }
 }
