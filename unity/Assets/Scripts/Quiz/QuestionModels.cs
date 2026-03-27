@@ -184,6 +184,47 @@ public class Question
     {
         return time_limit_sec;
     }
+
+    public string GetNormalizedLevel()
+    {
+        if (string.IsNullOrWhiteSpace(level))
+            return "medium";
+
+        string normalized = level.Trim().ToLower();
+
+        switch (normalized)
+        {
+            case "easy":
+            case "medium":
+            case "hard":
+                return normalized;
+            default:
+                return "medium";
+        }
+    }
+
+    public string GetNormalizedRegion()
+    {
+        if (string.IsNullOrWhiteSpace(region))
+            return string.Empty;
+
+        return region.Trim();
+    }
+
+    public bool HasValidLevel()
+    {
+        string normalized = GetNormalizedLevel();
+        return normalized == "easy" || normalized == "medium" || normalized == "hard";
+    }
+
+    public bool IsLevel(string targetLevel)
+    {
+        if (string.IsNullOrWhiteSpace(targetLevel))
+            return false;
+
+        return GetNormalizedLevel() == targetLevel.Trim().ToLower();
+    }
+
 }
 
 [Serializable]
