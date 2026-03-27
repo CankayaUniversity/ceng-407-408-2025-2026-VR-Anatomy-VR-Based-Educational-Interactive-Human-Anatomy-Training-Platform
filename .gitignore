@@ -28,6 +28,7 @@ Builds/
 *.VC.db
 *.pidb.meta
 
+
 # Crashlytics generated files
 crashlytics-build.properties
 
@@ -38,3 +39,17 @@ crashlytics-build.properties
 !Assets/
 !ProjectSettings/
 !Packages/
+
+# Python backend
+ai/backend/.venv/
+ai/backend/__pycache__/
+ai/backend/.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.env
+*.env

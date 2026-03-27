@@ -1,3 +1,9 @@
 fastapi
 uvicorn
 pydantic
+python-multipart
+gTTS
+SpeechRecognition
+python-dotenv
+azure-search-documents
+openai

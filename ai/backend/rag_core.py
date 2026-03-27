@@ -9,17 +9,22 @@ load_dotenv(override=True)
 
 
 def get_env(name: str) -> str:
-    v = os.getenv(name)
-    if not v:
-        raise RuntimeError(f"Missing env var: {name}")
-    return v
+    return get_env_any(name)
+
+
+def get_env_any(*names: str) -> str:
+    for name in names:
+        value = os.getenv(name)
+        if value and value.strip():
+            return value.strip()
+    raise RuntimeError(f"Missing env var: {' or '.join(names)}")
 
 
 def answer_question(question: str) -> dict:
 
     search_client = SearchClient(
         endpoint=get_env("AZURE_SEARCH_ENDPOINT").rstrip("/"),
-        index_name=get_env("AZURE_SEARCH_INDEX"),
+        index_name=get_env_any("AZURE_SEARCH_INDEX", "AZURE_SEARCH_INDEX_NAME"),
         credential=AzureKeyCredential(get_env("AZURE_SEARCH_KEY")),
     )
 
@@ -47,7 +52,7 @@ def answer_question(question: str) -> dict:
     )
 
     resp = client.chat.completions.create(
-        model=get_env("AZURE_OPENAI_CHAT_DEPLOYMENT"),
+        model=get_env_any("AZURE_OPENAI_CHAT_DEPLOYMENT", "AZURE_OPENAI_DEPLOYMENT"),
         messages=[
             {
                 "role": "system",
