@@ -305,7 +305,7 @@ MonoBehaviour:
   questionInput: {fileID: 1929558922}
   askButton: {fileID: 736500870}
   answerText: {fileID: 1160254746}
-  apiUrl: https://friend-apr-regular-conjunction.trycloudflare.com/ask
+  apiUrl: https://samuel-critics-knew-explorer.trycloudflare.com/ask
 --- !u!1 &736500866
 GameObject:
   m_ObjectHideFlags: 0
@@ -342,7 +342,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 628, y: 119.8}
+  m_AnchoredPosition: {x: 628, y: 195}
   m_SizeDelta: {x: 109.1, y: 46.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &736500868

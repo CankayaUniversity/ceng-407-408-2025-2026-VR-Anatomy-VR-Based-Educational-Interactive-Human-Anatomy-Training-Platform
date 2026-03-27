@@ -15,7 +15,7 @@ public class RagApiClient : MonoBehaviour
     [SerializeField] private TMP_Text answerText;
 
     [Header("API")]
-    [SerializeField] private string apiUrl = "https://friend-apr-regular-conjunction.trycloudflare.com/ask";
+    [SerializeField] private string apiUrl = "https://samuel-critics-knew-explorer.trycloudflare.com/ask";
 
     [Header("Speech API")]
     [SerializeField] private string sttUrl = "http://127.0.0.1:8001/stt";
@@ -90,47 +90,44 @@ public class RagApiClient : MonoBehaviour
         string json = JsonUtility.ToJson(payload);
         byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
 
-        using (var req = new UnityWebRequest(apiUrl, "POST"))
+        UnityWebRequest req = null;
+        try
         {
+            req = new UnityWebRequest(apiUrl, "POST");
             req.uploadHandler = new UploadHandlerRaw(bodyRaw);
             req.downloadHandler = new DownloadHandlerBuffer();
             req.SetRequestHeader("Content-Type", "application/json");
-            req.timeout = 30;
+            req.timeout = 15;
 
             yield return req.SendWebRequest();
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-                string backendBody = req.downloadHandler != null
-                    ? req.downloadHandler.text
-                    : "";
-                answerText.text =
-                    $"İstek başarısız ❌\n" +
-                    $"Hata: {req.error}\n" +
-                    $"HTTP: {req.responseCode}\n" +
-                    $"URL: {apiUrl}" +
-                    (string.IsNullOrWhiteSpace(backendBody) ? "" : $"\nSunucu: {backendBody}");
+                answerText.text = "Sunucuya bağlanamadı. Lütfen bağlantınızı kontrol edip tekrar deneyin.";
+                Debug.LogWarning($"[RagApiClient] Ask hatası: {req.error} | HTTP {req.responseCode}");
             }
             else
             {
                 string responseJson = req.downloadHandler.text;
-
                 try
                 {
                     var resp = JsonUtility.FromJson<AskResponse>(responseJson);
                     answerText.text = string.IsNullOrEmpty(resp?.answer)
-                        ? "Cevap boş geldi 🫥"
+                        ? "Cevap alınamadı, tekrar deneyin."
                         : resp.answer;
                 }
                 catch
                 {
-                    answerText.text = "JSON parse edemedim 😵\nRaw:\n" + responseJson;
+                    answerText.text = "Sunucudan geçersiz cevap geldi, tekrar deneyin.";
                 }
             }
         }
-
-        _isAsking = false;
-        RefreshInteractableState();
+        finally
+        {
+            req?.Dispose();
+            _isAsking = false;
+            RefreshInteractableState();
+        }
     }
 
     #endregion
@@ -157,22 +154,16 @@ public class RagApiClient : MonoBehaviour
         );
         _micButton.onClick.AddListener(OnMicClicked);
 
-        // "Dinle" butonu — cevap alanının sağ altında
+        // "Dinle" butonu — "Konuş" butonunun hemen altında
         _speakerButton = CloneButton(askButton, parent, "SpeakerButton");
         _speakerLabel = _speakerButton.GetComponentInChildren<TMP_Text>();
         _speakerLabel.text = "Dinle";
 
         RectTransform spkRT = _speakerButton.GetComponent<RectTransform>();
-        if (answerText != null)
-        {
-            RectTransform ansRT = answerText.GetComponent<RectTransform>();
-            float ansRight  = ansRT.anchoredPosition.x + ansRT.sizeDelta.x * 0.5f;
-            float ansBottom = ansRT.anchoredPosition.y - ansRT.sizeDelta.y * 0.5f;
-            spkRT.anchoredPosition = new Vector2(
-                ansRight  - askRT.sizeDelta.x * 0.5f,
-                ansBottom - askRT.sizeDelta.y * 0.5f - 12f
-            );
-        }
+        spkRT.anchoredPosition = new Vector2(
+            micRT.anchoredPosition.x,
+            micRT.anchoredPosition.y - askRT.sizeDelta.y - 12f
+        );
         _speakerButton.onClick.AddListener(OnSpeakerClicked);
     }
 
@@ -246,9 +237,11 @@ public class RagApiClient : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddBinaryData("file", wavData, "recording.wav", "audio/wav");
 
-        using (UnityWebRequest req = UnityWebRequest.Post(sttUrl, form))
+        UnityWebRequest req = null;
+        try
         {
-            req.timeout = 30;
+            req = UnityWebRequest.Post(sttUrl, form);
+            req.timeout = 15;
             yield return req.SendWebRequest();
 
             if (req.result == UnityWebRequest.Result.Success)
@@ -270,12 +263,16 @@ public class RagApiClient : MonoBehaviour
             else
             {
                 questionInput.text = "";
-                answerText.text = $"STT hatası: {req.error}";
+                answerText.text = "Sunucuya bağlanamadı. Konuşma algılanamadı.";
+                Debug.LogWarning($"[RagApiClient] STT hatası: {req.error}");
             }
         }
-
-        _isSttRunning = false;
-        RefreshInteractableState();
+        finally
+        {
+            req?.Dispose();
+            _isSttRunning = false;
+            RefreshInteractableState();
+        }
     }
 
     #endregion
@@ -324,6 +321,7 @@ public class RagApiClient : MonoBehaviour
             if (req.result != UnityWebRequest.Result.Success)
             {
                 _speakerLabel.text = "Dinle";
+                answerText.text = "Sunucuya bağlanamadı. Sesli okuma yapılamadı.";
                 Debug.LogWarning($"[RagApiClient] TTS hatası: {req.error}");
                 yield break;
             }
