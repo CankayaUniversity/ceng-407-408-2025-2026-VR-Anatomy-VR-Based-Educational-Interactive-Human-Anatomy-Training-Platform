@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class BoneIdentity : MonoBehaviour
 {
+    [FormerlySerializedAs("title")]
     [Tooltip("CSV'deki id ile birebir aynı olmalı. Örn: os_frontale")]
     public string id;
 

@@ -1,0 +1,1702 @@
+[
+  {
+    "id": "heart_function_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Kalbin görevi - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; function; circulation",
+    "level": "easy",
+    "question_text": "Kalp, kasılma ve gevşeme hareketleri ile kanın damarlar içinde dolaşmasını sağlayan bir pompa görevi görür.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Kalbin dolaşım sistemindeki temel rolünü düşün.",
+    "rationale": "",
+    "source": "Ders kitabı s.131"
+  },
+  {
+    "id": "heart_location_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Kalbin konumu - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; mediastinum; cardiac anatomy; heart location; thorax",
+    "level": "easy",
+    "question_text": "Kalp göğüs boşluğunda, sternumun tamamen sol tarafında yer alır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Kalbin göğüs boşluğundaki yerini hatırla.",
+    "rationale": "Ders kitabına göre, kalp mediastinumda yer alır ve büyük kısmı orta hattın solunda olsa da bir bölümü sağ tarafta bulunur.",
+    "source": "Ders kitabı s.131"
+  },
+  {
+    "id": "heart_chambers_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Kalp odacıkları - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; chambers; ventricle; cardiac anatomy; circulation",
+    "level": "easy",
+    "question_text": "Sağ ventrikül kanı tüm vücuda pompalar.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Sağ ve sol ventrikülün kanı nereye pompaladığını hatırla.",
+    "rationale": "Ders kitabına göre, sağ ventrikül kanı akciğerlere gönderir, tüm vücuda pompalayan sol ventriküldür.",
+    "source": "Ders kitabı s.131"
+  },
+  {
+    "id": "heart_septum_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Kalp septumları - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; septum; cardiac anatomy; heart chambers; circulation",
+    "level": "easy",
+    "question_text": "Kalpteki septumlar, temiz ve kirli kanın birbirine karışmasını engeller.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Kalbin sağ ve sol tarafındaki kanın karışıp karışmadığını düşün.",
+    "rationale": "",
+    "source": "Ders kitabı s.131"
+  },
+  {
+    "id": "heart_wall_layers_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Kalp duvarı tabakaları - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; myocardium; heart wall; cardiac anatomy; heart layers",
+    "level": "medium",
+    "question_text": "Kalp duvarının en kalın tabakası endokarddır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Kalp duvarındaki kas tabakasının adını hatırla.",
+    "rationale": "Ders kitabına göre, kalp duvarının en kalın tabakası kas tabakası olan miyokarddır.",
+    "source": "Ders kitabı s.131"
+  },
+  {
+    "id": "coronary_artery_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Koroner arterler - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; coronary artery; cardiac circulation; heart vessels",
+    "level": "medium",
+    "question_text": "Koroner arterler pulmoner arterden ayrılan ilk dallardır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Koroner arterlerin hangi büyük damardan ayrıldığını düşün.",
+    "rationale": "Ders kitabına göre, koroner arterler aorttan ayrılan ilk dallardır.",
+    "source": "Ders kitabı s.132"
+  },
+  {
+    "id": "heart_valves_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Kalbin kapakları- T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; heart valves; atrioventricular valve; semilunar valve; cardiac anatomy",
+    "level": "easy",
+    "question_text": "Kalpte bulunan dört kapağın ikisi atriyoventriküler, ikisi semilunar kapaktır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Kalpteki kapakların türlerini ve sayısını hatırla.",
+    "rationale": "",
+    "source": "Ders kitabı s.132"
+  },
+  {
+    "id": "coronary_artery_tf_02",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Koroner sinüs - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; coronary sinus; cardiac veins; heart vessels; circulation",
+    "level": "easy",
+    "question_text": "Koroner sinüs, kalp kasından gelen venöz kanı sol atriyuma taşır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Koroner sinüsün kalpteki venöz kanı nereye taşıdığını düşün.",
+    "rationale": "Ders kitabına göre, koroner venler birleşerek koroner sinüsü oluşturur ve buradaki kan sağ atriyuma dökülür.",
+    "source": "Ders kitabı s.132"
+  },
+  {
+    "id": "heart_wall_layers_tf_02",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Miyokard - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; myocardium; ventricle; cardiac muscle; cardiac anatomy",
+    "level": "medium",
+    "question_text": "Miyokard tabakası atriyumlarda ventriküllere göre daha kalındır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Atriyum ve ventriküllerin pompalama gücünü karşılaştır.",
+    "rationale": "Ders kitabına göre, miyokard ventriküllerde, özellikle sol ventrikülde daha kalındır.",
+    "source": "Ders kitabı s.131"
+  },
+  {
+    "id": "heart_chambers_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Kalp odacıkları - Görevi",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; chambers; ventricle; circulation; cardiac anatomy",
+    "level": "medium",
+    "question_text": "Kanı tüm vücuda pompalayan kalp odacığı hangisidir?",
+    "data": {
+      "options": [
+        "Sağ atriyum",
+        "Sağ ventrikül",
+        "Sol ventrikül",
+        "Sol atriyum"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Sistemik dolaşıma kan gönderen ventrikülü düşün.",
+    "rationale": "Ders kitabına göre, sol ventrikül oksijen bakımından zengin kanı aort aracılığıyla tüm vücuda pompalar.",
+    "source": "Ders kitabı s.131"
+  },
+  {
+    "id": "heart_septum_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Kalp septumları",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; septum; chambers; cardiac anatomy",
+    "level": "medium",
+    "question_text": "Ventrikülleri birbirinden ayıran yapı aşağıdakilerden hangisidir?",
+    "data": {
+      "options": [
+        "Septum interatriale",
+        "Septum interventrikulare",
+        "Perikard",
+        "Endokard"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Kalbin sağ ve sol ventriküllerini ayıran bölmeyi hatırla.",
+    "rationale": "Ders kitabına göre, septum interventrikulare sağ ve sol ventrikülü birbirinden ayırır.",
+    "source": "Ders kitabı s.131"
+  },
+  {
+    "id": "heart_wall_layers_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Kalp tabakaları",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; myocardium; cardiac muscle; heart wall",
+    "level": "medium",
+    "question_text": "Kalbin kasılma gücünü sağlayan ve en kalın olan tabaka hangisidir?",
+    "data": {
+      "options": [
+        "Endokard",
+        "Miyokard",
+        "Perikard",
+        "Epikard"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Kalp duvarındaki kas tabakasını düşün.",
+    "rationale": "Ders kitabına göre, kalbin kasılmasını sağlayan tabaka miyokarddır ve ventriküllerde daha kalındır.",
+    "source": "Ders kitabı s.131"
+  },
+  {
+    "id": "heart_valves_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Kalp kapakları - Konumu",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; valve; mitral; cardiac anatomy",
+    "level": "medium",
+    "question_text": "Mitral kapak aşağıdaki hangi yapılar arasında bulunur?",
+    "data": {
+      "options": [
+        "Sağ atriyum – sağ ventrikül",
+        "Sol atriyum – sol ventrikül",
+        "Sağ ventrikül – pulmoner arter",
+        "Sol ventrikül – aort"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Sol atriyum ile sol ventrikül arasındaki kapağı hatırla.",
+    "rationale": "Ders kitabına göre, mitral kapak sol atriyum ile sol ventrikül arasında yer alan atriyoventriküler kapaktır.",
+    "source": "Ders kitabı s.132"
+  },
+  {
+    "id": "coronary_artery_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Koroner arterler - Çıkışı",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; coronary artery; heart vessels; circulation",
+    "level": "hard",
+    "question_text": "Koroner arterler aşağıdaki damarlardan hangisinden ayrılır?",
+    "data": {
+      "options": [
+        "Pulmoner arter",
+        "Vena cava superior",
+        "Aort",
+        "Pulmoner ven"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Kalpten çıkan en büyük atardamarı düşün.",
+    "rationale": "Ders kitabına göre, koroner arterler aorttan ayrılan ilk dallardır ve kalp kasını besler.",
+    "source": "Ders kitabı s.132"
+  },
+  {
+    "id": "coronary_artery_mcq_02",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Koroner sinüs - Görevi",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; coronary sinus; cardiac veins; circulation",
+    "level": "medium",
+    "question_text": "Koroner sinüsün temel görevi aşağıdakilerden hangisidir?",
+    "data": {
+      "options": [
+        "Akciğerlere kan taşımak",
+        "Kalp kasından gelen kirli kanı toplamak",
+        "Oksijenli kanı sol ventriküle iletmek",
+        "Atriyumların kasılmasını başlatmak"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Kalp kasından dönen kanın toplandığı yapıyı düşün.",
+    "rationale": "Ders kitabına göre, koroner venler birleşerek koroner sinüsü oluşturur ve kan sağ atriyuma dökülür.",
+    "source": "Ders kitabı s.132"
+  },
+  {
+    "id": "heart_valves_mcq_02",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Kalp kapakları - Türleri",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; valves; atrioventricular; semilunar",
+    "level": "medium",
+    "question_text": "Aşağıdaki kapaklardan hangisi semilunar kapak grubuna girer?",
+    "data": {
+      "options": [
+        "Mitral kapak",
+        "Triküspit kapak",
+        "Aort kapağı",
+        "Koroner sinüs"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Büyük damarlara açılan kapakları hatırla.",
+    "rationale": "Ders kitabına göre, aort ve pulmoner kapaklar semilunar kapak grubuna girer.",
+    "source": "Ders kitabı s.132"
+  },
+  {
+    "id": "myocardium_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Miyokard - Kalınlığı",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; myocardium; ventricle; cardiac muscle",
+    "level": "hard",
+    "question_text": "Miyokardın en kalın olduğu kalp odacığı hangisidir?",
+    "data": {
+      "options": [
+        "Sağ atriyum",
+        "Sol atriyum",
+        "Sağ ventrikül",
+        "Sol ventrikül"
+      ]
+    },
+    "answer": {
+      "correct_index": 3
+    },
+    "hint": "En güçlü pompalama yapan odacığı düşün.",
+    "rationale": "Ders kitabına göre, sol ventrikül tüm vücuda kan pompaladığı için en kalın miyokard tabakasına sahiptir.",
+    "source": "Ders kitabı s.132"
+  },
+  {
+    "id": "cardiac_cycle_valves_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Kalp döngüsü - Kapakların durumu",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; cardiac cycle; systole; diastole; heart valves",
+    "level": "hard",
+    "question_text": "Sol ventrikülün sistol evresinde aşağıdaki kapaklardan hangisi açık durumdadır?",
+    "data": {
+      "options": [
+        "Mitral kapak",
+        "Triküspit kapak",
+        "Aort kapağı",
+        "Pulmoner kapak"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Kanın ventriküllerden büyük damarlara çıktığı kapakları düşün.",
+    "rationale": "Ders kitabına göre, sol ventrikül sistolünde ventrikül kasılır ve kan aort aracılığıyla sistemik dolaşıma gönderilir. Bu sırada aort kapağı açılır. Atriyoventriküler kapaklar (mitral ve triküspit kapak) ise kanın atriyumlara geri kaçmasını önlemek için kapalıdır.",
+    "source": "Ders kitabı s.134"
+  },
+  {
+    "id": "heart_valves_matching_01",
+    "valence": "assess",
+    "doc_type": "matching",
+    "title": "Kalp kapakları ve bulunduğu yer",
+    "time_limit_sec": null,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; valves; cardiac anatomy; matching",
+    "level": "medium",
+    "question_text": "Aşağıdaki kalp kapaklarını bulundukları yapılar ile eşleştiriniz.",
+    "data": {
+      "left": [
+        "Mitral kapak",
+        "Triküspit kapak",
+        "Aort kapağı",
+        "Pulmoner kapak"
+      ],
+      "right": [
+        "Sağ ventrikül ile pulmoner arter arasında bulunur",
+        "Sol ventrikül ile aort arasında bulunur",
+        "Sağ atriyum ile sağ ventrikül arasında bulunur",
+        "Sol atriyum ile sol ventrikül arasında bulunur"
+      ],
+      "shuffle_right": true
+    },
+    "answer": {
+      "pairs": [
+        {
+          "leftIndex": 0,
+          "rightIndex": 3
+        },
+        {
+          "leftIndex": 1,
+          "rightIndex": 2
+        },
+        {
+          "leftIndex": 2,
+          "rightIndex": 1
+        },
+        {
+          "leftIndex": 3,
+          "rightIndex": 0
+        }
+      ]
+    },
+    "hint": "",
+    "rationale": "",
+    "source": "Ders kitabı s.132"
+  },
+  {
+    "id": "cardiac_conduction_system_matching_01",
+    "valence": "assess",
+    "doc_type": "matching",
+    "title": "Kalbin uyarı ve ileti sistemi",
+    "time_limit_sec": null,
+    "topic": "Circulatory System",
+    "region": "Heart_Structure",
+    "tags": "heart; conduction system; SA node; AV node; His bundle; Purkinje fibers; matching",
+    "level": "medium",
+    "question_text": "Aşağıdaki kalbin uyarı ve ileti sistemi yapılarını görevleri ile eşleştiriniz.",
+    "data": {
+      "left": [
+        "Sinoatriyal (SA) düğüm",
+        "Atriyoventriküler (AV) düğüm",
+        "His demeti",
+        "Purkinje lifleri"
+      ],
+      "right": [
+        "Uyarıyı ventrikül kas tabakasına yayarak ventriküllerin kasılmasını sağlar",
+        "Kalpte ilk uyarının çıktığı merkezdir",
+        "Uyarıyı atriyumlardan ventriküllere kontrollü şekilde iletir",
+        "Uyarıyı ventriküller arası septum boyunca aşağı taşır"
+      ],
+      "shuffle_right": true
+    },
+    "answer": {
+      "pairs": [
+        {
+          "leftIndex": 0,
+          "rightIndex": 1
+        },
+        {
+          "leftIndex": 1,
+          "rightIndex": 2
+        },
+        {
+          "leftIndex": 2,
+          "rightIndex": 3
+        },
+        {
+          "leftIndex": 3,
+          "rightIndex": 0
+        }
+      ]
+    },
+    "hint": "",
+    "rationale": "",
+    "source": "Ders kitabı s.133"
+  },
+  {
+    "id": "artery_wall_layers_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Atardamar duvarı - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "artery; circulatory system; vessel structure; artery wall; tunica intima; tunica media; tunica adventitia; histology",
+    "level": "easy",
+    "question_text": "Atardamar duvarı üç tabakadan oluşur: tunica intima, tunica media ve tunica adventitia.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Atardamarların histolojik katmanlarını düşün.",
+    "rationale": "",
+    "source": "Ders kitabı s.136"
+  },
+  {
+    "id": "pulmonary_artery_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Akciğer atardamarı - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "artery; pulmonary circulation; pulmonary artery; arteria pulmonalis; right ventricle; lung circulation",
+    "level": "easy",
+    "question_text": "Arteria pulmonalis kirli kanı akciğerlere taşır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Sağ ventrikülden çıkan damarı düşün.",
+    "rationale": "",
+    "source": "Ders kitabı s.136"
+  },
+  {
+    "id": "artery_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Atardamar basıncı - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "artery; blood pressure; arterial pressure; circulatory physiology; blood flow dynamics; vessel function",
+    "level": "medium",
+    "question_text": "Atardamarlarda kan basıncı venlere göre daha düşüktür.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Kan kalpten hangi damarlara pompalanır?",
+    "rationale": "Ders kitabına göre, atardamarlarda basınç venlere göre daha yüksektir çünkü kan doğrudan kalpten pompalanır.",
+    "source": "Ders kitabı s.136"
+  },
+  {
+    "id": "aort_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Aort kemeri dalları - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "artery; aorta; aortic arch; truncus brachiocephalicus; systemic circulation; thoracic arteries",
+    "level": "medium",
+    "question_text": "Aort kemerinden çıkan arterlerden biri truncus brachiocephalicus'tur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Aort kemerinin ilk dalını düşün.",
+    "rationale": "",
+    "source": "Ders kitabı s.137"
+  },
+  {
+    "id": "capillary_structure_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Kılcal damar yapısı - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "capillary; microcirculation; capillary wall; endothelial cells; diffusion; tissue exchange",
+    "level": "medium",
+    "question_text": "Kılcal damarların duvarı tek katlı endotelden oluşur ve bu yapı madde alışverişini kolaylaştırır.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Gaz ve besin değişimi hangi damarlarda olur?",
+    "rationale": "",
+    "source": "Ders kitabı s.142"
+  },
+  {
+    "id": "vertebral_basilar_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Vertebral arter birleşmesi - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "artery; vertebral artery; basilar artery; cerebral circulation; brain blood supply; willis polygon",
+    "level": "hard",
+    "question_text": "Sağ ve sol vertebral arter birleşerek arteria carotis communis'i oluşturur.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Vertebral arterler hangi arteri oluşturur?",
+    "rationale": "Ders kitabına göre, sağ ve sol vertebral arter birleşerek arteria basilaris'i oluşturur. Carotis communis ile ilişkili değildir.",
+    "source": "Ders kitabı s.137"
+  },
+  {
+    "id": "artery_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Atardamarlar - Görevi",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "artery; vessel function; systemic circulation; blood transport",
+    "level": "easy",
+    "question_text": "Atardamarların temel görevi nedir?",
+    "data": {
+      "options": [
+        "Kanı kalpten dokulara taşımak",
+        "Kanı dokulardan kalbe taşımak",
+        "Gaz değişimini sağlamak",
+        "Lenf sıvısını taşımak"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Kan kalpten hangi damarlarla çıkar?",
+    "rationale": "Ders kitabına göre, atardamarlar kanı kalpten dokulara taşıyan damarlardır.",
+    "source": "Ders kitabı s.136"
+  },
+  {
+    "id": "pulmonary_artery_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Akciğer atardamarı",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "artery; pulmonary artery; right ventricle; lung circulation",
+    "level": "easy",
+    "question_text": "Akciğer atardamarı hangi kalp boşluğundan çıkar?",
+    "data": {
+      "options": [
+        "Sol atriyum",
+        "Sol ventrikül",
+        "Sağ atriyum",
+        "Sağ ventrikül"
+      ]
+    },
+    "answer": {
+      "correct_index": 3
+    },
+    "hint": "Kirli kanın akciğere gittiği odayı hatırla",
+    "rationale": "Ders kitabına göre, pulmoner arter sağ ventrikülden çıkar ve kirli kanı akciğerlere taşır.",
+    "source": "Ders kitabı s.136"
+  },
+  {
+    "id": "capillary_structure_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Kılcal damar - Yapısı",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "capillary; microcirculation; vessel wall; endothelial cells",
+    "level": "easy",
+    "question_text": "Kılcal damarların duvar yapısı nasıldır?",
+    "data": {
+      "options": [
+        "Üç katlı kaslı yapı",
+        "İki katlı kaslı yapı",
+        "Tek katlı endotel",
+        "Kıkırdak doku"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Madde alışverişi için ince yapı gerekir",
+    "rationale": "Ders kitabına göre, kılcal damarların duvarı tek katlı endotelden oluşur.",
+    "source": "Ders kitabı s.142"
+  },
+  {
+    "id": "aort_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Aort kemeri - Dalları",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "artery; aorta; aortic arch; truncus brachiocephalicus ",
+    "level": "medium",
+    "question_text": "Aort kemerinden çıkan ilk dal aşağıdakilerden hangisidir?",
+    "data": {
+      "options": [
+        "A. carotis communis sinistra",
+        "Truncus brachiocephalicus",
+        "A. subclavia sinistra",
+        "A. vertebralis"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Sağ baş ve kola giden arter buradan çıkar",
+    "rationale": "Ders kitabına göre, aort kemerinin ilk dalı truncus brachiocephalicus'tur.",
+    "source": "Ders kitabı s.137"
+  },
+  {
+    "id": "vertebral_artery_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Vertebral arter",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "artery; vertebral artery; brain circulation; willis polygon",
+    "level": "medium",
+    "question_text": "Vertebral arterlerin birleşmesiyle aşağıdaki damarlardan hangisi oluşur?",
+    "data": {
+      "options": [
+        "A. carotis communis",
+        "A. basilaris",
+        "A. subclavia",
+        "A. axillaris"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Beynin tabanındaki arter",
+    "rationale": "Ders kitabına göre, sağ ve sol vertebral arter birleşerek arteria basilaris'i oluşturur.",
+    "source": "Ders kitabı s.137"
+  },
+  {
+    "id": "axillary_artery_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "A. axillaris - Konumu",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "artery; axillary artery; upper extremity; shoulder region",
+    "level": "medium",
+    "question_text": "A. axillaris aşağıdaki bölgelerden hangisinde bulunur?",
+    "data": {
+      "options": [
+        "Dirsek",
+        "Koltuk altı",
+        "Bilek",
+        "Boyun"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Subclavian arterin devamı olduğunu hatırla.",
+    "rationale": "Ders kitabına göre, A. axillaris koltuk altı bölgesinde bulunur.",
+    "source": "Ders kitabı s.138"
+  },
+  {
+    "id": "femoral_artery_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Femoral arter - Konumu",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "artery; femoral artery; lower extremity; thigh circulation",
+    "level": "medium",
+    "question_text": "A. femoralis hangi bölgede bulunur?",
+    "data": {
+      "options": [
+        "Boyun",
+        "Uyluk",
+        "El bileği",
+        "Göğüs"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Latince femur kemiğini düşün.",
+    "rationale": "Ders kitabına göre, femoral arter uyluk bölgesinde bulunur.",
+    "source": "Ders kitabı s.139"
+  },
+  {
+    "id": "basilic_vein_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "V. basilica",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "vein; basilic vein; superficial veins; upper extremity",
+    "level": "medium",
+    "question_text": "V. basilica hangi damar grubuna aittir?",
+    "data": {
+      "options": [
+        "Derin arter",
+        "Yüzeyel ven",
+        "Lenf damarı",
+        "Kılcal damar"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Deri altında seyreden venleri hatırla.",
+    "rationale": "Ders kitabına göre, V. basilica üst ekstremitenin yüzeyel venlerinden biridir.",
+    "source": "Ders kitabı s.140"
+  },
+  {
+    "id": "vena_cava_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Vena cava inferior oluşumu",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "vein; vena cava inferior; venous return; iliac veins; systemic circulation; toplardamar",
+    "level": "medium",
+    "question_text": "Vena cava inferior aşağıdaki venlerden hangilerinin birleşmesi ile oluşur?",
+    "data": {
+      "options": [
+        "Sağ ve sol V. iliaca communis",
+        "V. iliaca interna ve V. iliaca externa",
+        "V. femoralis ve V. poplitea",
+        "V. saphena magna ve V. saphena parva"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Alt ekstremiteden gelen büyük venlerin birleşmesini hatırla.",
+    "rationale": "Ders kitabına göre, vena cava inferior, sağ ve sol vena iliaca communis venlerinin birleşmesiyle oluşur ve alt vücut bölgelerinden gelen venöz kanı kalbe taşır.",
+    "source": "Ders kitabı s.141"
+  },
+  {
+    "id": "aort_mcq_02",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "İnen aort",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "artery; descending aorta; thoracic aorta; abdominal aorta",
+    "level": "hard",
+    "question_text": "İnen aort aşağıdaki hangi iki bölümden oluşur?",
+    "data": {
+      "options": [
+        "Torasik aort ve abdominal aort",
+        "Karotis ve vertebral arter",
+        "Aort kemeri ve aort kökü",
+        "Pulmoner arter ve pulmoner ven"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Göğüs ve karın bölgesini hatırla",
+    "rationale": "Ders kitabına göre, inen aort göğüs aortu ve karın aortu olmak üzere iki bölüme ayrılır.",
+    "source": "Ders kitabı s.138"
+  },
+  {
+    "id": "venous_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Toplardamarların görevi",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "vein; venous return; systemic circulation; vena cava",
+    "level": "easy",
+    "question_text": "Aşağıdakilerden hangisi toplardamarların temel özelliğidir?",
+    "data": {
+      "options": [
+        "Kanı kalpten dokulara taşımaları",
+        "Yalnızca temiz kan taşımaları",
+        "Kanı dokulardan kalbe taşımaları",
+        "Yalnızca akciğerlerde bulunmaları"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Kanın dönüş yönünü düşün.",
+    "rationale": "Ders kitabına göre, toplardamarlar kanı dokulardan kalbe geri taşıyan damarlardır.",
+    "source": "Ders kitabı s.140"
+  },
+  {
+    "id": "pulse_artery_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Nabız ölçümü",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "artery; radial artery; pulse measurement; clinical anatomy",
+    "level": "hard",
+    "question_text": "Klinik muayenelerde nabız en sık hangi arterden ölçülür?",
+    "data": {
+      "options": [
+        "A. axillaris",
+        "A. radialis",
+        "A. femoralis",
+        "A. subclavia"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Bilek bölgesini düşün",
+    "rationale": "Ders kitabına göre, nabız ölçümü klinikte en sık radial arter üzerinden yapılır.",
+    "source": "Ders kitabı s.143"
+  },
+  {
+    "id": "venous_return_order_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Alt ekstremiteden venöz dönüş",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "vein; venous return; lower extremity veins; femoral vein; popliteal vein; iliac veins; vena cava inferior; toplardamar",
+    "level": "hard",
+    "question_text": "Ayaktan kalbe doğru venöz kanın izlediği doğru sıra aşağıdakilerden hangisidir?",
+    "data": {
+      "options": [
+        "V. tibialis posterior → V. poplitea → V. femoralis → V. iliaca externa → V. iliaca communis → V. cava inferior",
+        "V. tibialis posterior → V. femoralis → V. poplitea → V. iliaca externa → V. cava inferior",
+        "V. tibialis posterior → V. poplitea → V. iliaca communis → V. femoralis → V. cava inferior",
+        "V. tibialis posterior → V. femoralis → V. iliaca externa → V. poplitea → V. cava inferior"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Diz arkasındaki venin adını hatırla.",
+    "rationale": "Ders kitabına göre, alt ekstremitede venöz dönüş sırası tibialis venlerinden popliteaya, ardından femoral vene, sonra iliaca externa ve iliaca communis üzerinden vena cava inferiora ulaşır.",
+    "source": "Ders kitabı s.141"
+  },
+  {
+    "id": "vessel_matching_01",
+    "valence": "assess",
+    "doc_type": "matching",
+    "title": "Damarların Türkçe ve Latince karşılıkları",
+    "time_limit_sec": null,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "artery; vein; vessel terminology; latin names; anatomy",
+    "level": "medium",
+    "question_text": "Aşağıdaki damarların Türkçe adları ile Latince karşılıklarını eşleştiriniz.",
+    "data": {
+      "left": [
+        "Akciğer atardamarı",
+        "Kol baş atardamarı",
+        "Boyun iç toplardamarı",
+        "Kapı toplardamarı"
+      ],
+      "right": [
+        "Vena portae",
+        "Arteria pulmonalis",
+        "Vena jugularis interna",
+        "Truncus brachiocephalicus"
+      ],
+      "shuffle_right": true
+    },
+    "answer": {
+      "pairs": [
+        {
+          "leftIndex": 0,
+          "rightIndex": 1
+        },
+        {
+          "leftIndex": 1,
+          "rightIndex": 3
+        },
+        {
+          "leftIndex": 2,
+          "rightIndex": 2
+        },
+        {
+          "leftIndex": 3,
+          "rightIndex": 0
+        }
+      ]
+    },
+    "hint": "",
+    "rationale": "",
+    "source": "Ders kitabı s.144"
+  },
+  {
+    "id": "artery_body_region_matching_01",
+    "valence": "assess",
+    "doc_type": "matching",
+    "title": "Arterler ve bulundukları bölgeler",
+    "time_limit_sec": null,
+    "topic": "Circulatory System",
+    "region": "Vessels",
+    "tags": "artery; anatomical regions; systemic circulation; vessel location",
+    "level": "medium",
+    "question_text": "Aşağıdaki arterleri bulundukları anatomik bölgeler ile eşleştiriniz.",
+    "data": {
+      "left": [
+        "A. carotis communis",
+        "A. axillaris",
+        "A. brachialis",
+        "A. femoralis",
+        "A. poplitea",
+        "A. dorsalis pedis"
+      ],
+      "right": [
+        "Boyun",
+        "Koltuk altı",
+        "Kol",
+        "Uyluk",
+        "Diz arkası",
+        "Ayak sırtı"
+      ],
+      "shuffle_right": true
+    },
+    "answer": {
+      "pairs": [
+        {
+          "leftIndex": 0,
+          "rightIndex": 0
+        },
+        {
+          "leftIndex": 1,
+          "rightIndex": 1
+        },
+        {
+          "leftIndex": 2,
+          "rightIndex": 2
+        },
+        {
+          "leftIndex": 3,
+          "rightIndex": 3
+        },
+        {
+          "leftIndex": 4,
+          "rightIndex": 4
+        },
+        {
+          "leftIndex": 5,
+          "rightIndex": 5
+        }
+      ]
+    },
+    "hint": "",
+    "rationale": "",
+    "source": "Ders kitabı s.138–139"
+  },
+  {
+    "id": "systemic_circulation_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Büyük kan dolaşımı - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; systemic_circulation; oxygenated_blood; blood_flow; body_tissues; heart_pump; systemic_pathway",
+    "level": "easy",
+    "question_text": "Büyük kan dolaşımı, oksijen bakımından zengin kanın kalpten tüm vücut dokularına gönderilmesini sağlar.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Temiz kanın kalpten dokulara gönderildiği dolaşımı düşün.",
+    "rationale": "",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "pulmonary_circulation_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Küçük kan dolaşımı - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; pulmonary_circulation; lungs; oxygen_exchange; right_ventricle; left_atrium; pulmonary_pathway",
+    "level": "medium",
+    "question_text": "Küçük kan dolaşımında kan sağ ventrikülden çıkarak akciğerlere gider ve oksijenlenmiş olarak sol atriyuma döner.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Akciğer dolaşımında kanın hangi odacıktan çıktığını hatırla.",
+    "rationale": "",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "pulmonary_circulation_tf_02",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Küçük kan dolaşımı gaz değişimi - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; pulmonary_circulation; gas_exchange; alveoli; lungs; oxygen_diffusion; respiratory_function",
+    "level": "medium",
+    "question_text": "Küçük kan dolaşımında gaz değişimi kalpte gerçekleşir.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Gaz değişiminin gerçekleştiği organı düşün.",
+    "rationale": "Ders kitabına göre, gaz değişimi akciğerlerdeki alveollerde gerçekleşir, kalpte gerçekleşmez.",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "portal_circulation_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Portal dolaşım - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; portal_circulation; liver; digestive_organs; hepatic_portal_system; venous_flow",
+    "level": "medium",
+    "question_text": "Portal dolaşımda sindirim organlarından gelen kan doğrudan kalbe gider.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Portal dolaşımda kanın önce uğradığı organı düşün.",
+    "rationale": "Ders kitabına göre, portal dolaşımda kan önce karaciğere taşınır, doğrudan kalbe gitmez.",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "systemic_circulation_tf_02",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Dokularda gaz değişimi - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; systemic_circulation; tissue_exchange; oxygen_delivery; carbon_dioxide_transport; capillary_exchange",
+    "level": "medium",
+    "question_text": "Büyük kan dolaşımında dokularda gaz değişimi gerçekleşir ve kan karbondioksit bakımından zengin hale gelir.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Hücrelerin oksijeni kullandığını hatırla.",
+    "rationale": "",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "heart_circulation_tf_01",
+    "valence": "assess",
+    "doc_type": "true_false",
+    "title": "Büyük ve küçük dolaşım ilişkisi - T/F",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; pulmonary_circulation; systemic_circulation; right_ventricle; left_atrium; oxygenation; blood_flow",
+    "level": "hard",
+    "question_text": "Küçük kan dolaşımında oksijenlenen kan pulmoner venler aracılığıyla sağ atriyuma döner ve buradan büyük kan dolaşımı başlar.",
+    "data": {
+      "options": [
+        "Doğru",
+        "Yanlış"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Akciğerlerden gelen kanın hangi kalp odacığına döndüğünü hatırla.",
+    "rationale": "Ders kitabına göre, akciğerlerde oksijenlenen kan pulmoner venler ile sol atriyuma döner. Sağ atriyuma dönmez.",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "systemic_circulation_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Büyük kan dolaşımının başlangıcı",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; systemic_circulation; heart; left_ventricle; aorta; oxygenated_blood; blood_distribution; body_tissues",
+    "level": "easy",
+    "question_text": "Büyük kan dolaşımında oksijen bakımından zengin kan aşağıdaki hangi kalp odacığından çıkar?",
+    "data": {
+      "options": [
+        "Sol ventrikül",
+        "Sağ ventrikül",
+        "Sağ atriyum",
+        "Sol atriyum"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Aort hangi kalp odacığından çıkar?",
+    "rationale": "Ders kitabına göre, büyük kan dolaşımında oksijenli kan sol ventrikülden aort aracılığıyla tüm vücuda gönderilir.",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "pulmonary_circulation_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Küçük kan dolaşımı - Temel görevi",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; pulmonary_circulation; lungs; gas_exchange; oxygenation; respiratory_system; pulmonary_function",
+    "level": "easy",
+    "question_text": "Küçük kan dolaşımının temel görevi aşağıdakilerden hangisidir?",
+    "data": {
+      "options": [
+        "Kanın akciğerlerde oksijenlenmesini sağlamak",
+        "Kanın tüm vücuda dağıtılmasını sağlamak",
+        "Besin maddelerini karaciğere taşımak",
+        "Kanın kalbe geri dönmesini sağlamak"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Kanın temizlenmesi hangi organda gerçekleşir?",
+    "rationale": "Ders kitabına göre, küçük dolaşım kirli kanı akciğerlere götürerek gaz değişimi ile oksijenlendirilmesini sağlar.",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "systemic_circulation_mcq_02",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Büyük kan dolaşımı",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; systemic_circulation; tissue_exchange; oxygen_delivery; carbon_dioxide_transport; capillary_exchange; metabolism",
+    "level": "easy",
+    "question_text": "Büyük kan dolaşımında dokularda gerçekleşen temel olay aşağıdakilerden hangisidir?",
+    "data": {
+      "options": [
+        "Gaz değişimi gerçekleşmesi",
+        "Kanın kalbe pompalanması",
+        "Kanın akciğerlere gitmesi",
+        "Kapakların kapanması"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Bu olay kalpte veya akciğerde değil, vücut dokularında gerçekleşir.",
+    "rationale": "Ders kitabına göre, dokularda oksijen hücreler tarafından kullanılır ve karbondioksit kana geçer.",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "pulmonary_circulation_mcq_02",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Akciğerlerden kalbe dönen damar",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; pulmonary_circulation; pulmonary_vein; lungs; oxygenated_blood; heart_return; left_atrium",
+    "level": "medium",
+    "question_text": "Küçük kan dolaşımında akciğerlerde oksijenlenen kan aşağıdaki damarlardan hangisi ile kalbe geri döner?",
+    "data": {
+      "options": [
+        "Pulmoner ven",
+        "Pulmoner arter",
+        "Aort",
+        "Vena cava"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Akciğerlerden kalbe dönen damarları düşün.",
+    "rationale": "Ders kitabına göre, akciğerlerde oksijenlenen kan pulmoner venlerle sol atriyuma döner.",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "pulmonary_circulation_mcq_03",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Küçük dolaşımın başlangıç odacığı",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; pulmonary_circulation; right_ventricle; pulmonary_artery; lungs; blood_flow; pulmonary_pathway",
+    "level": "medium",
+    "question_text": "Aşağıdakilerden hangisi küçük kan dolaşımının başlangıç noktasıdır?",
+    "data": {
+      "options": [
+        "Sol ventrikül",
+        "Sağ ventrikül",
+        "Sol atriyum",
+        "Sağ atriyum"
+      ]
+    },
+    "answer": {
+      "correct_index": 1
+    },
+    "hint": "Akciğerlere giden kan hangi ventrikülden çıkar?",
+    "rationale": "Ders kitabına göre, küçük dolaşım sağ ventrikülden başlayan ve akciğerlere giden dolaşımdır.",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "systemic_circulation_mcq_03",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Büyük kan dolaşımının sırası",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; systemic_circulation; blood_flow_pathway; heart_chambers; aorta; vena_cava",
+    "level": "medium",
+    "question_text": "Aşağıdakilerden hangisi büyük kan dolaşımının doğru sırasını gösterir?",
+    "data": {
+      "options": [
+        "Sol ventrikül → Aort → Vücut dokuları → Vena cava → Sağ atriyum",
+        "Sağ ventrikül → Aort → Akciğerler → Sol atriyum",
+        "Sol atriyum → Aort → Dokular → Sağ ventrikül",
+        "Sağ atriyum → Aort → Dokular → Sol atriyum"
+      ]
+    },
+    "answer": {
+      "correct_index": 0
+    },
+    "hint": "Büyük dolaşımın kalbin sol tarafından başladığını hatırla.",
+    "rationale": "Ders kitabına göre, büyük dolaşım sol ventrikül → aort → dokular → vena cava → sağ atriyum yolunu izler.",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "pulmonary_circulation_mcq_04",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Küçük dolaşımda kanın izlediği yol",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; pulmonary_circulation; pulmonary_pathway; right_ventricle; pulmonary_artery; lungs",
+    "level": "medium",
+    "question_text": "Küçük kan dolaşımında kanın izlediği doğru yol aşağıdakilerden hangisidir?",
+    "data": {
+      "options": [
+        "Sol ventrikül → pulmoner arter → akciğer → pulmoner ven → sağ atriyum",
+        "Sağ atriyum → pulmoner arter → akciğer → vena cava → sol atriyum",
+        "Sol ventrikül → aort → akciğer → pulmoner ven → sağ atriyum",
+        "Sağ ventrikül → pulmoner arter → akciğer → pulmoner ven → sol atriyum"
+      ]
+    },
+    "answer": {
+      "correct_index": 3
+    },
+    "hint": "Akciğerlere giden kanın çıktığı kalp odacığını düşün.",
+    "rationale": "Ders kitabına göre, küçük kan dolaşımında kan sağ ventrikülden pulmoner arter ile akciğerlere gider, burada oksijenlenir ve pulmoner venler aracılığıyla sol atriyuma döner.",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "circulation_types_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Büyük ve küçük dolaşım farkı",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; systemic_circulation; pulmonary_circulation; circulation_types; oxygen_transport; gas_exchange",
+    "level": "hard",
+    "question_text": "Aşağıdakilerden hangisi büyük ve küçük kan dolaşımı arasındaki temel farklardan biridir?",
+    "data": {
+      "options": [
+        "Büyük dolaşımda kan akciğerlere taşınırken küçük dolaşımda tüm vücut dokularına gönderilir",
+        "Küçük dolaşımda kan vena cava aracılığıyla kalbe dönerken büyük dolaşımda pulmoner venler kullanılır",
+        "Büyük dolaşım dokulara oksijen taşırken küçük dolaşım akciğerlerde gaz değişimini sağlar",
+        "Küçük dolaşım yalnızca kalp içinde gerçekleşen bir dolaşım yoludur"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Bir dolaşım vücut dokularıyla, diğeri akciğerlerle ilişkilidir.",
+    "rationale": "Ders kitabına göre, büyük kan dolaşımı oksijen bakımından zengin kanı kalpten vücut dokularına taşır. Küçük kan dolaşımı ise kirli kanı akciğerlere götürerek gaz değişimini sağlar.",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "systemic_circulation_mcq_04",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Büyük dolaşımda kanın kalbe dönüş yolu",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; systemic_circulation; venous_return; vena_cava; right_atrium; blood_flow; cardiovascular_system",
+    "level": "medium",
+    "question_text": "Büyük kan dolaşımında vücut dokularında oksijenini kaybeden kanın kalbe dönüşünde aşağıdaki yapılardan hangisi son aşamayı oluşturur?",
+    "data": {
+      "options": [
+        "Pulmoner arter",
+        "Aort",
+        "Vena cava",
+        "Pulmoner ven"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Vücuttan gelen kirli kanın kalbe döndüğü en büyük toplardamarı düşün.",
+    "rationale": "Ders kitabına göre, vücut dokularında oksijenini kaybeden kan toplardamarlar aracılığıyla vena cava superior ve inferior üzerinden sağ atriyuma döner.",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "circulation_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Dolaşım yolunda mantık hatası",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; pulmonary_circulation; systemic_circulation; blood_flow_pathway; heart_chambers",
+    "level": "hard",
+    "question_text": "Bir öğrencinin kanın izlediği yolu şu şekilde tanımladığı düşünülüyor: “Vücut dokularında oksijenini kaybeden kan sağ atriyuma gelir, sağ ventriküle geçer ve akciğerlere gönderilir. Akciğerlerde oksijenlenen kan kalbe döndükten sonra sol ventriküle geçerek aort aracılığıyla tekrar vücuda gönderilir.” Bu açıklamada aşağıdaki hatalardan hangisi bulunmaktadır?",
+    "data": {
+      "options": [
+        "Kirli kanın sağ atriyuma gelmesi yanlış ifade edilmiştir",
+        "Küçük dolaşımın sağ ventrikülden başlaması yanlış belirtilmiştir",
+        "Aortun büyük dolaşımda görev aldığı yanlış ifade edilmiştir",
+        "Akciğerlerden dönen kanın önce ulaştığı kalp odacığı eksik belirtilmiştir"
+      ]
+    },
+    "answer": {
+      "correct_index": 3
+    },
+    "hint": "Akciğerlerden dönen kan kalpte hangi odacıktan geçerek sol ventriküle ulaşır?",
+    "rationale": "Ders kitabına göre, akciğerlerde oksijenlenen kan pulmoner venler aracılığıyla önce sol atriyuma gelir, ardından sol ventriküle geçerek aort ile vücuda gönderilir. Öğrencinin açıklamasında sol atriyum basamağı atlanmıştır.",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "fetal_circulation_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Foramen Ovale'nin görevi",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; fetal_circulation; foramen_ovale; fetal_heart; atrium; placental_circulation",
+    "level": "medium",
+    "question_text": "Fetal dolaşımda foramen ovale yapısının temel görevi aşağıdakilerden hangisidir?",
+    "data": {
+      "options": [
+        "Kanı pulmoner arterden aortaya yönlendirmek",
+        "Plasentadan gelen kanın karaciğere uğramadan vena cava inferiora geçmesini sağlamak",
+        "Sağ ve sol atriyum arasında kan geçişini sağlayarak akciğer dolaşımını büyük ölçüde atlamak",
+        "Vücut dokularından gelen kirli kanın plasentaya taşınmasını sağlamak"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Bu yapı fetüs kalbinde iki atriyum arasında bulunur.",
+    "rationale": "Ders kitabına göre, foramen ovale, fetüste sağ ve sol atriyum arasında açıklık oluşturarak kanın doğrudan sol tarafa geçmesini sağlar. Böylece henüz çalışmayan akciğer dolaşımı büyük ölçüde bypass edilir.",
+    "source": "Ders kitabı s.146"
+  },
+  {
+    "id": "lymph_circulation_mcq_01",
+    "valence": "assess",
+    "doc_type": "mcq_single",
+    "title": "Lenf sisteminde sıvı geri dönüşü",
+    "time_limit_sec": 30,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; lymph_circulation; lymph_system; tissue_fluid; lymphatic_vessels; capillaries; lymph_return",
+    "level": "medium",
+    "question_text": "Kılcal damarlarda gerçekleşen madde alışverişi sırasında dokulara geçen sıvının bir kısmı tekrar kana dönemez ve dokular arasında kalır. Bu sıvının dolaşım sistemine geri kazandırılmasını sağlayan yapı aşağıdakilerden hangisidir?",
+    "data": {
+      "options": [
+        "Pulmoner arter",
+        "Aort",
+        "Lenf damarları",
+        "Koroner arterler"
+      ]
+    },
+    "answer": {
+      "correct_index": 2
+    },
+    "hint": "Bu yapı doku sıvısını toplayarak tekrar dolaşıma kazandırır.",
+    "rationale": "Ders kitabına göre, kılcal damarlarda dokulara geçen sıvının tamamı tekrar kana dönmez. Artan sıvı lenf kılcalları ve lenf damarları aracılığıyla toplanarak dolaşıma geri kazandırılır.",
+    "source": "Ders kitabı s.147"
+  },
+  {
+    "id": "systemic_circulation_match_01",
+    "valence": "assess",
+    "doc_type": "matching",
+    "title": "Büyük kan dolaşımının aşamaları",
+    "time_limit_sec": null,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; systemic_circulation; blood_flow; heart_chambers; aorta; vena_cava; circulation_pathway",
+    "level": "medium",
+    "question_text": "Aşağıdaki yapıların büyük kan dolaşımındaki görevlerini eşleştiriniz.",
+    "data": {
+      "left": [
+        "Sol ventrikül",
+        "Aort",
+        "Vücut dokuları",
+        "Vena cava"
+      ],
+      "right": [
+        "Oksijen bakımından fakir kanı kalbe geri getirir",
+        "Oksijenli kanın vücuda pompalanmasını sağlar",
+        "Kanın tüm vücuda dağıldığı ana atardamardır",
+        "Doku hücreleri ile kan arasında madde alışverişi gerçekleşir"
+      ],
+      "shuffle_right": true
+    },
+    "answer": {
+      "pairs": [
+        {
+          "leftIndex": 0,
+          "rightIndex": 1
+        },
+        {
+          "leftIndex": 1,
+          "rightIndex": 2
+        },
+        {
+          "leftIndex": 2,
+          "rightIndex": 3
+        },
+        {
+          "leftIndex": 3,
+          "rightIndex": 0
+        }
+      ]
+    },
+    "hint": "",
+    "rationale": "",
+    "source": "Ders kitabı s.145"
+  },
+  {
+    "id": "pulmonary_circulation_match_01",
+    "valence": "assess",
+    "doc_type": "matching",
+    "title": "Küçük kan dolaşımının aşamaları",
+    "time_limit_sec": null,
+    "topic": "Circulatory System",
+    "region": "Circulation",
+    "tags": "circulation; pulmonary_circulation; lungs; pulmonary_artery; pulmonary_vein; gas_exchange",
+    "level": "medium",
+    "question_text": "Aşağıdaki yapıların küçük kan dolaşımındaki görevlerini eşleştiriniz.",
+    "data": {
+      "left": [
+        "Sağ ventrikül",
+        "Pulmoner arter",
+        "Akciğer kılcal damarları",
+        "Pulmoner ven"
+      ],
+      "right": [
+        "Oksijenlenmiş kanı kalbe taşır",
+        "Kirli kanı akciğerlere pompalar",
+        "Kirli kanı akciğerlere götüren damar",
+        "Gaz değişiminin gerçekleştiği damar ağı"
+      ],
+      "shuffle_right": true
+    },
+    "answer": {
+      "pairs": [
+        {
+          "leftIndex": 0,
+          "rightIndex": 1
+        },
+        {
+          "leftIndex": 1,
+          "rightIndex": 2
+        },
+        {
+          "leftIndex": 2,
+          "rightIndex": 3
+        },
+        {
+          "leftIndex": 3,
+          "rightIndex": 0
+        }
+      ]
+    },
+    "hint": "",
+    "rationale": "",
+    "source": "Ders kitabı s.145"
+  }
+]

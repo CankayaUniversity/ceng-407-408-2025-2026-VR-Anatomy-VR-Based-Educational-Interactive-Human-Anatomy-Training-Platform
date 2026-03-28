@@ -300,7 +300,7 @@ MonoBehaviour:
     valence: learn
     doc_type: entry
     content_type: bone
-    title: "G\xF6\u011F\xFCs kafesi"
+    title: Thorax
     topic: Movement System
     region: Trunk
     tags: "thoracic cage; g\xF6\u011F\xFCs kafesi; g\xF6\u011F\xFCs bo\u015Flu\u011Fu;
@@ -740,24 +740,13 @@ MonoBehaviour:
       olu\u015Fur.\"]"
     source: "Ders kitab\u0131 s.65"
   - id: sutura
-    valence: 
-    doc_type: 
-    content_type: 
-    title: 
-    topic: 
-    region: 
-    tags: 
-    body: 
-    steps: 
-    source: 
-  - id: ;learn;entry;Joint;Sutura;Movement System;Joints;eklem
-    valence: ' oynamaz'
-    doc_type: ' fibroz'
-    content_type: ' sutura'
-    title: 
-    topic: 
-    region: 
-    tags: 
+    valence: learn
+    doc_type: entry
+    content_type: Joint
+    title: Sutura
+    topic: Movement System
+    region: Head_Face
+    tags: eklem; oynamaz; fibroz; sutura
     body: 
     steps: 
     source: 
@@ -774,35 +763,24 @@ MonoBehaviour:
     steps: 
     source: 
   - id: gomphosis
-    valence: 
-    doc_type: 
-    content_type: 
-    title: 
-    topic: 
-    region: 
-    tags: 
-    body: 
+    valence: learn
+    doc_type: entry
+    content_type: Joint
+    title: Gomphosis
+    topic: Movement System
+    region: Head_Face
+    tags: eklem; oynamaz; fibroz; gomphosis
+    body: "Di\u015F k\xF6k\xFC ile \xE7ene kemi\u011Fi aras\u0131nda bulunan oynamaz
+      eklemdir."
     steps: 
-    source: 
-  - id: ;learn;entry;Joint;Gomphosis;Movement System;Joints;eklem
-    valence: ' oynamaz'
-    doc_type: ' fibroz'
-    content_type: " gomphosis;Di\u015F k\xF6k\xFC ile \xE7ene kemi\u011Fi aras\u0131nda
-      bulunan oynamaz eklemdir.;;Ders kitab\u0131 s.67"
-    title: 
-    topic: 
-    region: 
-    tags: 
-    body: 
-    steps: 
-    source: 
+    source: "Ders kitab\u0131 s.67"
   - id: syndesmosis
     valence: learn
     doc_type: entry
     content_type: Joint
     title: Syndesmosis
     topic: Movement System
-    region: Joints
+    region: Lower_Extremity
     tags: eklem; oynamaz; fibroz; syndesmosis
     body: "Kemik y\xFCzlerinin birbirine ligamentlerle ba\u011Fland\u0131\u011F\u0131
       oynamaz eklemdir."
@@ -815,7 +793,7 @@ MonoBehaviour:
     content_type: Joint
     title: Synchondrosis
     topic: Movement System
-    region: Joints
+    region: Trunk
     tags: "eklem; yar\u0131 oynar; synchondrosis; kartilaginoz; hiyalin k\u0131k\u0131rdak;
       sternum; kosta; epifiz plak"
     body: "Eklem y\xFCzleri aras\u0131nda hiyalin k\u0131k\u0131rdak bulunan yar\u0131
@@ -829,7 +807,7 @@ MonoBehaviour:
     content_type: Joint
     title: Symphysis
     topic: Movement System
-    region: Joints
+    region: Lower_Extremity
     tags: "eklem; yar\u0131 oynar; kartilaginoz; fibroz k\u0131k\u0131rdak; disk;
       pelvis; omur"
     body: "Eklem y\xFCzleri aras\u0131nda fibroz k\u0131k\u0131rdak yap\u0131s\u0131nda
@@ -843,7 +821,7 @@ MonoBehaviour:
     content_type: Joint
     title: Art. Temporomandibularis
     topic: Movement System
-    region: Joints
+    region: Head_Face
     tags: "eklem; oynar; temporomandibular; \xE7ene; kafa"
     body: "Kafa b\xF6lgesinin tek oynar eklemidir."
     steps: "[\"Temporal ve mandibular kemik aras\u0131nda bulunur.\", \"Alt \xE7eneyi
@@ -856,7 +834,7 @@ MonoBehaviour:
     content_type: Joint
     title: Art. Atlantooccipitalis
     topic: Movement System
-    region: Joints
+    region: Trunk
     tags: eklem; oynar; atlantooccipital; atlas; oksipital
     body: "Oksipital kemik ile atlas aras\u0131ndaki oynar eklemdir."
     steps: "[\"Ba\u015Fa fleksiyon, ekstansiyon ve biraz da lateral fleksiyon yapt\u0131r\u0131r.\"]"
@@ -867,7 +845,7 @@ MonoBehaviour:
     content_type: Joint
     title: Art. Atlantoaxialis
     topic: Movement System
-    region: Joints
+    region: Trunk
     tags: eklem; oynar; atlantoaxial; atlas; eksen
     body: "Atlas ile eksen aras\u0131ndaki oynar eklemdir."
     steps: "[\"Ba\u015Fa rotasyon hareketi yapt\u0131r\u0131r.\"]"
@@ -878,7 +856,7 @@ MonoBehaviour:
     content_type: Joint
     title: Art. Humeri
     topic: Movement System
-    region: Joints
+    region: Upper_Extremity
     tags: eklem; oynar; omuz; humerus; skapula
     body: "Humerus ba\u015F\u0131 ile skapula kemi\u011Fi aras\u0131ndaki oynar eklemdir."
     steps: "[\"V\xFCcudun en fazla hareket yetene\u011Fine sahip eklemidir.\",  \"Kola
@@ -890,7 +868,7 @@ MonoBehaviour:
     content_type: Joint
     title: Art. Cubiti
     topic: Movement System
-    region: Joints
+    region: Upper_Extremity
     tags: eklem; oynar; dirsek; humerus; ulna; radius
     body: Humerus
     steps: " ulna ve radius kemikleri aras\u0131ndaki oynar eklemdir."
@@ -902,7 +880,7 @@ MonoBehaviour:
     content_type: Joint
     title: Art. Radiocarpalis
     topic: Movement System
-    region: Joints
+    region: Upper_Extremity
     tags: "eklem; oynar; el bile\u011Fi; radius; karpal"
     body: "Proksimaldeki \xFC\xE7 karpal kemik ile radius kemi\u011Fi aras\u0131ndaki
       oynar eklemdir."
@@ -915,7 +893,7 @@ MonoBehaviour:
     content_type: Joint
     title: Art. Coxae
     topic: Movement System
-    region: Joints
+    region: Lower_Extremity
     tags: "eklem; oynar; kal\xE7a; acetabulum; femur"
     body: "Kal\xE7a kemi\u011Finin acetabulum \xE7ukuru ile femur ba\u015F\u0131
       aras\u0131ndaki oynar eklemdir."
@@ -927,7 +905,7 @@ MonoBehaviour:
     content_type: Joint
     title: Art. Genus
     topic: Movement System
-    region: Joints
+    region: Lower_Extremity
     tags: eklem; oynar; diz; femur; tibia; patella
     body: "V\xFCcudun en b\xFCy\xFCk ve karma\u015F\u0131k eklemlerinden biridir."
     steps: "[\"Femur, tibia ve patella kemikleri aras\u0131ndad\u0131r.\", \"Fibula
@@ -936,3 +914,342 @@ MonoBehaviour:
       ve ekstansiyon yapt\u0131r\u0131r.\", \"Yar\u0131 fleksiyonda biraz i\xE7 ve
       d\u0131\u015F rotasyon yapt\u0131r\u0131r.\"]"
     source: "Ders kitab\u0131 s.71"
+  - id: m_pectoralis_major
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Pectoralis Major
+    topic: Movement System
+    region: Trunk
+    tags: "kas; g\xF6\u011F\xFCs; y\xFCzeysel; b\xFCy\xFCk g\xF6\u011F\xFCs kas\u0131;
+      adduksiyon; i\xE7 rotasyon; fleksiyon"
+    body: "G\xF6\u011F\xFCs kafesinin \xFCst \xF6n k\u0131sm\u0131n\u0131 \xF6rten"
+    steps: " geni\u015F yelpaze \u015Feklinde ve kal\u0131n bir kast\u0131r. Koltuk
+      alt\u0131n\u0131n \xF6n duvar\u0131n\u0131 olu\u015Fturur. Klavikula ve sternumdan
+      ba\u015Flay\u0131p humerusta sonlan\u0131r."
+    source: "[\"Derin ve kuvvetli soluk almaya yard\u0131m eder.\" , \"Kola add\xFCksiyon,
+      fleksiyon ve i\xE7 rotasyon yapt\u0131r\u0131r.\"]"
+  - id: m_pectoralis_minor
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Pectoralis Minor
+    topic: Movement System
+    region: Trunk
+    tags: "kas; g\xF6\u011F\xFCs; y\xFCzeysel; k\xFC\xE7\xFCk g\xF6\u011F\xFCs kas\u0131"
+    body: "B\xFCy\xFCk g\xF6\u011F\xFCs kas\u0131n\u0131n alt\u0131nda \xFC\xE7gen
+      \u015Feklinde bir kast\u0131r. 2-5\u2019inci kaburgalar\u0131n \xF6n y\xFCz\xFCnden
+      ba\u015Flar"
+    steps: " skapulan\u0131n korakoid \xE7\u0131k\u0131nt\u0131s\u0131nda sonlan\u0131r."
+    source: "[\"Skapulay\u0131 \xF6ne do\u011Fru \xE7eker.\" , \"Soluk almaya yard\u0131m
+      eder.\"]"
+  - id: m_subclavius
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Subclavius
+    topic: Movement System
+    region: Trunk
+    tags: "kas; g\xF6\u011F\xFCs; y\xFCzeysel; k\xF6pr\xFCc\xFCk; koltuk alt\u0131"
+    body: "Birinci kaburga ile klavikula aras\u0131nda uzanan k\xFC\xE7\xFCk bir
+      kast\u0131r."
+    steps: "[\"Koltuk alt\u0131 damar ve sinir a\u011F\u0131n\u0131 korur.\"]"
+    source: "Ders kitab\u0131 s.77"
+  - id: m_serratus_anterior
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Serratus Anterior
+    topic: Movement System
+    region: Trunk
+    tags: "kas; g\xF6\u011F\xFCs; y\xFCzeysel; \xF6n di\u015Fli"
+    body: "G\xF6\u011F\xFCs yan duvar\u0131nda yass\u0131"
+    steps: " eldiven parma\u011F\u0131 gibi di\u015Fleri olan bir kast\u0131r. Kaburgalar
+      ile skapula aras\u0131ndad\u0131r."
+    source: "[\"Skapulay\u0131 kaburgalara do\u011Fru \xE7eker.\" , \"Soluk almaya
+      yard\u0131m eder.\"]"
+  - id: m_trapezius
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Trapezius
+    topic: Movement System
+    region: Trunk
+    tags: "kas; s\u0131rt; yamuk; ince"
+    body: "Olduk\xE7a ince olup s\u0131rt\u0131n \xFCst b\xF6lgesi ve ensenin en
+      y\xFCzeysel kas\u0131d\u0131r."
+    steps: "[\"Kolun yukar\u0131 kald\u0131r\u0131lmas\u0131na yard\u0131m eder.\"
+      , \"Orta lifler skapulay\u0131 omurgaya do\u011Fru \xE7eker.\"]"
+    source: "Ders kitab\u0131 s.79"
+  - id: m_latissimus_dorsi
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Latissimus Dorsi
+    topic: Movement System
+    region: Trunk
+    tags: "kas; s\u0131rt; geni\u015F; adduksiyon; i\xE7 rotasyon; fleksiyon"
+    body: "S\u0131rt\u0131n en geni\u015F kas\u0131d\u0131r. S\u0131rt\u0131n arka
+      alt ve yan k\u0131s\u0131mlar\u0131n\u0131 \xF6rter."
+    steps: "[\"Kola add\xFCksiyon, i\xE7e rotasyon ve ekstansiyon yapt\u0131r\u0131r.\"]"
+    source: "Ders kitab\u0131 s.79"
+  - id: m_rhomboideus_major
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Rhomboideus Major
+    topic: Movement System
+    region: Trunk
+    tags: "kas; s\u0131rt; yass\u0131; b\xFCy\xFCk romboid"
+    body: "Trapez kas\u0131n \xF6n\xFCnde dikd\xF6rtgen \u015Feklinde k\xFC\xE7\xFCk"
+    steps: " yass\u0131 bir kast\u0131r."
+    source: "[\"Skapulay\u0131 omurgaya do\u011Fru \xE7eker, sabitler.\"]"
+  - id: m_rhomboideus_minor
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Rhomboideus Minor
+    topic: Movement System
+    region: Trunk
+    tags: "kas; s\u0131rt; k\xFC\xE7\xFCk romboid"
+    body: "B\xFCy\xFCk romboid kas\u0131n \xFCst taraf\u0131nda yer al\u0131r ve
+      onunla beraber skapulay\u0131 omurgaya do\u011Fru \xE7eker."
+    steps: 
+    source: "Ders kitab\u0131 s.79"
+  - id: m_serratus_posterior_superior
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Serratus Posterior Superior
+    topic: Movement System
+    region: Trunk
+    tags: "kas; s\u0131rt; \xFCst arka di\u015Fli"
+    body: "Kas\u0131ld\u0131\u011F\u0131 zaman kaburgalar\u0131 yukar\u0131 do\u011Fru
+      kald\u0131rarak g\xF6\u011F\xFCs bo\u015Flu\u011Funu geni\u015Fletir ve soluk
+      almaya yard\u0131mc\u0131 olur."
+    steps: 
+    source: "Ders kitab\u0131 s.79"
+  - id: m_serratus_posterior_inferior
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Serratus Posterior Inferior
+    topic: Movement System
+    region: Trunk
+    tags: "kas; s\u0131rt; alt arka di\u015Fli"
+    body: "Kas\u0131ld\u0131\u011F\u0131 zaman kaburgalar\u0131 a\u015Fa\u011F\u0131
+      do\u011Fru \xE7ekerek g\xF6\u011F\xFCs bo\u015Flu\u011Funu daralt\u0131r ve
+      soluk vermeye yard\u0131mc\u0131 olur."
+    steps: 
+    source: "Ders kitab\u0131 s.79"
+  - id: m_deltoideus
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Deltoideus
+    topic: Movement System
+    region: Upper_Extremity
+    tags: "kas; omuz; abd\xFCksiyon"
+    body: "\xDC\xE7 k\u0131s\u0131mdan olu\u015Fan ve omuz kabar\u0131kl\u0131\u011F\u0131n\u0131
+      olu\u015Fturan kast\u0131r."
+    steps: "[\"As\u0131l i\u015Flevi kola abd\xFCksiyon yapt\u0131rmakt\u0131r.\"
+      , \"Farkl\u0131 k\u0131s\u0131mlar\u0131yla di\u011Fer kaslar\u0131n hareketlerine
+      de katk\u0131da bulunur.\"]"
+    source: "Ders kitab\u0131 s.80"
+  - id: m_teres_major
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Teres Major
+    topic: Movement System
+    region: Upper_Extremity
+    tags: "kas; omuz; b\xFCy\xFCk silindirik; adduksiyon; i\xE7 rotasyon; fleksiyon"
+    body: "Skapula ile humerus aras\u0131nda uzan\u0131r."
+    steps: "[\"Kola add\xFCksiyon, ekstansiyon ve i\xE7 rotasyon yapt\u0131r\u0131r.\"]"
+    source: "Ders kitab\u0131 s.80"
+  - id: m_teres_minor
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Teres Minor
+    topic: Movement System
+    region: Upper_Extremity
+    tags: "kas; omuz; k\xFC\xE7\xFCk silindirik; d\u0131\u015F rotasyon"
+    body: "Skapula ile humerus aras\u0131nda uzan\u0131r."
+    steps: "[\"Kola d\u0131\u015F rotasyon yapt\u0131r\u0131r.\"]"
+    source: "Ders kitab\u0131 s.80"
+  - id: m_biceps_brachialis
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Biceps Brachialis
+    topic: Movement System
+    region: Upper_Extremity
+    tags: "kas; kol; iki ba\u015Fl\u0131; supinasyon; fleksiyon"
+    body: "Kolun \xF6n b\xF6l\xFCm\xFCnde bulunan iki ba\u015Fl\u0131 kast\u0131r.
+      Skapuladan ba\u015Flay\u0131p radiusta sonlan\u0131r."
+    steps: "[\"\xD6n kola supinasyon ve fleksiyon yapt\u0131r\u0131r.\"]"
+    source: "Ders kitab\u0131 s.81"
+  - id: m_brachialis
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Brachialis
+    topic: Movement System
+    region: Upper_Extremity
+    tags: kas; kol; fleksiyon
+    body: "Humerusun \xF6n y\xFCz\xFCnden ba\u015Flay\u0131p ulnan\u0131n \xFCst
+      ucunda sonlan\u0131r."
+    steps: "[\"\xD6n kola fleksiyon yapt\u0131r\u0131r.\"]"
+    source: "Ders kitab\u0131 s.81"
+  - id: m_coracobrachialis
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Coracobrachialis
+    topic: Movement System
+    region: Upper_Extremity
+    tags: kas; kol; korakobrakial; fleksiyon; adduksiyon
+    body: "Korakoid \xE7\u0131k\u0131nt\u0131 ile humerus aras\u0131ndad\u0131r."
+    steps: "[\"\xD6n kola fleksiyon ve add\xFCksiyon yapt\u0131r\u0131r.\"]"
+    source: "Ders kitab\u0131 s.81"
+  - id: m_triceps_brachialis
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Triceps Brachialis
+    topic: Movement System
+    region: Upper_Extremity
+    tags: "kas; kol; \xFC\xE7 ba\u015Fl\u0131; ekstansiyon"
+    body: "Kolun arkas\u0131nda bulunan \xFC\xE7 ba\u015Fl\u0131 kast\u0131r. Bir
+      ucu skapula"
+    steps: " iki ucu humerustan ba\u015Flay\u0131p ulnan\u0131n olekranon \xE7\u0131k\u0131nt\u0131s\u0131nda
+      sonlan\u0131r."
+    source: "[\"\xD6n kola ekstansiyon yapt\u0131r\u0131r.\"]"
+  - id: m_iliopsoas
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Iliopsoas
+    topic: Movement System
+    region: Lower_Extremity
+    tags: "kas; kal\xE7a; g\xFC\xE7l\xFC; fleks\xF6r"
+    body: "Le\u011Fen kemi\u011Fi ve bel omurlar\u0131ndan ba\u015Flay\u0131p femurun
+      \xFCst b\xF6l\xFCm\xFCnde sonlan\u0131r."
+    steps: "[\"Uylu\u011Fun en g\xFC\xE7l\xFC fleks\xF6r kas\u0131d\u0131r.\"]"
+    source: "Ders kitab\u0131 s.81"
+  - id: m_gluteus_maximus
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Gluteus Maximus
+    topic: Movement System
+    region: Lower_Extremity
+    tags: "kas; kal\xE7a; b\xFCy\xFCk kal\xE7a; kal\u0131n; ekstans\xF6r; ekstansiyon;
+      d\u0131\u015F rotasyon"
+    body: "V\xFCcudun en kal\u0131n kas\u0131d\u0131r. \u0130liumun d\u0131\u015F
+      y\xFCz\xFC ve sakrumdan ba\u015Flay\u0131p femurda sonlan\u0131r. \u0130liopsoas
+      kas\u0131n\u0131n antagonistidir."
+    steps: "[\"Uylu\u011Fun en g\xFC\xE7l\xFC ekstans\xF6r kas\u0131d\u0131r.\" ,
+      \"Uylu\u011Fa ekstansiyon ve d\u0131\u015Fa rotasyon yapt\u0131r\u0131r.\"]"
+    source: "Ders kitab\u0131 s.81"
+  - id: m_gluteus_medius
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Gluteus Medius
+    topic: Movement System
+    region: Lower_Extremity
+    tags: "kas; kal\xE7a; orta kal\xE7a; abd\xFCkt\xF6r"
+    body: "B\xFCy\xFCk kal\xE7a kas\u0131n\u0131n alt\u0131nda yar al\u0131r. Le\u011Fen
+      kemi\u011Finden ba\u015Flay\u0131p femurda sonlan\u0131r."
+    steps: "[\"Uylu\u011Fun en g\xFC\xE7l\xFC abd\xFCkt\xF6r kas\u0131d\u0131r.\"]"
+    source: "Ders kitab\u0131 s.81"
+  - id: m_gluteus_minimus
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Gluteus Minimus
+    topic: Movement System
+    region: Lower_Extremity
+    tags: "kas; kal\xE7a; k\xFC\xE7\xFCk kal\xE7a; abd\xFCksiyon"
+    body: "En altta yer alan kal\xE7a kas\u0131d\u0131r. Le\u011Fen kemi\u011Finden
+      ba\u015Flay\u0131p femurda sonlan\u0131r."
+    steps: "[\"Uylu\u011Fa abd\xFCksiyon yapt\u0131r\u0131r.\"]"
+    source: "Ders kitab\u0131 s.82"
+  - id: m_sartorius
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Sartorius
+    topic: Movement System
+    region: Lower_Extremity
+    tags: "kas; uyluk; terzi; uzun; fleksiyon; abd\xFCksiyon; i\xE7 rotasyon"
+    body: "V\xFCcudun en uzun kas\u0131d\u0131r. Le\u011Fen kemi\u011Finden ba\u015Flay\u0131p
+      \xF6n i\xE7 yan\u0131ndan ge\xE7erek tibia kemi\u011Finin \xFCst ucunda sonlan\u0131r."
+    steps: "[\"Uylu\u011Fa fleksiyon ve abd\xFCksiyon yapt\u0131r\u0131r.\" , \"Diz
+      yar\u0131m fleksiyondayken bald\u0131ra i\xE7 rotasyon yapt\u0131r\u0131r.\"]"
+    source: "Ders kitab\u0131 s.82"
+  - id: m_quadriceps_femoris
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Quadriceps Femoris
+    topic: Movement System
+    region: Lower_Extremity
+    tags: "kas; uyluk; d\xF6rt ba\u015Fl\u0131; ekstansiyon"
+    body: "Uylu\u011Fun \xF6n b\xF6lgesindeki d\xF6rt kas\u0131n (m. rectus femoris"
+    steps: ' m. vastus lateralis'
+    source: ' m. vastus medialis'
+  - id: hamstring
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: Hamstring Grubu Kaslar
+    topic: Movement System
+    region: Lower_Extremity
+    tags: kas; uyluk; arka adele; ekstansiyon; fleksiyon
+    body: "Arka adele de denir. \xDC\xE7 kastan (m. biceps femoris"
+    steps: ' m. semitendinosus'
+    source: " m. semimembranosus) olu\u015Fur. Bu kaslar oturak kemi\u011Finden ba\u015Flay\u0131p
+      tibia ve fibula kemi\u011Finde sonlan\u0131r. Sporcular\u0131n en \xE7ok sakatland\u0131klar\u0131
+      kaslar\u0131n ba\u015F\u0131nda gelir."
+  - id: m_tibialis_anterior
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Tibialis Anterior
+    topic: Movement System
+    region: Lower_Extremity
+    tags: "kas; bald\u0131r; \xF6n tibia; dorsifleksiyon; ekstansiyon; inversiyon"
+    body: "Tibia kemi\u011Finin \xF6n"
+    steps: " d\u0131\u015F ve yan taraf\u0131nda bulunur. Tibia kemi\u011Finin \xFCst
+      ucundan ba\u015Flay\u0131p birinci ayak tarak kemi\u011Finde sonlan\u0131r."
+    source: "[\"Aya\u011Fa dorsifleksiyon (ekstansiyon) ve inversiyon yapt\u0131r\u0131r.\"]"
+  - id: m_tibialis_posterior
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Tibialis Posterior
+    topic: Movement System
+    region: Lower_Extremity
+    tags: "kas; bald\u0131r; arka tibia; plantar fleksiyon; inversiyon"
+    body: "Tibia ve fibula kemi\u011Finin arkas\u0131nda bulunur. Buradan ba\u015Flay\u0131p
+      2"
+    steps: " 3 ve 4\u2019\xFCnc\xFC ayak tarak kemi\u011Finde sonlan\u0131r."
+    source: "[\"Aya\u011Fa plantar fleksiyon ve inversiyon yapt\u0131r\u0131r.\"]"
+  - id: m_triceps_surae
+    valence: learn
+    doc_type: entry
+    content_type: muscle
+    title: M. Triceps Surae
+    topic: Movement System
+    region: Lower_Extremity
+    tags: "kas; bald\u0131r; \xFC\xE7 ba\u015Fl\u0131; a\u015Fil tendonu; plantar
+      fleksiyon"
+    body: "Bald\u0131r\u0131n arkas\u0131ndaki kabar\u0131kl\u0131\u011F\u0131 yapan
+      kast\u0131r. Bu kas"
+    steps: " m. gastrocnemius ve m. soleus kas\u0131n\u0131n birle\u015Fmesinden
+      olu\u015Fur. \u0130ki kas tibian\u0131n \xFCst ucundan ba\u015Flay\u0131p a\u015Fil
+      tendonunu olu\u015Fturduktan sonra topuk kemi\u011Finde sonlan\u0131r."
+    source: "[\"Aya\u011Fa plantar fleksiyon yapt\u0131r\u0131r.\"]"

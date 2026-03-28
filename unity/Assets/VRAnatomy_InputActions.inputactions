@@ -14,6 +14,24 @@
                     "processors": "",
                     "interactions": "Press",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Reset",
+                    "type": "Button",
+                    "id": "8b418218-8497-4674-8c4a-d1d9f62e9fef",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Menu",
+                    "type": "Button",
+                    "id": "10b5ddb9-0cd5-46d4-8e39-12cfe36b7b45",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -30,8 +48,8 @@
                 },
                 {
                     "name": "",
-                    "id": "ba41ad4f-5ba4-411b-9805-761fb2d50358",
-                    "path": "<XRSimulatedHMD>/{PrimaryButton}",
+                    "id": "2f620731-3b8f-4c8a-a5c9-ef324f12c319",
+                    "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -41,12 +59,45 @@
                 },
                 {
                     "name": "",
-                    "id": "2f620731-3b8f-4c8a-a5c9-ef324f12c319",
-                    "path": "<Keyboard>/z",
+                    "id": "bc92ff88-63f5-4b57-9f5d-9fd81b3722a9",
+                    "path": "<XRController>{LeftHand}/{SecondaryButton}",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ToggleHeldName",
+                    "action": "Reset",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dc1a1b0e-e11e-41d1-ba85-fb10040d04ae",
+                    "path": "<Keyboard>/#(P)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reset",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "71f68a5b-e7d2-4750-ac84-d0371ac6c9b2",
+                    "path": "<XRController>{LeftHand}/{MenuButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3bf93af6-af28-4ccf-b808-4cebaceb667f",
+                    "path": "<Keyboard>/#(M)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
