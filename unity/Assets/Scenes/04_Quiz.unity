@@ -1647,10 +1647,11 @@ MonoBehaviour:
   totalQuizTime: 20
   questionsPerRegion: 5
   questionsPerConceptType: 5
+  circulationQuestionsPerRegion: 10
   ui: {fileID: 834759466}
   basicConceptsJsonPath: JsonFiles/Quiz/basic_concepts_quiz_data
   motionSystemJsonPath: JsonFiles/Quiz/motion_system_quiz_data
-  circulationJsonPath: JsonFiles/Quiz/circulation_system_quiz_data
+  circulationJsonPath: JsonFiles/Quiz/circulatory_system_quiz_data
   allQuestionsJsonPath: JsonFiles/Quiz/quiz_data
 --- !u!1001 &747623108
 PrefabInstance:

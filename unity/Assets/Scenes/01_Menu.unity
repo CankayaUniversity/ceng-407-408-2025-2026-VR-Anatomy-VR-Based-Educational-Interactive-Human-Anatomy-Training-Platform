@@ -399,11 +399,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highlightScale: 1.12
   highlightTint: {r: 1, g: 1, b: 1, a: 1}
+  tintStrength: 0.1
+  brightnessBoost: 1.08
   transitionDuration: 0.3
   enablePulse: 1
   pulseMinScale: 1.08
   pulseMaxScale: 1.14
   pulseSpeed: 2.5
+  enableMetallicOverlay: 1
+  metallicOverlayColor: {r: 1, g: 1, b: 1, a: 0.16}
   dimAlpha: 0.35
 --- !u!1 &396711804
 GameObject:
@@ -622,11 +626,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highlightScale: 1.12
   highlightTint: {r: 1, g: 1, b: 1, a: 1}
+  tintStrength: 0.1
+  brightnessBoost: 1.08
   transitionDuration: 0.3
   enablePulse: 1
   pulseMinScale: 1.08
   pulseMaxScale: 1.14
   pulseSpeed: 2.5
+  enableMetallicOverlay: 1
+  metallicOverlayColor: {r: 1, g: 1, b: 1, a: 0.16}
   dimAlpha: 0.35
 --- !u!1 &498959226 stripped
 GameObject:
@@ -887,11 +895,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highlightScale: 1.12
   highlightTint: {r: 1, g: 1, b: 1, a: 1}
+  tintStrength: 0.1
+  brightnessBoost: 1.08
   transitionDuration: 0.3
   enablePulse: 1
   pulseMinScale: 1.08
   pulseMaxScale: 1.14
   pulseSpeed: 2.5
+  enableMetallicOverlay: 1
+  metallicOverlayColor: {r: 1, g: 1, b: 1, a: 0.16}
   dimAlpha: 0.35
 --- !u!1 &1106148654 stripped
 GameObject:
@@ -912,11 +924,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highlightScale: 1.12
   highlightTint: {r: 1, g: 1, b: 1, a: 1}
+  tintStrength: 0.1
+  brightnessBoost: 1.08
   transitionDuration: 0.3
   enablePulse: 1
   pulseMinScale: 1.08
   pulseMaxScale: 1.14
   pulseSpeed: 2.5
+  enableMetallicOverlay: 1
+  metallicOverlayColor: {r: 1, g: 1, b: 1, a: 0.16}
   dimAlpha: 0.35
 --- !u!1 &1235706130
 GameObject:
@@ -1045,36 +1061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d65719dd701ece44be383a5f0af4086, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  welcomeClip: {fileID: 8300000, guid: deaa54f702324fa45a337526751dd306, type: 3}
   postWelcomeDelay: 0.5
-  steps:
-  - stepName: "\xD6\u011Frenmeye Ba\u015Fla"
-    menuItem: {fileID: 1879586905}
-    voiceClip: {fileID: 8300000, guid: bbebfac6cfeb4ab47b5bfc9f19d130ff, type: 3}
-    postDelay: 0.4
-  - stepName: "Serbest \u0130nceleme"
-    menuItem: {fileID: 1106148659}
-    voiceClip: {fileID: 8300000, guid: 2c17ae1dd6a5bc249b98e4b2935e614f, type: 3}
-    postDelay: 0.4
-  - stepName: Test / Quiz
-    menuItem: {fileID: 351587678}
-    voiceClip: {fileID: 8300000, guid: 8540f46f318df974993c407656813fe8, type: 3}
-    postDelay: 0.4
-  - stepName: "Yapay Zeka ile Konu\u015F"
-    menuItem: {fileID: 1092983707}
-    voiceClip: {fileID: 8300000, guid: 0b19f573278810948aa4f541aef3c802, type: 3}
-    postDelay: 0.4
-  - stepName: Ayarlar
-    menuItem: {fileID: 403595415}
-    voiceClip: {fileID: 8300000, guid: 5b263df622f31b042aad4c568774757a, type: 3}
-    postDelay: 0.4
-  - stepName: "Hakk\u0131nda"
-    menuItem: {fileID: 1939588913}
-    voiceClip: {fileID: 8300000, guid: 8b8f06b3731a9c242b69960067e09c73, type: 3}
-    postDelay: 0.4
-  skipButton: {fileID: 579465187}
-  menuCanvasGroup: {fileID: 914830920}
-  voiceSource: {fileID: 1235706131}
 --- !u!4 &1235706133
 Transform:
   m_ObjectHideFlags: 0
@@ -1626,11 +1613,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highlightScale: 1.12
   highlightTint: {r: 1, g: 1, b: 1, a: 1}
+  tintStrength: 0.1
+  brightnessBoost: 1.08
   transitionDuration: 0.3
   enablePulse: 1
   pulseMinScale: 1.08
   pulseMaxScale: 1.14
   pulseSpeed: 2.5
+  enableMetallicOverlay: 1
+  metallicOverlayColor: {r: 1, g: 1, b: 1, a: 0.16}
   dimAlpha: 0.35
 --- !u!1 &1885519612 stripped
 GameObject:
@@ -1656,11 +1647,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highlightScale: 1.12
   highlightTint: {r: 1, g: 1, b: 1, a: 1}
+  tintStrength: 0.1
+  brightnessBoost: 1.08
   transitionDuration: 0.3
   enablePulse: 1
   pulseMinScale: 1.08
   pulseMaxScale: 1.14
   pulseSpeed: 2.5
+  enableMetallicOverlay: 1
+  metallicOverlayColor: {r: 1, g: 1, b: 1, a: 0.16}
   dimAlpha: 0.35
 --- !u!1001 &1291069849033468686
 PrefabInstance:
@@ -2420,7 +2415,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7584936715691551928, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7584936715691551928, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -2429,10 +2424,22 @@ PrefabInstance:
     - target: {fileID: 7584936715691551928, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 11500000, guid: 16e7d5512062e524e824e99577df8327, type: 3}
+      objectReference: {fileID: 1291069849033468687}
     - target: {fileID: 7584936715691551928, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7584936715691551928, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LoadCirculationSystemQuiz
+      objectReference: {fileID: 0}
+    - target: {fileID: 7584936715691551928, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SceneLoader, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7584936715691551928, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7894383613737781440, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode

@@ -76,20 +76,29 @@ public class QuizManager : MonoBehaviour
         "Abbreviation"
     };
 
+    [Header("Circulation System Quiz Settings")]
+    public int circulationQuestionsPerRegion = 10;
+
+    private readonly string[] circulationRegions = new string[]
+    {
+        "Heart_Structure",
+        "Vessels",
+        "Circulation"
+    };
+
     [Header("References")]
     public QuizUIController ui;
 
     [Header("Data (Resources paths, without extension)")]
     public string basicConceptsJsonPath = "JsonFiles/Quiz/basic_concepts_quiz_data";
     public string motionSystemJsonPath = "JsonFiles/Quiz/motion_system_quiz_data";
-    public string circulationJsonPath = "JsonFiles/Quiz/circulation_system_quiz_data";
+    public string circulationJsonPath = "JsonFiles/Quiz/circulatory_system_quiz_data";
     public string allQuestionsJsonPath = "JsonFiles/Quiz/quiz_data";
 
     private QuestionList questionList;
-    private Dictionary<string, List<Question>> motionQuestionsByRegion = new Dictionary<string, List<Question>>();
-    
+    private Dictionary<string, List<Question>> adaptiveQuestionsByRegion = new Dictionary<string, List<Question>>();
     private Dictionary<string, RegionQuizState> regionStates = new Dictionary<string, RegionQuizState>();
-    private List<string> motionRegionQueue = new List<string>();
+    private List<string> adaptiveRegionQueue = new List<string>();
     private Question currentQuestion;
     private string currentQuestionRegion;
     private List<QuestionResult> quizResults = new List<QuestionResult>();
@@ -126,6 +135,12 @@ public class QuizManager : MonoBehaviour
         Up
     }
 
+    private bool IsAdaptiveCategory(QuizCategory category)
+    {
+        return category == QuizCategory.MotionSystem ||
+            category == QuizCategory.CirculationSystem;
+    }
+
     void Update()
     {
         if (quizFinished) return;
@@ -153,7 +168,7 @@ public class QuizManager : MonoBehaviour
         remainingTime = 0f;
         ui.UpdateTimer(0f);
 
-        Question sourceQuestion = NavigationState.CurrentQuizCategory == QuizCategory.MotionSystem
+        Question sourceQuestion = IsAdaptiveCategory(NavigationState.CurrentQuizCategory)
             ? currentQuestion
             : questionList.questions[currentQuestionIndex];
 
@@ -164,18 +179,50 @@ public class QuizManager : MonoBehaviour
         ui.ShowTimeUpResult("Süreniz doldu. Cevap işaretlenmediği için bu soru boş sayıldı.");
     }
 
-    private void BuildMotionQuestionPools(List<Question> allMotionQuestions)
+    private string[] GetRegionsForCurrentCategory()
     {
-        motionQuestionsByRegion.Clear();
-
-        foreach (string region in motionRegions)
+        switch (NavigationState.CurrentQuizCategory)
         {
-            List<Question> regionQuestions = allMotionQuestions
+            case QuizCategory.MotionSystem:
+                return motionRegions;
+
+            case QuizCategory.CirculationSystem:
+                return circulationRegions;
+
+            default:
+                return Array.Empty<string>();
+        }
+    }
+
+    private int GetQuestionsPerRegionForCurrentCategory()
+    {
+        switch (NavigationState.CurrentQuizCategory)
+        {
+            case QuizCategory.MotionSystem:
+                return questionsPerRegion;
+
+            case QuizCategory.CirculationSystem:
+                return circulationQuestionsPerRegion;
+
+            default:
+                return 0;
+        }
+    }
+
+    private void BuildAdaptiveQuestionPools(List<Question> allQuestions)
+    {
+        adaptiveQuestionsByRegion.Clear();
+
+        string[] regions = GetRegionsForCurrentCategory();
+
+        foreach (string region in regions)
+        {
+            List<Question> regionQuestions = allQuestions
                 .Where(q => !string.IsNullOrWhiteSpace(q.region) &&
                             q.GetNormalizedRegion().Equals(region, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
-            motionQuestionsByRegion[region] = regionQuestions;
+            adaptiveQuestionsByRegion[region] = regionQuestions;
 
             Debug.Log($"[POOL DEBUG] Region={region} | Total Questions={regionQuestions.Count}");
 
@@ -187,11 +234,13 @@ public class QuizManager : MonoBehaviour
         }
     }
 
-    private void InitializeMotionRegionStates()
+    private void InitializeAdaptiveRegionStates()
     {
         regionStates.Clear();
 
-        foreach (string region in motionRegions)
+        string[] regions = GetRegionsForCurrentCategory();
+
+        foreach (string region in regions)
         {
             RegionQuizState state = new RegionQuizState
             {
@@ -205,24 +254,27 @@ public class QuizManager : MonoBehaviour
         }
     }
 
-    private void BuildMotionRegionQueue()
+    private void BuildAdaptiveRegionQueue()
     {
-        motionRegionQueue.Clear();
+        adaptiveRegionQueue.Clear();
 
-        foreach (string region in motionRegions)
+        string[] regions = GetRegionsForCurrentCategory();
+        int questionsPerRegionForCategory = GetQuestionsPerRegionForCurrentCategory();
+
+        foreach (string region in regions)
         {
-            for (int i = 0; i < questionsPerRegion; i++)
+            for (int i = 0; i < questionsPerRegionForCategory; i++)
             {
-                motionRegionQueue.Add(region);
+                adaptiveRegionQueue.Add(region);
             }
         }
 
-        motionRegionQueue = motionRegionQueue
+        adaptiveRegionQueue = adaptiveRegionQueue
             .OrderBy(x => UnityEngine.Random.value)
             .ToList();
 
-        Debug.Log("[QUEUE] Motion region queue created:");
-        foreach (string region in motionRegionQueue)
+        Debug.Log("[QUEUE] Adaptive region queue created:");
+        foreach (string region in adaptiveRegionQueue)
         {
             Debug.Log("[QUEUE ITEM] " + region);
         }
@@ -297,9 +349,44 @@ public class QuizManager : MonoBehaviour
         return finalQuizQuestions;
     }
 
+    private List<Question> BuildCirculationSystemQuiz(List<Question> allCirculationQuestions)
+    {
+        List<Question> finalQuizQuestions = new List<Question>();
+
+        foreach (string region in circulationRegions)
+        {
+            List<Question> regionQuestions = allCirculationQuestions
+                .Where(q => !string.IsNullOrEmpty(q.region) &&
+                            q.GetNormalizedRegion().Equals(region, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(q => UnityEngine.Random.value)
+                .ToList();
+
+            Debug.Log($"[QuizManager] Circulation Region {region} question count: {regionQuestions.Count}");
+
+            if (regionQuestions.Count < circulationQuestionsPerRegion)
+            {
+                Debug.LogError(
+                    $"Quiz başlatılamadı. Region {region} içinde en az {circulationQuestionsPerRegion} soru olmalı. " +
+                    $"Bulunan: {regionQuestions.Count}"
+                );
+                return null;
+            }
+
+            finalQuizQuestions.AddRange(regionQuestions.Take(circulationQuestionsPerRegion));
+        }
+
+        finalQuizQuestions = finalQuizQuestions
+            .OrderBy(q => UnityEngine.Random.value)
+            .ToList();
+
+        Debug.Log($"[QuizManager] Final Circulation System quiz question count: {finalQuizQuestions.Count}");
+
+        return finalQuizQuestions;
+    }
+
     public void OnMatchingQuestionAnswered(LevelChangeDirection direction)
     {
-        if (NavigationState.CurrentQuizCategory != QuizCategory.MotionSystem)
+        if (!IsAdaptiveCategory(NavigationState.CurrentQuizCategory))
             return;
 
         if (string.IsNullOrWhiteSpace(currentQuestionRegion) || !regionStates.ContainsKey(currentQuestionRegion))
@@ -441,11 +528,11 @@ public class QuizManager : MonoBehaviour
             questionList = new QuestionList { questions = new List<Question>() };
         }
 
-        if (NavigationState.CurrentQuizCategory == QuizCategory.MotionSystem)
+        if (IsAdaptiveCategory(NavigationState.CurrentQuizCategory))
         {
-            BuildMotionQuestionPools(questionList.questions);
-            InitializeMotionRegionStates();
-            BuildMotionRegionQueue();
+            BuildAdaptiveQuestionPools(questionList.questions);
+            InitializeAdaptiveRegionStates();
+            BuildAdaptiveRegionQueue();
 
             questionList.questions = new List<Question>();
         }
@@ -493,13 +580,13 @@ public class QuizManager : MonoBehaviour
         }
     }
 
-    private Question GetNextMotionSystemQuestion()
+    private Question GetNextAdaptiveQuestion()
     {
-        if (motionRegionQueue.Count == 0)
+        if (adaptiveRegionQueue.Count == 0)
             return null;
 
-        string region = motionRegionQueue[0];
-        motionRegionQueue.RemoveAt(0);
+        string region = adaptiveRegionQueue[0];
+        adaptiveRegionQueue.RemoveAt(0);
 
         currentQuestionRegion = region;
 
@@ -513,7 +600,7 @@ public class QuizManager : MonoBehaviour
 
         foreach (string level in levelPriority)
         {
-            availableQuestions = motionQuestionsByRegion[region]
+            availableQuestions = adaptiveQuestionsByRegion[region]
                 .Where(q => q.IsLevel(level) && !state.askedQuestionIds.Contains(q.id))
                 .OrderBy(q => UnityEngine.Random.value)
                 .ToList();
@@ -556,13 +643,13 @@ public class QuizManager : MonoBehaviour
 
     void PrepareCurrentQuestionAndShow()
     {
-        if (NavigationState.CurrentQuizCategory == QuizCategory.MotionSystem)
+        if (IsAdaptiveCategory(NavigationState.CurrentQuizCategory))
         {
             timeUpHandled = false;
             questionLocked = false;
             isTimerPaused = false;
 
-            currentQuestion = GetNextMotionSystemQuestion();
+            currentQuestion = GetNextAdaptiveQuestion();
 
             if (currentQuestion == null)
             {
@@ -917,7 +1004,7 @@ public class QuizManager : MonoBehaviour
         if (quizFinished) return;
         if (questionLocked) return;
 
-        Question sourceQuestion = NavigationState.CurrentQuizCategory == QuizCategory.MotionSystem
+        Question sourceQuestion = IsAdaptiveCategory(NavigationState.CurrentQuizCategory)
             ? currentQuestion
             : questionList.questions[currentQuestionIndex];
 
@@ -934,7 +1021,7 @@ public class QuizManager : MonoBehaviour
 
         bool isCorrect = selectedOption == q.answer_text;
 
-        if (NavigationState.CurrentQuizCategory == QuizCategory.MotionSystem)
+        if (IsAdaptiveCategory(NavigationState.CurrentQuizCategory))
         {
             if (!string.IsNullOrWhiteSpace(currentQuestionRegion) && regionStates.ContainsKey(currentQuestionRegion))
             {
@@ -971,7 +1058,7 @@ public class QuizManager : MonoBehaviour
     {
         if (quizFinished) return;
 
-        if (NavigationState.CurrentQuizCategory != QuizCategory.MotionSystem)
+        if (!IsAdaptiveCategory(NavigationState.CurrentQuizCategory))
         {
             currentQuestionIndex++;
         }

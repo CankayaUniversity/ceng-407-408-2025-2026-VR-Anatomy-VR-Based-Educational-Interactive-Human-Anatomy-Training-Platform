@@ -74,6 +74,15 @@ public class RegionResultRowUI : MonoBehaviour
 
             case "Lower_Extremity":
                 return "Alt Ekstremite Kemikleri";
+            
+            case "Vessels":
+                return "Kan Damarları";
+
+            case "Heart_Structure":
+                return "Kalbin Yapısı";
+
+            case "Circulation":
+                return "Kan Dolaşımı";
 
             default:
                 return rawName.Replace("_", " ");
