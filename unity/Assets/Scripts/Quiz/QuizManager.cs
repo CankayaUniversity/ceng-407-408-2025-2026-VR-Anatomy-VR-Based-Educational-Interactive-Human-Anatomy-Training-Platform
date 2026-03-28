@@ -86,6 +86,22 @@ public class QuizManager : MonoBehaviour
         "Circulation"
     };
 
+    [Header("All Questions Quiz Settings")]
+    public int allQuestionsPerRegion = 5;
+
+    private readonly string[] allQuestionsRegions = new string[]
+    {
+        "Head_Face",
+        "Trunk",
+        "Upper_Extremity",
+        "Lower_Extremity",
+        "Joints",
+        "Muscle",
+        "Heart_Structure",
+        "Vessels",
+        "Circulation"
+    };
+
     [Header("References")]
     public QuizUIController ui;
 
@@ -93,7 +109,6 @@ public class QuizManager : MonoBehaviour
     public string basicConceptsJsonPath = "JsonFiles/Quiz/basic_concepts_quiz_data";
     public string motionSystemJsonPath = "JsonFiles/Quiz/motion_system_quiz_data";
     public string circulationJsonPath = "JsonFiles/Quiz/circulatory_system_quiz_data";
-    public string allQuestionsJsonPath = "JsonFiles/Quiz/quiz_data";
 
     private QuestionList questionList;
     private Dictionary<string, List<Question>> adaptiveQuestionsByRegion = new Dictionary<string, List<Question>>();
@@ -138,7 +153,8 @@ public class QuizManager : MonoBehaviour
     private bool IsAdaptiveCategory(QuizCategory category)
     {
         return category == QuizCategory.MotionSystem ||
-            category == QuizCategory.CirculationSystem;
+            category == QuizCategory.CirculationSystem ||
+            category == QuizCategory.AllQuestions;
     }
 
     void Update()
@@ -189,6 +205,9 @@ public class QuizManager : MonoBehaviour
             case QuizCategory.CirculationSystem:
                 return circulationRegions;
 
+            case QuizCategory.AllQuestions:
+                return allQuestionsRegions;
+
             default:
                 return Array.Empty<string>();
         }
@@ -203,6 +222,9 @@ public class QuizManager : MonoBehaviour
 
             case QuizCategory.CirculationSystem:
                 return circulationQuestionsPerRegion;
+
+            case QuizCategory.AllQuestions:
+                return allQuestionsPerRegion;
 
             default:
                 return 0;
@@ -279,41 +301,6 @@ public class QuizManager : MonoBehaviour
             Debug.Log("[QUEUE ITEM] " + region);
         }
     }
-    private List<Question> BuildMotionSystemQuiz(List<Question> allMotionQuestions)
-    {
-        List<Question> finalQuizQuestions = new List<Question>();
-
-        foreach (string region in motionRegions)
-        {
-            List<Question> regionQuestions = allMotionQuestions
-                .Where(q => !string.IsNullOrEmpty(q.region) &&
-                            q.region.Trim().Equals(region, StringComparison.OrdinalIgnoreCase))
-                .OrderBy(q => UnityEngine.Random.value)
-                .ToList();
-
-            Debug.Log($"[QuizManager] Region {region} question count: {regionQuestions.Count}");
-
-            if (regionQuestions.Count < questionsPerRegion)
-            {
-                Debug.LogError(
-                    $"Quiz başlatılamadı. Region {region} içinde en az {questionsPerRegion} soru olmalı. " +
-                    $"Bulunan: {regionQuestions.Count}"
-                );
-                return null;
-            }
-
-            finalQuizQuestions.AddRange(regionQuestions.Take(questionsPerRegion));
-        }
-
-        finalQuizQuestions = finalQuizQuestions
-            .OrderBy(q => UnityEngine.Random.value)
-            .ToList();
-
-        Debug.Log($"[QuizManager] Final Motion System quiz question count: {finalQuizQuestions.Count}");
-
-        return finalQuizQuestions;
-    }
-
     private List<Question> BuildBasicConceptsQuiz(List<Question> allBasicQuestions)
     {
         List<Question> finalQuizQuestions = new List<Question>();
@@ -348,42 +335,6 @@ public class QuizManager : MonoBehaviour
 
         return finalQuizQuestions;
     }
-
-    private List<Question> BuildCirculationSystemQuiz(List<Question> allCirculationQuestions)
-    {
-        List<Question> finalQuizQuestions = new List<Question>();
-
-        foreach (string region in circulationRegions)
-        {
-            List<Question> regionQuestions = allCirculationQuestions
-                .Where(q => !string.IsNullOrEmpty(q.region) &&
-                            q.GetNormalizedRegion().Equals(region, StringComparison.OrdinalIgnoreCase))
-                .OrderBy(q => UnityEngine.Random.value)
-                .ToList();
-
-            Debug.Log($"[QuizManager] Circulation Region {region} question count: {regionQuestions.Count}");
-
-            if (regionQuestions.Count < circulationQuestionsPerRegion)
-            {
-                Debug.LogError(
-                    $"Quiz başlatılamadı. Region {region} içinde en az {circulationQuestionsPerRegion} soru olmalı. " +
-                    $"Bulunan: {regionQuestions.Count}"
-                );
-                return null;
-            }
-
-            finalQuizQuestions.AddRange(regionQuestions.Take(circulationQuestionsPerRegion));
-        }
-
-        finalQuizQuestions = finalQuizQuestions
-            .OrderBy(q => UnityEngine.Random.value)
-            .ToList();
-
-        Debug.Log($"[QuizManager] Final Circulation System quiz question count: {finalQuizQuestions.Count}");
-
-        return finalQuizQuestions;
-    }
-
     public void OnMatchingQuestionAnswered(LevelChangeDirection direction)
     {
         if (!IsAdaptiveCategory(NavigationState.CurrentQuizCategory))
@@ -456,7 +407,32 @@ public class QuizManager : MonoBehaviour
     {
         Debug.Log("[TEST] Entered LoadQuestionsByCategory");
 
-        string selectedPath = allQuestionsJsonPath;
+        if (NavigationState.CurrentQuizCategory == QuizCategory.AllQuestions)
+        {
+            Debug.Log("[QuizManager] Loading All Questions from Motion + Circulation JSON files.");
+
+            List<Question> allQuestionsPool = LoadAllQuestionsPool();
+
+            if (allQuestionsPool == null || allQuestionsPool.Count == 0)
+            {
+                Debug.LogError("[QuizManager] All Questions pool could not be created.");
+                questionList = new QuestionList { questions = new List<Question>() };
+                return;
+            }
+
+            questionList = new QuestionList { questions = allQuestionsPool };
+
+            BuildAdaptiveQuestionPools(questionList.questions);
+            InitializeAdaptiveRegionStates();
+            BuildAdaptiveRegionQueue();
+
+            questionList.questions = new List<Question>();
+
+            Debug.Log("[QuizManager] All Questions adaptive pool initialized.");
+            return;
+        }
+
+        string selectedPath = "";
 
         switch (NavigationState.CurrentQuizCategory)
         {
@@ -469,10 +445,13 @@ public class QuizManager : MonoBehaviour
             case QuizCategory.CirculationSystem:
                 selectedPath = circulationJsonPath;
                 break;
-            case QuizCategory.AllQuestions:
-            default:
-                selectedPath = allQuestionsJsonPath;
-                break;
+        }
+
+        if (string.IsNullOrEmpty(selectedPath))
+        {
+            Debug.LogError($"[QuizManager] Unsupported quiz category: {NavigationState.CurrentQuizCategory}");
+            questionList = new QuestionList { questions = new List<Question>() };
+            return;
         }
 
         Debug.Log($"[QuizManager] Category={NavigationState.CurrentQuizCategory} | Loading: Resources/{selectedPath}.json");
@@ -558,6 +537,67 @@ public class QuizManager : MonoBehaviour
                 $"[Question Debug] id={q.id} | region={q.GetNormalizedRegion()} | topic={q.topic} | level(raw)={q.level} | level(normalized)={q.GetNormalizedLevel()}"
             );
         }
+    }
+
+    private List<Question> LoadQuestionsFromPath(string path)
+    {
+        TextAsset jsonFile = Resources.Load<TextAsset>(path);
+
+        if (jsonFile == null)
+        {
+            Debug.LogError($"[QuizManager] JSON not found at Resources/{path}.json");
+            return new List<Question>();
+        }
+
+        string json = jsonFile.text?.Trim();
+
+        if (string.IsNullOrEmpty(json))
+        {
+            Debug.LogError($"[QuizManager] JSON file is empty: {path}");
+            return new List<Question>();
+        }
+
+        try
+        {
+            if (json.StartsWith("["))
+            {
+                Question[] loadedQuestions = JsonHelper.FromJson<Question>(json);
+                return loadedQuestions != null
+                    ? new List<Question>(loadedQuestions)
+                    : new List<Question>();
+            }
+            else if (json.StartsWith("{"))
+            {
+                QuestionList loadedList = JsonUtility.FromJson<QuestionList>(json);
+                return loadedList != null && loadedList.questions != null
+                    ? loadedList.questions
+                    : new List<Question>();
+            }
+            else
+            {
+                Debug.LogError($"[QuizManager] Unknown JSON format in {path}");
+                return new List<Question>();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[QuizManager] Failed to parse JSON at {path}: {e.Message}");
+            return new List<Question>();
+        }
+    }
+
+    private List<Question> LoadAllQuestionsPool()
+    {
+        List<Question> motionQuestions = LoadQuestionsFromPath(motionSystemJsonPath);
+        List<Question> circulationQuestions = LoadQuestionsFromPath(circulationJsonPath);
+
+        List<Question> combined = new List<Question>();
+        combined.AddRange(motionQuestions);
+        combined.AddRange(circulationQuestions);
+
+        Debug.Log($"[QuizManager] All Questions pool loaded. Motion={motionQuestions.Count}, Circulation={circulationQuestions.Count}, Total={combined.Count}");
+
+        return combined;
     }
 
     private List<string> GetLevelPriorityOrder(string targetLevel)

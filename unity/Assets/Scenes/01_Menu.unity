@@ -2073,6 +2073,34 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 49.6
       objectReference: {fileID: 0}
+    - target: {fileID: 4231168173109832681, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4231168173109832681, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4231168173109832681, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1291069849033468687}
+    - target: {fileID: 4231168173109832681, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4231168173109832681, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LoadAllQuestionsQuiz
+      objectReference: {fileID: 0}
+    - target: {fileID: 4231168173109832681, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SceneLoader, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4231168173109832681, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4420364946555961164, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -2452,6 +2480,18 @@ PrefabInstance:
     - target: {fileID: 7894383613737781440, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
       value: SkeletalMusclesPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997696954984306081, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997696954984306081, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
+      propertyPath: m_Color.b
+      value: 0.8745098
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997696954984306081, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
+      propertyPath: m_Color.g
+      value: 0.9254902
       objectReference: {fileID: 0}
     - target: {fileID: 8082806833027847004, guid: 2029556d9f74e204fb740f4eeeae9333, type: 3}
       propertyPath: m_AnchoredPosition.y
