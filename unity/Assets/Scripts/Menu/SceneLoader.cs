@@ -18,7 +18,9 @@ public class SceneLoader : MonoBehaviour
         NavigationState.CurrentEntryMode = EntryMode.FreeExplore;
     }
 
-    // Hareket Sistemi VR sahnesi
+    // ----------------------------
+    // HAREKET SİSTEMİ
+    // ----------------------------
     public void LoadMotionSystemSubUnit(int subUnitInt)
     {
         NavigationState.SelectedMotionSubUnit = (MotionSubUnit)subUnitInt;
@@ -31,8 +33,17 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene("02_MotionSystem");
     }
 
+    // ----------------------------
+    // DOLAŞIM SİSTEMİ
+    // ----------------------------
     public void LoadCirculationSystem()
     {
+        SceneManager.LoadScene("03_CirculationSystem");
+    }
+
+    public void LoadCirculationSystemSubUnit(int subUnitInt)
+    {
+        NavigationState.SelectedCirculationSubUnit = (CirculationSubUnit)subUnitInt;
         SceneManager.LoadScene("03_CirculationSystem");
     }
 
@@ -43,7 +54,7 @@ public class SceneLoader : MonoBehaviour
     }
 
     // ----------------------------
-    // QUIZ - Genel (eski)
+    // QUIZ - Genel
     // ----------------------------
     public void LoadQuiz()
     {
@@ -57,7 +68,7 @@ public class SceneLoader : MonoBehaviour
     }
 
     // ----------------------------
-    // ✅ QUIZ - Kategori seçerek yükleme (YENİ)
+    // QUIZ - Kategori seçerek yükleme
     // ----------------------------
     public void LoadBasicConceptsQuiz()
     {
@@ -84,7 +95,7 @@ public class SceneLoader : MonoBehaviour
     }
 
     // ----------------------------
-    // Diğer sahneler
+    // DİĞER SAHNELER
     // ----------------------------
     public void LoadAIChat()
     {
