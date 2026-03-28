@@ -7,3 +7,4 @@ SpeechRecognition
 python-dotenv
 azure-search-documents
 openai
+edge-tts

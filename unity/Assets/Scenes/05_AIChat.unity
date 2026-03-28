@@ -305,7 +305,7 @@ MonoBehaviour:
   questionInput: {fileID: 1929558922}
   askButton: {fileID: 736500870}
   answerText: {fileID: 1160254746}
-  apiUrl: https://samuel-critics-knew-explorer.trycloudflare.com/ask
+  apiUrl: https://cold-thus-alberta-stream.trycloudflare.com/ask
 --- !u!1 &736500866
 GameObject:
   m_ObjectHideFlags: 0

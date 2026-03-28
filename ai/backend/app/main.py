@@ -7,9 +7,8 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
 from pydantic import BaseModel
 
 from rag_core import answer_question
@@ -78,23 +77,34 @@ def speech_to_text(file: UploadFile = File(...)):
         return {"text": "", "error": str(e)}
 
 
-# ── Text-to-Speech (free Google Translate TTS via gTTS) ──
+# ── Text-to-Speech (Edge TTS - Emel Neural) ──
 
 class TtsRequest(BaseModel):
     text: str
 
 
 @app.post("/tts")
-def text_to_speech(req: TtsRequest):
-    from gtts import gTTS
+async def text_to_speech(req: TtsRequest):
+    import edge_tts
 
-    if not req.text.strip():
+    if not req.text or not req.text.strip():
         return Response(status_code=400, content=b"", media_type="text/plain")
 
     try:
-        tts = gTTS(text=req.text, lang="tr")
+        communicate = edge_tts.Communicate(
+            text=req.text.strip(),
+            voice="tr-TR-EmelNeural",
+            rate="-10%",
+            volume="+0%",
+            pitch="+0Hz",
+        )
+
         buffer = io.BytesIO()
-        tts.write_to_fp(buffer)
+
+        async for chunk in communicate.stream():
+            if chunk["type"] == "audio":
+                buffer.write(chunk["data"])
+
         buffer.seek(0)
         return Response(content=buffer.read(), media_type="audio/mpeg")
 
