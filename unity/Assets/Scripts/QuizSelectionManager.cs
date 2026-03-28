@@ -16,11 +16,33 @@ public class QuizSelectionManager : MonoBehaviour
     private QuizCategory selectedCategory;
     private bool countdownRunning;
 
-    static readonly string IntroInfoText =
-        "<indent=0%><color=#00D4FF>></color>  <indent=5%>Bu test 30 sorudan olu\u015Fmaktad\u0131r.\n" +
-        "<indent=0%><color=#00D4FF>></color>  <indent=5%>\u00C7oktan se\u00E7meli sorular i\u00E7in 30 saniye s\u00FCreniz vard\u0131r.\n" +
-        "<indent=0%><color=#00D4FF>></color>  <indent=5%>Zorland\u0131\u011F\u0131n\u0131z sorularda \u0130pucu butonunu kullanabilirsiniz.\n" +
-        "<indent=0%><color=#00D4FF>></color>  <indent=5%>Haz\u0131r oldu\u011Funuzda Ba\u015Fla butonuna basarak teste ba\u015Flayabilirsiniz.";
+    private static string GetIntroInfoText(QuizCategory category)
+    {
+        const string bullet = "<indent=0%><color=#00D4FF>></color>  <indent=5%>";
+
+        switch (category)
+        {
+            case QuizCategory.BasicConcepts:
+                return
+                    bullet + "Bu test 10 sorudan olu\u015Fmaktad\u0131r.\n" +
+                    bullet + "Her soru i\u00E7in 30 saniyeniz vard\u0131r.\n" +
+                    bullet + "Haz\u0131r oldu\u011Funuzda Ba\u015Fla butonuna basarak teste ba\u015Flayabilirsiniz.";
+
+            case QuizCategory.AllQuestions:
+                return
+                    bullet + "Bu test 45 sorudan olu\u015Fmaktad\u0131r.\n" +
+                    bullet + "\u00C7oktan se\u00E7meli sorular i\u00E7in 30 saniye s\u00FCreniz vard\u0131r.\n" +
+                    bullet + "Zorland\u0131\u011F\u0131n\u0131z sorularda \u0130pucu butonunu kullanabilirsiniz.\n" +
+                    bullet + "Haz\u0131r oldu\u011Funuzda Ba\u015Fla butonuna basarak teste ba\u015Flayabilirsiniz.";
+
+            default: // MotionSystem & CirculationSystem
+                return
+                    bullet + "Bu test 30 sorudan olu\u015Fmaktad\u0131r.\n" +
+                    bullet + "\u00C7oktan se\u00E7meli sorular i\u00E7in 30 saniye s\u00FCreniz vard\u0131r.\n" +
+                    bullet + "Zorland\u0131\u011F\u0131n\u0131z sorularda \u0130pucu butonunu kullanabilirsiniz.\n" +
+                    bullet + "Haz\u0131r oldu\u011Funuzda Ba\u015Fla butonuna basarak teste ba\u015Flayabilirsiniz.";
+        }
+    }
 
     private void Start()
     {
@@ -56,8 +78,8 @@ public class QuizSelectionManager : MonoBehaviour
             var tmp = introTextObj.GetComponent<TextMeshProUGUI>();
             if (tmp != null)
             {
-                tmp.text = IntroInfoText;
-                tmp.alignment = TextAlignmentOptions.Left;
+                tmp.text = GetIntroInfoText(QuizCategory.MotionSystem);
+                tmp.alignment = TextAlignmentOptions.TopLeft;
                 tmp.lineSpacing = 2f;
                 tmp.paragraphSpacing = 0f;
                 tmp.enableAutoSizing = true;
@@ -156,11 +178,18 @@ public class QuizSelectionManager : MonoBehaviour
     {
         selectedCategory = category;
 
+        // Intro metnini seçilen kategoriye göre güncelle
+        UpdateIntroText(category);
+
         if (categorySelectionPanel != null)
             categorySelectionPanel.SetActive(false);
 
         if (introPanel != null)
             introPanel.SetActive(true);
+
+        // Hiçbir butonun otomatik seçili görünmemesi için selection'ı temizle
+        if (UnityEngine.EventSystems.EventSystem.current != null)
+            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
     }
 
     private void OnStartClicked()
@@ -187,5 +216,17 @@ public class QuizSelectionManager : MonoBehaviour
 
         if (categorySelectionPanel != null)
             categorySelectionPanel.SetActive(true);
+    }
+
+    private void UpdateIntroText(QuizCategory category)
+    {
+        if (introPanel == null) return;
+
+        var introTextObj = introPanel.transform.Find("IntroText");
+        if (introTextObj == null) return;
+
+        var tmp = introTextObj.GetComponent<TextMeshProUGUI>();
+        if (tmp != null)
+            tmp.text = GetIntroInfoText(category);
     }
 }

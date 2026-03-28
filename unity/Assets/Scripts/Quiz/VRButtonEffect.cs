@@ -7,7 +7,8 @@ using System.Collections;
 [RequireComponent(typeof(Button))]
 public class VRButtonEffect : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler,
-    IPointerDownHandler, IPointerUpHandler
+    IPointerDownHandler, IPointerUpHandler,
+    ISelectHandler, IDeselectHandler
 {
     // ── Border colours ──
     static readonly Color BorderNorm  = new Color(0f, 0.55f, 0.75f, 0.35f);
@@ -54,7 +55,14 @@ public class VRButtonEffect : MonoBehaviour,
 
         var btn = GetComponent<Button>();
         if (btn != null)
+        {
             btn.transition = Selectable.Transition.None;
+
+            // Otomatik navigation'ı kapat — phantom highlight'ı önler
+            var nav = btn.navigation;
+            nav.mode = Navigation.Mode.None;
+            btn.navigation = nav;
+        }
 
         if (borderImage != null)
             borderImage.color = BorderNorm;
@@ -66,6 +74,22 @@ public class VRButtonEffect : MonoBehaviour,
         CreateFill();
         CreateHighlight();
         SetupLabel();
+    }
+
+    void OnEnable()
+    {
+        // Panel her açıldığında butonu normal state'e sıfırla
+        isHovered = false;
+        targetScale = 1f;
+
+        if (rect != null)
+            rect.localScale = baseScale;
+
+        Apply(BorderNorm, FillNorm, HighlightNorm, TextNorm, labelMatNorm);
+
+        // EventSystem'in bu butonu otomatik seçmesini engelle
+        if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject == gameObject)
+            EventSystem.current.SetSelectedGameObject(null);
     }
 
     void CreateFill()
@@ -175,6 +199,19 @@ public class VRButtonEffect : MonoBehaviour,
     }
 
     public void OnPointerUp(PointerEventData eventData) { }
+
+    public void OnSelect(BaseEventData eventData)
+    {
+        // Unity bazen butonu otomatik seçer — hemen deselect et
+        EventSystem.current?.SetSelectedGameObject(null);
+    }
+
+    public void OnDeselect(BaseEventData eventData)
+    {
+        isHovered = false;
+        targetScale = 1f;
+        Apply(BorderNorm, FillNorm, HighlightNorm, TextNorm, labelMatNorm);
+    }
 
     IEnumerator PressFlash()
     {
