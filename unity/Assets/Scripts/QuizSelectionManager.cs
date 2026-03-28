@@ -17,10 +17,10 @@ public class QuizSelectionManager : MonoBehaviour
     private bool countdownRunning;
 
     static readonly string IntroInfoText =
-        "Bu test 30 sorudan olu\u015Fmaktad\u0131r.\n\n" +
-        "\u00C7oktan se\u00E7meli sorular i\u00E7in 30 saniye s\u00FCreniz vard\u0131r.\n\n" +
-        "Zorland\u0131\u011F\u0131n\u0131z sorularda \u0130pucu butonunu kullanabilirsiniz.\n\n" +
-        "Haz\u0131r oldu\u011Funuzda Ba\u015Fla butonuna basarak teste ba\u015Flayabilirsiniz.";
+        "<indent=0%><color=#00D4FF>></color>  <indent=5%>Bu test 30 sorudan olu\u015Fmaktad\u0131r.\n" +
+        "<indent=0%><color=#00D4FF>></color>  <indent=5%>\u00C7oktan se\u00E7meli sorular i\u00E7in 30 saniye s\u00FCreniz vard\u0131r.\n" +
+        "<indent=0%><color=#00D4FF>></color>  <indent=5%>Zorland\u0131\u011F\u0131n\u0131z sorularda \u0130pucu butonunu kullanabilirsiniz.\n" +
+        "<indent=0%><color=#00D4FF>></color>  <indent=5%>Haz\u0131r oldu\u011Funuzda Ba\u015Fla butonuna basarak teste ba\u015Flayabilirsiniz.";
 
     private void Start()
     {
@@ -47,8 +47,8 @@ public class QuizSelectionManager : MonoBehaviour
             var tr = introTextObj.GetComponent<RectTransform>();
             if (tr != null)
             {
-                tr.anchorMin = new Vector2(0.06f, 0.20f);
-                tr.anchorMax = new Vector2(0.94f, 0.80f);
+                tr.anchorMin = new Vector2(0.08f, 0.22f);
+                tr.anchorMax = new Vector2(0.92f, 0.82f);
                 tr.anchoredPosition = Vector2.zero;
                 tr.sizeDelta = Vector2.zero;
             }
@@ -57,39 +57,61 @@ public class QuizSelectionManager : MonoBehaviour
             if (tmp != null)
             {
                 tmp.text = IntroInfoText;
-                tmp.alignment = TextAlignmentOptions.Center;
-                tmp.lineSpacing = 5f;
-                tmp.paragraphSpacing = 10f;
+                tmp.alignment = TextAlignmentOptions.Left;
+                tmp.lineSpacing = 2f;
+                tmp.paragraphSpacing = 0f;
                 tmp.enableAutoSizing = true;
-                tmp.fontSizeMin = 12;
-                tmp.fontSizeMax = 26;
+                tmp.fontSizeMin = 8;
+                tmp.fontSizeMax = 12;
             }
         }
 
+        // --- Başla butonu (sağ alt, küçük) ---
         if (startButton != null)
         {
             var r = startButton.GetComponent<RectTransform>();
             if (r != null)
             {
-                r.anchorMin = new Vector2(0.65f, 0.06f);
-                r.anchorMax = new Vector2(0.88f, 0.16f);
+                r.anchorMin = new Vector2(0.70f, 0.09f);
+                r.anchorMax = new Vector2(0.82f, 0.16f);
                 r.anchoredPosition = Vector2.zero;
                 r.sizeDelta = Vector2.zero;
             }
+
+            // Buton yazı boyutunu küçült
+            var btnText = startButton.GetComponentInChildren<TextMeshProUGUI>();
+            if (btnText != null)
+            {
+                btnText.enableAutoSizing = true;
+                btnText.fontSizeMin = 8;
+                btnText.fontSizeMax = 12;
+            }
+
             if (startButton.GetComponent<VRButtonEffect>() == null)
                 startButton.gameObject.AddComponent<VRButtonEffect>();
         }
 
+        // --- Geri butonu (sol alt, küçük) ---
         if (backButton != null)
         {
             var r = backButton.GetComponent<RectTransform>();
             if (r != null)
             {
-                r.anchorMin = new Vector2(0.12f, 0.06f);
-                r.anchorMax = new Vector2(0.35f, 0.16f);
+                r.anchorMin = new Vector2(0.08f, 0.09f);
+                r.anchorMax = new Vector2(0.20f, 0.16f);
                 r.anchoredPosition = Vector2.zero;
                 r.sizeDelta = Vector2.zero;
             }
+
+            // Buton yazı boyutunu küçült
+            var btnText = backButton.GetComponentInChildren<TextMeshProUGUI>();
+            if (btnText != null)
+            {
+                btnText.enableAutoSizing = true;
+                btnText.fontSizeMin = 8;
+                btnText.fontSizeMax = 12;
+            }
+
             if (backButton.GetComponent<VRButtonEffect>() == null)
                 backButton.gameObject.AddComponent<VRButtonEffect>();
         }

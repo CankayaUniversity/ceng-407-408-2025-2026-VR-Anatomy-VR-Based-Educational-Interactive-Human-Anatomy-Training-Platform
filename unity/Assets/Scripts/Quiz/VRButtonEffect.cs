@@ -9,24 +9,34 @@ public class VRButtonEffect : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler,
     IPointerDownHandler, IPointerUpHandler
 {
-    static readonly Color BorderNorm  = new Color(0f, 0.40f, 0.55f, 0.18f);
-    static readonly Color BorderHover = new Color(0f, 0.85f, 1f, 0.85f);
-    static readonly Color BorderFlash = new Color(0.5f, 1f, 1f, 1f);
+    // ── Border colours ──
+    static readonly Color BorderNorm  = new Color(0f, 0.55f, 0.75f, 0.35f);
+    static readonly Color BorderHover = new Color(0f, 0.90f, 1f, 0.95f);
+    static readonly Color BorderFlash = new Color(0.6f, 1f, 1f, 1f);
 
-    static readonly Color FillNorm  = new Color(0.02f, 0.05f, 0.08f, 0.78f);
-    static readonly Color FillHover = new Color(0.07f, 0.26f, 0.38f, 0.92f);
-    static readonly Color FillFlash = new Color(0.15f, 0.45f, 0.55f, 1f);
+    // ── Inner fill ──
+    static readonly Color FillNorm  = new Color(0.01f, 0.06f, 0.12f, 0.70f);
+    static readonly Color FillHover = new Color(0.04f, 0.18f, 0.30f, 0.88f);
+    static readonly Color FillFlash = new Color(0.10f, 0.35f, 0.50f, 0.95f);
 
+    // ── Top highlight gradient layer ──
+    static readonly Color HighlightNorm  = new Color(0.15f, 0.65f, 0.85f, 0.06f);
+    static readonly Color HighlightHover = new Color(0.15f, 0.75f, 1f, 0.18f);
+
+    // ── Text ──
     static readonly Color TextNorm  = new Color(0.80f, 0.94f, 1f, 1f);
     static readonly Color TextHover = Color.white;
 
-    const float BorderWidth = 1.5f;
-    const float HoverScale  = 1.08f;
-    const float PressScale  = 0.92f;
-    const float LerpSpeed   = 12f;
+    const float BorderWidth  = 1.2f;
+    const float HoverScale   = 1.06f;
+    const float PressScale   = 0.94f;
+    const float LerpSpeed    = 14f;
+    const float PulseSpeed   = 2.5f;
+    const float PulseRange   = 0.12f;
 
     Image borderImage;
     Image fillImage;
+    Image highlightImage;
     TextMeshProUGUI label;
     Material labelMatNorm;
     Material labelMatHover;
@@ -54,6 +64,7 @@ public class VRButtonEffect : MonoBehaviour,
             Destroy(oldOutline);
 
         CreateFill();
+        CreateHighlight();
         SetupLabel();
     }
 
@@ -74,60 +85,87 @@ public class VRButtonEffect : MonoBehaviour,
         fillImage.raycastTarget = false;
     }
 
+    void CreateHighlight()
+    {
+        var hlObj = new GameObject("ButtonHighlight");
+        hlObj.transform.SetParent(transform, false);
+        hlObj.transform.SetSiblingIndex(1);
+
+        var hr = hlObj.AddComponent<RectTransform>();
+        hr.anchorMin = new Vector2(0f, 0.5f);
+        hr.anchorMax = Vector2.one;
+        hr.offsetMin = new Vector2(BorderWidth + 1f, 0f);
+        hr.offsetMax = new Vector2(-BorderWidth - 1f, -BorderWidth - 1f);
+
+        highlightImage = hlObj.AddComponent<Image>();
+        highlightImage.color = HighlightNorm;
+        highlightImage.raycastTarget = false;
+    }
+
     void SetupLabel()
     {
         if (label == null) return;
 
         label.color = TextNorm;
         label.enableAutoSizing = true;
-        label.fontSizeMin = 10;
-        label.fontSizeMax = 20;
+        label.fontSizeMin = 8;
+        label.fontSizeMax = 14;
 
         if (label.fontSharedMaterial == null) return;
 
         labelMatNorm = new Material(label.fontSharedMaterial);
         labelMatNorm.EnableKeyword("GLOW_ON");
-        labelMatNorm.SetFloat("_GlowOffset", 0.30f);
-        labelMatNorm.SetFloat("_GlowOuter", 0.15f);
-        labelMatNorm.SetFloat("_GlowInner", 0.05f);
-        labelMatNorm.SetFloat("_GlowPower", 0.35f);
-        labelMatNorm.SetColor("_GlowColor", new Color(0f, 0.80f, 1f, 0.25f));
+        labelMatNorm.SetFloat("_GlowOffset", 0.35f);
+        labelMatNorm.SetFloat("_GlowOuter", 0.20f);
+        labelMatNorm.SetFloat("_GlowInner", 0.08f);
+        labelMatNorm.SetFloat("_GlowPower", 0.45f);
+        labelMatNorm.SetColor("_GlowColor", new Color(0f, 0.75f, 1f, 0.30f));
 
         labelMatHover = new Material(label.fontSharedMaterial);
         labelMatHover.EnableKeyword("GLOW_ON");
-        labelMatHover.SetFloat("_GlowOffset", 0.40f);
-        labelMatHover.SetFloat("_GlowOuter", 0.35f);
-        labelMatHover.SetFloat("_GlowInner", 0.10f);
-        labelMatHover.SetFloat("_GlowPower", 0.65f);
-        labelMatHover.SetColor("_GlowColor", new Color(0f, 0.90f, 1f, 0.60f));
+        labelMatHover.SetFloat("_GlowOffset", 0.45f);
+        labelMatHover.SetFloat("_GlowOuter", 0.45f);
+        labelMatHover.SetFloat("_GlowInner", 0.15f);
+        labelMatHover.SetFloat("_GlowPower", 0.80f);
+        labelMatHover.SetColor("_GlowColor", new Color(0f, 0.92f, 1f, 0.70f));
 
         label.fontMaterial = labelMatNorm;
     }
 
     void Update()
     {
+        // Smooth scale interpolation
         float s = targetScale;
         if (isHovered)
-            s *= 1f + Mathf.Sin(Time.time * 3f) * 0.008f;
+            s *= 1f + Mathf.Sin(Time.time * 3.5f) * 0.006f;
 
         rect.localScale = Vector3.Lerp(
             rect.localScale,
             baseScale * s,
             Time.deltaTime * LerpSpeed);
+
+        // Subtle border pulse when idle (breathing effect)
+        if (!isHovered && borderImage != null)
+        {
+            float pulse = 0.5f + 0.5f * Mathf.Sin(Time.time * PulseSpeed);
+            Color c = BorderNorm;
+            c.a = Mathf.Lerp(BorderNorm.a - PulseRange, BorderNorm.a + PulseRange, pulse);
+            borderImage.color = c;
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         isHovered = true;
         targetScale = HoverScale;
-        Apply(BorderHover, FillHover, TextHover, labelMatHover);
+        Apply(BorderHover, FillHover, HighlightHover, TextHover, labelMatHover);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         isHovered = false;
         targetScale = 1f;
-        Apply(BorderNorm, FillNorm, TextNorm, labelMatNorm);
+        Apply(BorderNorm, FillNorm, HighlightNorm, TextNorm, labelMatNorm);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -141,23 +179,25 @@ public class VRButtonEffect : MonoBehaviour,
     IEnumerator PressFlash()
     {
         targetScale = PressScale;
-        Apply(BorderFlash, FillFlash, TextHover, labelMatHover);
+        Apply(BorderFlash, FillFlash, HighlightHover, TextHover, labelMatHover);
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.12f);
 
         bool h = isHovered;
         targetScale = h ? HoverScale : 1f;
         Apply(
-            h ? BorderHover : BorderNorm,
-            h ? FillHover   : FillNorm,
-            h ? TextHover   : TextNorm,
+            h ? BorderHover  : BorderNorm,
+            h ? FillHover    : FillNorm,
+            h ? HighlightHover : HighlightNorm,
+            h ? TextHover    : TextNorm,
             h ? labelMatHover : labelMatNorm);
     }
 
-    void Apply(Color border, Color fill, Color text, Material mat)
+    void Apply(Color border, Color fill, Color highlight, Color text, Material mat)
     {
-        if (borderImage != null) borderImage.color = border;
-        if (fillImage   != null) fillImage.color   = fill;
+        if (borderImage    != null) borderImage.color    = border;
+        if (fillImage      != null) fillImage.color      = fill;
+        if (highlightImage != null) highlightImage.color = highlight;
         if (label != null)
         {
             label.color = text;
