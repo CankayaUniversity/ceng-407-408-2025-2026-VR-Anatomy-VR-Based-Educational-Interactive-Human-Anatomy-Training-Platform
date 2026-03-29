@@ -1,0 +1,1407 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 183938a2c59528247891af44595da2e8, type: 3}
+  m_Name: CirculationSystemDatabase
+  m_EditorClassIdentifier: 
+  entries:
+  - id: heart
+    valence: learn
+    doc_type: entry
+    content_type: concept
+    title: Kalp
+    topic: Circulatory System
+    region: Heart_External
+    tags: heart; organ; pump; circulation
+    body: Kalp
+    steps: " dola\u015F\u0131m sisteminin temel organ\u0131d\u0131r ve kas\u0131l\u0131p
+      gev\u015Feyerek kan\u0131n v\xFCcutta dola\u015Fmas\u0131n\u0131 sa\u011Flar."
+    source: "[\"Kalp kas\u0131lma ve gev\u015Feme hareketleri ile kan\u0131 pompalar.\",
+      \"Akci\u011Ferlerden gelen oksijen bak\u0131m\u0131ndan zengin kan\u0131 dokulara
+      g\xF6nderir.\", \"Dokulardan d\xF6nen oksijen oran\u0131 d\xFC\u015F\xFCk kan\u0131
+      akci\u011Ferlere y\xF6nlendirir.\", \"Kan\u0131n damarlar i\xE7erisindeki dola\u015F\u0131m\u0131
+      kalbin pompalama i\u015Flevine ba\u011Fl\u0131d\u0131r.\", \"Kalbin duvar\u0131
+      \xFC\xE7 tabakadan olu\u015Fur: endokard, miyokard ve epikard.\", \"Perikard
+      visseral ve paryetal olmak \xFCzere iki katl\u0131d\u0131r.\", \"Perikard katmanlar\u0131
+      aras\u0131ndaki s\u0131v\u0131 kalbin hareketini kolayla\u015Ft\u0131r\u0131r
+      ve s\xFCrt\xFCnmeyi azalt\u0131r.\"]"
+  - id: basis_cordis
+    valence: learn
+    doc_type: entry
+    content_type: structure
+    title: Basis cordis
+    topic: Circulatory System
+    region: Heart_External
+    tags: heart; external; base; basis_cordis; location
+    body: "Kalbin taban\u0131 (basis cordis) \xFCst tarafta yer al\u0131r."
+    steps: 
+    source: "Ders kitab\u0131 s.131"
+  - id: apex_cordis
+    valence: learn
+    doc_type: entry
+    content_type: structure
+    title: Apex cordis
+    topic: Circulatory System
+    region: Heart_External
+    tags: heart; external; apex; apex_cordis; location
+    body: "Kalbin tepesi (apex cordis) alt tarafta yer al\u0131r."
+    steps: 
+    source: "Ders kitab\u0131 s.131"
+  - id: heart_chambers
+    valence: learn
+    doc_type: entry
+    content_type: concept
+    title: "Kalbin odac\u0131klar\u0131"
+    topic: Circulatory System
+    region: Heart_Internal
+    tags: heart; chambers; atrium; ventricle; anatomy
+    body: "Kalbin yap\u0131s\u0131nda d\xF6rt odac\u0131k bulunur."
+    steps: "[\"\xDCst k\u0131s\u0131mda iki kulak\xE7\u0131k (atrium), alt k\u0131s\u0131mda
+      iki kar\u0131nc\u0131k (ventriculus) yer al\u0131r.\", \"Kalbin sa\u011F taraf\u0131nda
+      sa\u011F kulak\xE7\u0131k (atrium dexter) ve sa\u011F kar\u0131nc\u0131k (ventriculus
+      dexter), sol taraf\u0131nda ise sol kulak\xE7\u0131k (atrium sinister) ve sol
+      kar\u0131nc\u0131k (ventriculus sinister) bulunur.\" , \"Kulak\xE7\u0131klar\u0131
+      birbirinden ay\u0131ran b\xF6lmeye septum interatriale, kar\u0131nc\u0131klar\u0131
+      ay\u0131ran b\xF6lmeye ise septum interventrikulare denir.\" , \"Bu b\xF6lmeler
+      sayesinde kalbin sa\u011F taraf\u0131ndaki kirli kan ile sol taraf\u0131ndaki
+      temiz kan birbirine kar\u0131\u015Fmaz.\"]"
+    source: "Ders kitab\u0131 s.131"
+  - id: atrium_dexter
+    valence: learn
+    doc_type: entry
+    content_type: structure
+    title: Atrium dexter
+    topic: Circulatory System
+    region: Heart_Internal
+    tags: heart; internal; atrium; right
+    body: "Atrium dexter (sa\u011F kulak\xE7\u0131k) kalbin sa\u011F \xFCst odac\u0131\u011F\u0131d\u0131r."
+    steps: "[\"\xDCst ana toplardamar ve alt ana toplardamar arac\u0131l\u0131\u011F\u0131yla
+      v\xFCcuttan gelen oksijeni azalm\u0131\u015F kan burada toplan\u0131r.\" ,
+      \"Sa\u011F kulak\xE7\u0131k bu kan\u0131 trik\xFCspit kapaktan ge\xE7irerek
+      sa\u011F kar\u0131nc\u0131\u011Fa g\xF6nderir.\"]"
+    source: "Ders kitab\u0131 s.131"
+  - id: atrium_sinister
+    valence: learn
+    doc_type: entry
+    content_type: structure
+    title: Atrium sinister
+    topic: Circulatory System
+    region: Heart_Internal
+    tags: heart; internal; atrium; left
+    body: "Atrium sinister (sol kulak\xE7\u0131k) kalbin sol \xFCst odac\u0131\u011F\u0131d\u0131r."
+    steps: "[\"Akci\u011Ferlerden oksijen bak\u0131m\u0131ndan zengin kan akci\u011Fer
+      toplardamarlar\u0131 arac\u0131l\u0131\u011F\u0131yla buraya gelir.\"  , \"Sol
+      kulak\xE7\u0131k bu kan\u0131 mitral kapaktan ge\xE7irerek sol kar\u0131nc\u0131\u011Fa
+      iletir.\"]"
+    source: "Ders kitab\u0131 s.131"
+  - id: ventriculus_dexter
+    valence: learn
+    doc_type: entry
+    content_type: structure
+    title: Ventriculus dexter
+    topic: Circulatory System
+    region: Heart_Internal
+    tags: heart; internal; ventricle; right
+    body: "Ventriculus dexter (sa\u011F kar\u0131nc\u0131k) kalbin sa\u011F alt odac\u0131\u011F\u0131d\u0131r."
+    steps: "[\"Sa\u011F kulak\xE7\u0131ktan gelen oksijeni azalm\u0131\u015F kan\u0131
+      akci\u011Ferlere g\xF6nderir.\" , \"Bu kan akci\u011Fer atardamar\u0131 arac\u0131l\u0131\u011F\u0131yla
+      akci\u011Ferlere ta\u015F\u0131n\u0131r ve burada oksijenlenir.\"]"
+    source: "Ders kitab\u0131 s.131"
+  - id: ventriculus_sinister
+    valence: learn
+    doc_type: entry
+    content_type: structure
+    title: Ventriculus sinister
+    topic: Circulatory System
+    region: Heart_Internal
+    tags: heart; internal; ventricle; left
+    body: "Ventriculus sinister (sol kar\u0131nc\u0131k) kalbin en g\xFC\xE7l\xFC
+      kas yap\u0131s\u0131na sahip odac\u0131\u011F\u0131d\u0131r."
+    steps: "[\"Sol kulak\xE7\u0131ktan gelen oksijen bak\u0131m\u0131ndan zengin
+      kan\u0131 aort arac\u0131l\u0131\u011F\u0131yla t\xFCm v\xFCcuda pompalar.\"]"
+    source: "Ders kitab\u0131 s.131"
+  - id: vena_cava_superior
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: "\xDCst ana toplardamar"
+    topic: Circulatory System
+    region: Heart_External
+    tags: heart; vessel; vein
+    body: "\xDCst ana toplardamar"
+    steps: " ba\u015F ve \xFCst v\xFCcut b\xF6lgelerinden gelen oksijeni azalm\u0131\u015F
+      kan\u0131 kalbin sa\u011F kulak\xE7\u0131\u011F\u0131na ta\u015F\u0131yan b\xFCy\xFCk
+      toplardamard\u0131r."
+    source: 
+  - id: vena_cava_inferior
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: Alt ana toplardamar
+    topic: Circulatory System
+    region: Heart_External
+    tags: heart; vessel; vein
+    body: Alt ana toplardamar
+    steps: " v\xFCcudun alt b\xF6lgelerinden gelen oksijeni azalm\u0131\u015F kan\u0131
+      kalbin sa\u011F kulak\xE7\u0131\u011F\u0131na ta\u015F\u0131yan b\xFCy\xFCk
+      toplardamard\u0131r."
+    source: 
+  - id: aorta
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: Aort
+    topic: Circulatory System
+    region: Heart_External
+    tags: heart; vessel; artery; aorta
+    body: Aort
+    steps: " kalpten \xE7\u0131kan en b\xFCy\xFCk atardamard\u0131r."
+    source: "[\"Sol kar\u0131nc\u0131ktan \xE7\u0131kan oksijen bak\u0131m\u0131ndan
+      zengin kan\u0131 t\xFCm v\xFCcuda ta\u015F\u0131r.\" , \"Aort, sistemik dola\u015F\u0131m\u0131n
+      ba\u015Flang\u0131\xE7 damar\u0131d\u0131r.\"]"
+  - id: pulmonary_vein
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: "Akci\u011Fer toplardamar\u0131"
+    topic: Circulatory System
+    region: Heart_External
+    tags: heart; vessel; vein; pulmonary
+    body: "Akci\u011Fer toplardamar\u0131"
+    steps: " akci\u011Ferlerde oksijenlenen kan\u0131 kalbin sol kulak\xE7\u0131\u011F\u0131na
+      ta\u015F\u0131yan damard\u0131r."
+    source: "[\"Akci\u011Ferlerden gelen oksijen bak\u0131m\u0131ndan zengin kan\u0131
+      kalbe getirir.\", \"Di\u011Fer toplardamarlardan farkl\u0131 olarak oksijen
+      bak\u0131m\u0131ndan zengin kan ta\u015F\u0131r.\"]"
+  - id: heart_valves
+    valence: learn
+    doc_type: entry
+    content_type: structure
+    title: "Kalbin kapaklar\u0131"
+    topic: Circulatory System
+    region: Heart_Internal
+    tags: heart; valve; mitral; tricuspid; aortic; pulmonary
+    body: "Kalpte d\xF6rt adet kapak bulunur."
+    steps: "[\"Bu kapaklar\u0131n ikisi atriyoventrik\xFCler kapaklar, ikisi ise
+      semilunar kapaklard\u0131r.\" , \"Atriyoventrik\xFCler kapaklar, kulak\xE7\u0131klar
+      ile kar\u0131nc\u0131klar aras\u0131nda yer al\u0131r ve mitral kapak ile trik\xFCspit
+      kapaktan olu\u015Fur.\" , \"Semilunar kapaklar ise kar\u0131nc\u0131klar ile
+      b\xFCy\xFCk atardamarlar aras\u0131nda bulunur ve aort kapa\u011F\u0131 ile
+      pulmoner kapaktan olu\u015Fur.\", \"Kalp kapaklar\u0131, kalbin kas\u0131lmas\u0131
+      ve gev\u015Femesi s\u0131ras\u0131nda kan\u0131n geriye do\u011Fru akmas\u0131n\u0131
+      engelleyerek kan\u0131n tek y\xF6nl\xFC ilerlemesini sa\u011Flar.\"]"
+    source: "Ders kitab\u0131 s.132"
+  - id: coronary_arteries
+    valence: learn
+    doc_type: entry
+    content_type: concept
+    title: Koroner arterler
+    topic: Circulatory System
+    region: Heart_External
+    tags: heart; coronary; artery; circulation
+    body: "Kalp kas\u0131na oksijen bak\u0131m\u0131ndan zengin kan ta\u015F\u0131yan
+      damarlara koroner arterler denir."
+    steps: "[\"Koroner arterler aorttan ayr\u0131lan ilk dallard\u0131r.\" , \"Sa\u011F
+      koroner arter kalbin sa\u011F taraf\u0131n\u0131, sol koroner arter ise kalbin
+      sol taraf\u0131n\u0131 besler.\" , \"Bu damarlarda olu\u015Fan daralma veya
+      t\u0131kan\u0131kl\u0131klar kalp kas\u0131n\u0131n yeterince beslenmesini
+      engelleyebilir ve kalp krizine neden olabilir.\"]"
+    source: "Ders kitab\u0131 s.132"
+  - id: arteria_coronalis_dextra
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: Arteria coronalis dextra
+    topic: Circulatory System
+    region: Heart_External
+    tags: heart; coronary; artery; right
+    body: "Sa\u011F koroner arter (arteria coronalis dextra)"
+    steps: " aorttan ayr\u0131lan ve kalbin sa\u011F taraf\u0131n\u0131 besleyen
+      koroner damard\u0131r."
+    source: "[\"Aorttan ayr\u0131lan ilk dallardan biridir.\", \"Kalp kas\u0131na
+      oksijen ve besin bak\u0131m\u0131ndan zengin kan ta\u015F\u0131r.\"]"
+  - id: arteria_coronalis_sinistra
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: Arteria coronalis sinistra
+    topic: Circulatory System
+    region: Heart_External
+    tags: heart; coronary; artery; left
+    body: Sol koroner arter (arteria coronalis sinistra)
+    steps: " aorttan ayr\u0131lan ve kalbin sol taraf\u0131n\u0131 besleyen koroner
+      damard\u0131r."
+    source: "[\"Kalp kas\u0131n\u0131n b\xFCy\xFCk b\xF6l\xFCm\xFCne oksijen bak\u0131m\u0131ndan
+      zengin kan ta\u015F\u0131r.\"]"
+  - id: vena_cordis_magna
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: Vena cordis magna
+    topic: Circulatory System
+    region: Heart_External
+    tags: heart; coronary; vein
+    body: Vena cordis magna
+    steps: " kalp kas\u0131ndan toplanan kirli kan\u0131 ta\u015F\u0131yan b\xFCy\xFCk
+      koroner toplardamarlardan biridir."
+    source: "[\"Bu damar kalbin y\xFCzeyindeki venlerle birle\u015Ferek koroner sin\xFCse
+      kat\u0131l\u0131r.\"]"
+  - id: vena_cordis_media
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: Vena cordis media
+    topic: Circulatory System
+    region: Heart_External
+    tags: heart; coronary; vein
+    body: Vena cordis media
+    steps: " kalp kas\u0131ndan gelen kirli kan\u0131 toplayan koroner toplardamarlardan
+      biridir."
+    source: "[\"Bu damar da di\u011Fer koroner venlerle birlikte koroner sin\xFCse
+      a\xE7\u0131l\u0131r.\"]"
+  - id: vena_cordis_parva
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: Vena cordis parva
+    topic: Circulatory System
+    region: Heart_External
+    tags: heart; coronary; vein
+    body: Vena cordis parva
+    steps: " kalp kas\u0131ndan gelen kirli kan\u0131 ta\u015F\u0131yan k\xFC\xE7\xFCk
+      koroner toplardamarlardan biridir."
+    source: "[\"Bu damar koroner venlerle birle\u015Ferek koroner sin\xFCse kat\u0131l\u0131r.\"]"
+  - id: coronary_sinus
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: Sinus coronarius
+    topic: Circulatory System
+    region: Heart_External
+    tags: heart; coronary; sinus
+    body: Sinus coronarius
+    steps: " kalp kas\u0131ndan gelen kirli kan\u0131n topland\u0131\u011F\u0131
+      geni\u015F bir toplardamard\u0131r."
+    source: "[\"Koroner venler burada birle\u015Fir ve kan buradan sa\u011F atriyuma
+      d\xF6k\xFCl\xFCr.\"]"
+  - id: cardiac_cycle
+    valence: learn
+    doc_type: entry
+    content_type: concept
+    title: "Kalbin \xE7al\u0131\u015Fmas\u0131"
+    topic: Circulatory System
+    region: Heart_Internal
+    tags: heart; cardiac cycle; systole; diastole
+    body: Kalp
+    steps: " kendine ait uyar\u0131 \xE7\u0131karan h\xFCcreler sayesinde d\xFCzenli
+      olarak kas\u0131l\u0131p gev\u015Fer."
+    source: "[\"Kalbin kas\u0131lma evresine sistol, gev\u015Feme evresine ise diyastol
+      denir.\" , \"Ventrik\xFCller kas\u0131ld\u0131\u011F\u0131nda kan atardamarlara
+      pompalan\u0131r, gev\u015Fedi\u011Finde ise atriyumlardan gelen kan ventrik\xFCllere
+      dolar.\" , \"Kapaklar kan\u0131n tek y\xF6nl\xFC ilerlemesini sa\u011Flar ve
+      geri ka\xE7mas\u0131n\u0131 engeller.\"]"
+  - id: tricuspid_valve
+    valence: learn
+    doc_type: entry
+    content_type: structure
+    title: "Trik\xFCspit kapak"
+    topic: Circulatory System
+    region: Heart_Internal
+    tags: heart; valve; tricuspid
+    body: "Trik\xFCspit kapak"
+    steps: " sa\u011F kulak\xE7\u0131k ile sa\u011F kar\u0131nc\u0131k aras\u0131nda
+      bulunan atriyoventrik\xFCler kapakt\u0131r."
+    source: "[\"Ventrik\xFCl kas\u0131ld\u0131\u011F\u0131nda kan\u0131n tekrar kulak\xE7\u0131\u011Fa
+      geri d\xF6nmesini engeller.\"]"
+  - id: mitral_valve
+    valence: learn
+    doc_type: entry
+    content_type: structure
+    title: Mitral kapak
+    topic: Circulatory System
+    region: Heart_Internal
+    tags: heart; valve; mitral
+    body: Mitral kapak
+    steps: " sol kulak\xE7\u0131k ile sol kar\u0131nc\u0131k aras\u0131nda bulunan
+      atriyoventrik\xFCler kapakt\u0131r. "
+    source: "[\"Kan\u0131n ventrik\xFCl kas\u0131lmas\u0131 s\u0131ras\u0131nda sol
+      kulak\xE7\u0131\u011Fa geri ka\xE7mas\u0131n\u0131 engeller.\"]"
+  - id: myocardium
+    valence: learn
+    doc_type: entry
+    content_type: structure
+    title: Myocardium
+    topic: Circulatory System
+    region: Heart_Internal
+    tags: heart; muscle; myocardium
+    body: Myokard
+    steps: " kalbin kas\u0131lmas\u0131n\u0131 sa\u011Flayan kal\u0131n kas tabakas\u0131d\u0131r."
+    source: "[\"Bu kas tabakas\u0131 kas\u0131larak kan\u0131n kalpten damarlara
+      pompalanmas\u0131n\u0131 sa\u011Flar.\"]"
+  - id: arteries
+    valence: learn
+    doc_type: entry
+    content_type: concept
+    title: Atardamarlar
+    topic: Circulatory System
+    region: Vessels
+    tags: artery; arter; vessel; blood circulation; damar
+    body: Atardamarlar
+    steps: " kan\u0131 kalpten dokulara ve organlara ta\u015F\u0131yan kan damarlar\u0131d\u0131r."
+    source: "[\"Atardamarlar kalbin ventrik\xFClleri ile ba\u011Flant\u0131l\u0131
+      damarlard\u0131r ve kan\u0131 kalpten uzakla\u015Ft\u0131rarak v\xFCcudun farkl\u0131
+      b\xF6lgelerine ta\u015F\u0131rlar.\", \"Sa\u011F ventrik\xFClden akci\u011Ferlere
+      kirli kan ta\u015F\u0131yan akci\u011Fer atardamar\u0131 d\u0131\u015F\u0131nda
+      di\u011Fer t\xFCm atardamarlar oksijen bak\u0131m\u0131ndan zengin temiz kan
+      ta\u015F\u0131r.\", \"Sol ventrik\xFClden \xE7\u0131kan temiz kan sistol s\u0131ras\u0131nda
+      aort damar\u0131na pompalan\u0131r ve buradan v\xFCcuttaki di\u011Fer atardamarlara
+      da\u011F\u0131t\u0131l\u0131r.\", \"Atardamarlar\u0131n \xE7aplar\u0131 perifer
+      b\xF6lgelere do\u011Fru gidildik\xE7e k\xFC\xE7\xFCl\xFCr ve bu k\xFC\xE7\xFCk
+      damarlara arteriyol ad\u0131 verilir.\", \"Atardamarlarda kan bas\u0131nc\u0131
+      y\xFCksek oldu\u011Fu i\xE7in damar duvarlar\u0131 toplardamarlara g\xF6re
+      daha kal\u0131n ve dayan\u0131kl\u0131d\u0131r.\"]"
+  - id: upper_extremity_arteries
+    valence: learn
+    doc_type: entry
+    content_type: concept
+    title: "\xDCst ekstremite arterleri"
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: artery; arter; upper extremity; arm; kol; damar; subclavian; axillary;
+      brachial; radial; ulnar
+    body: "\xDCst ekstremite arterleri"
+    steps: " omuzdan ele kadar \xFCst ekstremiteyi besleyen atardamarlard\u0131r."
+    source: "[\"Sa\u011F ve sol k\xF6pr\xFCc\xFCk alt\u0131 arterleri kola do\u011Fru
+      ilerledik\xE7e \xE7aplar\u0131 giderek k\xFC\xE7\xFCl\xFCr ve ge\xE7tikleri
+      b\xF6lgeye g\xF6re farkl\u0131 isimler al\u0131rlar.\",\"\xDCst ekstremitede
+      arterler s\u0131ras\u0131yla a. subclavia, a. axillaris, a. brachialis, a.
+      radialis ve a. ulnaris olarak devam eder.\",\"Bu damarlar omuz, kol, \xF6n
+      kol ve elin kanlanmas\u0131n\u0131 sa\u011Flar.\"]"
+  - id: subclavian_artery
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. subclavia
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: "artery; subclavian artery; a. subclavia; upper extremity; arter; k\xF6pr\xFCc\xFCk
+      alt\u0131 atardamar\u0131; atardamar"
+    body: A. subclavia
+    steps: " \xFCst ekstremiteye kan ta\u015F\u0131yan ana arterlerden biridir."
+    source: "[\"Sa\u011F ve sol a. subclavia, \xFCst ekstremiteye uzanan arteriyel
+      dola\u015F\u0131m\u0131n ba\u015Flang\u0131\xE7 b\xF6l\xFCm\xFCn\xFC olu\u015Fturur.\",\"Bu
+      damar kola do\u011Fru ilerledik\xE7e bulundu\u011Fu b\xF6lgeye g\xF6re isim
+      de\u011Fi\u015Ftirir.\",\"Koltuk alt\u0131 b\xF6lgesine ula\u015Ft\u0131\u011F\u0131nda
+      a. axillaris ad\u0131n\u0131 al\u0131r.\"]"
+  - id: axillary_artery
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. axillaris
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: "artery; arter; axillary artery; a. axillaris; koltuk alt\u0131 atardamar\u0131;
+      upper extremity; atardamar"
+    body: A. axillaris
+    steps: " a. subclavia'n\u0131n koltuk alt\u0131 b\xF6lgesindeki devam\u0131d\u0131r."
+    source: "[\"A. subclavia, koltuk alt\u0131 b\xF6lgesine geldi\u011Finde a. axillaris
+      ad\u0131n\u0131 al\u0131r.\",\"A. axillaris g\xF6\u011F\xFCs ve omuz b\xF6lgesine
+      dallar verir.\",\"Bu damar kol b\xF6lgesine do\u011Fru devam ederek a. brachialis
+      ad\u0131n\u0131 al\u0131r.\"]"
+  - id: brachial_artery
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. brachialis
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: "artery; arter; brachial artery; a. brachialis; kol atardamar\u0131; blood
+      pressure; atardamar"
+    body: A. brachialis
+    steps: " a. axillaris'in kol b\xF6lgesindeki devam\u0131d\u0131r."
+    source: "[\"A. axillaris kol b\xF6lgesine ge\xE7ince a. brachialis ad\u0131n\u0131
+      al\u0131r.\",\"A. brachialis kol kaslar\u0131n\u0131n beslenmesini sa\u011Flar.\",\"Tansiyon
+      \xF6l\xE7\xFCm\xFC klinikte bu damar \xFCzerinden yap\u0131l\u0131r.\",\"Dirsek
+      \xF6n b\xF6lgesinde a. radialis ve a. ulnaris olmak \xFCzere iki dala ayr\u0131l\u0131r.\"]"
+  - id: radial_artery
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. radialis
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: "artery; arter; radial artery; a. radialis; radius; nab\u0131z; pulse;
+      upper extremity; atardamar"
+    body: A. radialis
+    steps: " a. brachialis'in dirsek \xF6n b\xF6lgesinde ayr\u0131lan dallar\u0131ndan
+      biridir."
+    source: "[\"A. brachialis dirsek \xF6n b\xF6lgesinde a. radialis ve a. ulnaris
+      olarak iki dala ayr\u0131l\u0131r.\",\"A. radialis \xF6n kolun ve elin bir
+      b\xF6l\xFCm\xFCn\xFCn kanlanmas\u0131na katk\u0131 sa\u011Flar.\",\"A. radialis
+      nab\u0131z almada daha s\u0131k tercih edilen damarlardan biridir.\"]"
+  - id: ulnar_artery
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. ulnaris
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: artery; arter; ulnar artery; a. ulnaris; ulna; upper extremity; atardamar
+    body: A. ulnaris
+    steps: " a. brachialis'in dirsek \xF6n b\xF6lgesinde ayr\u0131lan dallar\u0131ndan
+      biridir."
+    source: "[\"A. brachialis dirsek \xF6n b\xF6lgesinde iki ana dala ayr\u0131l\u0131r
+      ve bunlardan biri a. ulnaris'tir.\",\"A. ulnaris \xF6n kolun ve elin bir b\xF6l\xFCm\xFCn\xFCn
+      kanlanmas\u0131na katk\u0131 sa\u011Flar.\",\"A. ulnaris, a. radialis ile birlikte
+      el bile\u011Fi ve elin beslenmesinde g\xF6rev al\u0131r.\"]"
+  - id: abdominal_aorta
+    valence: learn
+    doc_type: entry
+    content_type: concept
+    title: "Kar\u0131n aortu"
+    topic: Circulatory System
+    region: Abdomen
+    tags: artery; abdominal aorta; aorta abdominalis; circulation; abdomen; atardamar
+    body: "Kar\u0131n aortu"
+    steps: " aortun diyaframdan sonra kar\u0131n bo\u015Flu\u011Funda devam eden
+      b\xF6l\xFCm\xFCd\xFCr."
+    source: "[\"Kar\u0131n aortu diyaframdan ba\u015Flayarak bel omurlar\u0131 boyunca
+      a\u015Fa\u011F\u0131 do\u011Fru uzan\u0131r.\",\"Bu damar kar\u0131n b\xF6lgesindeki
+      bir\xE7ok organa kan ta\u015F\u0131yan arterlerin \xE7\u0131kt\u0131\u011F\u0131
+      ana damard\u0131r.\",\"Truncus coeliacus, a. mesenterica superior ve a. mesenterica
+      inferior gibi \xF6nemli arterler kar\u0131n aortundan ayr\u0131l\u0131r.\",\"Kar\u0131n
+      aortu yakla\u015F\u0131k d\xF6rd\xFCnc\xFC bel omuru hizas\u0131nda ikiye ayr\u0131larak
+      sa\u011F ve sol a. iliaca communis arterlerini olu\u015Fturur.\"]"
+  - id: truncus_coeliacus
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: Truncus coeliacus
+    topic: Circulatory System
+    region: Abdomen
+    tags: artery; truncus coeliacus; celiac trunk; abdominal aorta; atardamar
+    body: Truncus coeliacus
+    steps: " kar\u0131n aortundan ayr\u0131lan ve \xFC\xE7 ana dala ayr\u0131lan
+      \xF6nemli bir arterdir."
+    source: "[\"Truncus coeliacus kar\u0131n aortundan ayr\u0131l\u0131r.\",\"Bu
+      damar \xFC\xE7 ana dala ayr\u0131larak kar\u0131n b\xF6lgesindeki baz\u0131
+      organlara kan ta\u015F\u0131r.\",\"Dallar\u0131 mide, karaci\u011Fer ve dalak
+      gibi organlar\u0131n beslenmesine katk\u0131 sa\u011Flar.\"]"
+  - id: gastrica_sinistra
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. gastrica sinistra
+    topic: Circulatory System
+    region: Abdomen
+    tags: artery; gastrica sinistra; left gastric artery; stomach; atardamar
+    body: A. gastrica sinistra
+    steps: ' mideyi besleyen arterlerden biridir.'
+    source: "[\"Bu damar kar\u0131n aortundan \xE7\u0131kan truncus coeliacusun dallar\u0131ndan
+      biridir.\",\"Midenin \xFCst k\u0131sm\u0131na kan ta\u015F\u0131r.\",\"Mide
+      duvar\u0131n\u0131n beslenmesine katk\u0131 sa\u011Flar.\"]"
+  - id: hepatica_communis
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. hepatica communis
+    topic: Circulatory System
+    region: Abdomen
+    tags: artery; hepatica communis; common hepatic artery; liver; atardamar
+    body: A. hepatica communis
+    steps: " karaci\u011Feri besleyen \xF6nemli arterlerden biridir."
+    source: "[\"Bu damar truncus coeliacusun ana dallar\u0131ndan biridir.\",\"Karaci\u011Fere
+      kan ta\u015F\u0131r.\",\"Karaci\u011Fer dokusunun beslenmesinde g\xF6rev al\u0131r.\"]"
+  - id: lienalis
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. lienalis
+    topic: Circulatory System
+    region: Abdomen
+    tags: artery; lienalis; splenic artery; spleen; pancreas; atardamar
+    body: A. lienalis
+    steps: " dalak ve pankreas\u0131 besleyen arterlerden biridir."
+    source: "[\"Bu damar truncus coeliacusun dallar\u0131ndan biridir.\",\"Dalak
+      dokusuna kan ta\u015F\u0131r.\",\"Pankreas\u0131n bir b\xF6l\xFCm\xFCn\xFCn
+      beslenmesine katk\u0131 sa\u011Flar.\"]"
+  - id: mesenterica_superior
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. mesenterica superior
+    topic: Circulatory System
+    region: Abdomen
+    tags: artery; mesenterica superior; superior mesenteric artery; intestine; atardamar
+    body: A. mesenterica superior
+    steps: " ince ba\u011F\u0131rsak ve kal\u0131n ba\u011F\u0131rsa\u011F\u0131n
+      bir b\xF6l\xFCm\xFCn\xFC besleyen arterdir."
+    source: "[\"Bu damar kar\u0131n aortundan ayr\u0131l\u0131r.\",\"\u0130nce ba\u011F\u0131rsa\u011Fa
+      kan ta\u015F\u0131r.\",\"Kal\u0131n ba\u011F\u0131rsa\u011F\u0131n ilk yar\u0131s\u0131n\u0131n
+      beslenmesine katk\u0131 sa\u011Flar.\"]"
+  - id: mesenterica_inferior
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. mesenterica inferior
+    topic: Circulatory System
+    region: Abdomen
+    tags: artery; mesenterica inferior; inferior mesenteric artery; intestine; atardamar
+    body: A. mesenterica inferior
+    steps: " kal\u0131n ba\u011F\u0131rsa\u011F\u0131n ikinci yar\u0131s\u0131n\u0131
+      besleyen arterdir."
+    source: "[\"Bu damar kar\u0131n aortundan ayr\u0131l\u0131r.\",\"Kal\u0131n ba\u011F\u0131rsa\u011F\u0131n
+      alt b\xF6l\xFCmlerine kan ta\u015F\u0131r.\",\"Sindirim sisteminin alt k\u0131sm\u0131n\u0131n
+      beslenmesinde g\xF6rev al\u0131r.\"]"
+  - id: renalis
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. renalis
+    topic: Circulatory System
+    region: Abdomen
+    tags: artery; renalis; renal artery; kidney; atardamar
+    body: A. renalis
+    steps: " b\xF6breklere kan ta\u015F\u0131yan b\xFCy\xFCk arterlerden biridir."
+    source: "[\"Bu damar kar\u0131n aortundan ayr\u0131l\u0131r.\",\"B\xF6breklere
+      oksijen bak\u0131m\u0131ndan zengin kan ta\u015F\u0131r.\",\"B\xF6brek dokusunun
+      beslenmesinde \xF6nemli rol oynar.\"]"
+  - id: gonadal_artery
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. testicularis / A. ovarica
+    topic: Circulatory System
+    region: Abdomen
+    tags: artery; testicular artery; ovarian artery; gonadal artery; atardamar
+    body: A. testicularis ve A. ovarica
+    steps: " \xFCreme organlar\u0131n\u0131 besleyen arterlerdir."
+    source: "[\"Bu damarlar kar\u0131n aortundan ayr\u0131l\u0131r.\",\"Erkeklerde
+      testislerin kanlanmas\u0131n\u0131 sa\u011Flar.\",\"Kad\u0131nlarda yumurtal\u0131klar\u0131n
+      beslenmesinde g\xF6rev al\u0131r.\"]"
+  - id: lumbales
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. lumbales
+    topic: Circulatory System
+    region: Abdomen
+    tags: artery; lumbales; lumbar artery; spine; atardamar
+    body: A. lumbales
+    steps: " bel b\xF6lgesindeki yap\u0131lar\u0131 besleyen arterlerdir."
+    source: "[\"Bu damarlar kar\u0131n aortundan ayr\u0131l\u0131r.\",\"Omurilik
+      \xE7evresindeki kas ve dokulara kan ta\u015F\u0131rlar.\",\"Bel b\xF6lgesinin
+      kanlanmas\u0131na katk\u0131 sa\u011Flarlar.\"]"
+  - id: sacralis_media
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. sacralis media
+    topic: Circulatory System
+    region: Abdomen
+    tags: artery; sacralis media; sacral artery; sacrum; atardamar
+    body: A. sacralis media
+    steps: " sakrum b\xF6lgesini besleyen arterdir."
+    source: "[\"Bu damar kar\u0131n aortunun alt k\u0131sm\u0131ndan ayr\u0131l\u0131r.\",\"Sakrum
+      b\xF6lgesine kan ta\u015F\u0131r.\",\"Pelvis b\xF6lgesindeki baz\u0131 yap\u0131lar\u0131n
+      beslenmesine katk\u0131 sa\u011Flar.\"]"
+  - id: phrenica_inferior
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. phrenica inferior
+    topic: Circulatory System
+    region: Abdomen
+    tags: artery; phrenica inferior; inferior phrenic artery; diaphragm; atardamar
+    body: A. phrenica inferior
+    steps: " diyafram\u0131n alt k\u0131sm\u0131n\u0131 besleyen arterlerden biridir."
+    source: "[\"Bu damar kar\u0131n aortundan ayr\u0131l\u0131r.\",\"Diyafram\u0131n
+      alt y\xFCz\xFCne kan ta\u015F\u0131r.\",\"Diyafram kas\u0131n\u0131n beslenmesinde
+      g\xF6rev al\u0131r.\"]"
+  - id: iliaca_communis
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. iliaca communis
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: artery; iliaca communis; common iliac artery; pelvis; atardamar
+    body: A. iliaca communis
+    steps: " kar\u0131n aortunun ikiye ayr\u0131lmas\u0131yla olu\u015Fan b\xFCy\xFCk
+      arterlerden biridir."
+    source: "[\"Kar\u0131n aortu yakla\u015F\u0131k d\xF6rd\xFCnc\xFC bel omuru hizas\u0131nda
+      ikiye ayr\u0131larak sa\u011F ve sol a. iliaca communis arterlerini olu\u015Fturur.\",\"Bu
+      arter pelvis b\xF6lgesine do\u011Fru ilerler.\",\"Pelvis i\xE7inde a. iliaca
+      interna ve a. iliaca externa olmak \xFCzere iki ana dala ayr\u0131l\u0131r.\"]"
+  - id: iliaca_interna
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. iliaca interna
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: artery; iliaca interna; internal iliac artery; pelvis; atardamar
+    body: A. iliaca interna
+    steps: " pelvis bo\u015Flu\u011Fundaki organlar\u0131 besleyen arterdir."
+    source: " [\"Bu damar a. iliaca communis'in dallar\u0131ndan biridir.\",\"Pelvis
+      bo\u015Flu\u011Fu i\xE7inde ilerler.\",\"Mesane, rektum ve pelvis kaslar\u0131
+      gibi yap\u0131lara dallar vererek bu b\xF6lgelerin beslenmesini sa\u011Flar.\"]"
+  - id: iliaca_externa
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. iliaca externa
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: artery; iliaca externa; external iliac artery; leg; atardamar
+    body: A. iliaca externa
+    steps: " alt ekstremiteye kan ta\u015F\u0131yan \xF6nemli arterlerden biridir."
+    source: "[\"Bu damar a. iliaca communis'in iki ana dal\u0131ndan biridir.\",\"Pelvis
+      b\xF6lgesinden \xE7\u0131karak bacaklara do\u011Fru ilerler.\",\"Alt ekstremitenin
+      kanlanmas\u0131n\u0131 sa\u011Flayan arteriyel dola\u015F\u0131m\u0131n devam\u0131n\u0131
+      olu\u015Fturur.\"]"
+  - id: femoralis
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. femoralis
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: artery; femoralis; femoral artery; thigh; atardamar
+    body: A. femoralis
+    steps: " uyluk b\xF6lgesini besleyen b\xFCy\xFCk bir arterdir."
+    source: "[\"A. iliaca externa uyluk b\xF6lgesine ula\u015Ft\u0131\u011F\u0131nda
+      a. femoralis ad\u0131n\u0131 al\u0131r.\",\"Bu arter uyluk kaslar\u0131na dallar
+      vererek b\xF6lgenin kanlanmas\u0131n\u0131 sa\u011Flar.\",\"Uyluk boyunca a\u015Fa\u011F\u0131
+      do\u011Fru ilerleyerek diz b\xF6lgesine ula\u015F\u0131r.\"]"
+  - id: poplitea
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. poplitea
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: artery; poplitea; popliteal artery; knee; atardamar
+    body: A. poplitea
+    steps: " diz arkas\u0131nda bulunan ve diz b\xF6lgesini besleyen arterdir."
+    source: "[\"A. femoralis diz b\xF6lgesine ula\u015Ft\u0131\u011F\u0131nda a.
+      poplitea ad\u0131n\u0131 al\u0131r.\",\"Bu arter dizin arka k\u0131sm\u0131nda
+      yer al\u0131r.\",\"Diz \xE7evresindeki yap\u0131lar\u0131n beslenmesini sa\u011Flar.\"]"
+  - id: tibialis_anterior
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. tibialis anterior
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: artery; tibialis anterior; anterior tibial artery; leg; atardamar
+    body: A. tibialis anterior
+    steps: " baca\u011F\u0131n \xF6n k\u0131sm\u0131n\u0131 besleyen arterdir."
+    source: "[\"A. poplitea bald\u0131r b\xF6lgesinde iki ana dala ayr\u0131l\u0131r.\",\"Bu
+      dallardan biri a. tibialis anteriordur.\",\"Baca\u011F\u0131n \xF6n k\u0131sm\u0131ndaki
+      kaslar\u0131n ve dokular\u0131n beslenmesini sa\u011Flar.\",\"Ayak s\u0131rt\u0131nda
+      a. dorsalis pedis olarak devam eder.\"]"
+  - id: tibialis_posterior
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. tibialis posterior
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: artery; tibialis posterior; posterior tibial artery; leg; atardamar
+    body: A. tibialis posterior
+    steps: " baca\u011F\u0131n arka b\xF6l\xFCm\xFCn\xFC besleyen arterdir."
+    source: "[\"A. poplitea bald\u0131r b\xF6lgesinde a. tibialis anterior ve a.
+      tibialis posterior olarak ikiye ayr\u0131l\u0131r.\",\"A. tibialis posterior
+      baca\u011F\u0131n arka b\xF6l\xFCm\xFCndeki kaslar\u0131 besler.\",\"Alt bacak
+      ve ayak b\xF6lgesinin kanlanmas\u0131na katk\u0131 sa\u011Flar.\"]"
+  - id: dorsalis_pedis
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. dorsalis pedis
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: artery; dorsalis pedis; foot artery; pulse; atardamar
+    body: A. dorsalis pedis
+    steps: " aya\u011F\u0131n \xFCst k\u0131sm\u0131nda bulunan arterdir."
+    source: "[\"A. tibialis anterior ayak s\u0131rt\u0131na ula\u015Ft\u0131\u011F\u0131nda
+      a. dorsalis pedis ad\u0131n\u0131 al\u0131r.\",\"Aya\u011F\u0131n \xFCst k\u0131sm\u0131ndaki
+      dokular\u0131n beslenmesini sa\u011Flar.\",\"Birinci metatarsal aral\u0131kta
+      bu arter \xFCzerinden nab\u0131z al\u0131nabilir.\"]"
+  - id: temporalis
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. temporalis
+    topic: Circulatory System
+    region: Head_Face
+    tags: "artery; temporalis; temporal artery; nab\u0131z; atardamar"
+    body: A. temporalis
+    steps: " ba\u015F b\xF6lgesinde nab\u0131z al\u0131nabilen arterlerden biridir."
+    source: "[\"Bu arter \u015Fakak b\xF6lgesinde bulunur.\",\"Ba\u015F b\xF6lgesinde
+      nab\u0131z de\u011Ferlendirilirken bu damardan yararlan\u0131labilir.\"]"
+  - id: carotis_communis
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. carotis communis
+    topic: Circulatory System
+    region: Neck
+    tags: "artery; carotis communis; carotid artery; nab\u0131z; atardamar"
+    body: A. carotis communis
+    steps: " boyun b\xF6lgesinde nab\u0131z al\u0131nabilen \xF6nemli arterlerden
+      biridir."
+    source: "[\"Bu arter boyunda yer al\u0131r.\",\"Fiziksel muayenede karotis arterden
+      nab\u0131z al\u0131nabilir.\",\"Karotis arterden nab\u0131z al\u0131n\u0131rken
+      dikkat edilmelidir.\"]"
+  - id: axillaris_pulse
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. axillaris
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: "artery; axillaris; axillary artery; nab\u0131z; atardamar"
+    body: A. axillaris
+    steps: " \xFCst ekstremitede nab\u0131z al\u0131nabilen arterlerden biridir."
+    source: "[\"Bu arter koltuk alt\u0131 b\xF6lgesinde bulunur.\",\"\xDCst ekstremite
+      arterlerinden biri olarak nab\u0131z de\u011Ferlendirmesinde kullan\u0131labilir.\"]"
+  - id: brachialis_pulse
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. brachialis
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: "artery; brachialis; brachial artery; nab\u0131z; atardamar"
+    body: A. brachialis
+    steps: " \xFCst ekstremitede nab\u0131z al\u0131nabilen arterlerden biridir."
+    source: "[\"Bu arter kol b\xF6lgesinde bulunur.\",\"Fiziksel muayenede \xFCst
+      ekstremite arterlerinden biri olarak nab\u0131z de\u011Ferlendirilmesinde kullan\u0131labilir.\"]"
+  - id: ulnaris_pulse
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. ulnaris
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: "artery; ulnaris; ulnar artery; nab\u0131z; atardamar"
+    body: A. ulnaris
+    steps: " \xF6n kol b\xF6lgesinde bulunan arterlerden biridir."
+    source: "[\"Bu arter \xF6n kol b\xF6lgesinde yer al\u0131r.\",\"\xDCst ekstremitede
+      nab\u0131z al\u0131nabilen arterlerden biridir.\"]"
+  - id: radialis_pulse
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. radialis
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: "artery; radialis; radial artery; nab\u0131z; atardamar"
+    body: A. radialis
+    steps: " el bile\u011Finde nab\u0131z al\u0131nmas\u0131nda yayg\u0131n olarak
+      kullan\u0131lan arterdir."
+    source: "[\"Bu arter el bile\u011Fi b\xF6lgesinde bulunur.\",\"Rutin muayenelerde
+      nab\u0131z genellikle radial arter \xFCzerinden de\u011Ferlendirilir.\"]"
+  - id: femoralis_pulse
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. femoralis
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: "artery; femoralis; femoral artery; nab\u0131z; atardamar"
+    body: A. femoralis
+    steps: " alt ekstremitede nab\u0131z al\u0131nabilen arterlerden biridir."
+    source: "[\"Bu arter uyluk b\xF6lgesinde bulunur.\",\"Alt ekstremite arterlerinden
+      biri olarak nab\u0131z de\u011Ferlendirilmesinde kullan\u0131labilir.\"]"
+  - id: poplitea_pulse
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. poplitea
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: "artery; poplitea; popliteal artery; nab\u0131z; atardamar"
+    body: A. poplitea
+    steps: " diz arkas\u0131nda bulunan arterdir."
+    source: "[\"Bu arter dizin arka k\u0131sm\u0131nda yer al\u0131r.\",\"Alt ekstremitede
+      nab\u0131z de\u011Ferlendirilirken bu damardan yararlan\u0131labilir.\"]"
+  - id: tibialis_posterior_pulse
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. tibialis posterior
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: "artery; tibialis posterior; posterior tibial artery; nab\u0131z; atardamar"
+    body: A. tibialis posterior
+    steps: " alt bacak b\xF6lgesinde nab\u0131z al\u0131nabilen arterlerden biridir."
+    source: "[\"Bu arter bald\u0131r b\xF6lgesinde yer al\u0131r.\",\"Alt ekstremitede
+      nab\u0131z de\u011Ferlendirilmesinde kullan\u0131lan arterlerden biridir.\"]"
+  - id: dorsalis_pedis_pulse
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: A. dorsalis pedis
+    topic: Circulatory System
+    region: Foot
+    tags: "artery; dorsalis pedis; foot artery; nab\u0131z; atardamar"
+    body: A. dorsalis pedis
+    steps: " aya\u011F\u0131n \xFCst k\u0131sm\u0131nda bulunan arterdir."
+    source: "[\"Bu arter ayak s\u0131rt\u0131nda bulunur.\",\"Alt ekstremitede nab\u0131z
+      de\u011Ferlendirilirken bu damardan yararlan\u0131labilir.\"]"
+  - id: veins
+    valence: learn
+    doc_type: entry
+    content_type: concept
+    title: Toplardamarlar
+    topic: Circulatory System
+    region: Vessels
+    tags: vein; vena; ven; circulation; toplardamar
+    body: Toplardamarlar
+    steps: " kan\u0131 dokular ve akci\u011Ferlerden kalbe ta\u015F\u0131yan damar
+      grubudur."
+    source: "[\"Temiz kan\u0131 akci\u011Ferlerden kalbe ta\u015F\u0131yan akci\u011Fer
+      toplardamarlar\u0131 d\u0131\u015F\u0131nda venler kirli kan ta\u015F\u0131r.\",\"Venlerde
+      kan bas\u0131nc\u0131 arterlere g\xF6re daha d\xFC\u015F\xFCkt\xFCr.\",\"Ven
+      duvarlar\u0131 arterlere g\xF6re daha incedir.\",\"Normal istirahat halinde
+      dola\u015F\u0131mdaki kan\u0131n b\xFCy\xFCk bir b\xF6l\xFCm\xFC venlerde bulunur.\"]"
+  - id: upper_extremity_veins
+    valence: learn
+    doc_type: entry
+    content_type: concept
+    title: "\xDCst ekstremite venleri"
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: vein; upper extremity veins; arm veins; vena; toplardamar
+    body: "\xDCst ekstremite venleri"
+    steps: " kol b\xF6lgesindeki kirli kan\u0131 kalbe do\u011Fru ta\u015F\u0131yan
+      toplardamarlard\u0131r."
+    source: "[\"\xDCst ekstremite venleri y\xFCzeysel ve derin venler olmak \xFCzere
+      iki grupta incelenir.\",\"Y\xFCzeysel venler deri alt\u0131nda seyreder ve
+      g\xF6r\xFClebilir.\",\"\xD6nemli y\xFCzeysel venler aras\u0131nda v. cephalica,
+      v. basilica, v. mediana antebrachii ve v. mediana cubiti bulunur.\",\"Derin
+      venler arterlerle birlikte seyreder.\",\"\xD6nemli derin venler aras\u0131nda
+      v. radialis, v. ulnaris, v. brachialis ve v. axillaris yer al\u0131r.\",\"\xDCst
+      ekstremiteden gelen ven\xF6z kan v. subclavia \xFCzerinden daha b\xFCy\xFCk
+      venlere ta\u015F\u0131n\u0131r.\"]"
+  - id: brachiocephalica_vein
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. brachiocephalica
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: vein; brachiocephalica; brachiocephalic vein; toplardamar
+    body: V. brachiocephalica
+    steps: " kol ve ba\u015F b\xF6lgesinden gelen venlerin birle\u015Fmesi ile olu\u015Fur."
+    source: "[\"Ba\u015F b\xF6lgesinden gelen v. jugularis interna ile boynun d\u0131\u015F
+      venlerinden v. jugularis externa birle\u015Fir.\",\"Koldan gelen v. subclavia
+      ile birle\u015Ferek v. brachiocephalica olu\u015Fur.\"]"
+  - id: jugularis_interna
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. jugularis interna
+    topic: Circulatory System
+    region: Neck
+    tags: vein; jugularis interna; internal jugular vein; toplardamar
+    body: "V. jugularis interna boyundaki en b\xFCy\xFCk vendir."
+    steps: "[\"El s\u0131rt\u0131n\u0131n ulnar taraf\u0131ndan ba\u015Flar.\",\"\xD6n
+      kolun i\xE7 y\xFCz\xFCnden yukar\u0131 do\u011Fru ilerler.\",\"Dirsek b\xF6lgesini
+      ge\xE7erek kol b\xF6lgesine ula\u015F\u0131r.\",\"Kol b\xF6lgesinde derine
+      ilerler ve derin ven\xF6z sistemle birle\u015Ferek v. axillaris'in olu\u015Fumuna
+      kat\u0131l\u0131r.\"]"
+    source: "Ders kitab\u0131 s.140"
+  - id: jugularis_externa
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. jugularis externa
+    topic: Circulatory System
+    region: Neck
+    tags: vein; jugularis externa; external jugular vein; toplardamar
+    body: "V. jugularis externa ba\u015F\u0131n d\u0131\u015F venlerini ve y\xFCz\xFCn
+      y\xFCzeysel venlerini toplar."
+    steps: "[\"Ba\u015F ve y\xFCz\xFCn y\xFCzeysel venleri ile birle\u015Fir.\",\"Boyundan
+      a\u015Fa\u011F\u0131 do\u011Fru ilerler.\",\"V. subclavia ile birle\u015Ferek
+      sonlan\u0131r.\"]"
+    source: "Ders kitab\u0131 s.140"
+  - id: subclavia_vein
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. subclavia
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: vein; subclavia; subclavian vein; toplardamar
+    body: V. subclavia
+    steps: " v. axillaris'in k\xF6pr\xFCc\xFCk kemi\u011Fi alt\u0131ndaki devam\u0131
+      olan vendir."
+    source: "[\"Kol venleri birle\u015Ferek v. axillaris'i olu\u015Fturur.\",\"V.
+      axillaris k\xF6pr\xFCc\xFCk kemi\u011Finin alt\u0131nda v. subclavia ad\u0131n\u0131
+      al\u0131r.\",\"Buradan jugular venlerle birle\u015Ferek v. brachiocephalica'y\u0131
+      olu\u015Fturur.\"]"
+  - id: axillaris_vein
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. axillaris
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: vein; axillaris; axillary vein; toplardamar
+    body: V. axillaris
+    steps: " \xFCst ekstremitenin derin ven\xF6z d\xF6n\xFC\u015F\xFCnde yer alan
+      ve koltuk alt\u0131 b\xF6lgesinde bulunan b\xFCy\xFCk bir vendir."
+    source: "[\"Kol b\xF6lgesindeki venlerin birle\u015Fmesi ile olu\u015Fur.\",\"Koltuk
+      alt\u0131 b\xF6lgesinde bulunur.\",\"Yukar\u0131 do\u011Fru ilerleyerek v.
+      subclavia olarak devam eder.\"]"
+  - id: cephalica_vein
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. cephalica
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: vein; cephalica; cephalic vein; toplardamar
+    body: "V. cephalica \xFCst ekstremitenin \xF6nemli y\xFCzeysel venlerinden biridir."
+    steps: "[\"El s\u0131rt\u0131n\u0131n radyal taraf\u0131ndan ba\u015Flar.\",\"\xD6n
+      kolun \xF6n taraf\u0131na do\u011Fru ilerler.\",\"Kolun d\u0131\u015F yan\u0131ndan
+      yukar\u0131 \xE7\u0131kar.\",\"Proksimalde v. axillaris'e kat\u0131l\u0131r.\"]"
+    source: "Ders kitab\u0131 s.140"
+  - id: brachialis_vein
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. brachialis
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: vein; brachialis; brachial vein; toplardamar
+    body: "V. brachialis kol b\xF6lgesinin derin venlerinden biridir."
+    steps: "[\"V. radialis ve v. ulnaris'in dirsek \xF6n\xFCnde birle\u015Fmesi ile
+      olu\u015Fur.\",\"Yukar\u0131 do\u011Fru ilerleyerek v. axillaris'e kat\u0131l\u0131r.\"]"
+    source: "Ders kitab\u0131 s.140"
+  - id: basilica_vein
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. basilica
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: vein; basilica; basilic vein; toplardamar
+    body: "V. basilica \xFCst ekstremitenin \xF6nemli y\xFCzeysel venlerinden biridir."
+    steps: 
+    source: "Ders kitab\u0131 s.140"
+  - id: mediana_cubiti
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. mediana cubiti
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: vein; mediana cubiti; median cubital vein; toplardamar
+    body: "V. mediana cubiti dirsek b\xF6lgesinde bulunan y\xFCzeysel vendir."
+    steps: "[\"Dirsek ekleminin i\xE7 y\xFCz\xFCnde bulunur.\",\"V. basilica ile
+      v. cephalica'y\u0131 birbirine ba\u011Flar.\"]"
+    source: "Ders kitab\u0131 s.140"
+  - id: antebrachii_mediana
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. antebrachii mediana
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: vein; antebrachii mediana; median antebrachial vein; toplardamar
+    body: "V. antebrachii mediana \xF6n kolun y\xFCzeysel venlerinden biridir."
+    steps: "[\"Elin palmar y\xFCz\xFCnden ba\u015Flayarak yukar\u0131 do\u011Fru
+      uzan\u0131r.\",\"V. mediana cubiti veya v. basilica ile birle\u015Fir.\"]"
+    source: "Ders kitab\u0131 s.140"
+  - id: radialis_vein
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. radialis
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: vein; radialis; radial vein; toplardamar
+    body: "V. radialis el ve \xF6n kolun radyal b\xF6lgesinin ven\xF6z kan\u0131n\u0131
+      toplar."
+    steps: "[\"El ve \xF6n kolun radyal taraf\u0131ndaki kirli kan\u0131 toplar.\",\"V.
+      ulnaris ile birle\u015Ferek v. brachialisi olu\u015Fturur.\"]"
+    source: "Ders kitab\u0131 s.140"
+  - id: ulnaris_vein
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. ulnaris
+    topic: Circulatory System
+    region: Upper_Extremity
+    tags: vein; ulnaris; ulnar vein; toplardamar
+    body: "V. ulnaris el ve \xF6n kolun ulnar b\xF6lgesinin ven\xF6z kan\u0131n\u0131
+      toplar."
+    steps: "[\"El ve \xF6n kolun ulnar taraf\u0131ndaki kirli kan\u0131 toplar.\",\"V.
+      radialis ile birle\u015Ferek v. brachialisi olu\u015Fturur.\"]"
+    source: "Ders kitab\u0131 s.140"
+  - id: cava_superior
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. cava superior
+    topic: Circulatory System
+    region: Thorax
+    tags: vein; cava superior; superior vena cava; toplardamar
+    body: V. cava superior
+    steps: " ba\u015F"
+    source: ' boyun'
+  - id: lower_extremity_veins
+    valence: learn
+    doc_type: entry
+    content_type: concept
+    title: Alt ekstremite venleri
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: vein; lower extremity veins; leg veins; vena; toplardamar
+    body: "Alt ekstremite venleri bacak ve ayak b\xF6lgesindeki ven\xF6z kan\u0131
+      kalbe do\u011Fru ta\u015F\u0131yan toplardamarlard\u0131r."
+    steps: "[\"Alt ekstremite venleri y\xFCzeysel ve derin venler olmak \xFCzere
+      iki grupta incelenir.\",\"Y\xFCzeysel venlerin yap\u0131s\u0131nda kapak\xE7\u0131klar
+      bulunur.\",\"Derin venler genellikle ayn\u0131 isimdeki arterlerle birlikte
+      seyreder.\",\"Alt ekstremiteden gelen ven\xF6z kan daha b\xFCy\xFCk venler
+      arac\u0131l\u0131\u011F\u0131yla v. cava inferiora ta\u015F\u0131n\u0131r.\"]"
+    source: "Ders kitab\u0131 s.141"
+  - id: cava_inferior
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. cava inferior
+    topic: Circulatory System
+    region: Abdomen
+    tags: vein; cava inferior; inferior vena cava; toplardamar
+    body: "V. cava inferior g\xF6vdenin alt b\xF6l\xFCm\xFCnden gelen ven\xF6z kan\u0131
+      kalbe ta\u015F\u0131yan b\xFCy\xFCk bir vendir."
+    steps: "[\"G\xF6vdede diyafram\u0131n alt\u0131nda kalan b\xF6l\xFCm ile alt
+      ekstremite b\xF6lgelerinin kan\u0131n\u0131 toplar.\",\"Sa\u011F ve sol v.
+      iliaca communis'in birle\u015Fmesi ile olu\u015Fur.\",\"Toplad\u0131\u011F\u0131
+      kan\u0131 kalbin sa\u011F atriumuna ta\u015F\u0131r.\"]"
+    source: "Ders kitab\u0131 s.141"
+  - id: iliaca_communis_vein
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. iliaca communis
+    topic: Circulatory System
+    region: Pelvis
+    tags: vein; iliaca communis; common iliac vein; toplardamar
+    body: "V. iliaca communis pelvis ve alt ekstremitenin ven\xF6z kan\u0131n\u0131
+      ta\u015F\u0131yan vendir."
+    steps: "[\"V. iliaca interna ve v. iliaca externa venlerinin birle\u015Fmesi
+      ile olu\u015Fur.\",\"Sa\u011F ve sol v. iliaca communis venleri birle\u015Ferek
+      v. cava inferioru olu\u015Fturur.\"]"
+    source: "Ders kitab\u0131 s.141"
+  - id: iliaca_externa_vein
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. iliaca externa
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: vein; iliaca externa; external iliac vein; toplardamar
+    body: "V. iliaca externa alt ekstremitenin ven\xF6z kan\u0131n\u0131 ta\u015F\u0131yan
+      \xF6nemli venlerden biridir."
+    steps: "[\"Alt ekstremiteden gelen ven\xF6z kan\u0131 ta\u015F\u0131r.\",\"Kas\u0131k
+      b\xF6lgesinden a\u015Fa\u011F\u0131da v. femoralis ad\u0131n\u0131 al\u0131r.\"]"
+    source: "Ders kitab\u0131 s.141"
+  - id: femoralis_vein
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. femoralis
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: vein; femoralis; femoral vein; toplardamar
+    body: "V. femoralis bacak b\xF6lgesinin ven\xF6z kan\u0131n\u0131 ta\u015F\u0131yan
+      \xF6nemli derin vendir."
+    steps: "[\"Bacak b\xF6lgesinin kirli kan\u0131n\u0131 ta\u015F\u0131r.\",\"V.
+      poplitean\u0131n devam\u0131d\u0131r.\",\"Yukar\u0131 do\u011Fru ilerleyerek
+      kas\u0131k b\xF6lgesinde v. iliaca externa ad\u0131n\u0131 al\u0131r.\"]"
+    source: "Ders kitab\u0131 s.141"
+  - id: poplitea_vein
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. poplitea
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: vein; poplitea; popliteal vein; toplardamar
+    body: "V. poplitea diz arkas\u0131nda bulunan derin vendir."
+    steps: "[\"V. tibialis anterior ve v. tibialis posteriorun birle\u015Fmesi ile
+      olu\u015Fur.\",\"Diz arkas\u0131ndan yukar\u0131 do\u011Fru ilerler.\",\"Yukar\u0131da
+      v. femoralis ad\u0131n\u0131 al\u0131r.\"]"
+    source: "Ders kitab\u0131 s.141"
+  - id: tibialis_anterior_vein
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. tibialis anterior
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: vein; tibialis anterior; anterior tibial vein; toplardamar
+    body: "V. tibialis anterior ayak ve baca\u011F\u0131n \xF6n b\xF6l\xFCm\xFCnden
+      gelen ven\xF6z kan\u0131 ta\u015F\u0131r."
+    steps: "[\"Ayak s\u0131rt\u0131ndan ba\u015Flayarak bald\u0131r\u0131n \xF6n\xFCnden
+      yukar\u0131 do\u011Fru ilerler.\",\"V. tibialis posterior ile birle\u015Ferek
+      v. popliteay\u0131 olu\u015Fturur.\"]"
+    source: "Ders kitab\u0131 s.141"
+  - id: tibialis_posterior_vein
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. tibialis posterior
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: vein; tibialis posterior; posterior tibial vein; toplardamar
+    body: "V. tibialis posterior ayak taban\u0131 ve bald\u0131r b\xF6lgesinin ven\xF6z
+      kan\u0131n\u0131 ta\u015F\u0131r."
+    steps: "[\"Ayak taban\u0131ndan ba\u015Flayarak bald\u0131r\u0131n arka k\u0131sm\u0131ndan
+      yukar\u0131 do\u011Fru ilerler.\",\"V. tibialis anterior ile birle\u015Ferek
+      v. popliteay\u0131 olu\u015Fturur.\"]"
+    source: "Ders kitab\u0131 s.141"
+  - id: saphena_magna
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. saphena magna
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: vein; saphena magna; great saphenous vein; toplardamar
+    body: "V. saphena magna v\xFCcudun en uzun venidir."
+    steps: "[\"Ayak s\u0131rt\u0131ndan ba\u015Flar.\",\"Baca\u011F\u0131n i\xE7
+      y\xFCz\xFCnden yukar\u0131 do\u011Fru ilerler.\",\"Kas\u0131k b\xF6lgesinde
+      v. femoralis ile birle\u015Fir.\",\"Koroner arter bypass ameliyatlar\u0131nda
+      greft olarak kullan\u0131labilir.\"]"
+    source: "Ders kitab\u0131 s.141"
+  - id: saphena_parva
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: V. saphena parva
+    topic: Circulatory System
+    region: Lower_Extremity
+    tags: vein; saphena parva; small saphenous vein; toplardamar
+    body: "V. saphena parva alt ekstremitenin y\xFCzeysel venlerinden biridir."
+    steps: "[\"Ayak s\u0131rt\u0131n\u0131n d\u0131\u015F taraf\u0131ndan ba\u015Flar.\",\"Bald\u0131r\u0131n
+      arka k\u0131sm\u0131ndan yukar\u0131 do\u011Fru ilerler.\",\"Diz arkas\u0131nda
+      derine ilerleyerek v. popliteaya ba\u011Flan\u0131r.\"]"
+    source: "Ders kitab\u0131 s.141"
+  - id: systemic_circulation
+    valence: learn
+    doc_type: entry
+    content_type: concept
+    title: "B\xFCy\xFCk kan dola\u015F\u0131m\u0131"
+    topic: Circulatory System
+    region: Circulation
+    tags: circulation; systemic; large_circulation; heart; body
+    body: "B\xFCy\xFCk kan dola\u015F\u0131m\u0131"
+    steps: " oksijen bak\u0131m\u0131ndan zengin kan\u0131n kalpten \xE7\u0131karak
+      t\xFCm v\xFCcut dokular\u0131na g\xF6nderilmesini ve dokularda olu\u015Fan
+      karbondioksit ile at\u0131k maddelerin toplanarak tekrar kalbe getirilmesini
+      sa\u011Flayan dola\u015F\u0131md\u0131r."
+    source: "[\"Oksijenlenmi\u015F kan pulmoner venler ile sol atriyuma gelir\",
+      \"Kan mitral kapaktan ge\xE7erek sol ventrik\xFCle ula\u015F\u0131r\", \"Sol
+      ventrik\xFCl kas\u0131larak kan\u0131 aort arac\u0131l\u0131\u011F\u0131yla
+      t\xFCm v\xFCcuda pompalar\", \"Dokularda gaz de\u011Fi\u015Fimi ger\xE7ekle\u015Fir
+      ve kan kirlenir\", \"Kirli kan vena cava damarlar\u0131 ile sa\u011F atriyuma
+      geri d\xF6ner\"]"
+  - id: pulmonary_circulation
+    valence: learn
+    doc_type: entry
+    content_type: concept
+    title: "K\xFC\xE7\xFCk kan dola\u015F\u0131m\u0131"
+    topic: Circulatory System
+    region: Circulation
+    tags: circulation; pulmonary; small_circulation; heart; lung
+    body: "K\xFC\xE7\xFCk kan dola\u015F\u0131m\u0131"
+    steps: " kalpten akci\u011Ferlere g\xF6nderilen kirli kan\u0131n akci\u011Ferlerde
+      oksijenlenerek temizlenmesi ve tekrar kalbe d\xF6nmesini sa\u011Flayan dola\u015F\u0131md\u0131r."
+    source: "[\"Kirli kan sa\u011F atriyuma gelir\", \"Kan trik\xFCspit kapaktan
+      ge\xE7erek sa\u011F ventrik\xFCle ula\u015F\u0131r\", \"Sa\u011F ventrik\xFCl
+      kas\u0131larak kan\u0131 pulmoner arter arac\u0131l\u0131\u011F\u0131yla akci\u011Ferlere
+      pompalar\", \"Akci\u011Ferlerde gaz de\u011Fi\u015Fimi ger\xE7ekle\u015Fir
+      ve kan oksijenlenir\", \"Oksijenlenmi\u015F kan pulmoner venler ile sol atriyuma
+      geri d\xF6ner\"]"
+  - id: systemic_left_ventricle_01
+    valence: learn
+    doc_type: entry
+    content_type: structure
+    title: "Sol ventrik\xFCl"
+    topic: Circulatory System
+    region: Circulation
+    tags: circulation; systemic; large_circulation; heart; ventricle
+    body: "Sol ventrik\xFCl"
+    steps: " oksijen bak\u0131m\u0131ndan zengin kan\u0131 aort arac\u0131l\u0131\u011F\u0131yla
+      t\xFCm v\xFCcuda pompalayan ve b\xFCy\xFCk kan dola\u015F\u0131m\u0131n\u0131n
+      ba\u015Flad\u0131\u011F\u0131 kalp odac\u0131\u011F\u0131d\u0131r."
+    source: "[\"Sol atriyumdan gelen oksijenli kan sol ventrik\xFClde toplan\u0131r\",
+      \"Ventrik\xFCl kas\u0131larak kan\u0131 kalpten d\u0131\u015Far\u0131 pompalar\",
+      \"Kan aort damar\u0131na g\xF6nderilir\"]"
+  - id: systemic_aorta_02
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: Aort
+    topic: Circulatory System
+    region: Circulation
+    tags: circulation; systemic; large_circulation; vessel; artery; aorta
+    body: Aort
+    steps: " sol ventrik\xFClden pompalanan oksijen bak\u0131m\u0131ndan zengin kan\u0131
+      t\xFCm v\xFCcuda da\u011F\u0131tan kalpten \xE7\u0131kan en b\xFCy\xFCk atardamard\u0131r."
+    source: "[\"Sol ventrik\xFClden \xE7\u0131kan kan aort damar\u0131na ula\u015F\u0131r\",
+      \"Aort \xE7e\u015Fitli dallara ayr\u0131larak kan\u0131 v\xFCcudun farkl\u0131
+      b\xF6lgelerine ta\u015F\u0131r\"]"
+  - id: systemic_body_arteries_03
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: "V\xFCcut atardamarlar\u0131"
+    topic: Circulatory System
+    region: Circulation
+    tags: circulation; systemic; large_circulation; vessel; artery; systemic_artery
+    body: "Aorttan ayr\u0131lan atardamarlar oksijen bak\u0131m\u0131ndan zengin
+      kan\u0131 v\xFCcudun farkl\u0131 b\xF6lgelerindeki dokulara ta\u015F\u0131yan
+      damarlard\u0131r."
+    steps: "[\"Aorttan \xE7\u0131kan kan b\xFCy\xFCk atardamarlara ge\xE7er\", \"Atardamarlar
+      dallanarak v\xFCcudun \xE7e\u015Fitli b\xF6lgelerine kan ta\u015F\u0131r\",
+      \"Kan daha k\xFC\xE7\xFCk atardamarlara ve k\u0131lcal damarlara do\u011Fru
+      ilerler\"]"
+    source: "Ders kitab\u0131 s.145"
+  - id: systemic_capillaries_04
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: "V\xFCcut k\u0131lcal damarlar\u0131"
+    topic: Circulatory System
+    region: Circulation
+    tags: circulation; systemic; large_circulation; capillary; body
+    body: "K\u0131lcal damarlar"
+    steps: " kan ile h\xFCcreler aras\u0131nda gaz ve madde al\u0131\u015Fveri\u015Finin
+      ger\xE7ekle\u015Fti\u011Fi en ince damarlard\u0131r."
+    source: "[\"Oksijenli kan k\u0131lcal damarlara ula\u015F\u0131r\", \"H\xFCcreler
+      oksijeni ve besin maddelerini al\u0131r\", \"Karbondioksit ve at\u0131k maddeler
+      kana ge\xE7er\" , \"Kan kirli hale gelir\"]"
+  - id: systemic_body_veins_05
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: "V\xFCcut toplardamarlar\u0131"
+    topic: Circulatory System
+    region: Circulation
+    tags: circulation; systemic; large_circulation; vein; body
+    body: Toplardamarlar
+    steps: " dokularda gaz de\u011Fi\u015Fimi sonucu kirlenen kan\u0131 k\u0131lcal
+      damarlardan alarak kalbe do\u011Fru ta\u015F\u0131yan damarlard\u0131r."
+    source: "[\"K\u0131lcal damarlardan \xE7\u0131kan kirli kan k\xFC\xE7\xFCk toplardamarlara
+      ge\xE7er\", \"Toplardamarlar birle\u015Ferek daha b\xFCy\xFCk damarlar\u0131
+      olu\u015Fturur\", \"Kan kalbe do\u011Fru ta\u015F\u0131n\u0131r\"]"
+  - id: systemic_vena_cava_06
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: Vena cava
+    topic: Circulatory System
+    region: Circulation
+    tags: circulation; systemic; large_circulation; vein; vena_cava
+    body: Vena cava superior ve vena cava inferior
+    steps: " v\xFCcuttan gelen kirli kan\u0131 kalbin sa\u011F atriyumuna ta\u015F\u0131yan
+      b\xFCy\xFCk toplardamarlard\u0131r."
+    source: "[\"V\xFCcuttan gelen kirli kan b\xFCy\xFCk toplardamarlarda toplan\u0131r\",
+      \"Kan vena cava damarlar\u0131na ula\u015F\u0131r\", \"Vena cava kan\u0131
+      kalbin sa\u011F atriyumuna ta\u015F\u0131r\"]"
+  - id: systemic_right_atrium_07
+    valence: learn
+    doc_type: entry
+    content_type: structure
+    title: "Sa\u011F atriyum"
+    topic: Circulatory System
+    region: Circulation
+    tags: circulation; systemic; large_circulation; heart; atrium
+    body: "Sa\u011F atriyum"
+    steps: " vena cava damarlar\u0131 arac\u0131l\u0131\u011F\u0131yla v\xFCcuttan
+      gelen kirli kan\u0131n topland\u0131\u011F\u0131 kalp odac\u0131\u011F\u0131d\u0131r."
+    source: "[\"Vena cava damarlar\u0131ndan gelen kan sa\u011F atriyuma ula\u015F\u0131r\",
+      \"Sa\u011F atriyum kan\u0131 sa\u011F ventrik\xFCle iletmeye haz\u0131r hale
+      getirir\"]"
+  - id: pulmonary_right_ventricle_01
+    valence: learn
+    doc_type: entry
+    content_type: structure
+    title: "Sa\u011F ventrik\xFCl"
+    topic: Circulatory System
+    region: Circulation
+    tags: circulation; pulmonary; small_circulation; heart; ventricle; right_ventricle
+    body: "Sa\u011F ventrik\xFCl"
+    steps: " kirli kan\u0131 pulmoner arter arac\u0131l\u0131\u011F\u0131yla akci\u011Ferlere
+      pompalayan kalp odac\u0131\u011F\u0131d\u0131r."
+    source: "[\"Sa\u011F atriyumdan gelen kirli kan sa\u011F ventrik\xFClde toplan\u0131r\",
+      \"Sa\u011F ventrik\xFCl kas\u0131l\u0131r\", \"Kan pulmoner artere pompalan\u0131r\"]"
+  - id: pulmonary_artery_02
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: Pulmoner arter (A. pulmonalis)
+    topic: Circulatory System
+    region: Circulation
+    tags: circulation; pulmonary; small_circulation; vessel; artery; pulmonary_artery
+    body: Pulmoner arter
+    steps: " kirli kan\u0131 kalpten akci\u011Ferlere ta\u015F\u0131yan atardamard\u0131r."
+    source: "[\"Sa\u011F ventrik\xFClden \xE7\u0131kan kirli kan pulmoner artere
+      ula\u015F\u0131r\", \"Pulmoner arter kan\u0131 akci\u011Ferlere ta\u015F\u0131r\",
+      \"Kan akci\u011Fer k\u0131lcal damarlar\u0131na do\u011Fru ilerler\"]"
+  - id: pulmonary_capillaries_03
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: "Akci\u011Fer k\u0131lcal damarlar\u0131"
+    topic: Circulatory System
+    region: Circulation
+    tags: circulation; pulmonary; small_circulation; vessel; capillary; lung_capillary
+    body: "Akci\u011Fer k\u0131lcal damarlar\u0131"
+    steps: " kan ile alveoller aras\u0131nda gaz de\u011Fi\u015Fiminin ger\xE7ekle\u015Fti\u011Fi
+      damarlard\u0131r."
+    source: "[\"Kirli kan akci\u011Fer k\u0131lcal damarlar\u0131na ula\u015F\u0131r\",
+      \"Karbondioksit alveollere verilir\", \"Oksijen kana ge\xE7er\", \"Kan oksijen
+      bak\u0131m\u0131ndan zengin hale gelir\"]"
+  - id: pulmonary_vein_04
+    valence: learn
+    doc_type: entry
+    content_type: vessel
+    title: Pulmoner ven (V. pulmonalis)
+    topic: Circulatory System
+    region: Circulation
+    tags: circulation; pulmonary; small_circulation; vessel; vein; pulmonary_vein
+    body: Pulmoner ven
+    steps: " akci\u011Ferlerde oksijenlenen kan\u0131 kalbe ta\u015F\u0131yan toplardamard\u0131r."
+    source: "[\"Akci\u011Ferlerde oksijenlenen kan pulmoner venlere ge\xE7er\", \"Pulmoner
+      venler kan\u0131 kalbe ta\u015F\u0131r\", \"Kan sol atriyuma ula\u015F\u0131r\"]"
+  - id: pulmonary_left_atrium_05
+    valence: learn
+    doc_type: entry
+    content_type: structure
+    title: Sol atriyum
+    topic: Circulatory System
+    region: Circulation
+    tags: circulation; pulmonary; small_circulation; heart; atrium; left_atrium
+    body: Sol atriyum
+    steps: " akci\u011Ferlerden gelen oksijen bak\u0131m\u0131ndan zengin kan\u0131n
+      topland\u0131\u011F\u0131 kalp odac\u0131\u011F\u0131d\u0131r."
+    source: "[\"Pulmoner venlerden gelen oksijenli kan sol atriyuma ula\u015F\u0131r\",
+      \"Kan sol ventrik\xFCle iletilmeye haz\u0131rlan\u0131r\"]"

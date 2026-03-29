@@ -40,3 +40,5 @@ crashlytics-build.properties
 !Packages/
 unity/Assets/Sci-Fi UI/_SciFi_GUISkin_/Skin_Assets/font/zekton free SDF.asset
 unity/Assets/Sci-Fi UI/_SciFi_GUISkin_/Skin_Assets/font/zekton free SDF.asset.meta
+/unity/Assets/Sci-Fi UI/_SciFi_GUISkin_/Skin_Assets/font
+unity/Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset
