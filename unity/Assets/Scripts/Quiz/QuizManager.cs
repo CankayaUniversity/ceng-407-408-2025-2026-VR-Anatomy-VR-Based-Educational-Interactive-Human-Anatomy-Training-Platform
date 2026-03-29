@@ -1,12 +1,106 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Collections;
 
+[Serializable]
+public class RegionQuizState
+{
+    public string regionName;
+    public int askedCount = 0;
+    public string currentLevel = "medium";
+    public List<string> askedQuestionIds = new List<string>();
+}
+
+[Serializable]
+public class QuestionResult
+{
+    public string questionId;
+    public string topic;
+    public string region;
+    public string level;
+    public string docType;
+
+    public bool isCorrect;
+    public bool isUnanswered;
+    public float scoreRatio;
+
+    public string selectedAnswer;
+    public string correctAnswer;
+}
+
+public enum RegionPerformanceStatus
+{
+    Green,
+    Yellow,
+    Red
+}
+
+[Serializable]
+public class RegionAnalysisResult
+{
+    public string region;
+    public int totalQuestions;
+    public int wrongCount;
+    public int correctCount;
+    public int unansweredCount; 
+    public float averageScoreRatio;
+    public RegionPerformanceStatus status;
+}
 public class QuizManager : MonoBehaviour
 {
     [Header("Config (Fallback)")]
     [Tooltip("Soru süresizse timer gösterilmez. Bu değer sadece istersen fallback olarak kullanılabilir.")]
     public float totalQuizTime = 120f;
+
+    [Header("Motion System Quiz Settings")]
+    public int questionsPerRegion = 5;
+
+    private readonly string[] motionRegions = new string[]
+    {
+        "Head_Face",
+        "Trunk",
+        "Upper_Extremity",
+        "Lower_Extremity",
+        "Joints",
+        "Muscle"
+    };
+
+    [Header("Basic Concepts Quiz Settings")]
+    public int questionsPerConceptType = 5;
+
+    private readonly string[] basicConceptTypes = new string[]
+    {
+        "Latin",
+        "Abbreviation"
+    };
+
+    [Header("Circulation System Quiz Settings")]
+    public int circulationQuestionsPerRegion = 10;
+
+    private readonly string[] circulationRegions = new string[]
+    {
+        "Heart_Structure",
+        "Vessels",
+        "Circulation"
+    };
+
+    [Header("All Questions Quiz Settings")]
+    public int allQuestionsPerRegion = 5;
+
+    private readonly string[] allQuestionsRegions = new string[]
+    {
+        "Head_Face",
+        "Trunk",
+        "Upper_Extremity",
+        "Lower_Extremity",
+        "Joints",
+        "Muscle",
+        "Heart_Structure",
+        "Vessels",
+        "Circulation"
+    };
 
     [Header("References")]
     public QuizUIController ui;
@@ -14,10 +108,21 @@ public class QuizManager : MonoBehaviour
     [Header("Data (Resources paths, without extension)")]
     public string basicConceptsJsonPath = "JsonFiles/Quiz/basic_concepts_quiz_data";
     public string motionSystemJsonPath = "JsonFiles/Quiz/motion_system_quiz_data";
-    public string circulationJsonPath = "JsonFiles/Quiz/circulation_system_quiz_data";
-    public string allQuestionsJsonPath = "JsonFiles/Quiz/quiz_data";
+    public string circulationJsonPath = "JsonFiles/Quiz/circulatory_system_quiz_data";
 
     private QuestionList questionList;
+    private Dictionary<string, List<Question>> adaptiveQuestionsByRegion = new Dictionary<string, List<Question>>();
+    private Dictionary<string, RegionQuizState> regionStates = new Dictionary<string, RegionQuizState>();
+    private List<string> adaptiveRegionQueue = new List<string>();
+    private Question currentQuestion;
+    private string currentQuestionRegion;
+    private List<QuestionResult> quizResults = new List<QuestionResult>();
+    private List<RegionAnalysisResult> finalRegionAnalysis = new List<RegionAnalysisResult>();
+    private int finalTotalQuestions = 0;
+    private int finalTotalCorrect = 0;
+    private int finalTotalWrong = 0;
+    private int finalTotalUnanswered = 0;
+    private float finalOverallAverageScore = 0f;
     private int currentQuestionIndex = 0;
 
     private float remainingTime;
@@ -28,13 +133,28 @@ public class QuizManager : MonoBehaviour
     private bool timeUpHandled = false;
     private bool questionLocked = false;
 
-    void Start()
+    private IEnumerator Start()
     {
+        yield return null;
+
         LoadQuestionsByCategory();
         ShuffleQuestions();
 
         currentQuestionIndex = 0;
         PrepareCurrentQuestionAndShow();
+    }
+    public enum LevelChangeDirection
+    {
+        Down,
+        Stay,
+        Up
+    }
+
+    private bool IsAdaptiveCategory(QuizCategory category)
+    {
+        return category == QuizCategory.MotionSystem ||
+            category == QuizCategory.CirculationSystem ||
+            category == QuizCategory.AllQuestions;
     }
 
     void Update()
@@ -64,12 +184,255 @@ public class QuizManager : MonoBehaviour
         remainingTime = 0f;
         ui.UpdateTimer(0f);
 
+        Question sourceQuestion = IsAdaptiveCategory(NavigationState.CurrentQuizCategory)
+            ? currentQuestion
+            : questionList.questions[currentQuestionIndex];
+
+        Question q = NormalizeForUI(sourceQuestion);
+
+        RecordUnansweredQuestionResult(q);
+
         ui.ShowTimeUpResult("Süreniz doldu. Cevap işaretlenmediği için bu soru boş sayıldı.");
+    }
+
+    private string[] GetRegionsForCurrentCategory()
+    {
+        switch (NavigationState.CurrentQuizCategory)
+        {
+            case QuizCategory.MotionSystem:
+                return motionRegions;
+
+            case QuizCategory.CirculationSystem:
+                return circulationRegions;
+
+            case QuizCategory.AllQuestions:
+                return allQuestionsRegions;
+
+            default:
+                return Array.Empty<string>();
+        }
+    }
+
+    private int GetQuestionsPerRegionForCurrentCategory()
+    {
+        switch (NavigationState.CurrentQuizCategory)
+        {
+            case QuizCategory.MotionSystem:
+                return questionsPerRegion;
+
+            case QuizCategory.CirculationSystem:
+                return circulationQuestionsPerRegion;
+
+            case QuizCategory.AllQuestions:
+                return allQuestionsPerRegion;
+
+            default:
+                return 0;
+        }
+    }
+
+    private void BuildAdaptiveQuestionPools(List<Question> allQuestions)
+    {
+        adaptiveQuestionsByRegion.Clear();
+
+        string[] regions = GetRegionsForCurrentCategory();
+
+        foreach (string region in regions)
+        {
+            List<Question> regionQuestions = allQuestions
+                .Where(q => !string.IsNullOrWhiteSpace(q.region) &&
+                            q.GetNormalizedRegion().Equals(region, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            adaptiveQuestionsByRegion[region] = regionQuestions;
+
+            Debug.Log($"[POOL DEBUG] Region={region} | Total Questions={regionQuestions.Count}");
+
+            int easyCount = regionQuestions.Count(q => q.IsLevel("easy"));
+            int mediumCount = regionQuestions.Count(q => q.IsLevel("medium"));
+            int hardCount = regionQuestions.Count(q => q.IsLevel("hard"));
+
+            Debug.Log($"[POOL] Region={region} | Easy={easyCount} | Medium={mediumCount} | Hard={hardCount}");
+        }
+    }
+
+    private void InitializeAdaptiveRegionStates()
+    {
+        regionStates.Clear();
+
+        string[] regions = GetRegionsForCurrentCategory();
+
+        foreach (string region in regions)
+        {
+            RegionQuizState state = new RegionQuizState
+            {
+                regionName = region,
+                askedCount = 0,
+                currentLevel = "medium",
+                askedQuestionIds = new List<string>()
+            };
+
+            regionStates[region] = state;
+        }
+    }
+
+    private void BuildAdaptiveRegionQueue()
+    {
+        adaptiveRegionQueue.Clear();
+
+        string[] regions = GetRegionsForCurrentCategory();
+        int questionsPerRegionForCategory = GetQuestionsPerRegionForCurrentCategory();
+
+        foreach (string region in regions)
+        {
+            for (int i = 0; i < questionsPerRegionForCategory; i++)
+            {
+                adaptiveRegionQueue.Add(region);
+            }
+        }
+
+        adaptiveRegionQueue = adaptiveRegionQueue
+            .OrderBy(x => UnityEngine.Random.value)
+            .ToList();
+
+        Debug.Log("[QUEUE] Adaptive region queue created:");
+        foreach (string region in adaptiveRegionQueue)
+        {
+            Debug.Log("[QUEUE ITEM] " + region);
+        }
+    }
+    private List<Question> BuildBasicConceptsQuiz(List<Question> allBasicQuestions)
+    {
+        List<Question> finalQuizQuestions = new List<Question>();
+
+        foreach (string conceptType in basicConceptTypes)
+        {
+            List<Question> conceptQuestions = allBasicQuestions
+                .Where(q => !string.IsNullOrEmpty(q.concept_type) &&
+                            q.concept_type.Trim().Equals(conceptType, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(q => UnityEngine.Random.value)
+                .ToList();
+
+            Debug.Log($"[QuizManager] ConceptType {conceptType} question count: {conceptQuestions.Count}");
+
+            if (conceptQuestions.Count < questionsPerConceptType)
+            {
+                Debug.LogError(
+                    $"Quiz başlatılamadı. ConceptType {conceptType} içinde en az {questionsPerConceptType} soru olmalı. " +
+                    $"Bulunan: {conceptQuestions.Count}"
+                );
+                return null;
+            }
+
+            finalQuizQuestions.AddRange(conceptQuestions.Take(questionsPerConceptType));
+        }
+
+        finalQuizQuestions = finalQuizQuestions
+            .OrderBy(q => UnityEngine.Random.value)
+            .ToList();
+
+        Debug.Log($"[QuizManager] Final Basic Concepts quiz question count: {finalQuizQuestions.Count}");
+
+        return finalQuizQuestions;
+    }
+    public void OnMatchingQuestionAnswered(LevelChangeDirection direction)
+    {
+        if (!IsAdaptiveCategory(NavigationState.CurrentQuizCategory))
+            return;
+
+        if (string.IsNullOrWhiteSpace(currentQuestionRegion) || !regionStates.ContainsKey(currentQuestionRegion))
+            return;
+
+        RegionQuizState state = regionStates[currentQuestionRegion];
+
+        string oldLevel = state.currentLevel;
+
+        switch (direction)
+        {
+            case LevelChangeDirection.Up:
+                state.currentLevel = GetNextLevel(state.currentLevel, true);
+                break;
+
+            case LevelChangeDirection.Down:
+                state.currentLevel = GetNextLevel(state.currentLevel, false);
+                break;
+
+            case LevelChangeDirection.Stay:
+                // level değişmiyor
+                break;
+        }
+
+        Debug.Log(
+            $"[MATCHING LEVEL UPDATE] Region={currentQuestionRegion} | Direction={direction} | OldLevel={oldLevel} | NewLevel={state.currentLevel}"
+        );
+    }
+
+    private string GetNextLevel(string currentLevel, bool answeredCorrect)
+    {
+        string normalized = string.IsNullOrWhiteSpace(currentLevel)
+            ? "medium"
+            : currentLevel.Trim().ToLower();
+
+        if (answeredCorrect)
+        {
+            switch (normalized)
+            {
+                case "easy":
+                    return "medium";
+                case "medium":
+                    return "hard";
+                case "hard":
+                    return "hard";
+                default:
+                    return "medium";
+            }
+        }
+        else
+        {
+            switch (normalized)
+            {
+                case "hard":
+                    return "medium";
+                case "medium":
+                    return "easy";
+                case "easy":
+                    return "easy";
+                default:
+                    return "medium";
+            }
+        }
     }
 
     void LoadQuestionsByCategory()
     {
-        string selectedPath = allQuestionsJsonPath;
+        Debug.Log("[TEST] Entered LoadQuestionsByCategory");
+
+        if (NavigationState.CurrentQuizCategory == QuizCategory.AllQuestions)
+        {
+            Debug.Log("[QuizManager] Loading All Questions from Motion + Circulation JSON files.");
+
+            List<Question> allQuestionsPool = LoadAllQuestionsPool();
+
+            if (allQuestionsPool == null || allQuestionsPool.Count == 0)
+            {
+                Debug.LogError("[QuizManager] All Questions pool could not be created.");
+                questionList = new QuestionList { questions = new List<Question>() };
+                return;
+            }
+
+            questionList = new QuestionList { questions = allQuestionsPool };
+
+            BuildAdaptiveQuestionPools(questionList.questions);
+            InitializeAdaptiveRegionStates();
+            BuildAdaptiveRegionQueue();
+
+            questionList.questions = new List<Question>();
+
+            Debug.Log("[QuizManager] All Questions adaptive pool initialized.");
+            return;
+        }
+
+        string selectedPath = "";
 
         switch (NavigationState.CurrentQuizCategory)
         {
@@ -82,10 +445,13 @@ public class QuizManager : MonoBehaviour
             case QuizCategory.CirculationSystem:
                 selectedPath = circulationJsonPath;
                 break;
-            case QuizCategory.AllQuestions:
-            default:
-                selectedPath = allQuestionsJsonPath;
-                break;
+        }
+
+        if (string.IsNullOrEmpty(selectedPath))
+        {
+            Debug.LogError($"[QuizManager] Unsupported quiz category: {NavigationState.CurrentQuizCategory}");
+            questionList = new QuestionList { questions = new List<Question>() };
+            return;
         }
 
         Debug.Log($"[QuizManager] Category={NavigationState.CurrentQuizCategory} | Loading: Resources/{selectedPath}.json");
@@ -141,7 +507,167 @@ public class QuizManager : MonoBehaviour
             questionList = new QuestionList { questions = new List<Question>() };
         }
 
+        if (IsAdaptiveCategory(NavigationState.CurrentQuizCategory))
+        {
+            BuildAdaptiveQuestionPools(questionList.questions);
+            InitializeAdaptiveRegionStates();
+            BuildAdaptiveRegionQueue();
+
+            questionList.questions = new List<Question>();
+        }
+
+        if (NavigationState.CurrentQuizCategory == QuizCategory.BasicConcepts)
+        {
+            List<Question> selectedQuestions = BuildBasicConceptsQuiz(questionList.questions);
+
+            if (selectedQuestions == null || selectedQuestions.Count != basicConceptTypes.Length * questionsPerConceptType)
+            {
+                Debug.LogError("[QuizManager] Basic Concepts quiz oluşturulamadı.");
+                questionList = new QuestionList { questions = new List<Question>() };
+                return;
+            }
+
+            questionList.questions = selectedQuestions;
+        }
+
         Debug.Log($"[QuizManager] Loaded questions count = {questionList.questions.Count}");
+        foreach (Question q in questionList.questions)
+        {
+            Debug.Log(
+                $"[Question Debug] id={q.id} | region={q.GetNormalizedRegion()} | topic={q.topic} | level(raw)={q.level} | level(normalized)={q.GetNormalizedLevel()}"
+            );
+        }
+    }
+
+    private List<Question> LoadQuestionsFromPath(string path)
+    {
+        TextAsset jsonFile = Resources.Load<TextAsset>(path);
+
+        if (jsonFile == null)
+        {
+            Debug.LogError($"[QuizManager] JSON not found at Resources/{path}.json");
+            return new List<Question>();
+        }
+
+        string json = jsonFile.text?.Trim();
+
+        if (string.IsNullOrEmpty(json))
+        {
+            Debug.LogError($"[QuizManager] JSON file is empty: {path}");
+            return new List<Question>();
+        }
+
+        try
+        {
+            if (json.StartsWith("["))
+            {
+                Question[] loadedQuestions = JsonHelper.FromJson<Question>(json);
+                return loadedQuestions != null
+                    ? new List<Question>(loadedQuestions)
+                    : new List<Question>();
+            }
+            else if (json.StartsWith("{"))
+            {
+                QuestionList loadedList = JsonUtility.FromJson<QuestionList>(json);
+                return loadedList != null && loadedList.questions != null
+                    ? loadedList.questions
+                    : new List<Question>();
+            }
+            else
+            {
+                Debug.LogError($"[QuizManager] Unknown JSON format in {path}");
+                return new List<Question>();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[QuizManager] Failed to parse JSON at {path}: {e.Message}");
+            return new List<Question>();
+        }
+    }
+
+    private List<Question> LoadAllQuestionsPool()
+    {
+        List<Question> motionQuestions = LoadQuestionsFromPath(motionSystemJsonPath);
+        List<Question> circulationQuestions = LoadQuestionsFromPath(circulationJsonPath);
+
+        List<Question> combined = new List<Question>();
+        combined.AddRange(motionQuestions);
+        combined.AddRange(circulationQuestions);
+
+        Debug.Log($"[QuizManager] All Questions pool loaded. Motion={motionQuestions.Count}, Circulation={circulationQuestions.Count}, Total={combined.Count}");
+
+        return combined;
+    }
+
+    private List<string> GetLevelPriorityOrder(string targetLevel)
+    {
+        string normalized = string.IsNullOrWhiteSpace(targetLevel)
+            ? "medium"
+            : targetLevel.Trim().ToLower();
+
+        switch (normalized)
+        {
+            case "easy":
+                return new List<string> { "easy", "medium", "hard" };
+
+            case "hard":
+                return new List<string> { "hard", "medium", "easy" };
+
+            case "medium":
+            default:
+                return new List<string> { "medium", "easy", "hard" };
+        }
+    }
+
+    private Question GetNextAdaptiveQuestion()
+    {
+        if (adaptiveRegionQueue.Count == 0)
+            return null;
+
+        string region = adaptiveRegionQueue[0];
+        adaptiveRegionQueue.RemoveAt(0);
+
+        currentQuestionRegion = region;
+
+        RegionQuizState state = regionStates[region];
+
+        string targetLevel = state.askedCount < 2 ? "medium" : state.currentLevel;
+
+        List<string> levelPriority = GetLevelPriorityOrder(targetLevel);
+        List<Question> availableQuestions = new List<Question>();
+        string actualSelectedLevel = string.Empty;
+
+        foreach (string level in levelPriority)
+        {
+            availableQuestions = adaptiveQuestionsByRegion[region]
+                .Where(q => q.IsLevel(level) && !state.askedQuestionIds.Contains(q.id))
+                .OrderBy(q => UnityEngine.Random.value)
+                .ToList();
+
+            if (availableQuestions.Count > 0)
+            {
+                actualSelectedLevel = level;
+                break;
+            }
+        }
+
+        if (availableQuestions.Count == 0)
+        {
+            Debug.LogError($"[ADAPTIVE] No available question found for region {region}");
+            return null;
+        }
+
+        Question selected = availableQuestions[0];
+
+        state.askedCount++;
+        state.askedQuestionIds.Add(selected.id);
+
+        Debug.Log(
+            $"[ADAPTIVE] Selected Question | region={region} | askedCount={state.askedCount} | targetLevel={targetLevel} | actualLevel={actualSelectedLevel} | selectedId={selected.id} | selectedLevel={selected.GetNormalizedLevel()}"
+        );
+
+        return selected;
     }
 
     void ShuffleQuestions()
@@ -157,6 +683,55 @@ public class QuizManager : MonoBehaviour
 
     void PrepareCurrentQuestionAndShow()
     {
+        if (IsAdaptiveCategory(NavigationState.CurrentQuizCategory))
+        {
+            timeUpHandled = false;
+            questionLocked = false;
+            isTimerPaused = false;
+
+            currentQuestion = GetNextAdaptiveQuestion();
+
+            if (currentQuestion == null)
+            {
+                EndQuiz();
+                return;
+            }
+
+            Question q = NormalizeForUI(currentQuestion);
+
+            Debug.Log("===== CURRENT QUESTION DEBUG =====");
+            Debug.Log("id: " + q.id);
+            Debug.Log("doc_type: " + q.doc_type);
+            Debug.Log("topic: " + q.topic);
+            Debug.Log("region: " + q.region);
+            Debug.Log("level: " + q.level);
+            Debug.Log("normalized level: " + q.GetNormalizedLevel());
+            Debug.Log("body: " + q.body);
+            Debug.Log("question_text: " + q.question_text);
+            Debug.Log("rationale: " + q.rationale);
+            Debug.Log("A: " + q.A);
+            Debug.Log("B: " + q.B);
+            Debug.Log("C: " + q.C);
+            Debug.Log("D: " + q.D);
+            Debug.Log("answer_text: " + q.answer_text);
+            Debug.Log("time_limit_sec: " + q.time_limit_sec);
+
+            isTimedQuestion = q.time_limit_sec > 0;
+
+            if (isTimedQuestion)
+            {
+                remainingTime = q.time_limit_sec;
+                ui.UpdateTimer(remainingTime);
+            }
+            else
+            {
+                ui.UpdateTimer(-1f);
+            }
+
+            ui.ShowQuestion(q);
+            return;
+        }
+
         if (questionList == null || questionList.questions == null || questionList.questions.Count == 0)
         {
             EndQuiz();
@@ -173,48 +748,30 @@ public class QuizManager : MonoBehaviour
         questionLocked = false;
         isTimerPaused = false;
 
-        Question q = NormalizeForUI(questionList.questions[currentQuestionIndex]);
+        Question normalQuestion = NormalizeForUI(questionList.questions[currentQuestionIndex]);
 
         Debug.Log("===== CURRENT QUESTION DEBUG =====");
-        Debug.Log("id: " + q.id);
-        Debug.Log("doc_type: " + q.doc_type);
-        Debug.Log("body: " + q.body);
-        Debug.Log("question_text: " + q.question_text);
-        Debug.Log("rationale: " + q.rationale);
-        Debug.Log("A: " + q.A);
-        Debug.Log("B: " + q.B);
-        Debug.Log("C: " + q.C);
-        Debug.Log("D: " + q.D);
-        Debug.Log("answer_text: " + q.answer_text);
-        Debug.Log("time_limit_sec: " + q.time_limit_sec);
+        Debug.Log("id: " + normalQuestion.id);
+        Debug.Log("doc_type: " + normalQuestion.doc_type);
+        Debug.Log("topic: " + normalQuestion.topic);
+        Debug.Log("region: " + normalQuestion.region);
+        Debug.Log("level: " + normalQuestion.level);
+        Debug.Log("normalized level: " + normalQuestion.GetNormalizedLevel());
+        Debug.Log("body: " + normalQuestion.body);
+        Debug.Log("question_text: " + normalQuestion.question_text);
+        Debug.Log("rationale: " + normalQuestion.rationale);
+        Debug.Log("A: " + normalQuestion.A);
+        Debug.Log("B: " + normalQuestion.B);
+        Debug.Log("C: " + normalQuestion.C);
+        Debug.Log("D: " + normalQuestion.D);
+        Debug.Log("answer_text: " + normalQuestion.answer_text);
+        Debug.Log("time_limit_sec: " + normalQuestion.time_limit_sec);
 
-        if (q.data != null && q.data.options != null)
-        {
-            Debug.Log("data.options count: " + q.data.options.Count);
-            for (int i = 0; i < q.data.options.Count; i++)
-            {
-                Debug.Log("option[" + i + "]: " + q.data.options[i]);
-            }
-        }
-        else
-        {
-            Debug.Log("data.options is NULL");
-        }
-
-        if (q.answer != null)
-        {
-            Debug.Log("answer.correct_index: " + q.answer.correct_index);
-        }
-        else
-        {
-            Debug.Log("answer is NULL");
-        }
-
-        isTimedQuestion = q.time_limit_sec > 0;
+        isTimedQuestion = normalQuestion.time_limit_sec > 0;
 
         if (isTimedQuestion)
         {
-            remainingTime = q.time_limit_sec;
+            remainingTime = normalQuestion.time_limit_sec;
             ui.UpdateTimer(remainingTime);
         }
         else
@@ -222,15 +779,174 @@ public class QuizManager : MonoBehaviour
             ui.UpdateTimer(-1f);
         }
 
-        if (!string.IsNullOrEmpty(q.doc_type) && q.doc_type.Equals("matching", StringComparison.OrdinalIgnoreCase))
+        ui.ShowQuestion(normalQuestion);
+    }
+
+    private void RecordChoiceQuestionResult(Question q, string selectedOption, bool isCorrect)
+    {
+        QuestionResult result = new QuestionResult
         {
-            Debug.Log($"[QuizManager] Matching question: {q.id}");
-            ui.ShowQuestion(q);
+            questionId = q.id,
+            topic = q.topic,
+            region = q.region,
+            level = q.GetNormalizedLevel(),
+            docType = q.doc_type,
+            isCorrect = isCorrect,
+            isUnanswered = false,
+            scoreRatio = isCorrect ? 1f : 0f,
+            selectedAnswer = selectedOption,
+            correctAnswer = q.answer_text
+        };
+
+        quizResults.Add(result);
+
+        Debug.Log(
+            $"[RESULT] Choice | id={result.questionId} | region={result.region} | level={result.level} | isCorrect={result.isCorrect}"
+        );
+    }
+
+    public void RecordMatchingQuestionResult(Question q, int correctCount, int totalCount)
+    {
+        if (q == null || totalCount <= 0)
             return;
+
+        float accuracy = (float)correctCount / totalCount;
+        bool isCorrect = accuracy >= 1f;
+
+        QuestionResult result = new QuestionResult
+        {
+            questionId = q.id,
+            topic = q.topic,
+            region = q.region,
+            level = q.GetNormalizedLevel(),
+            docType = q.doc_type,
+            isCorrect = isCorrect,
+            isUnanswered = false,
+            scoreRatio = accuracy,
+            selectedAnswer = $"{correctCount}/{totalCount}",
+            correctAnswer = $"{totalCount}/{totalCount}"
+        };
+
+        quizResults.Add(result);
+
+        Debug.Log(
+            $"[RESULT] Matching | id={result.questionId} | region={result.region} | level={result.level} | accuracy={result.scoreRatio}"
+        );
+    }
+
+    private void RecordUnansweredQuestionResult(Question q)
+    {
+        QuestionResult result = new QuestionResult
+        {
+            questionId = q.id,
+            topic = q.topic,
+            region = q.region,
+            level = q.GetNormalizedLevel(),
+            docType = q.doc_type,
+            isCorrect = false,
+            isUnanswered = true,
+            scoreRatio = 0f,
+            selectedAnswer = "Unanswered",
+            correctAnswer = q.answer_text
+        };
+
+        quizResults.Add(result);
+
+        Debug.Log($"[RESULT] Unanswered | id={result.questionId} | region={result.region} | level={result.level}");
+    }
+
+    private List<RegionAnalysisResult> BuildRegionAnalysis()
+    {
+        List<RegionAnalysisResult> analysisResults = new List<RegionAnalysisResult>();
+
+        var groupedByRegion = quizResults
+            .Where(r => !string.IsNullOrWhiteSpace(r.region))
+            .GroupBy(r => r.region);
+
+        foreach (var group in groupedByRegion)
+        {
+            int totalQuestions = group.Count();
+            int correctCount = group.Count(x => x.isCorrect);
+            int unansweredCount = group.Count(x => x.isUnanswered);
+            int wrongCount = group.Count(x => !x.isCorrect && !x.isUnanswered);
+
+            float averageScoreRatio = totalQuestions > 0
+                ? (float)correctCount / totalQuestions
+                : 0f;
+
+            RegionAnalysisResult result = new RegionAnalysisResult
+            {
+                region = group.Key,
+                totalQuestions = totalQuestions,
+                correctCount = correctCount,
+                wrongCount = wrongCount,
+                unansweredCount = unansweredCount,
+                averageScoreRatio = averageScoreRatio,
+                status = GetRegionPerformanceStatus(correctCount, totalQuestions)
+            };
+
+            analysisResults.Add(result);
         }
 
-        ui.ShowQuestion(q);
+        analysisResults = analysisResults
+            .OrderBy(r => r.averageScoreRatio)
+            .ThenByDescending(r => r.unansweredCount + r.wrongCount)
+            .ToList();
+
+        return analysisResults;
     }
+
+    private void BuildFinalQuizAnalysis()
+    {
+        finalTotalQuestions = quizResults.Count;
+        finalTotalCorrect = quizResults.Count(r => r.isCorrect);
+        finalTotalUnanswered = quizResults.Count(r => r.isUnanswered);
+        finalTotalWrong = quizResults.Count(r => !r.isCorrect && !r.isUnanswered);
+        finalOverallAverageScore = quizResults.Count > 0 ? quizResults.Average(r => r.scoreRatio) : 0f;
+
+        finalRegionAnalysis = BuildRegionAnalysis();
+    }
+
+    private void PrintQuizAnalysisToConsole()
+    {
+        Debug.Log("========== QUIZ ANALYSIS ==========");
+
+        Debug.Log($"[ANALYSIS] Total Questions: {finalTotalQuestions}");
+        Debug.Log($"[ANALYSIS] Total Correct: {finalTotalCorrect}");
+        Debug.Log($"[ANALYSIS] Total Wrong: {finalTotalWrong}");
+        Debug.Log($"[ANALYSIS] Total Unanswered: {finalTotalUnanswered}");
+        Debug.Log($"[ANALYSIS] Overall Average Score Ratio: {finalOverallAverageScore:F2}");
+
+        Debug.Log("========== REGION ANALYSIS ==========");
+
+        foreach (RegionAnalysisResult region in finalRegionAnalysis)
+        {
+            Debug.Log(
+                $"[REGION ANALYSIS] Region={region.region} | Total={region.totalQuestions} | Correct={region.correctCount} | Wrong={region.wrongCount} | Unanswered={region.unansweredCount} | AvgScore={region.averageScoreRatio:F2} | Status={region.status}"
+            );
+        }
+
+        Debug.Log("====================================");
+    }
+
+    private RegionPerformanceStatus GetRegionPerformanceStatus(int correctCount, int totalQuestions)
+    {
+        if (totalQuestions <= 0)
+            return RegionPerformanceStatus.Green;
+
+        float ratio = (float)correctCount / totalQuestions;
+
+        if (ratio < 0.4f)
+            return RegionPerformanceStatus.Red;
+
+        if (ratio < 0.8f)
+            return RegionPerformanceStatus.Yellow;
+
+        return RegionPerformanceStatus.Green;
+    }
+
+
+    // mevcut eski yapı aşağıda aynen kalsın
 
     Question NormalizeForUI(Question raw)
     {
@@ -243,10 +959,10 @@ public class QuizManager : MonoBehaviour
             time_limit_sec = raw.time_limit_sec,
             tags = raw.tags,
             source = raw.source,
-            topic = raw.topic,
-            region = raw.region,
-            concept_type = raw.concept_type,
-            level = raw.level,
+            topic = string.IsNullOrWhiteSpace(raw.topic) ? string.Empty : raw.topic.Trim(),
+            region = raw.GetNormalizedRegion(),
+            concept_type = string.IsNullOrWhiteSpace(raw.concept_type) ? string.Empty : raw.concept_type.Trim(),
+            level = raw.GetNormalizedLevel(),
             hint = raw.hint,
 
             rationale = raw.rationale,
@@ -328,7 +1044,11 @@ public class QuizManager : MonoBehaviour
         if (quizFinished) return;
         if (questionLocked) return;
 
-        Question q = NormalizeForUI(questionList.questions[currentQuestionIndex]);
+        Question sourceQuestion = IsAdaptiveCategory(NavigationState.CurrentQuizCategory)
+            ? currentQuestion
+            : questionList.questions[currentQuestionIndex];
+
+        Question q = NormalizeForUI(sourceQuestion);
 
         if (!string.IsNullOrEmpty(q.doc_type) && q.doc_type.Equals("matching", StringComparison.OrdinalIgnoreCase))
         {
@@ -338,6 +1058,34 @@ public class QuizManager : MonoBehaviour
 
         isTimerPaused = true;
         questionLocked = true;
+
+        bool isCorrect = selectedOption == q.answer_text;
+
+        if (IsAdaptiveCategory(NavigationState.CurrentQuizCategory))
+        {
+            if (!string.IsNullOrWhiteSpace(currentQuestionRegion) && regionStates.ContainsKey(currentQuestionRegion))
+            {
+                RegionQuizState state = regionStates[currentQuestionRegion];
+
+                string oldLevel = state.currentLevel;
+                string questionLevel = q.GetNormalizedLevel();
+
+                if (state.askedCount >= 2)
+                {
+                    state.currentLevel = GetNextLevel(state.currentLevel, isCorrect);
+                }
+                else
+                {
+                    state.currentLevel = GetNextLevel(questionLevel, isCorrect);
+                }
+
+                Debug.Log(
+                    $"[LEVEL UPDATE] Region={currentQuestionRegion} | QuestionId={q.id} | QuestionLevel={questionLevel} | AnswerCorrect={isCorrect} | OldStateLevel={oldLevel} | NewStateLevel={state.currentLevel} | AskedCount={state.askedCount}"
+                );
+            }
+        }
+
+        RecordChoiceQuestionResult(q, selectedOption, isCorrect);
 
         ui.ShowAnswerResult(
             correctOption: q.answer_text,
@@ -350,13 +1098,38 @@ public class QuizManager : MonoBehaviour
     {
         if (quizFinished) return;
 
-        currentQuestionIndex++;
+        if (!IsAdaptiveCategory(NavigationState.CurrentQuizCategory))
+        {
+            currentQuestionIndex++;
+        }
+
         PrepareCurrentQuestionAndShow();
     }
 
     void EndQuiz()
     {
         quizFinished = true;
-        ui.ShowQuizFinished();
+        BuildFinalQuizAnalysis();
+        PrintQuizAnalysisToConsole();
+
+    if (NavigationState.CurrentQuizCategory == QuizCategory.BasicConcepts)
+    {
+        ui.ShowBasicConceptsFinishedResults(
+            finalTotalCorrect,
+            finalTotalWrong,
+            finalTotalUnanswered,
+            finalOverallAverageScore
+        );
+    }
+    else
+    {
+        ui.ShowQuizFinishedResults(
+            finalTotalCorrect,
+            finalTotalWrong,
+            finalTotalUnanswered,
+            finalOverallAverageScore,
+            finalRegionAnalysis
+        );
+    }
     }
 }
