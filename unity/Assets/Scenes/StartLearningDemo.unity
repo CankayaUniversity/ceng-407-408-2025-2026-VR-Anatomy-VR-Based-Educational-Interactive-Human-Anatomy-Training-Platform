@@ -6316,6 +6316,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiController: {fileID: 241448454972729168}
+  titleText: {fileID: 8777015957708029154}
+  infoText: {fileID: 2831077547328853405}
   bones:
   - {fileID: 2091541845178173364}
   - {fileID: 9057518639438406231}
