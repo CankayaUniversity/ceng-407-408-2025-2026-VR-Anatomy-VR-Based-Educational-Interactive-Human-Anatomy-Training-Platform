@@ -26,10 +26,10 @@ public class LessonManager : MonoBehaviour
 
     [Header("Bone Sequence")]
     public List<GameObject> bones;
+    public BoneVisualManager visualsManager;
 
     private Dictionary<string, BoneData> dataLookup = new Dictionary<string, BoneData>();
     private int currentIndex = 0;
-
     void Start()
     {
         LoadJsonData();
@@ -90,19 +90,31 @@ public class LessonManager : MonoBehaviour
         }
     }
 
+
+
     void ActivateStep(int index)
     {
+        // 1. Get the bone we are currently focused on
         GameObject currentBone = bones[index];
+
+        // 2. Tell the UI to move its pivot to this bone
         uiController.SetNewTarget(currentBone.transform);
 
-        BoneIdentity identity = currentBone.GetComponent<BoneIdentity>();
+        // 3. Handle the Visuals (Transparency/Focus)
+        // If you chose to split the scripts, call the manager here:
+        if (visualsManager != null)
+        {
+            visualsManager.FocusBone(currentBone, bones);
+        }
 
+        // 4. Handle the Data/Text
+        BoneIdentity identity = currentBone.GetComponent<BoneIdentity>();
         if (identity != null && dataLookup.ContainsKey(identity.id))
         {
             BoneData data = dataLookup[identity.id];
 
-            titleText.text = !string.IsNullOrEmpty(data.title) ? data.title :
-                             (!string.IsNullOrEmpty(identity.fallbackDisplayName) ? identity.fallbackDisplayName : currentBone.name);
+            // Set the Title and Body from JSON
+            titleText.text = data.title;
 
             string fullDescription = data.body;
             if (data.steps != null && data.steps.Length > 0)
@@ -117,8 +129,12 @@ public class LessonManager : MonoBehaviour
         }
         else
         {
-            titleText.text = identity != null ? identity.fallbackDisplayName : currentBone.name;
-            infoText.text = "Missing data for ID: " + (identity != null ? identity.id : "No ID Script");
+            // Error handling if ID is missing
+            titleText.text = "Data Missing";
+            infoText.text = "Check ID: " + (identity != null ? identity.id : "No Script");
         }
     }
+
+
+
 }
