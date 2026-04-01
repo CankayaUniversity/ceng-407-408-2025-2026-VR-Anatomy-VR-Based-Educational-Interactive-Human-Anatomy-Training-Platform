@@ -15,13 +15,12 @@ public class MenuRestoreOnStart : MonoBehaviour
 
     private void RestorePanel()
     {
-        // 1) Hepsini kapat
         foreach (var p in allPanels)
         {
-            if (p != null) p.SetActive(false);
+            if (p != null)
+                p.SetActive(false);
         }
 
-        // 2) İstenen paneli aç
         string target = NavigationState.ReturnMenuPanelName;
 
         if (!string.IsNullOrEmpty(target))
@@ -30,19 +29,17 @@ public class MenuRestoreOnStart : MonoBehaviour
             {
                 if (p != null && p.name == target)
                 {
-                    Debug.Log($"[MenuRestore] wanted='{NavigationState.ReturnMenuPanelName}'");
+                    Debug.Log($"[MenuRestore] wanted='{target}'");
                     p.SetActive(true);
                     return;
                 }
             }
         }
 
-        // 3) Bulamazsa main menu
         if (mainMenuPanel != null)
         {
-            Debug.LogWarning($"[MenuRestore] Panel not found: '{NavigationState.ReturnMenuPanelName}'. Falling back to MainMenu.");
+            Debug.LogWarning($"[MenuRestore] Panel not found: '{target}'. Falling back to MainMenu.");
             mainMenuPanel.SetActive(true);
         }
-        
     }
 }

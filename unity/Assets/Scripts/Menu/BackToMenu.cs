@@ -34,14 +34,19 @@ public class BackToMenu : MonoBehaviour
     private void Update()
     {
         if (Keyboard.current != null && Keyboard.current[backKey].wasPressedThisFrame)
+        {
             GoBackToMenu();
+        }
     }
 
-    private void OnBackAction(InputAction.CallbackContext ctx) => GoBackToMenu();
+    private void OnBackAction(InputAction.CallbackContext ctx)
+    {
+        GoBackToMenu();
+    }
 
     public void GoBackToMenu()
     {
-        Debug.Log("[BackToMenu] Returning to menu and skipping intro once.");
+        Debug.Log("[BackToMenu] Returning to menu and keeping target panel.");
         NavigationState.SkipMenuIntroOnce = true;
         NavigationState.ClearRuntimeOnly();
         SceneManager.LoadScene(menuSceneName);

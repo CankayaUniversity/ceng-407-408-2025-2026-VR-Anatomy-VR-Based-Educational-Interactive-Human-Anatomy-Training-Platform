@@ -119,6 +119,20 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &44842482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
+  m_Name: FreeExplore/Menu
+  m_EditorClassIdentifier: 
+  m_Asset: {fileID: -944628639613478452, guid: 0acb5d62861787642a8c83c72045e607, type: 3}
+  m_ActionId: 10b5ddb9-0cd5-46d4-8e39-12cfe36b7b45
 --- !u!1001 &986287139
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -135,6 +149,10 @@ PrefabInstance:
       propertyPath: menuSceneName
       value: 01_Menu
       objectReference: {fileID: 0}
+    - target: {fileID: 4274365239816312433, guid: 094ab6737cf0d1c488020ebc8032676f, type: 3}
+      propertyPath: backToMenuAction
+      value: 
+      objectReference: {fileID: 44842482}
     - target: {fileID: 5698275172736818006, guid: 094ab6737cf0d1c488020ebc8032676f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.0476694

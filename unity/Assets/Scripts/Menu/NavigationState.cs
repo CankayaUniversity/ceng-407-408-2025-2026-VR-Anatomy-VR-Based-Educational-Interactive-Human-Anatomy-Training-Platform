@@ -1,6 +1,6 @@
 public static class NavigationState
 {
-    // Menüde en son seçilen ünite/alt menü id (istersen kullanırsın)
+    // Menüde en son seçilen ünite/alt menü id
     public static string lastSelectedUnitId;
 
     // Menüye geri dönünce hangi panel açılacak?
@@ -12,23 +12,16 @@ public static class NavigationState
     // Hareket sistemi içinde hangi alt ünite seçildi?
     public static MotionSubUnit SelectedMotionSubUnit { get; set; } = MotionSubUnit.None;
 
-    // ✅ QUIZ: Menüden hangi quiz kategorisi seçildi?
+    // QUIZ: Menüden hangi quiz kategorisi seçildi?
     public static QuizCategory CurrentQuizCategory { get; set; } = QuizCategory.AllQuestions;
+
+    // Menü intro bir kez atlasın mı?
     public static bool SkipMenuIntroOnce = false;
 
-    // Sadece runtime state temizliği (menü geri dönüş bilgisini silmez)
+    // Sadece runtime state temizliği (menü geri dönüş panelini silmez)
     public static void ClearRuntimeOnly()
     {
-        // lastSelectedUnitId aynı kalsın
-        // ReturnMenuPanelName aynı kalsın
         SelectedMotionSubUnit = MotionSubUnit.None;
-
-        // Quiz seçimini istersen koru istersen resetle.
-        // Ben "korusun" diye dokunmuyorum.
-        // CurrentQuizCategory = QuizCategory.AllQuestions;
-
-        // Mode’u da istersen koru, istersen resetle:
-        // CurrentEntryMode = EntryMode.Learn;
     }
 
     public static void ResetAll()
@@ -37,9 +30,8 @@ public static class NavigationState
         ReturnMenuPanelName = null;
         CurrentEntryMode = EntryMode.Learn;
         SelectedMotionSubUnit = MotionSubUnit.None;
-
-        // ✅ Quiz state reset
         CurrentQuizCategory = QuizCategory.AllQuestions;
+        SkipMenuIntroOnce = false;
     }
 }
 
@@ -52,9 +44,6 @@ public enum EntryMode
 public enum MotionSubUnit
 {
     None = 0,
-
-    // Bunları senin menü seçeneklerine göre genişletebilirsin.
-    // Şimdilik örnekler:
     HeadFaceBones = 1,
     Rib = 2,
     Spine = 3,
@@ -64,11 +53,10 @@ public enum MotionSubUnit
     LowerExtremityMuscles = 7
 }
 
-// ✅ Quiz kategorileri (menüdeki butonlara birebir)
 public enum QuizCategory
 {
-    BasicConcepts = 0,     // Temel Kavramlar
-    MotionSystem = 1,      // Hareket Sistemi
-    CirculationSystem = 2, // Dolaşım Sistemi
-    AllQuestions = 3       // Bütün Sorular
+    BasicConcepts = 0,
+    MotionSystem = 1,
+    CirculationSystem = 2,
+    AllQuestions = 3
 }

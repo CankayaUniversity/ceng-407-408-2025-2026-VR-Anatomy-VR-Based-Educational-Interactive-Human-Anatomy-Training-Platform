@@ -18,7 +18,6 @@ public class SceneLoader : MonoBehaviour
         NavigationState.CurrentEntryMode = EntryMode.FreeExplore;
     }
 
-    // Hareket Sistemi VR sahnesi
     public void LoadMotionSystemSubUnit(int subUnitInt)
     {
         NavigationState.SelectedMotionSubUnit = (MotionSubUnit)subUnitInt;
@@ -43,7 +42,7 @@ public class SceneLoader : MonoBehaviour
     }
 
     // ----------------------------
-    // QUIZ - Genel (eski)
+    // QUIZ - Genel
     // ----------------------------
     public void LoadQuiz()
     {
@@ -57,7 +56,7 @@ public class SceneLoader : MonoBehaviour
     }
 
     // ----------------------------
-    // ✅ QUIZ - Kategori seçerek yükleme (YENİ)
+    // QUIZ - Kategori seçerek yükleme
     // ----------------------------
     public void LoadBasicConceptsQuiz()
     {
@@ -79,6 +78,37 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadAllQuestionsQuiz()
     {
+        NavigationState.CurrentQuizCategory = QuizCategory.AllQuestions;
+        SceneManager.LoadScene("04_Quiz");
+    }
+
+    // ----------------------------
+    // ✅ PANELDEN QUIZ'E GİRİŞ İÇİN YENİLER
+    // ----------------------------
+    public void LoadBasicConceptsQuizFromMenuPanel(string currentMenuPanelName)
+    {
+        NavigationState.ReturnMenuPanelName = currentMenuPanelName;
+        NavigationState.CurrentQuizCategory = QuizCategory.BasicConcepts;
+        SceneManager.LoadScene("04_Quiz");
+    }
+
+    public void LoadMotionSystemQuizFromMenuPanel(string currentMenuPanelName)
+    {
+        NavigationState.ReturnMenuPanelName = currentMenuPanelName;
+        NavigationState.CurrentQuizCategory = QuizCategory.MotionSystem;
+        SceneManager.LoadScene("04_Quiz");
+    }
+
+    public void LoadCirculationSystemQuizFromMenuPanel(string currentMenuPanelName)
+    {
+        NavigationState.ReturnMenuPanelName = currentMenuPanelName;
+        NavigationState.CurrentQuizCategory = QuizCategory.CirculationSystem;
+        SceneManager.LoadScene("04_Quiz");
+    }
+
+    public void LoadAllQuestionsQuizFromMenuPanel(string currentMenuPanelName)
+    {
+        NavigationState.ReturnMenuPanelName = currentMenuPanelName;
         NavigationState.CurrentQuizCategory = QuizCategory.AllQuestions;
         SceneManager.LoadScene("04_Quiz");
     }
