@@ -10,7 +10,7 @@ public class CirculationFreeExploreVisualController : MonoBehaviour
     [SerializeField] private Material highlightMaterial;
     [SerializeField] private Material dimMaterial;
 
-    private readonly Dictionary<Renderer, Material[]> _originalMaterials = new Dictionary<Renderer, Material[]>();
+    private readonly Dictionary<Renderer, Material[]> _originalMaterials = new();
 
     private void Awake()
     {
@@ -32,7 +32,15 @@ public class CirculationFreeExploreVisualController : MonoBehaviour
 
             if (!_originalMaterials.ContainsKey(r))
             {
-                _originalMaterials.Add(r, r.sharedMaterials);
+                Material[] originals = r.sharedMaterials;
+                Material[] copy = new Material[originals.Length];
+
+                for (int j = 0; j < originals.Length; j++)
+                {
+                    copy[j] = originals[j];
+                }
+
+                _originalMaterials.Add(r, copy);
             }
         }
     }
@@ -49,25 +57,33 @@ public class CirculationFreeExploreVisualController : MonoBehaviour
         }
     }
 
-    public void ApplyFocus(List<GameObject> focusTargets, List<GameObject> dimTargets)
+    public void ApplyFocus(List<GameObject> interactionTargets, List<GameObject> dimTargets)
     {
         ResetVisualState();
 
-        HashSet<Renderer> focusRenderers = CollectRenderers(focusTargets);
+        HashSet<Renderer> interactionRenderers = CollectRenderers(interactionTargets);
         HashSet<Renderer> dimRenderers = CollectRenderers(dimTargets);
 
-        // Focus renderers always win over dim renderers
-        foreach (Renderer r in focusRenderers)
+        // Interaction olanlar highlight
+        foreach (Renderer r in interactionRenderers)
         {
             if (r == null) continue;
-            ApplyOverrideMaterial(r, highlightMaterial);
+
+            if (highlightMaterial != null)
+                ApplyOverrideMaterial(r, highlightMaterial);
         }
 
+        // Dim olanlar dim material
         foreach (Renderer r in dimRenderers)
         {
             if (r == null) continue;
-            if (focusRenderers.Contains(r)) continue;
-            ApplyOverrideMaterial(r, dimMaterial);
+
+            // Interaction her zaman kazanır
+            if (interactionRenderers.Contains(r))
+                continue;
+
+            if (dimMaterial != null)
+                ApplyOverrideMaterial(r, dimMaterial);
         }
     }
 

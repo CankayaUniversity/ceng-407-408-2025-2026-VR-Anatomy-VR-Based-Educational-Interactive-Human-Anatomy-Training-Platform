@@ -19,10 +19,10 @@ public class CirculationFreeExploreController : MonoBehaviour
 
     [SerializeField] private List<SequenceDefinition> sequenceDefinitions = new();
 
-    [SerializeField] private FreeExploreDisplayVisibilityController visibilityController;
-    [SerializeField] private FreeExploreVisualController visualController;
+    [SerializeField] private CirculationFreeExploreDisplayVisibilityController visibilityController;
+    [SerializeField] private CirculationFreeExploreVisualController visualController;
     [SerializeField] private FreeExploreRotationController rotationController;
-    [SerializeField] private FreeExploreInteractionController interactionController;
+    [SerializeField] private CirculationFreeExploreInteractionController interactionController;
 
     [SerializeField] private float defaultOverviewDuration = 10f;
 
@@ -45,38 +45,65 @@ public class CirculationFreeExploreController : MonoBehaviour
     }
 
     private IEnumerator RunSequence(SequenceDefinition def)
+{
+    if (visibilityController != null)
+        visibilityController.HideAll();
+
+    if (visualController != null)
+        visualController.ResetVisualState();
+
+    if (interactionController != null)
+        interactionController.DisableAllInteractions();
+
+    // OVERVIEW: sadece context göster
+    if (visibilityController != null)
+        visibilityController.ShowOnly(def.contextObjects);
+
+    if (rotationController != null)
+        rotationController.EnableRotation();
+
+    float wait = def.overviewDurationOverride > 0f
+        ? def.overviewDurationOverride
+        : defaultOverviewDuration;
+
+    yield return new WaitForSeconds(wait);
+
+    if (rotationController != null)
+        rotationController.DisableRotation();
+
+    List<GameObject> visibleObjects = BuildVisibleSet(def);
+
+    if (visibilityController != null)
+        visibilityController.ShowOnly(visibleObjects);
+
+    if (visualController != null)
+        visualController.ApplyFocus(def.interactionTargets, def.dimTargets);
+
+    if (interactionController != null)
+        interactionController.EnableOnly(def.interactionTargets);
+}
+
+    private List<GameObject> BuildVisibleSet(SequenceDefinition def)
     {
-        if (visibilityController != null)
-            visibilityController.HideAll();
+        List<GameObject> result = new();
 
-        if (visualController != null)
-            visualController.ResetVisualState();
+        AddRangeUnique(result, def.contextObjects);
+        AddRangeUnique(result, def.focusTargets);
+        AddRangeUnique(result, def.dimTargets);
 
-        if (interactionController != null)
-            interactionController.DisableAllInteractions();
+        return result;
+    }
 
-        if (visibilityController != null)
-            visibilityController.ShowOnly(def.contextObjects);
+    private void AddRangeUnique(List<GameObject> target, List<GameObject> source)
+    {
+        if (source == null) return;
 
-        if (rotationController != null)
-            rotationController.EnableRotation();
-
-        float wait = def.overviewDurationOverride > 0f
-            ? def.overviewDurationOverride
-            : defaultOverviewDuration;
-
-        yield return new WaitForSeconds(wait);
-
-        if (rotationController != null)
-            rotationController.DisableRotation();
-
-        if (visibilityController != null)
-            visibilityController.ShowOnly(def.contextObjects);
-
-        if (visualController != null)
-            visualController.ApplyFocus(def.focusTargets, def.dimTargets);
-
-        if (interactionController != null)
-            interactionController.EnableOnly(def.interactionTargets);
+        for (int i = 0; i < source.Count; i++)
+        {
+            GameObject go = source[i];
+            if (go == null) continue;
+            if (!target.Contains(go))
+                target.Add(go);
+        }
     }
 }
