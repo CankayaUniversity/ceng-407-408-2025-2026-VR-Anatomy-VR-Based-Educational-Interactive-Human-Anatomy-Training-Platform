@@ -37,6 +37,7 @@ public class QuizUIController : MonoBehaviour
     public TMP_Text generalWrongText;
     public TMP_Text generalUnansweredText;
     public TMP_Text generalSuccessText;
+    public Image successRadialFill;///////////////////////////////////////////////////////////////////////
 
     public Transform regionResultsContent;
     public RegionResultRowUI regionResultRowPrefab;
@@ -375,7 +376,7 @@ public class QuizUIController : MonoBehaviour
             generalUnansweredText.text = $"Boş: {totalUnanswered}";
 
         if (generalSuccessText != null)
-            generalSuccessText.text = $"Başarı oranı: %{overallAverageScore * 100f:0}";
+            generalSuccessText.text = $" %{overallAverageScore * 100f:0}";
 
         if (regionResultsContent != null)
             regionResultsContent.gameObject.SetActive(true);
@@ -398,6 +399,12 @@ public class QuizUIController : MonoBehaviour
             RegionResultRowUI row = Instantiate(regionResultRowPrefab, regionResultsContent);
             row.Setup(region);
         }
+
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        UpdateSuccessUI(overallAverageScore);
+        ///////////////////////////////////////////////////////////////////////
     }
 
     public void ShowBasicConceptsFinishedResults(
@@ -714,4 +721,22 @@ public class QuizUIController : MonoBehaviour
     {
         return matchingSubmitted;
     }
+
+    ////////////////////////////////////////////////////////////////////
+    private void UpdateSuccessUI(float scoreRatio)
+    {
+        if (successRadialFill == null) return;
+
+        successRadialFill.fillAmount = scoreRatio;
+
+        if (scoreRatio < 0.4f)
+            successRadialFill.color = Color.red;
+        else if (scoreRatio < 0.8f)
+            successRadialFill.color = Color.yellow;
+        else
+            successRadialFill.color = Color.green;
+    }
+
+
+
 }
