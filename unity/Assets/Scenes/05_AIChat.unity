@@ -305,7 +305,7 @@ MonoBehaviour:
   questionInput: {fileID: 1929558922}
   askButton: {fileID: 736500870}
   answerText: {fileID: 1160254746}
-  apiUrl: https://cold-thus-alberta-stream.trycloudflare.com/ask
+  apiUrl: https://aquatic-terminal-necessarily-xbox.trycloudflare.com/ask
 --- !u!1 &736500866
 GameObject:
   m_ObjectHideFlags: 0
@@ -1680,7 +1680,7 @@ Transform:
   m_GameObject: {fileID: 888000001}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.1, y: -0.8, z: -8}
+  m_LocalPosition: {x: -1.62, y: -0.5, z: -7}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1698,10 +1698,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f92ff94284510574e97f22863bad4e5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  glbFileName: son.glb
+  glbFileName: model1.glb
   lookAtCamera: 1
   rotationSpeed: 2
-  lookAtPitchOffset: -25
+  lookAtPitchOffset: -10
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

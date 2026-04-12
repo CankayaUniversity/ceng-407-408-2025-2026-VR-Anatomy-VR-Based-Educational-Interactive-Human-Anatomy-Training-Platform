@@ -15,7 +15,7 @@ public class RagApiClient : MonoBehaviour
     [SerializeField] private TMP_Text answerText;
 
     [Header("API")]
-    [SerializeField] private string apiUrl = "https://cold-thus-alberta-stream.trycloudflare.com/ask";
+    [SerializeField] private string apiUrl = "https://aquatic-terminal-necessarily-xbox.trycloudflare.com/ask";
 
     [Header("Speech API")]
     [SerializeField] private string sttUrl = "http://127.0.0.1:8001/stt";
