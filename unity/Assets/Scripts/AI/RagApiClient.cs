@@ -27,8 +27,10 @@ public class RagApiClient : MonoBehaviour
 
     private Button _micButton;
     private Button _speakerButton;
+    private Button _answerToggleButton;
     private TMP_Text _micLabel;
     private TMP_Text _speakerLabel;
+    private TMP_Text _answerToggleLabel;
     private AudioSource _audio;
 
     private bool _isRecording;
@@ -37,6 +39,8 @@ public class RagApiClient : MonoBehaviour
     private AudioClip _recordingClip;
     private Color _defaultBtnColor;
     private Coroutine _ttsRoutine;
+    private bool _isAnswerVisible;
+    private string _latestAnswer = "";
 
     [Serializable] private class AskRequest    { public string question; }
     [Serializable] private class AskResponse   { public string answer; }
@@ -52,6 +56,7 @@ public class RagApiClient : MonoBehaviour
             _audio = gameObject.AddComponent<AudioSource>();
 
         CreateSpeechButtons();
+        SetAnswerVisible(false);
         RefreshInteractableState();
     }
 
@@ -61,6 +66,7 @@ public class RagApiClient : MonoBehaviour
         if (_isRecording) Microphone.End(null);
         if (_micButton != null) _micButton.onClick.RemoveAllListeners();
         if (_speakerButton != null) _speakerButton.onClick.RemoveAllListeners();
+        if (_answerToggleButton != null) _answerToggleButton.onClick.RemoveAllListeners();
     }
 
     #region Ask (mevcut fonksiyon)
@@ -73,11 +79,11 @@ public class RagApiClient : MonoBehaviour
 
         if (string.IsNullOrEmpty(q))
         {
-            answerText.text = "Bir soru yaz da öyle bas 🙃";
+            SetLatestAnswer("Devam etmek için lütfen bir soru yazın.");
             return;
         }
 
-        answerText.text = "Düşünüyorum... 🤔";
+        SetLatestAnswer("Cevap hazırlanıyor...");
         StartCoroutine(SendQuestion(q));
     }
 
@@ -103,7 +109,7 @@ public class RagApiClient : MonoBehaviour
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-                answerText.text = "Sunucuya bağlanamadı. Lütfen bağlantınızı kontrol edip tekrar deneyin.";
+                SetLatestAnswer("Sunucuya bağlanamadı. Lütfen bağlantınızı kontrol edip tekrar deneyin.");
                 Debug.LogWarning($"[RagApiClient] Ask hatası: {req.error} | HTTP {req.responseCode}");
             }
             else
@@ -112,13 +118,13 @@ public class RagApiClient : MonoBehaviour
                 try
                 {
                     var resp = JsonUtility.FromJson<AskResponse>(responseJson);
-                    answerText.text = string.IsNullOrEmpty(resp?.answer)
+                    SetLatestAnswer(string.IsNullOrEmpty(resp?.answer)
                         ? "Cevap alınamadı, tekrar deneyin."
-                        : resp.answer;
+                        : resp.answer);
                 }
                 catch
                 {
-                    answerText.text = "Sunucudan geçersiz cevap geldi, tekrar deneyin.";
+                    SetLatestAnswer("Sunucudan geçersiz cevap geldi, tekrar deneyin.");
                 }
             }
         }
@@ -165,6 +171,138 @@ public class RagApiClient : MonoBehaviour
             micRT.anchoredPosition.y - askRT.sizeDelta.y - 12f
         );
         _speakerButton.onClick.AddListener(OnSpeakerClicked);
+
+        // "Cevabı Gör" butonu — chatbox'ın altında, geniş tasarım
+        _answerToggleButton = CloneButton(askButton, parent, "AnswerToggleButton");
+        _answerToggleLabel = _answerToggleButton.GetComponentInChildren<TMP_Text>();
+        _answerToggleLabel.text = "Cevabı Gör";
+
+        RectTransform toggleRT = _answerToggleButton.GetComponent<RectTransform>();
+        PositionAndStyleAnswerToggle(toggleRT, askRT);
+        _answerToggleButton.onClick.AddListener(OnAnswerToggleClicked);
+    }
+
+    private void PositionAndStyleAnswerToggle(RectTransform toggleRT, RectTransform askRT)
+    {
+        if (toggleRT == null) return;
+
+        RectTransform questionRT = questionInput != null ? questionInput.GetComponent<RectTransform>() : null;
+        RectTransform answerRT = answerText != null ? answerText.GetComponent<RectTransform>() : null;
+
+        // Kompakt boyut: chatbox ile hizalı ama bar gibi değil.
+        float chatWidthRef = questionRT != null ? questionRT.sizeDelta.x :
+            (answerRT != null ? answerRT.sizeDelta.x : 420f);
+        float width = Mathf.Clamp(chatWidthRef * 0.42f, 210f, 300f);
+        float height = Mathf.Clamp(askRT.sizeDelta.y * 0.9f, 38f, 46f);
+        toggleRT.sizeDelta = new Vector2(width, height);
+
+        // Chatbox'ın hemen altına, yatayda ortalı yerleşim.
+        if (questionRT != null)
+        {
+            float yOffset = questionRT.anchoredPosition.y - (questionRT.sizeDelta.y * 0.5f) - (height * 0.5f) - 14f;
+            toggleRT.anchoredPosition = new Vector2(questionRT.anchoredPosition.x, yOffset);
+        }
+        else if (answerRT != null)
+        {
+            float yOffset = answerRT.anchoredPosition.y - (answerRT.sizeDelta.y * 0.5f) - (height * 0.5f) - 12f;
+            toggleRT.anchoredPosition = new Vector2(answerRT.anchoredPosition.x, yOffset);
+        }
+        else
+        {
+            toggleRT.anchoredPosition = new Vector2(askRT.anchoredPosition.x - 90f, askRT.anchoredPosition.y - 125f);
+        }
+
+        // Tasarımsal iyileştirme: futuristik cyan tonları + yumuşak state geçişleri.
+        Image img = _answerToggleButton != null ? _answerToggleButton.GetComponent<Image>() : null;
+        if (img != null)
+        {
+            Color normal = new Color(0.06f, 0.40f, 0.62f, 0.92f);
+            Color highlighted = new Color(0.10f, 0.52f, 0.77f, 0.97f);
+            Color pressed = new Color(0.05f, 0.33f, 0.52f, 0.96f);
+            img.color = normal;
+
+            var colors = _answerToggleButton.colors;
+            colors.normalColor = normal;
+            colors.highlightedColor = highlighted;
+            colors.pressedColor = pressed;
+            colors.selectedColor = highlighted;
+            colors.disabledColor = new Color(0.06f, 0.22f, 0.32f, 0.55f);
+            colors.colorMultiplier = 1f;
+            colors.fadeDuration = 0.12f;
+            _answerToggleButton.colors = colors;
+        }
+
+        if (_answerToggleLabel != null)
+        {
+            _answerToggleLabel.fontSize = 25f;
+            _answerToggleLabel.alignment = TextAlignmentOptions.Center;
+            _answerToggleLabel.enableWordWrapping = false;
+            _answerToggleLabel.overflowMode = TextOverflowModes.Truncate;
+            _answerToggleLabel.color = new Color(0.92f, 0.98f, 1f, 1f);
+        }
+
+        PositionAnswerTextBelowToggle(toggleRT, answerRT, questionRT);
+    }
+
+    private void PositionAnswerTextBelowToggle(
+        RectTransform toggleRT,
+        RectTransform answerRT,
+        RectTransform questionRT)
+    {
+        if (toggleRT == null || answerRT == null) return;
+
+        RectTransform questionTextRT = (questionInput != null && questionInput.textComponent != null)
+            ? questionInput.textComponent.rectTransform
+            : null;
+        RectTransform parentRT = answerRT.parent as RectTransform;
+        if (parentRT == null) return;
+
+        float gap = 16f;
+        float answerHeight = Mathf.Max(answerRT.sizeDelta.y, 260f);
+
+        // Toggle butonunun alt kenarını parent uzayına çevir.
+        Vector3[] toggleWorld = new Vector3[4];
+        toggleRT.GetWorldCorners(toggleWorld);
+        Vector2 toggleBottomLocal = parentRT.InverseTransformPoint(toggleWorld[0]);
+        float y = toggleBottomLocal.y - (answerHeight * 0.5f) - gap;
+
+        // Cevap bloğu chatbox alt-solundan başlayıp sağa kadar uzasın.
+        // Metin sola hizalı, dar sütun olmayacak.
+        if (questionRT != null)
+        {
+            Vector3[] questionBoxWorld = new Vector3[4];
+            questionRT.GetWorldCorners(questionBoxWorld);
+            Vector2 questionLeftLocal = parentRT.InverseTransformPoint(questionBoxWorld[0]);
+            Vector2 questionRightLocal = parentRT.InverseTransformPoint(questionBoxWorld[3]);
+
+            const float leftInset = 10f;   // biraz daha soldan başlasın
+            const float rightInset = 8f;   // sağa daha geç bitsin
+            float leftStart = questionLeftLocal.x + leftInset;
+            float rightEnd = questionRightLocal.x - rightInset;
+            float answerWidth = Mathf.Clamp(rightEnd - leftStart, 540f, 1040f);
+            answerRT.anchorMin = new Vector2(0.5f, 0.5f);
+            answerRT.anchorMax = new Vector2(0.5f, 0.5f);
+            answerRT.pivot = new Vector2(0f, 0.5f);
+            answerRT.sizeDelta = new Vector2(answerWidth, answerHeight);
+            answerRT.anchoredPosition = new Vector2(leftStart, y);
+        }
+        else if (questionTextRT != null)
+        {
+            Vector3[] questionTextWorld = new Vector3[4];
+            questionTextRT.GetWorldCorners(questionTextWorld);
+            Vector2 textLeftLocal = parentRT.InverseTransformPoint(questionTextWorld[0]);
+            Vector2 textRightLocal = parentRT.InverseTransformPoint(questionTextWorld[3]);
+            float answerWidth = Mathf.Clamp(textRightLocal.x - textLeftLocal.x, 520f, 980f);
+            answerRT.anchorMin = new Vector2(0.5f, 0.5f);
+            answerRT.anchorMax = new Vector2(0.5f, 0.5f);
+            answerRT.pivot = new Vector2(0f, 0.5f);
+            answerRT.sizeDelta = new Vector2(answerWidth, answerHeight);
+            answerRT.anchoredPosition = new Vector2(textLeftLocal.x, y);
+        }
+        else
+        {
+            answerRT.anchoredPosition = new Vector2(toggleRT.anchoredPosition.x, y);
+        }
     }
 
     private Button CloneButton(Button template, Transform parent, string goName)
@@ -191,7 +329,7 @@ public class RagApiClient : MonoBehaviour
     {
         if (Microphone.devices.Length == 0)
         {
-            answerText.text = "Mikrofon bulunamadı ❌";
+            SetLatestAnswer("Mikrofon bulunamadı ❌");
             return;
         }
 
@@ -213,7 +351,7 @@ public class RagApiClient : MonoBehaviour
 
         if (pos <= 0 || _recordingClip == null)
         {
-            answerText.text = "Ses algılanamadı, tekrar deneyin.";
+            SetLatestAnswer("Ses algılanamadı, tekrar deneyin.");
             return;
         }
 
@@ -253,7 +391,7 @@ public class RagApiClient : MonoBehaviour
                 if (string.IsNullOrEmpty(recognized))
                 {
                     questionInput.text = "";
-                    answerText.text = "Konuşma anlaşılamadı, tekrar deneyin.";
+                    SetLatestAnswer("Konuşma anlaşılamadı, tekrar deneyin.");
                 }
                 else
                 {
@@ -263,7 +401,7 @@ public class RagApiClient : MonoBehaviour
             else
             {
                 questionInput.text = "";
-                answerText.text = "Sunucuya bağlanamadı. Konuşma algılanamadı.";
+                SetLatestAnswer("Sunucuya bağlanamadı. Konuşma algılanamadı.");
                 Debug.LogWarning($"[RagApiClient] STT hatası: {req.error}");
             }
         }
@@ -290,7 +428,7 @@ public class RagApiClient : MonoBehaviour
             return;
         }
 
-        string text = answerText != null ? answerText.text : "";
+        string text = _latestAnswer;
         if (string.IsNullOrEmpty(text)
             || text.StartsWith("Cevap burada")
             || text.StartsWith("Düşünüyorum")
@@ -321,7 +459,7 @@ public class RagApiClient : MonoBehaviour
             if (req.result != UnityWebRequest.Result.Success)
             {
                 _speakerLabel.text = "Dinle";
-                answerText.text = "Sunucuya bağlanamadı. Sesli okuma yapılamadı.";
+                SetLatestAnswer("Sunucuya bağlanamadı. Sesli okuma yapılamadı.");
                 Debug.LogWarning($"[RagApiClient] TTS hatası: {req.error}");
                 yield break;
             }
@@ -412,5 +550,88 @@ public class RagApiClient : MonoBehaviour
         if (askButton != null) askButton.interactable = canAsk;
         if (_micButton != null) _micButton.interactable = !_isAsking && !_isSttRunning;
         if (_speakerButton != null) _speakerButton.interactable = !_isAsking && !_isSttRunning && !_isRecording;
+        if (_answerToggleButton != null) _answerToggleButton.interactable = true;
+    }
+
+    private void OnAnswerToggleClicked()
+    {
+        SetAnswerVisible(!_isAnswerVisible);
+    }
+
+    private void SetAnswerVisible(bool visible)
+    {
+        _isAnswerVisible = visible;
+        if (_answerToggleLabel != null)
+            _answerToggleLabel.text = visible ? "Cevabı Gizle" : "Cevabı Gör";
+
+        if (answerText != null)
+        {
+            answerText.gameObject.SetActive(visible);
+            if (visible)
+            {
+                RectTransform toggleRT = _answerToggleButton != null
+                    ? _answerToggleButton.GetComponent<RectTransform>() : null;
+                RectTransform answerRT = answerText.GetComponent<RectTransform>();
+                RectTransform questionRT = questionInput != null
+                    ? questionInput.GetComponent<RectTransform>() : null;
+                PositionAnswerTextBelowToggle(toggleRT, answerRT, questionRT);
+
+                answerText.enableWordWrapping = true;
+                answerText.enableAutoSizing = false;
+                answerText.fontSize = Mathf.Clamp(answerText.fontSize, 28f, 36f);
+                answerText.alignment = TextAlignmentOptions.TopLeft;
+                answerText.overflowMode = TextOverflowModes.Overflow;
+                answerText.lineSpacing = 2f;
+                answerText.text = string.IsNullOrEmpty(_latestAnswer)
+                    ? "Cevap burada gözükecek"
+                    : FormatAnswerForDisplay(_latestAnswer);
+            }
+        }
+    }
+
+    private void SetLatestAnswer(string text)
+    {
+        _latestAnswer = text ?? "";
+        if (_isAnswerVisible && answerText != null)
+            answerText.text = FormatAnswerForDisplay(_latestAnswer);
+    }
+
+    private string FormatAnswerForDisplay(string raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+            return "";
+
+        string normalized = raw.Replace("\r\n", "\n");
+        string[] lines = normalized.Split('\n');
+        var entries = new System.Collections.Generic.List<string>();
+
+        foreach (string line in lines)
+        {
+            string t = line.Trim();
+            if (string.IsNullOrEmpty(t)) continue;
+
+            if (t.StartsWith("- ")) t = t.Substring(2).Trim();
+            else if (t.StartsWith("• ")) t = t.Substring(2).Trim();
+            else if (t.StartsWith("– ")) t = t.Substring(2).Trim();
+
+            entries.Add(t);
+        }
+
+
+
+        // Premium bullet + hanging indent:
+        // Alt satır bullet'ın altına değil, metnin başladığı hattan devam eder.
+        const string prefix = "<indent=34px><line-indent=-34px><color=#33CFFF><b>></b></color><space=10px>";
+        const string suffix = "</line-indent></indent>";
+        var sb = new StringBuilder();
+        for (int i = 0; i < entries.Count; i++)
+        {
+            sb.Append(prefix);
+            sb.Append(entries[i]);
+            sb.Append(suffix);
+            if (i < entries.Count - 1)
+                sb.Append("\n");
+        }
+        return sb.ToString();
     }
 }
