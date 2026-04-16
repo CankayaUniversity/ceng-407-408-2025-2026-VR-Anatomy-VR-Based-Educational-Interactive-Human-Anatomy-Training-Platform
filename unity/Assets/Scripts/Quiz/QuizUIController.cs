@@ -37,6 +37,7 @@ public class QuizUIController : MonoBehaviour
     public TMP_Text generalWrongText;
     public TMP_Text generalUnansweredText;
     public TMP_Text generalSuccessText;
+    public Image successRadialFill;///////////////////////////////////////////////////////////////////////
 
     public Transform regionResultsContent;
     public RegionResultRowUI regionResultRowPrefab;
@@ -90,6 +91,24 @@ public class QuizUIController : MonoBehaviour
 
     public void ShowQuestion(Question q)
     {
+        Debug.Log("=== ShowQuestion çağrıldı ===");
+
+        if (q == null)
+        {
+            Debug.LogError("ShowQuestion içine gelen q NULL!");
+            return;
+        }
+
+        if (questionText == null)
+        {
+            Debug.LogError("questionText Inspector'da atanmamış!");
+            return;
+        }
+
+        Debug.Log("q.body: " + q.body);
+        Debug.Log("q.GetQuestionText(): " + q.GetQuestionText());
+        Debug.Log("q.IsMatching(): " + q.IsMatching());
+
         if (quizCompletedPanel != null)
             quizCompletedPanel.SetActive(false);
 
@@ -97,9 +116,18 @@ public class QuizUIController : MonoBehaviour
         ResetHintUI();
 
         if (!string.IsNullOrWhiteSpace(q.body))
+        {
             questionText.text = q.body;
+            Debug.Log("questionText'e q.body yazıldı: " + questionText.text);
+        }
         else
+        {
             questionText.text = q.GetQuestionText();
+            Debug.Log("questionText'e q.GetQuestionText() yazıldı: " + questionText.text);
+        }
+
+        Debug.Log("questionText objesi aktif mi?: " + questionText.gameObject.activeInHierarchy);
+        Debug.Log("questionText final text: " + questionText.text);
 
         nextButton.gameObject.SetActive(false);
         rationalePopup.Hide();
@@ -126,7 +154,6 @@ public class QuizUIController : MonoBehaviour
             }
 
             ShowMatchingQuestion(q);
-
             Debug.Log("Matching soru gösteriliyor: " + q.GetQuestionText());
         }
         else
@@ -147,9 +174,12 @@ public class QuizUIController : MonoBehaviour
             }
 
             ShowChoiceQuestion(q);
+            Debug.Log("Choice soru gösteriliyor.");
         }
 
         TryStartHintTimer(q);
+
+        Debug.Log("=== ShowQuestion bitti ===");
     }
 
     void ShowChoiceQuestion(Question q)
@@ -375,7 +405,7 @@ public class QuizUIController : MonoBehaviour
             generalUnansweredText.text = $"Boş: {totalUnanswered}";
 
         if (generalSuccessText != null)
-            generalSuccessText.text = $"Başarı oranı: %{overallAverageScore * 100f:0}";
+            generalSuccessText.text = $" %{overallAverageScore * 100f:0}";
 
         if (regionResultsContent != null)
             regionResultsContent.gameObject.SetActive(true);
@@ -398,6 +428,12 @@ public class QuizUIController : MonoBehaviour
             RegionResultRowUI row = Instantiate(regionResultRowPrefab, regionResultsContent);
             row.Setup(region);
         }
+
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        UpdateSuccessUI(overallAverageScore);
+        ///////////////////////////////////////////////////////////////////////
     }
 
     public void ShowBasicConceptsFinishedResults(
@@ -714,4 +750,22 @@ public class QuizUIController : MonoBehaviour
     {
         return matchingSubmitted;
     }
+
+    ////////////////////////////////////////////////////////////////////
+    private void UpdateSuccessUI(float scoreRatio)
+    {
+        if (successRadialFill == null) return;
+
+        successRadialFill.fillAmount = scoreRatio;
+
+        if (scoreRatio < 0.4f)
+            successRadialFill.color = Color.red;
+        else if (scoreRatio < 0.8f)
+            successRadialFill.color = Color.yellow;
+        else
+            successRadialFill.color = Color.green;
+    }
+
+
+
 }
