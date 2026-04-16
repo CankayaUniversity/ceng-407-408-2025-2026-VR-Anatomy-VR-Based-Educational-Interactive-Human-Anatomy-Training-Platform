@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -15,7 +16,7 @@ public class RagApiClient : MonoBehaviour
     [SerializeField] private TMP_Text answerText;
 
     [Header("API")]
-    [SerializeField] private string apiUrl = "https://aquatic-terminal-necessarily-xbox.trycloudflare.com/ask";
+    [SerializeField] private string apiUrl = "https://cindy-therapeutic-diffs-candles.trycloudflare.com/ask";
 
     [Header("Speech API")]
     [SerializeField] private string sttUrl = "http://127.0.0.1:8001/stt";
@@ -41,6 +42,12 @@ public class RagApiClient : MonoBehaviour
     private Coroutine _ttsRoutine;
     private bool _isAnswerVisible;
     private string _latestAnswer = "";
+    private string _questionDraftBeforeStt = "";
+
+    private static readonly Regex CevaplaCommandRegex =
+        new Regex(@"\bcevapla\b", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    private static readonly Regex MultiSpaceRegex =
+        new Regex(@"\s+", RegexOptions.Compiled);
 
     [Serializable] private class AskRequest    { public string question; }
     [Serializable] private class AskResponse   { public string answer; }
@@ -363,6 +370,7 @@ public class RagApiClient : MonoBehaviour
         trimmed.SetData(samples, 0);
 
         byte[] wav = EncodeToWav(trimmed);
+        _questionDraftBeforeStt = questionInput != null ? questionInput.text.Trim() : "";
         questionInput.text = "Konuşma algılanıyor...";
         StartCoroutine(RequestSTT(wav));
     }
@@ -371,6 +379,7 @@ public class RagApiClient : MonoBehaviour
     {
         _isSttRunning = true;
         RefreshInteractableState();
+        bool triggerAutoAsk = false;
 
         WWWForm form = new WWWForm();
         form.AddBinaryData("file", wavData, "recording.wav", "audio/wav");
@@ -395,7 +404,41 @@ public class RagApiClient : MonoBehaviour
                 }
                 else
                 {
-                    questionInput.text = recognized;
+                    bool hasCevapla = ContainsCevaplaCommand(recognized);
+                    string cleaned = RemoveCevaplaCommand(recognized);
+
+                    if (hasCevapla)
+                    {
+                        // "sadece cevapla" dendiğinde mevcut input draft'ını kullan.
+                        if (string.IsNullOrWhiteSpace(cleaned))
+                        {
+                            string draft = _questionDraftBeforeStt;
+                            if (string.IsNullOrWhiteSpace(draft) || draft == "Konuşma algılanıyor...")
+                                draft = questionInput != null ? questionInput.text.Trim() : "";
+
+                            if (string.IsNullOrWhiteSpace(draft) || draft == "Konuşma algılanıyor...")
+                            {
+                                SetLatestAnswer("Gönderilecek bir soru bulunamadı. Önce sorunuzu söyleyin veya yazın.");
+                                questionInput.text = "";
+                            }
+                            else
+                            {
+                                questionInput.text = draft;
+                                triggerAutoAsk = true;
+                            }
+                        }
+                        else
+                        {
+                            questionInput.text = cleaned;
+                            triggerAutoAsk = true;
+                        }
+                    }
+                    else
+                    {
+                        // Sadece soru söylendiyse input'a yaz, otomatik gönderme.
+                        questionInput.text = recognized.Trim();
+                        SetLatestAnswer("Sorunuz hazır. Göndermek için 'cevapla' deyin veya Sor butonuna basın.");
+                    }
                 }
             }
             else
@@ -410,6 +453,13 @@ public class RagApiClient : MonoBehaviour
             req?.Dispose();
             _isSttRunning = false;
             RefreshInteractableState();
+            _questionDraftBeforeStt = "";
+        }
+
+        if (triggerAutoAsk)
+        {
+            // STT bittiğinde Sor butonuna basılmış gibi gönder.
+            OnAskClicked();
         }
     }
 
@@ -544,6 +594,22 @@ public class RagApiClient : MonoBehaviour
 
     #endregion
 
+    private static bool ContainsCevaplaCommand(string text)
+    {
+        return !string.IsNullOrWhiteSpace(text) && CevaplaCommandRegex.IsMatch(text);
+    }
+
+    private static string RemoveCevaplaCommand(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return "";
+
+        string stripped = CevaplaCommandRegex.Replace(text, " ");
+        stripped = MultiSpaceRegex.Replace(stripped, " ").Trim();
+        stripped = stripped.Trim(' ', ',', '.', ';', ':', '!', '?', '-', '_', '/', '\\', '\"', '\'');
+        return stripped;
+    }
+
     private void RefreshInteractableState()
     {
         bool canAsk = !_isAsking && !_isSttRunning && !_isRecording;
@@ -583,7 +649,7 @@ public class RagApiClient : MonoBehaviour
                 answerText.overflowMode = TextOverflowModes.Overflow;
                 answerText.lineSpacing = 2f;
                 answerText.text = string.IsNullOrEmpty(_latestAnswer)
-                    ? "Cevap burada gözükecek"
+                    ? "Lütfen bir soru sorun, cevabı burada görüntülenecek."
                     : FormatAnswerForDisplay(_latestAnswer);
             }
         }
