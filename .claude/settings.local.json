@@ -4,7 +4,15 @@
       "mcp__UnityMCP__manage_editor",
       "Bash(cat:*)",
       "mcp__UnityMCP__manage_asset",
-      "mcp__UnityMCP__manage_scene"
+      "mcp__UnityMCP__manage_scene",
+      "Bash(gh repo *)",
+      "WebFetch(domain:github.com)",
+      "Bash(claude --version)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(claude mcp *)",
+      "mcp__blender__get_scene_info",
+      "mcp__blender__execute_blender_code",
+      "mcp__blender__get_viewport_screenshot"
     ]
   }
 }

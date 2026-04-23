@@ -1,0 +1,362 @@
+fileFormatVersion: 2
+guid: f2a3d9a7970e4474aac3ec2f6805346e
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Aluminium
+    second: {fileID: 2100000, guid: 26f1d92056242e9479816d6014efbc3c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Book_1
+    second: {fileID: 2100000, guid: 1363c883fef4e0f40993dbbec5d85cbf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Book_2
+    second: {fileID: 2100000, guid: e1b832e5c1d490c4881210dc8af64bdb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Book_3
+    second: {fileID: 2100000, guid: fb5027119578eb2419b0f6890001a688, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Book_4
+    second: {fileID: 2100000, guid: f70a9254c2e2bdf45a6dd6ed7caa80d6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Book_5
+    second: {fileID: 2100000, guid: 04bb34cd60abb9d4bb833046ab2c11b7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Book_6
+    second: {fileID: 2100000, guid: 0b8ddbbabab707d4094bb2b4213bd3ae, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_CabinetBody
+    second: {fileID: 2100000, guid: aadb4fbc8e803c348af85c2ed4c80fd0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_CabinetDoor
+    second: {fileID: 2100000, guid: 1a5054058de95704e905093571b7785c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Ceramic
+    second: {fileID: 2100000, guid: 0b40d489281f976458658f7b03455369, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Chrome
+    second: {fileID: 2100000, guid: 7a4eb07ab4437de4fb4d12e7679cfd59, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Clipboard
+    second: {fileID: 2100000, guid: 1f0bd68701d902846891151b4182daff, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_DarkGranite
+    second: {fileID: 2100000, guid: c9214a777344eb84fbf6ed71e5a9c00b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_DarkMetal
+    second: {fileID: 2100000, guid: 2c268a18586831d47af2ffdb6e658a37, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Heart_Realistic
+    second: {fileID: 2100000, guid: 76f1514a64b1ef2429b9f522ddcf4850, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Kickplate
+    second: {fileID: 2100000, guid: 491a42a9702f60947b04af88cdca6919, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Kickplate.001
+    second: {fileID: 2100000, guid: 8f1c66a3647f25b4ab6194667870947c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Kickplate.002
+    second: {fileID: 2100000, guid: 6145fac38da4154429b4b5a6e50def14, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_LabFloor
+    second: {fileID: 2100000, guid: 75503855223d41541a7f36fd24e62d6b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_LabGlass
+    second: {fileID: 2100000, guid: f744662afe4b0b24ab9492f98437c4f4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_LabWall
+    second: {fileID: 2100000, guid: 4e12db08423cfb54db74a9b639df86ee, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Laptop
+    second: {fileID: 2100000, guid: 62a884600d99a3446bcea38cce920c62, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_LaptopScreen
+    second: {fileID: 2100000, guid: 8b5883a250a9cf84291444c78dc1b36b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_LightHousing
+    second: {fileID: 2100000, guid: be9050731c218084faa05ac571f49478, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_LightTube
+    second: {fileID: 2100000, guid: 727dd25789d0e5e4abcc4344c18711bc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Liquid_Blue
+    second: {fileID: 2100000, guid: f7306b69b87d1b64283fc6356e4f673f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Liquid_Green
+    second: {fileID: 2100000, guid: 0091c270df930814f830db494e184c13, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Liquid_Purple
+    second: {fileID: 2100000, guid: e3af5e4caceabd8478bd2e2b3f3f6a2c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Liquid_Red
+    second: {fileID: 2100000, guid: f81d7b5533b369741aab16f4d51e29a0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Liquid_Yellow
+    second: {fileID: 2100000, guid: ac2c8ab94c554b147a2194e2ff2e641d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Microscope
+    second: {fileID: 2100000, guid: 4e8e07af77710314dbd1a3beceade42e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_PetriDish
+    second: {fileID: 2100000, guid: 836628ab86240c847b5bc0a96e6cfe48, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_PlantLeaf
+    second: {fileID: 2100000, guid: e9f21eb849de9804e9bb227082066099, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Poster_L_Heart
+    second: {fileID: 2100000, guid: 5286bf991697ce243b89cc07d0f41c1b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Poster_L_Skeleton_Muscle
+    second: {fileID: 2100000, guid: c4e3f7582060d70408986add42af37c1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Poster_R_Muscular
+    second: {fileID: 2100000, guid: e377e399e8175a34fbbb6cfba796e4f2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Poster_R_Pulmoner
+    second: {fileID: 2100000, guid: 02dce4706ff487f4da0711c8c47ed457, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Skeleton_Realistic
+    second: {fileID: 2100000, guid: 00a511ca433b0694fbeb2a8f2004af73, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_TerraCotta
+    second: {fileID: 2100000, guid: f0438acf9137e224cb9f0dd1766ac3ab, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Torso_Realistic
+    second: {fileID: 2100000, guid: d2650c6971f052a4a929fb0b609a23bc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Trim
+    second: {fileID: 2100000, guid: f94f977797f92a64cad1594f31634592, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_VRRing
+    second: {fileID: 2100000, guid: 878b2e3b01df40b4583eeee2c9934d9d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_VRSurface
+    second: {fileID: 2100000, guid: 3a165c5aa9768544daa588a9dbc42ceb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Whiteboard
+    second: {fileID: 2100000, guid: b964b0b39ec60cd499700a8d7d80fdce, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Window_Frame
+    second: {fileID: 2100000, guid: 9fa28a5254b0fcd4fafef329d2cdaa31, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Window_Glass
+    second: {fileID: 2100000, guid: 61106c8a07207484ca7fa627600ca3c1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_WoodShelf
+    second: {fileID: 2100000, guid: 89d97bc5cac22f945b349dd1a56e87fa, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Poster_L_Heart
+    second: {fileID: 2800000, guid: 5ac8a13507eac9944b566ffeebfe4bf0, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Poster_L_Skeleton_Muscle
+    second: {fileID: 2800000, guid: 0e9bc05752833ed41863ec7c0da5dc29, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Poster_R_Muscular
+    second: {fileID: 2800000, guid: fb683dd0012848648833efd368c99cdb, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Poster_R_Pulmoner
+    second: {fileID: 2800000, guid: 162cc0e3999a31a45bd1725c07dd51cd, type: 3}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
