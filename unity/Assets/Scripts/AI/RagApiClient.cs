@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -65,6 +66,7 @@ public class RagApiClient : MonoBehaviour
         CreateSpeechButtons();
         SetAnswerVisible(false);
         RefreshInteractableState();
+        ShowIntroPanel();
     }
 
     private void OnDestroy()
@@ -660,6 +662,77 @@ public class RagApiClient : MonoBehaviour
         _latestAnswer = text ?? "";
         if (_isAnswerVisible && answerText != null)
             answerText.text = FormatAnswerForDisplay(_latestAnswer);
+    }
+
+    private void ShowIntroPanel()
+    {
+        Canvas canvas = askButton != null ? askButton.GetComponentInParent<Canvas>() : null;
+        if (canvas == null) return;
+
+        var hideList = new List<GameObject>();
+        if (askButton != null) hideList.Add(askButton.gameObject);
+        if (_micButton != null) hideList.Add(_micButton.gameObject);
+        if (_speakerButton != null) hideList.Add(_speakerButton.gameObject);
+        if (_answerToggleButton != null) hideList.Add(_answerToggleButton.gameObject);
+        if (questionInput != null) hideList.Add(questionInput.gameObject);
+
+        GameObject answerGroup = answerText != null && answerText.transform.parent != null
+            ? answerText.transform.parent.gameObject : null;
+        if (answerGroup != null) hideList.Add(answerGroup);
+
+        GameObject avatar = FindChatAvatar();
+        if (avatar != null) hideList.Add(avatar);
+
+        Sprite panelSprite = ResolvePanelSprite();
+        TMP_FontAsset font = ResolveTmpFontAsset();
+        GameObject titleLogo = ResolveTitleLogo();
+
+        var intro = gameObject.AddComponent<AIChatIntroPanel>();
+        intro.Show(canvas, panelSprite, font, titleLogo, hideList, OnIntroContinue);
+    }
+
+    private void OnIntroContinue()
+    {
+        // Chatbox'a geri dönünce cevap alanı kapalı kalmalı, toggle'a basılınca açılsın.
+        SetAnswerVisible(false);
+        RefreshInteractableState();
+    }
+
+    private GameObject FindChatAvatar()
+    {
+        var go = GameObject.Find("ChatAvatar");
+        if (go != null) return go;
+
+        var controller = FindObjectOfType<ChatAvatarController>(true);
+        return controller != null ? controller.gameObject : null;
+    }
+
+    private Sprite ResolvePanelSprite()
+    {
+        // Quiz intro paneli ile birebir aynı 9-slice sprite'ı paylaşmak için sahnedeki
+        // chat kutusunun (QuestionText) Image'ından atlas sprite'ını alıyoruz.
+        if (questionInput != null)
+        {
+            var img = questionInput.GetComponent<Image>();
+            if (img != null && img.sprite != null) return img.sprite;
+        }
+        return null;
+    }
+
+    private TMP_FontAsset ResolveTmpFontAsset()
+    {
+        if (askButton != null)
+        {
+            var label = askButton.GetComponentInChildren<TMP_Text>(true);
+            if (label != null && label.font != null) return label.font;
+        }
+        if (answerText != null && answerText.font != null) return answerText.font;
+        return null;
+    }
+
+    private GameObject ResolveTitleLogo()
+    {
+        return GameObject.Find("logo");
     }
 
     private string FormatAnswerForDisplay(string raw)
