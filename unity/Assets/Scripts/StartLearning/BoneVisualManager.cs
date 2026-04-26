@@ -3,29 +3,49 @@ using System.Collections.Generic;
 
 public class BoneVisualManager : MonoBehaviour
 {
-    private MaterialPropertyBlock propBlock;
-    // This is the property ID for the "Base Color" in URP Lit shaders
-    private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+    [Header("Material Settings")]
+    public Material ghostMaterial;
 
-    void Awake() => propBlock = new MaterialPropertyBlock();
+    private Dictionary<Renderer, Material> _originalMaterials = new Dictionary<Renderer, Material>();
 
-    public void FocusBone(GameObject target, List<GameObject> allBones)
+    void Awake()
     {
-        foreach (GameObject bone in allBones)
+        Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+        foreach (Renderer r in renderers)
         {
-            Renderer r = bone.GetComponent<Renderer>();
-            if (r == null) continue;
+            if (r != null && !_originalMaterials.ContainsKey(r))
+            {
+                _originalMaterials[r] = r.sharedMaterial;
+            }
+        }
+    }
 
-            // 1. Get the current properties
-            r.GetPropertyBlock(propBlock);
+    void OnEnable()
+    {
+        // Whenever this unit is turned ON, force it to Ghost mode
+        // so we don't have lingering "Solid" materials from before.
+        SetAllToGhost();
+    }
 
-            // 2. Determine Alpha: 1.0 (Solid) for target, 0.2 (Ghost) for others
-            // Note: We keep RGB as (1, 1, 1) so it doesn't change the bone color
-            float alpha = (bone == target) ? 1.0f : 0.2f;
-            propBlock.SetColor(BaseColorId, new Color(1, 1, 1, alpha));
+    private void SetAllToGhost()
+    {
+        foreach (var r in _originalMaterials.Keys)
+        {
+            if (r != null) r.sharedMaterial = ghostMaterial;
+        }
+    }
 
-            // 3. Apply the changes ONLY to this specific bone's renderer
-            r.SetPropertyBlock(propBlock);
+    public void FocusBone(GameObject targetBone, List<GameObject> allBones)
+    {
+        SetAllToGhost();
+
+        Renderer[] targetRenderers = targetBone.GetComponentsInChildren<Renderer>(true);
+        foreach (Renderer r in targetRenderers)
+        {
+            if (_originalMaterials.ContainsKey(r))
+            {
+                r.sharedMaterial = _originalMaterials[r];
+            }
         }
     }
 }

@@ -2382,6 +2382,10 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1658168125}
+    - target: {fileID: 295389670828611932, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 335816521610118885, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -2450,6 +2454,10 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1658168125}
+    - target: {fileID: 962755956062497485, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 992292892638186325, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -2526,6 +2534,10 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1658168125}
+    - target: {fileID: 1452766258089559695, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1471902717655265427, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -2542,6 +2554,14 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1658168125}
+    - target: {fileID: 1566108085057950785, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: ghostMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: e3d9b789f8bf13b4c848c52c11166fa5, type: 2}
+    - target: {fileID: 1566108085057950785, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: transparentMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 2d7276f50d475de4dbb0fb245b8d380d, type: 2}
     - target: {fileID: 1582133357103008885, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -2614,6 +2634,10 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1658168125}
+    - target: {fileID: 2072099580046965311, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2095952282782933040, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -2758,6 +2782,14 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1658168125}
+    - target: {fileID: 3244217138765970903, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: ghostMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 2d7276f50d475de4dbb0fb245b8d380d, type: 2}
+    - target: {fileID: 3244217138765970903, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: transparentMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 2d7276f50d475de4dbb0fb245b8d380d, type: 2}
     - target: {fileID: 3255451682695912290, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -2787,6 +2819,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2831077547328853405}
     - target: {fileID: 3390485456117315999, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3390485456117315999, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
       propertyPath: titleText
       value: 
       objectReference: {fileID: 8777015957708029154}
@@ -2802,6 +2838,10 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1658168125}
+    - target: {fileID: 3521167693680075310, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3527816401432785387, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -2958,6 +2998,14 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1658168125}
+    - target: {fileID: 5168726881174544426, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: ghostMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 2d7276f50d475de4dbb0fb245b8d380d, type: 2}
+    - target: {fileID: 5168726881174544426, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: transparentMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 2d7276f50d475de4dbb0fb245b8d380d, type: 2}
     - target: {fileID: 5175425851687229726, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -3026,6 +3074,14 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1658168125}
+    - target: {fileID: 5812825415163972954, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: ghostMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 2d7276f50d475de4dbb0fb245b8d380d, type: 2}
+    - target: {fileID: 5812825415163972954, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: transparentMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 2d7276f50d475de4dbb0fb245b8d380d, type: 2}
     - target: {fileID: 5820107162038431163, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -3038,6 +3094,14 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1658168125}
+    - target: {fileID: 5938544385615424895, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: ghostMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 2d7276f50d475de4dbb0fb245b8d380d, type: 2}
+    - target: {fileID: 5938544385615424895, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: transparentMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 2d7276f50d475de4dbb0fb245b8d380d, type: 2}
     - target: {fileID: 5948523215763836654, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -3294,6 +3358,10 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1658168125}
+    - target: {fileID: 7794891224143049836, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7854496479234946242, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -3334,6 +3402,14 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1658168125}
+    - target: {fileID: 8231497959096013156, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: ghostMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 2d7276f50d475de4dbb0fb245b8d380d, type: 2}
+    - target: {fileID: 8231497959096013156, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
+      propertyPath: transparentMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 2d7276f50d475de4dbb0fb245b8d380d, type: 2}
     - target: {fileID: 8240019266416489115, guid: 1fa104430cdab7542bee0f7885fd16c4, type: 3}
       propertyPath: m_InteractionManager
       value: 
