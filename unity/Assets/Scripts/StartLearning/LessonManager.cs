@@ -14,7 +14,7 @@ public class BoneData
 [System.Serializable]
 public class BoneList
 {
-    public List<BoneData> bones;
+    public List<BoneData> entries;
 }
 
 public class LessonManager : MonoBehaviour
@@ -40,18 +40,18 @@ public class LessonManager : MonoBehaviour
     {
         // Path is relative to the "Resources" folder. 
         // IMPORTANT: Do NOT include the ".json" extension here!
-        TextAsset jsonAsset = Resources.Load<TextAsset>("JsonFiles/StartLearningBones");
+        TextAsset jsonAsset = Resources.Load<TextAsset>("JsonFiles/StartLearning/motion_system_education_data");
 
         if (jsonAsset != null)
         {
             BoneList loadedData = JsonUtility.FromJson<BoneList>(jsonAsset.text);
 
-            foreach (var data in loadedData.bones)
+            foreach (var data in loadedData.entries)
             {
                 if (!dataLookup.ContainsKey(data.id))
                     dataLookup.Add(data.id, data);
             }
-            Debug.Log($"Successfully loaded {dataLookup.Count} bones from Resources.");
+            Debug.Log($"Successfully loaded {dataLookup.Count} entries from Resources.");
         }
         else
         {
