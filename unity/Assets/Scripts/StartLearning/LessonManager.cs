@@ -34,10 +34,6 @@ public class LessonManager : MonoBehaviour
     void Start()
     {
         LoadJsonData();
-
-        // Use Invoke to delay the start by 0.1s. 
-        // This ensures BoneVisualManager has cached all materials in its Awake/Start 
-        // before we try to interact with it.
         if (bones.Count > 0)
             Invoke(nameof(StartLesson), 0.1f);
     }
@@ -48,7 +44,6 @@ public class LessonManager : MonoBehaviour
         ActivateStep(currentIndex);
     }
 
-    // Call this if you manually activate a unit parent in the inspector
     public void ResetLesson()
     {
         currentIndex = 0;
@@ -58,7 +53,6 @@ public class LessonManager : MonoBehaviour
     void LoadJsonData()
     {
         TextAsset jsonAsset = Resources.Load<TextAsset>("JsonFiles/StartLearning/motion_system_education_data");
-
         if (jsonAsset != null)
         {
             BoneList loadedData = JsonUtility.FromJson<BoneList>(jsonAsset.text);
@@ -67,11 +61,6 @@ public class LessonManager : MonoBehaviour
                 if (!dataLookup.ContainsKey(data.id))
                     dataLookup.Add(data.id, data);
             }
-            Debug.Log($"Successfully loaded {dataLookup.Count} entries.");
-        }
-        else
-        {
-            Debug.LogError("Could not find JSON in Resources/JsonFiles/StartLearning/");
         }
     }
 
@@ -108,6 +97,7 @@ public class LessonManager : MonoBehaviour
 
         if (visualsManager != null)
         {
+            // This now triggers the material change AND the grab-script toggle
             visualsManager.FocusBone(currentBone, bones);
         }
 
@@ -124,11 +114,6 @@ public class LessonManager : MonoBehaviour
                     fullDescription += "• " + step + "\n";
             }
             infoText.text = fullDescription;
-        }
-        else
-        {
-            titleText.text = "Data Missing";
-            infoText.text = "Check ID: " + (identity != null ? identity.id : "No Script");
         }
     }
 }

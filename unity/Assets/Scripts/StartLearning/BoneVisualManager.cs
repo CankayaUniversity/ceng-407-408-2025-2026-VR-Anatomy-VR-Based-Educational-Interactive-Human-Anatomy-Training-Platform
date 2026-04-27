@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class BoneVisualManager : MonoBehaviour
 {
@@ -20,13 +21,6 @@ public class BoneVisualManager : MonoBehaviour
         }
     }
 
-    void OnEnable()
-    {
-        // Whenever this unit is turned ON, force it to Ghost mode
-        // so we don't have lingering "Solid" materials from before.
-        SetAllToGhost();
-    }
-
     private void SetAllToGhost()
     {
         foreach (var r in _originalMaterials.Keys)
@@ -39,6 +33,23 @@ public class BoneVisualManager : MonoBehaviour
     {
         SetAllToGhost();
 
+        // 1. Disable ALL grab components in the entire unit first
+        foreach (GameObject bone in allBones)
+        {
+            if (bone == null) continue;
+            // Get all grabables in children as well to ensure total lockdown
+            XRGrabInteractable[] allGrabs = bone.GetComponentsInChildren<XRGrabInteractable>(true);
+            foreach (var g in allGrabs) g.enabled = false;
+        }
+
+        // 2. Enable ONLY the grab components belonging to the targetBone hierarchy
+        XRGrabInteractable[] targetGrabs = targetBone.GetComponentsInChildren<XRGrabInteractable>(true);
+        foreach (var g in targetGrabs)
+        {
+            g.enabled = true;
+        }
+
+        // 3. Handle Visuals
         Renderer[] targetRenderers = targetBone.GetComponentsInChildren<Renderer>(true);
         foreach (Renderer r in targetRenderers)
         {
