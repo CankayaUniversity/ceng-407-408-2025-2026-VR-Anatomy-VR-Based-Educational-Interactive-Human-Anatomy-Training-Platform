@@ -26,6 +26,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/07_Settings.unity
     guid: 6986802fc2fa91345a4bd9170d1c627d
+  - enabled: 1
+    path: Assets/Scenes/StartLearningDemo.unity
+    guid: a109d7716d04a5344b7b57f46e6e4d35
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: dc5a169419fa04987b057f65238cf3ba, type: 2}
