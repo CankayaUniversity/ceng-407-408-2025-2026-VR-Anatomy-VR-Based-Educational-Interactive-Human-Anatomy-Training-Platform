@@ -13,6 +13,12 @@ public class SceneLoader : MonoBehaviour
         NavigationState.CurrentEntryMode = EntryMode.Learn;
     }
 
+    public void LoadMotionSystemLearnUnit(string sceneName, int unitInt)
+    {
+        AnatomyState.SelectedAnatomyUnitID = unitInt;
+        SceneManager.LoadScene(sceneName);
+    }//
+
     public void SetModeFreeExplore()
     {
         NavigationState.CurrentEntryMode = EntryMode.FreeExplore;
