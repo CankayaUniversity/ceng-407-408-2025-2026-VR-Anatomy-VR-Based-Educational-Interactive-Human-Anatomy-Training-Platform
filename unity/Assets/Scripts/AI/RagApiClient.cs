@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,13 +11,16 @@ using UnityEngine.UI;
 
 public class RagApiClient : MonoBehaviour
 {
+    private const string EmptyQuestionFeedback = "Devam etmek için lütfen bir soru yazın.";
+    private const string NoAnswerFeedback = "Henüz bir cevap yok. Lütfen önce bir soru sorun.";
+
     [Header("UI")]
     [SerializeField] private TMP_InputField questionInput;
     [SerializeField] private Button askButton;
     [SerializeField] private TMP_Text answerText;
 
     [Header("API")]
-    [SerializeField] private string apiUrl = "https://dimensions-continuing-cab-oval.trycloudflare.com/ask";
+    [SerializeField] private string apiUrl = "https://subscription-incident-least-fda.trycloudflare.com/ask";
 
     [Header("Speech API")]
     [SerializeField] private string sttUrl = "http://127.0.0.1:8001/stt";
@@ -25,6 +29,9 @@ public class RagApiClient : MonoBehaviour
     [Header("Kayıt Ayarları")]
     [SerializeField] private int maxRecordSeconds = 30;
     [SerializeField] private int sampleRate = 16000;
+    [SerializeField] private float silenceThreshold = 0.01f;
+    [SerializeField] private float silenceDurationToStop = 1.8f;
+    [SerializeField] private int silenceCheckSampleWindow = 512;
 
     private Button _micButton;
     private Button _speakerButton;
@@ -43,6 +50,9 @@ public class RagApiClient : MonoBehaviour
     private bool _isAnswerVisible;
     private string _latestAnswer = "";
     private string _questionDraftBeforeStt = "";
+    private float _silenceTimer;
+    private bool _hasDetectedSpeech;
+    private float[] _silenceSampleBuffer;
 
     private static readonly Regex CevaplaCommandRegex =
         new Regex(@"\bcevapla\b", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -57,6 +67,8 @@ public class RagApiClient : MonoBehaviour
     private void Awake()
     {
         askButton.onClick.AddListener(OnAskClicked);
+        if (questionInput != null)
+            questionInput.onValueChanged.AddListener(OnQuestionInputChanged);
 
         _audio = GetComponent<AudioSource>();
         if (_audio == null)
@@ -65,15 +77,49 @@ public class RagApiClient : MonoBehaviour
         CreateSpeechButtons();
         SetAnswerVisible(false);
         RefreshInteractableState();
+        ShowIntroPanel();
     }
 
     private void OnDestroy()
     {
         askButton.onClick.RemoveListener(OnAskClicked);
+        if (questionInput != null)
+            questionInput.onValueChanged.RemoveListener(OnQuestionInputChanged);
         if (_isRecording) Microphone.End(null);
         if (_micButton != null) _micButton.onClick.RemoveAllListeners();
         if (_speakerButton != null) _speakerButton.onClick.RemoveAllListeners();
         if (_answerToggleButton != null) _answerToggleButton.onClick.RemoveAllListeners();
+    }
+
+    private void Update()
+    {
+        if (!_isRecording || _recordingClip == null) return;
+
+        // Cihazdan kayıt beklenmedik şekilde düşerse mevcut akışla finalize et.
+        if (!Microphone.IsRecording(null))
+        {
+            StopRecording();
+            return;
+        }
+
+        int micPosition = Microphone.GetPosition(null);
+        if (micPosition <= 0) return;
+
+        float micLevel = ReadMicLevel(micPosition);
+        if (micLevel >= silenceThreshold)
+        {
+            _hasDetectedSpeech = true;
+            _silenceTimer = 0f;
+            return;
+        }
+
+        if (!_hasDetectedSpeech) return;
+
+        _silenceTimer += Time.unscaledDeltaTime;
+        if (_silenceTimer >= silenceDurationToStop)
+        {
+            StopRecording();
+        }
     }
 
     #region Ask (mevcut fonksiyon)
@@ -86,11 +132,11 @@ public class RagApiClient : MonoBehaviour
 
         if (string.IsNullOrEmpty(q))
         {
-            SetLatestAnswer("Devam etmek için lütfen bir soru yazın.");
+            ShowAnswerMessage(EmptyQuestionFeedback);
             return;
         }
 
-        SetLatestAnswer("Cevap hazırlanıyor...");
+        ShowAnswerMessage("Cevap hazırlanıyor...");
         StartCoroutine(SendQuestion(q));
     }
 
@@ -116,7 +162,7 @@ public class RagApiClient : MonoBehaviour
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-                SetLatestAnswer("Sunucuya bağlanamadı. Lütfen bağlantınızı kontrol edip tekrar deneyin.");
+                ShowAnswerMessage("Sunucuya bağlanamadı. Lütfen bağlantınızı kontrol edip tekrar deneyin.");
                 Debug.LogWarning($"[RagApiClient] Ask hatası: {req.error} | HTTP {req.responseCode}");
             }
             else
@@ -125,13 +171,13 @@ public class RagApiClient : MonoBehaviour
                 try
                 {
                     var resp = JsonUtility.FromJson<AskResponse>(responseJson);
-                    SetLatestAnswer(string.IsNullOrEmpty(resp?.answer)
+                    ShowAnswerMessage(string.IsNullOrEmpty(resp?.answer)
                         ? "Cevap alınamadı, tekrar deneyin."
                         : resp.answer);
                 }
                 catch
                 {
-                    SetLatestAnswer("Sunucudan geçersiz cevap geldi, tekrar deneyin.");
+                    ShowAnswerMessage("Sunucudan geçersiz cevap geldi, tekrar deneyin.");
                 }
             }
         }
@@ -334,6 +380,8 @@ public class RagApiClient : MonoBehaviour
 
     private void StartRecording()
     {
+        if (_isRecording) return;
+
         if (Microphone.devices.Length == 0)
         {
             SetLatestAnswer("Mikrofon bulunamadı ❌");
@@ -342,6 +390,8 @@ public class RagApiClient : MonoBehaviour
 
         _recordingClip = Microphone.Start(null, false, maxRecordSeconds, sampleRate);
         _isRecording = true;
+        _silenceTimer = 0f;
+        _hasDetectedSpeech = false;
         _micLabel.text = "Dur";
         _micButton.GetComponent<Image>().color = new Color(0.85f, 0.25f, 0.25f);
         RefreshInteractableState();
@@ -349,9 +399,13 @@ public class RagApiClient : MonoBehaviour
 
     private void StopRecording()
     {
+        if (!_isRecording) return;
+
         int pos = Microphone.GetPosition(null);
         Microphone.End(null);
         _isRecording = false;
+        _silenceTimer = 0f;
+        _hasDetectedSpeech = false;
         _micLabel.text = "Konuş";
         _micButton.GetComponent<Image>().color = _defaultBtnColor;
         RefreshInteractableState();
@@ -373,6 +427,31 @@ public class RagApiClient : MonoBehaviour
         _questionDraftBeforeStt = questionInput != null ? questionInput.text.Trim() : "";
         questionInput.text = "Konuşma algılanıyor...";
         StartCoroutine(RequestSTT(wav));
+    }
+
+    private float ReadMicLevel(int micPosition)
+    {
+        if (_recordingClip == null || micPosition <= 0) return 0f;
+
+        int channels = Mathf.Max(1, _recordingClip.channels);
+        int frameCount = Mathf.Clamp(silenceCheckSampleWindow, 64, 4096);
+        frameCount = Mathf.Min(frameCount, micPosition);
+        if (frameCount <= 0) return 0f;
+
+        int sampleCount = frameCount * channels;
+        if (_silenceSampleBuffer == null || _silenceSampleBuffer.Length != sampleCount)
+            _silenceSampleBuffer = new float[sampleCount];
+
+        int startFrame = micPosition - frameCount;
+        _recordingClip.GetData(_silenceSampleBuffer, startFrame);
+
+        float sum = 0f;
+        for (int i = 0; i < sampleCount; i++)
+        {
+            sum += Mathf.Abs(_silenceSampleBuffer[i]);
+        }
+
+        return sampleCount > 0 ? (sum / sampleCount) : 0f;
     }
 
     private IEnumerator RequestSTT(byte[] wavData)
@@ -481,8 +560,11 @@ public class RagApiClient : MonoBehaviour
         string text = _latestAnswer;
         if (string.IsNullOrEmpty(text)
             || text.StartsWith("Cevap burada")
+            || text.StartsWith("Cevap hazırlanıyor")
             || text.StartsWith("Düşünüyorum")
-            || text.StartsWith("Bir soru yaz"))
+            || text.StartsWith("Bir soru yaz")
+            || text.StartsWith("Devam etmek için")
+            || text.StartsWith("Henüz gösterilecek"))
             return;
 
         if (_ttsRoutine != null) StopCoroutine(_ttsRoutine);
@@ -622,6 +704,8 @@ public class RagApiClient : MonoBehaviour
     private void OnAnswerToggleClicked()
     {
         SetAnswerVisible(!_isAnswerVisible);
+        if (_isAnswerVisible && string.IsNullOrWhiteSpace(_latestAnswer))
+            SetLatestAnswer(NoAnswerFeedback);
     }
 
     private void SetAnswerVisible(bool visible)
@@ -649,8 +733,12 @@ public class RagApiClient : MonoBehaviour
                 answerText.overflowMode = TextOverflowModes.Overflow;
                 answerText.lineSpacing = 2f;
                 answerText.text = string.IsNullOrEmpty(_latestAnswer)
-                    ? "Lütfen bir soru sorun, cevabı burada görüntülenecek."
+                    ? ""
                     : FormatAnswerForDisplay(_latestAnswer);
+            }
+            else
+            {
+                answerText.text = "";
             }
         }
     }
@@ -660,6 +748,101 @@ public class RagApiClient : MonoBehaviour
         _latestAnswer = text ?? "";
         if (_isAnswerVisible && answerText != null)
             answerText.text = FormatAnswerForDisplay(_latestAnswer);
+    }
+
+    private void ShowAnswerMessage(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            ClearAnswerState();
+            return;
+        }
+
+        SetLatestAnswer(text);
+    }
+
+    private void ClearAnswerState()
+    {
+        _latestAnswer = "";
+        if (answerText != null)
+            answerText.text = "";
+    }
+
+    private void OnQuestionInputChanged(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            ClearAnswerState();
+    }
+
+    private void ShowIntroPanel()
+    {
+        Canvas canvas = askButton != null ? askButton.GetComponentInParent<Canvas>() : null;
+        if (canvas == null) return;
+
+        var hideList = new List<GameObject>();
+        if (askButton != null) hideList.Add(askButton.gameObject);
+        if (_micButton != null) hideList.Add(_micButton.gameObject);
+        if (_speakerButton != null) hideList.Add(_speakerButton.gameObject);
+        if (_answerToggleButton != null) hideList.Add(_answerToggleButton.gameObject);
+        if (questionInput != null) hideList.Add(questionInput.gameObject);
+
+        GameObject answerGroup = answerText != null && answerText.transform.parent != null
+            ? answerText.transform.parent.gameObject : null;
+        if (answerGroup != null) hideList.Add(answerGroup);
+
+        GameObject avatar = FindChatAvatar();
+        if (avatar != null) hideList.Add(avatar);
+
+        Sprite panelSprite = ResolvePanelSprite();
+        TMP_FontAsset font = ResolveTmpFontAsset();
+        GameObject titleLogo = ResolveTitleLogo();
+
+        var intro = gameObject.AddComponent<AIChatIntroPanel>();
+        intro.Show(canvas, panelSprite, font, titleLogo, hideList, OnIntroContinue);
+    }
+
+    private void OnIntroContinue()
+    {
+        // Chatbox'a geri dönünce cevap alanı kapalı kalmalı, toggle'a basılınca açılsın.
+        SetAnswerVisible(false);
+        RefreshInteractableState();
+    }
+
+    private GameObject FindChatAvatar()
+    {
+        var go = GameObject.Find("ChatAvatar");
+        if (go != null) return go;
+
+        var controller = FindObjectOfType<ChatAvatarController>(true);
+        return controller != null ? controller.gameObject : null;
+    }
+
+    private Sprite ResolvePanelSprite()
+    {
+        // Quiz intro paneli ile birebir aynı 9-slice sprite'ı paylaşmak için sahnedeki
+        // chat kutusunun (QuestionText) Image'ından atlas sprite'ını alıyoruz.
+        if (questionInput != null)
+        {
+            var img = questionInput.GetComponent<Image>();
+            if (img != null && img.sprite != null) return img.sprite;
+        }
+        return null;
+    }
+
+    private TMP_FontAsset ResolveTmpFontAsset()
+    {
+        if (askButton != null)
+        {
+            var label = askButton.GetComponentInChildren<TMP_Text>(true);
+            if (label != null && label.font != null) return label.font;
+        }
+        if (answerText != null && answerText.font != null) return answerText.font;
+        return null;
+    }
+
+    private GameObject ResolveTitleLogo()
+    {
+        return GameObject.Find("logo");
     }
 
     private string FormatAnswerForDisplay(string raw)

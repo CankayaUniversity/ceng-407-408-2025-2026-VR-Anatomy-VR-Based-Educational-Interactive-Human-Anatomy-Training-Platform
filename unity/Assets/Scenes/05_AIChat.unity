@@ -319,7 +319,7 @@ MonoBehaviour:
   questionInput: {fileID: 1929558922}
   askButton: {fileID: 736500870}
   answerText: {fileID: 1160254746}
-  apiUrl: https://dimensions-continuing-cab-oval.trycloudflare.com/ask
+  apiUrl: https://subscription-incident-least-fda.trycloudflare.com/ask
   sttUrl: http://127.0.0.1:8001/stt
   ttsUrl: http://127.0.0.1:8001/tts
   maxRecordSeconds: 30
@@ -633,7 +633,7 @@ Transform:
   m_GameObject: {fileID: 888000001}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.62, y: -0.5, z: -7}
+  m_LocalPosition: {x: -1.85, y: -0.5, z: -7}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
