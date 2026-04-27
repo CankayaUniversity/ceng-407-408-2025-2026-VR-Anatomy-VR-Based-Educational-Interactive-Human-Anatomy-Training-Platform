@@ -14,7 +14,7 @@ public class BoneData
 [System.Serializable]
 public class BoneList
 {
-    public List<BoneData> bones;
+    public List<BoneData> entries;
 }
 
 public class LessonManager : MonoBehaviour
@@ -30,41 +30,43 @@ public class LessonManager : MonoBehaviour
 
     private Dictionary<string, BoneData> dataLookup = new Dictionary<string, BoneData>();
     private int currentIndex = 0;
+
     void Start()
     {
         LoadJsonData();
-        if (bones.Count > 0) ActivateStep(0);
+        if (bones.Count > 0)
+            Invoke(nameof(StartLesson), 0.1f);
+    }
+
+    private void StartLesson()
+    {
+        currentIndex = 0;
+        ActivateStep(currentIndex);
+    }
+
+    public void ResetLesson()
+    {
+        currentIndex = 0;
+        ActivateStep(currentIndex);
     }
 
     void LoadJsonData()
     {
-        // Path is relative to the "Resources" folder. 
-        // IMPORTANT: Do NOT include the ".json" extension here!
-        TextAsset jsonAsset = Resources.Load<TextAsset>("JsonFiles/StartLearningBones");
-
+        TextAsset jsonAsset = Resources.Load<TextAsset>("JsonFiles/StartLearning/motion_system_education_data");
         if (jsonAsset != null)
         {
             BoneList loadedData = JsonUtility.FromJson<BoneList>(jsonAsset.text);
-
-            foreach (var data in loadedData.bones)
+            foreach (var data in loadedData.entries)
             {
                 if (!dataLookup.ContainsKey(data.id))
                     dataLookup.Add(data.id, data);
             }
-            Debug.Log($"Successfully loaded {dataLookup.Count} bones from Resources.");
-        }
-        else
-        {
-            Debug.LogError("Could not find 'StartLearningBones' in Resources/JsonFiles/");
         }
     }
 
     void Update()
     {
-        // Space to go forward
         if (Input.GetKeyDown(KeyCode.Space)) NextStep();
-
-        // Backspace to go backward (Optional but helpful!)
         if (Input.GetKeyDown(KeyCode.Backspace)) PreviousStep();
     }
 
@@ -74,10 +76,6 @@ public class LessonManager : MonoBehaviour
         {
             currentIndex++;
             ActivateStep(currentIndex);
-        }
-        else
-        {
-            Debug.Log("Skeleton System Lesson Complete!");
         }
     }
 
@@ -90,51 +88,32 @@ public class LessonManager : MonoBehaviour
         }
     }
 
-
-
     void ActivateStep(int index)
     {
-        // 1. Get the bone we are currently focused on
-        GameObject currentBone = bones[index];
+        if (index < 0 || index >= bones.Count) return;
 
-        // 2. Tell the UI to move its pivot to this bone
+        GameObject currentBone = bones[index];
         uiController.SetNewTarget(currentBone.transform);
 
-        // 3. Handle the Visuals (Transparency/Focus)
-        // If you chose to split the scripts, call the manager here:
         if (visualsManager != null)
         {
+            // This now triggers the material change AND the grab-script toggle
             visualsManager.FocusBone(currentBone, bones);
         }
 
-        // 4. Handle the Data/Text
         BoneIdentity identity = currentBone.GetComponent<BoneIdentity>();
         if (identity != null && dataLookup.ContainsKey(identity.id))
         {
             BoneData data = dataLookup[identity.id];
-
-            // Set the Title and Body from JSON
             titleText.text = data.title;
-
             string fullDescription = data.body;
             if (data.steps != null && data.steps.Length > 0)
             {
                 fullDescription += "\n\n";
                 foreach (string step in data.steps)
-                {
                     fullDescription += "• " + step + "\n";
-                }
             }
             infoText.text = fullDescription;
         }
-        else
-        {
-            // Error handling if ID is missing
-            titleText.text = "Data Missing";
-            infoText.text = "Check ID: " + (identity != null ? identity.id : "No Script");
-        }
     }
-
-
-
 }
