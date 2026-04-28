@@ -35,6 +35,12 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene("03_CirculationSystem");
     }
 
+    public void LoadCirculationSystemSubUnit(int subUnitInt)
+{
+    NavigationState.SelectedCirculationSubUnit = (CirculationSubUnit)subUnitInt;
+    SceneManager.LoadScene("03_CirculationSystem");
+}
+
     public void LoadCirculationSystemFromMenuPanel(string currentMenuPanelName)
     {
         NavigationState.ReturnMenuPanelName = currentMenuPanelName;

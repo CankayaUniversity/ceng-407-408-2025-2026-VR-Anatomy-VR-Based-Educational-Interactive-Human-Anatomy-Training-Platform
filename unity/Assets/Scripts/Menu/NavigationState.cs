@@ -12,6 +12,9 @@ public static class NavigationState
     // Hareket sistemi içinde hangi alt ünite seçildi?
     public static MotionSubUnit SelectedMotionSubUnit { get; set; } = MotionSubUnit.None;
 
+    // Dolaşım sistemi içinde hangi alt ünite seçildi?
+    public static CirculationSubUnit SelectedCirculationSubUnit { get; set; } = CirculationSubUnit.None;
+
     // QUIZ: Menüden hangi quiz kategorisi seçildi?
     public static QuizCategory CurrentQuizCategory { get; set; } = QuizCategory.AllQuestions;
 
@@ -22,6 +25,7 @@ public static class NavigationState
     public static void ClearRuntimeOnly()
     {
         SelectedMotionSubUnit = MotionSubUnit.None;
+        SelectedCirculationSubUnit = CirculationSubUnit.None;
     }
 
     public static void ResetAll()
@@ -51,6 +55,21 @@ public enum MotionSubUnit
     LowerExtremityBones = 5,
     UpperExtremityMuscles = 6,
     LowerExtremityMuscles = 7
+}
+
+public enum CirculationSubUnit
+{
+    None = 0,
+    HeartInnerStructure = 1,
+    HeartOuterStructure = 2,
+    UpperExtremityArteries = 3,
+    AbdominalAortaBranches = 4,
+    LowerExtremityArteries = 5,
+    PalpableArteries = 6,
+    UpperExtremityVeins = 7,
+    LowerExtremityVeins = 8,
+    SystemicCirculation = 9,
+    PulmonaryCirculation = 10
 }
 
 public enum QuizCategory
