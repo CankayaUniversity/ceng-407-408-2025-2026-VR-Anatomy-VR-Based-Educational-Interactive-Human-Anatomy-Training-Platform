@@ -666,17 +666,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 094ab6737cf0d1c488020ebc8032676f, type: 3}
---- !u!114 &986287140 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4274365239816312433, guid: 094ab6737cf0d1c488020ebc8032676f, type: 3}
-  m_PrefabInstance: {fileID: 986287139}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e943d00594d1e1c458c35c0d4627f62e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1135165550
 GameObject:
   m_ObjectHideFlags: 0
@@ -689,6 +678,7 @@ GameObject:
   - component: {fileID: 1135165554}
   - component: {fileID: 1135165553}
   - component: {fileID: 1135165552}
+  - component: {fileID: 1135165555}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -760,7 +750,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 986287140}
+      - m_Target: {fileID: 1135165555}
         m_TargetAssemblyTypeName: BackToMenu, Assembly-CSharp
         m_MethodName: GoBackToMenu
         m_Mode: 1
@@ -810,6 +800,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1135165550}
   m_CullTransparentMesh: 1
+--- !u!114 &1135165555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1135165550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e943d00594d1e1c458c35c0d4627f62e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuSceneName: 01_Menu
+  backToMenuAction: {fileID: 1213584483}
+  backKey: 27
+--- !u!114 &1213584483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
+  m_Name: FreeExplore/Menu
+  m_EditorClassIdentifier: 
+  m_Asset: {fileID: -944628639613478452, guid: 0acb5d62861787642a8c83c72045e607, type: 3}
+  m_ActionId: 10b5ddb9-0cd5-46d4-8e39-12cfe36b7b45
 --- !u!1 &1225360706
 GameObject:
   m_ObjectHideFlags: 0
