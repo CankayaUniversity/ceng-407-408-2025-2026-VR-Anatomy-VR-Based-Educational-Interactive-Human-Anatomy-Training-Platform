@@ -1690,6 +1690,7 @@ GameObject:
   - component: {fileID: 129956329}
   - component: {fileID: 129956328}
   - component: {fileID: 129956327}
+  - component: {fileID: 129956330}
   m_Layer: 0
   m_Name: BonesoftheUpperExtremities
   m_TagString: Untagged
@@ -1761,16 +1762,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1774060356}
-        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
-        m_MethodName: LoadMotionSystemFromMenuPanel
-        m_Mode: 5
+      - m_Target: {fileID: 129956330}
+        m_TargetAssemblyTypeName: GenericUnitButton, Assembly-CSharp
+        m_MethodName: Click
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: HareketSistemiPaneli
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &129956328
@@ -1811,6 +1812,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 129956325}
   m_CullTransparentMesh: 1
+--- !u!114 &129956330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 129956325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1d5d66bfcf4c7547917a86092d3688a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneLoader: {fileID: 1774060356}
+  targetSceneName: StartLearningDemo
+  unitID: 2
 --- !u!1 &174913578
 GameObject:
   m_ObjectHideFlags: 0
@@ -5388,6 +5404,7 @@ GameObject:
   - component: {fileID: 396171452}
   - component: {fileID: 396171451}
   - component: {fileID: 396171450}
+  - component: {fileID: 396171453}
   m_Layer: 0
   m_Name: BonesoftheLowerExtremities
   m_TagString: Untagged
@@ -5459,16 +5476,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1774060356}
-        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
-        m_MethodName: LoadMotionSystemFromMenuPanel
-        m_Mode: 5
+      - m_Target: {fileID: 396171453}
+        m_TargetAssemblyTypeName: GenericUnitButton, Assembly-CSharp
+        m_MethodName: Click
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: HareketSistemiPaneli
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &396171451
@@ -5509,6 +5526,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 396171448}
   m_CullTransparentMesh: 1
+--- !u!114 &396171453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 396171448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1d5d66bfcf4c7547917a86092d3688a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneLoader: {fileID: 1774060356}
+  targetSceneName: StartLearningDemo
+  unitID: 3
 --- !u!1001 &397261426
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18526,6 +18558,7 @@ GameObject:
   - component: {fileID: 1660699228}
   - component: {fileID: 1660699227}
   - component: {fileID: 1660699226}
+  - component: {fileID: 1660699229}
   m_Layer: 0
   m_Name: BonesoftheHeadandFace
   m_TagString: Untagged
@@ -18597,10 +18630,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
-        m_MethodName: LoadMotionSystemFromMenuPanel
-        m_Mode: 5
+      - m_Target: {fileID: 1660699229}
+        m_TargetAssemblyTypeName: GenericUnitButton, Assembly-CSharp
+        m_MethodName: Click
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -18647,6 +18680,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1660699224}
   m_CullTransparentMesh: 1
+--- !u!114 &1660699229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1660699224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1d5d66bfcf4c7547917a86092d3688a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneLoader: {fileID: 1774060356}
+  targetSceneName: StartLearningDemo
+  unitID: 0
 --- !u!1 &1663503678
 GameObject:
   m_ObjectHideFlags: 0
@@ -21554,6 +21602,7 @@ GameObject:
   - component: {fileID: 1909617811}
   - component: {fileID: 1909617810}
   - component: {fileID: 1909617809}
+  - component: {fileID: 1909617812}
   m_Layer: 0
   m_Name: BonesoftheTrunk
   m_TagString: Untagged
@@ -21625,6 +21674,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1909617812}
+        m_TargetAssemblyTypeName: GenericUnitButton, Assembly-CSharp
+        m_MethodName: Click
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 344162259}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
@@ -21687,6 +21748,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1909617807}
   m_CullTransparentMesh: 1
+--- !u!114 &1909617812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909617807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1d5d66bfcf4c7547917a86092d3688a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneLoader: {fileID: 1774060356}
+  targetSceneName: StartLearningDemo
+  unitID: 1
 --- !u!1 &1912571297
 GameObject:
   m_ObjectHideFlags: 0
@@ -23391,6 +23467,7 @@ GameObject:
   - component: {fileID: 2077520764}
   - component: {fileID: 2077520763}
   - component: {fileID: 2077520762}
+  - component: {fileID: 2077520765}
   m_Layer: 0
   m_Name: MusclesoftheLowerExtremities
   m_TagString: Untagged
@@ -23462,16 +23539,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1774060356}
-        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
-        m_MethodName: LoadMotionSystemFromMenuPanel
-        m_Mode: 5
+      - m_Target: {fileID: 2077520765}
+        m_TargetAssemblyTypeName: GenericUnitButton, Assembly-CSharp
+        m_MethodName: Click
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: SkeletalMusclesPanel
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &2077520763
@@ -23512,6 +23589,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2077520760}
   m_CullTransparentMesh: 1
+--- !u!114 &2077520765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077520760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1d5d66bfcf4c7547917a86092d3688a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneLoader: {fileID: 1774060356}
+  targetSceneName: StartLearningDemo
+  unitID: 5
 --- !u!1 &2105548721
 GameObject:
   m_ObjectHideFlags: 0
@@ -23661,6 +23753,7 @@ GameObject:
   - component: {fileID: 2129284811}
   - component: {fileID: 2129284810}
   - component: {fileID: 2129284809}
+  - component: {fileID: 2129284812}
   m_Layer: 0
   m_Name: MusclesoftheUpperExtremities
   m_TagString: Untagged
@@ -23732,16 +23825,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1774060356}
-        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
-        m_MethodName: LoadMotionSystemFromMenuPanel
-        m_Mode: 5
+      - m_Target: {fileID: 2129284812}
+        m_TargetAssemblyTypeName: GenericUnitButton, Assembly-CSharp
+        m_MethodName: Click
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: SkeletalMusclesPanel
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &2129284810
@@ -23782,6 +23875,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2129284807}
   m_CullTransparentMesh: 1
+--- !u!114 &2129284812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2129284807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1d5d66bfcf4c7547917a86092d3688a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneLoader: {fileID: 1774060356}
+  targetSceneName: StartLearningDemo
+  unitID: 4
 --- !u!1 &2141302857
 GameObject:
   m_ObjectHideFlags: 0
