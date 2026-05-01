@@ -19,6 +19,8 @@ public class BoneList
 
 public class LessonManager : MonoBehaviour
 {
+    public QuizTransitionManager transitionManager;
+
     [Header("UI References")]
     public AnatomyUIController uiController;
     public TextMeshProUGUI titleText;
@@ -76,6 +78,16 @@ public class LessonManager : MonoBehaviour
         {
             currentIndex++;
             ActivateStep(currentIndex);
+        }
+        else
+        {
+            Debug.Log("Skeleton System Lesson Complete!");
+
+            //Trigger the Quiz transition instead of just logging
+            if (transitionManager != null)
+            {
+                transitionManager.TriggerQuizTransition();
+            }
         }
     }
 

@@ -29,6 +29,23 @@ public class BoneVisualManager : MonoBehaviour
         }
     }
 
+
+    public void ResetToOriginalMat()
+    {
+        Debug.Log("Resetting all bones to original materials for Quiz mode.");
+
+        foreach (var entry in _originalMaterials)
+        {
+            Renderer r = entry.Key;
+            Material originalMat = entry.Value;
+
+            if (r != null && originalMat != null)
+            {
+                r.sharedMaterial = originalMat;
+            }
+        }
+    }
+
     public void FocusBone(GameObject targetBone, List<GameObject> allBones)
     {
         SetAllToGhost();
