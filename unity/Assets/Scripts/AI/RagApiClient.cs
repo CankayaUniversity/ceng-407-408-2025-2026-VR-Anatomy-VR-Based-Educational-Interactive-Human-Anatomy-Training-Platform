@@ -13,6 +13,10 @@ public class RagApiClient : MonoBehaviour
 {
     private const string EmptyQuestionFeedback = "Devam etmek için lütfen bir soru yazın.";
     private const string NoAnswerFeedback = "Henüz bir cevap yok. Lütfen önce bir soru sorun.";
+    private const string FemaleTtsVoice = "tr-TR-EmelNeural";
+    private const string MaleTtsVoice = "tr-TR-AhmetNeural";
+    private const string MaleTtsPitch = "+8%";
+    private const string MaleTtsRate = "+0%";
 
     [Header("UI")]
     [SerializeField] private TMP_InputField questionInput;
@@ -20,7 +24,7 @@ public class RagApiClient : MonoBehaviour
     [SerializeField] private TMP_Text answerText;
 
     [Header("API")]
-    [SerializeField] private string apiUrl = "https://subscription-incident-least-fda.trycloudflare.com/ask";
+    [SerializeField] private string apiUrl = "http://127.0.0.1:8000/docs/ask";
 
     [Header("Speech API")]
     [SerializeField] private string sttUrl = "http://127.0.0.1:8001/stt";
@@ -62,7 +66,13 @@ public class RagApiClient : MonoBehaviour
     [Serializable] private class AskRequest    { public string question; }
     [Serializable] private class AskResponse   { public string answer; }
     [Serializable] private class SttResponse    { public string text; }
-    [Serializable] private class TtsPayload     { public string text; }
+    [Serializable] private class TtsPayload
+    {
+        public string text;
+        public string voice;
+        public string pitch;
+        public string rate;
+    }
 
     private void Awake()
     {
@@ -575,7 +585,14 @@ public class RagApiClient : MonoBehaviour
     {
         _speakerLabel.text = "...";
 
-        TtsPayload payload = new TtsPayload { text = text };
+        bool isMaleAvatar = IsMaleAvatarSelected();
+        TtsPayload payload = new TtsPayload
+        {
+            text = text,
+            voice = isMaleAvatar ? MaleTtsVoice : FemaleTtsVoice,
+            pitch = isMaleAvatar ? MaleTtsPitch : null,
+            rate = isMaleAvatar ? MaleTtsRate : null
+        };
         string json = JsonUtility.ToJson(payload);
         byte[] body = Encoding.UTF8.GetBytes(json);
 
@@ -591,7 +608,6 @@ public class RagApiClient : MonoBehaviour
             if (req.result != UnityWebRequest.Result.Success)
             {
                 _speakerLabel.text = "Dinle";
-                SetLatestAnswer("Sunucuya bağlanamadı. Sesli okuma yapılamadı.");
                 Debug.LogWarning($"[RagApiClient] TTS hatası: {req.error}");
                 yield break;
             }
@@ -626,6 +642,15 @@ public class RagApiClient : MonoBehaviour
                 }
             }
         }
+    }
+
+    private bool IsMaleAvatarSelected()
+    {
+        if (SettingsManager.Instance != null)
+            return SettingsManager.Instance.SelectedAvatarType == SettingsManager.AvatarType.Male;
+
+        int rawValue = PlayerPrefs.GetInt("AvatarType", (int)SettingsManager.AvatarType.Female);
+        return rawValue == (int)SettingsManager.AvatarType.Male;
     }
 
     #endregion
