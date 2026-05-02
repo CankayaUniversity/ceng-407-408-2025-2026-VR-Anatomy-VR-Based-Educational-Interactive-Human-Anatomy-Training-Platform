@@ -2,6 +2,7 @@ import io
 import logging
 import os
 import sys
+from typing import Optional
 
 # rag_core.py üst dizinde (backend/) olduğu için path'e ekliyoruz
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -77,10 +78,30 @@ def speech_to_text(file: UploadFile = File(...)):
         return {"text": "", "error": str(e)}
 
 
-# ── Text-to-Speech (Edge TTS - Emel Neural) ──
+# ── Text-to-Speech (Edge TTS) ──
+
+DEFAULT_TTS_VOICE = "tr-TR-EmelNeural"
+MALE_TTS_VOICE = "tr-TR-AhmetNeural"
+ALLOWED_TTS_VOICES = {
+    DEFAULT_TTS_VOICE,
+    MALE_TTS_VOICE,
+}
+DEFAULT_TTS_RATE = "-10%"
+DEFAULT_TTS_PITCH = "+0Hz"
+MALE_TTS_RATE = "+0%"
+MALE_TTS_PITCH = "+5Hz"
+ALLOWED_TTS_RATES = {"+0%", "+5%"}
+MALE_TTS_PITCH_BY_PERCENT = {
+    "+8%": MALE_TTS_PITCH,
+    "+10%": "+20Hz",
+}
+
 
 class TtsRequest(BaseModel):
     text: str
+    voice: Optional[str] = None
+    rate: Optional[str] = None
+    pitch: Optional[str] = None
 
 
 @app.post("/tts")
@@ -91,22 +112,24 @@ async def text_to_speech(req: TtsRequest):
         return Response(status_code=400, content=b"", media_type="text/plain")
 
     try:
-        communicate = edge_tts.Communicate(
-            text=req.text.strip(),
-            voice="tr-TR-EmelNeural",
-            rate="-10%",
-            volume="+0%",
-            pitch="+0Hz",
+        voice = req.voice if req.voice in ALLOWED_TTS_VOICES else DEFAULT_TTS_VOICE
+        is_male_voice = voice == MALE_TTS_VOICE
+        rate = req.rate if is_male_voice and req.rate in ALLOWED_TTS_RATES else (
+            MALE_TTS_RATE if is_male_voice else DEFAULT_TTS_RATE
+        )
+        pitch = (
+            MALE_TTS_PITCH_BY_PERCENT.get(req.pitch, MALE_TTS_PITCH)
+            if is_male_voice
+            else DEFAULT_TTS_PITCH
         )
 
-        buffer = io.BytesIO()
+        try:
+            audio = await synthesize_tts(req.text.strip(), voice, rate, pitch)
+        except Exception:
+            logger.warning("TTS prosody başarısız; varsayılan pitch ile tekrar deneniyor.")
+            audio = await synthesize_tts(req.text.strip(), voice, rate, DEFAULT_TTS_PITCH)
 
-        async for chunk in communicate.stream():
-            if chunk["type"] == "audio":
-                buffer.write(chunk["data"])
-
-        buffer.seek(0)
-        return Response(content=buffer.read(), media_type="audio/mpeg")
+        return Response(content=audio, media_type="audio/mpeg")
 
     except Exception as e:
         logger.error("TTS hatası: %s", e)
@@ -115,3 +138,24 @@ async def text_to_speech(req: TtsRequest):
             content=str(e).encode(),
             media_type="text/plain",
         )
+
+
+async def synthesize_tts(text: str, voice: str, rate: str, pitch: str) -> bytes:
+    import edge_tts
+
+    communicate = edge_tts.Communicate(
+        text=text,
+        voice=voice,
+        rate=rate,
+        volume="+0%",
+        pitch=pitch,
+    )
+
+    buffer = io.BytesIO()
+
+    async for chunk in communicate.stream():
+        if chunk["type"] == "audio":
+            buffer.write(chunk["data"])
+
+    buffer.seek(0)
+    return buffer.read()

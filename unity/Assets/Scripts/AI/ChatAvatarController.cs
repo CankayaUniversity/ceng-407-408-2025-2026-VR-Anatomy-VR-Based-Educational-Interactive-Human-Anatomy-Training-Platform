@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using GLTFast;
 using UnityEngine;
@@ -8,6 +9,19 @@ public class ChatAvatarController : MonoBehaviour
 {
     [Header("Avatar Source (GLB)")]
     [SerializeField] private string glbFileName = "model1.glb";
+    [SerializeField] private string maleGlbFileName = "model 2.glb";
+
+    [Header("Male Avatar Alignment")]
+    [SerializeField] private bool alignMaleFeetToAvatarRoot = true;
+    [SerializeField] private bool disableMaleImportedIdleAnimation = false;
+    [SerializeField] private Vector3 maleModelPositionOffset = Vector3.zero;
+    [SerializeField] private Vector3 maleModelEulerOffset = new Vector3(7f, 0f, 0f);
+    [SerializeField] private Vector3 maleModelScaleMultiplier = Vector3.one;
+    [SerializeField] private bool keepMaleAvatarGroundedDuringAnimation = true;
+    [SerializeField] private float maleGroundingYOffset = -0.15f;
+    [SerializeField] private bool stabilizeMaleRightFoot = true;
+    [SerializeField, Range(0f, 1f)] private float maleRightFootStabilizeWeight = 1f;
+    [SerializeField] private Vector3 maleRightFootEulerOffset = new Vector3(0f, 0f, -6f);
 
     [Header("Look At Camera")]
     [SerializeField] private bool lookAtCamera = true;
@@ -40,6 +54,10 @@ public class ChatAvatarController : MonoBehaviour
     private GltfAsset _gltfAsset;
     private Transform _cameraTransform;
     private bool _loaded;
+    private bool _isMaleAvatar;
+    private Transform _maleModelRoot;
+    private Transform _maleRightFoot;
+    private Transform _maleRightToe;
 
     // ── Blendshape face targets ──
     private SkinnedMeshRenderer _headSkin;
@@ -80,17 +98,30 @@ public class ChatAvatarController : MonoBehaviour
     private async void Start()
     {
         _cameraTransform = Camera.main != null ? Camera.main.transform : null;
+        glbFileName = ResolveAvatarFileName();
+        _isMaleAvatar = IsMaleAvatarFile(glbFileName);
         await LoadAvatar();
+    }
+
+    private string ResolveAvatarFileName()
+    {
+        // SettingsManager yoksa da son seçimi PlayerPrefs'ten okuyarak avatarı koru.
+        if (SettingsManager.Instance != null &&
+            SettingsManager.Instance.SelectedAvatarType == SettingsManager.AvatarType.Male)
+        {
+            return maleGlbFileName;
+        }
+
+        int rawValue = PlayerPrefs.GetInt("AvatarType", (int)SettingsManager.AvatarType.Female);
+        return rawValue == (int)SettingsManager.AvatarType.Male ? maleGlbFileName : glbFileName;
     }
 
     private async Task LoadAvatar()
     {
         _gltfAsset = gameObject.AddComponent<GltfAsset>();
         _gltfAsset.LoadOnStartup = false;
-        _gltfAsset.StreamingAsset = true;
-        _gltfAsset.Url = glbFileName;
 
-        bool success = await _gltfAsset.Load(_gltfAsset.FullUrl);
+        bool success = await TryLoadAvatarFromKnownPaths(glbFileName);
 
         if (success)
         {
@@ -103,11 +134,47 @@ public class ChatAvatarController : MonoBehaviour
         }
     }
 
+    private async Task<bool> TryLoadAvatarFromKnownPaths(string fileName)
+    {
+        var candidates = new List<(bool useStreamingAsset, string url)>
+        {
+            (true, fileName),
+            (true, $"Avatars/{fileName}")
+        };
+
+        string streamingPath = Path.Combine(Application.dataPath, "StreamingAssets", fileName);
+        string avatarsPath = Path.Combine(Application.dataPath, "Avatars", fileName);
+
+        if (File.Exists(streamingPath))
+            candidates.Add((false, $"file:///{streamingPath.Replace("\\", "/")}"));
+
+        if (File.Exists(avatarsPath))
+            candidates.Add((false, $"file:///{avatarsPath.Replace("\\", "/")}"));
+
+        for (int i = 0; i < candidates.Count; i++)
+        {
+            var candidate = candidates[i];
+            _gltfAsset.StreamingAsset = candidate.useStreamingAsset;
+            _gltfAsset.Url = candidate.url;
+
+            string fullUrl = _gltfAsset.FullUrl;
+            bool loaded = await _gltfAsset.Load(fullUrl);
+            if (loaded)
+            {
+                Debug.Log($"[ChatAvatar] Avatar yüklendi: {fullUrl}");
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private IEnumerator SetupAfterLoad()
     {
         yield return null;
         yield return null;
 
+        ApplyAvatarModelAlignment();
         SetupAnimation();
         SetupAvatarLighting();
         InitFace();
@@ -122,6 +189,12 @@ public class ChatAvatarController : MonoBehaviour
 
     private void SetupAnimation()
     {
+        if (_isMaleAvatar && disableMaleImportedIdleAnimation)
+        {
+            Debug.Log("[ChatAvatar] Erkek avatar sabit idle pozunda tutuluyor.");
+            return;
+        }
+
         Animation legacyAnim = GetComponentInChildren<Animation>();
         if (legacyAnim != null)
         {
@@ -153,6 +226,118 @@ public class ChatAvatarController : MonoBehaviour
         }
 
         Debug.LogWarning("[ChatAvatar] GLB'de animasyon bulunamadı.");
+    }
+
+    private bool IsMaleAvatarFile(string fileName)
+    {
+        return string.Equals(Path.GetFileName(fileName), maleGlbFileName, System.StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void ApplyAvatarModelAlignment()
+    {
+        if (!_isMaleAvatar) return;
+
+        _maleModelRoot = FindLoadedModelRoot();
+        if (_maleModelRoot == null)
+        {
+            Debug.LogWarning("[ChatAvatar] Erkek avatar root transform bulunamadı, hizalama atlandı.");
+            return;
+        }
+
+        _maleModelRoot.localPosition += maleModelPositionOffset;
+        _maleModelRoot.localRotation = Quaternion.Euler(maleModelEulerOffset) * _maleModelRoot.localRotation;
+        Vector3 scaleMultiplier = maleModelScaleMultiplier == Vector3.zero ? Vector3.one : maleModelScaleMultiplier;
+        _maleModelRoot.localScale = Vector3.Scale(_maleModelRoot.localScale, scaleMultiplier);
+
+        if (alignMaleFeetToAvatarRoot)
+            AlignModelBottomToRoot(_maleModelRoot);
+
+        ConfigureMaleRigForStableStanding();
+        CacheMaleRightFootBones(_maleModelRoot);
+        Debug.Log("[ChatAvatar] Erkek avatar zemine göre hizalandı.");
+    }
+
+    private Transform FindLoadedModelRoot()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            if (child.GetComponentInChildren<Renderer>(true) != null ||
+                child.GetComponentInChildren<Animator>(true) != null ||
+                child.GetComponentInChildren<Animation>(true) != null)
+            {
+                return child;
+            }
+        }
+
+        return null;
+    }
+
+    private void AlignModelBottomToRoot(Transform modelRoot)
+    {
+        if (!TryGetModelBounds(modelRoot, out Bounds bounds)) return;
+
+        float verticalOffset = transform.position.y + maleGroundingYOffset - bounds.min.y;
+        modelRoot.position += Vector3.up * verticalOffset;
+    }
+
+    private bool TryGetModelBounds(Transform modelRoot, out Bounds bounds)
+    {
+        var renderers = modelRoot.GetComponentsInChildren<Renderer>(true);
+        bounds = default;
+
+        bool hasBounds = false;
+        foreach (var renderer in renderers)
+        {
+            if (!hasBounds)
+            {
+                bounds = renderer.bounds;
+                hasBounds = true;
+                continue;
+            }
+
+            bounds.Encapsulate(renderer.bounds);
+        }
+
+        return hasBounds;
+    }
+
+    private void ConfigureMaleRigForStableStanding()
+    {
+        var animator = GetComponentInChildren<Animator>(true);
+        if (animator != null)
+            animator.applyRootMotion = false;
+
+        if (!disableMaleImportedIdleAnimation) return;
+
+        var legacyAnim = GetComponentInChildren<Animation>(true);
+        if (legacyAnim == null) return;
+
+        legacyAnim.Stop();
+        legacyAnim.enabled = false;
+        Debug.Log("[ChatAvatar] Erkek avatar import idle animasyonu devre dışı bırakıldı.");
+    }
+
+    private void CacheMaleRightFootBones(Transform modelRoot)
+    {
+        _maleRightFoot = FindChildByName(modelRoot, "RightFoot");
+        _maleRightToe = FindChildByName(modelRoot, "RightToeBase");
+
+        if (_maleRightFoot == null)
+            Debug.LogWarning("[ChatAvatar] Erkek avatar RightFoot kemiği bulunamadı.");
+    }
+
+    private Transform FindChildByName(Transform root, string targetName)
+    {
+        if (root.name == targetName) return root;
+
+        for (int i = 0; i < root.childCount; i++)
+        {
+            Transform match = FindChildByName(root.GetChild(i), targetName);
+            if (match != null) return match;
+        }
+
+        return null;
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -372,6 +557,9 @@ public class ChatAvatarController : MonoBehaviour
             }
         }
 
+        StabilizeMaleRightFootAfterAnimation();
+        GroundMaleAvatarAfterAnimation();
+
         if (!_faceReady) return;
 
         bool speaking = _ttsAudio != null && _ttsAudio.isPlaying;
@@ -380,6 +568,32 @@ public class ChatAvatarController : MonoBehaviour
         if (!speaking) DoBlendshapeBreath();
         DoSmile();
         DoLipSync(speaking);
+    }
+
+    private void StabilizeMaleRightFootAfterAnimation()
+    {
+        if (!_isMaleAvatar || !stabilizeMaleRightFoot || _maleRightFoot == null) return;
+
+        Quaternion targetRotation = _maleRightFoot.rotation;
+
+        if (_maleRightToe != null)
+        {
+            Vector3 toeDirection = _maleRightToe.position - _maleRightFoot.position;
+            Vector3 flatToeDirection = Vector3.ProjectOnPlane(toeDirection, Vector3.up);
+            if (toeDirection.sqrMagnitude > 0.0001f && flatToeDirection.sqrMagnitude > 0.0001f)
+            {
+                targetRotation = Quaternion.FromToRotation(toeDirection.normalized, flatToeDirection.normalized) * targetRotation;
+            }
+        }
+
+        targetRotation *= Quaternion.Euler(maleRightFootEulerOffset);
+        _maleRightFoot.rotation = Quaternion.Slerp(_maleRightFoot.rotation, targetRotation, maleRightFootStabilizeWeight);
+    }
+
+    private void GroundMaleAvatarAfterAnimation()
+    {
+        if (!_isMaleAvatar || !keepMaleAvatarGroundedDuringAnimation || _maleModelRoot == null) return;
+        AlignModelBottomToRoot(_maleModelRoot);
     }
 
     // ═══════════════════════════════════════════════════════════

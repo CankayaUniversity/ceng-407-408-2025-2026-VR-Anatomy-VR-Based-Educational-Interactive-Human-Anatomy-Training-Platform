@@ -305,7 +305,7 @@ MonoBehaviour:
   questionInput: {fileID: 1929558922}
   askButton: {fileID: 736500870}
   answerText: {fileID: 1160254746}
-  apiUrl: https://subscription-incident-least-fda.trycloudflare.com/ask
+  apiUrl: http://127.0.0.1:8000/ask
   sttUrl: http://127.0.0.1:8001/stt
   ttsUrl: http://127.0.0.1:8001/tts
   maxRecordSeconds: 30
