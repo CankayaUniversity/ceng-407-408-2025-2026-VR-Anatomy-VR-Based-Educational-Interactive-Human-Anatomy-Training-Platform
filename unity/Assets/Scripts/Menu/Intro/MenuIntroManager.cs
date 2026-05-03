@@ -36,12 +36,12 @@ public class MenuIntroManager : MonoBehaviour
     private GameObject _skipButtonGO;
     private GameObject _menuInputBlocker;
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void RegisterSceneCallback()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
+    //[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    //private static void RegisterSceneCallback()
+    //{
+    //    SceneManager.sceneLoaded -= OnSceneLoaded;
+    //    SceneManager.sceneLoaded += OnSceneLoaded;
+    //}
 
     private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
