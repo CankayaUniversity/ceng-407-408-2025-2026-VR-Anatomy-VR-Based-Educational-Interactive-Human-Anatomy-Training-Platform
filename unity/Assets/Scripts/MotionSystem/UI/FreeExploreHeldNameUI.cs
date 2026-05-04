@@ -136,7 +136,7 @@ public class FreeExploreHeldNameUI : MonoBehaviour
         // 3) UI bas
         if (selectedGO == null)
         {
-            nameText.text = "Elinde bir model yok";
+            nameText.text = "";
             return;
         }
 
