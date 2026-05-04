@@ -19,7 +19,10 @@ using UnityEngine.UI;
 public class AIChatIntroPanel : MonoBehaviour
 {
     private const string PanelName = "AIChatIntroPanel";
+    
     private const string MenuSceneName = "01_Menu";
+
+    [SerializeField] private Material uiOpaqueMaterial;
 
     private static readonly string[] BodyLines =
     {
@@ -53,6 +56,37 @@ public class AIChatIntroPanel : MonoBehaviour
     private Vector3 _titleOriginalScale;
     private bool _titleCentered;
     private Sprite _roundedButtonSprite;
+
+    private Material _uiOpaqueMaterial;
+
+private Material UiOpaqueMaterial
+{
+    get
+    {
+        if (_uiOpaqueMaterial == null)
+        {
+            _uiOpaqueMaterial = Resources.Load<Material>("UI Opaque");
+
+            if (_uiOpaqueMaterial == null)
+            {
+                Debug.LogWarning("UI Opaque material bulunamadı. Assets/Resources/UI Opaque.mat var mı kontrol et.");
+            }
+        }
+
+        return _uiOpaqueMaterial;
+    }
+}
+
+private void ApplyUiOpaqueMaterial(Graphic graphic)
+{
+    if (graphic == null) return;
+
+    var material = UiOpaqueMaterial;
+    if (material != null)
+    {
+        graphic.material = material;
+    }
+}
 
     public void Show(
         Canvas canvas,
@@ -98,6 +132,13 @@ public class AIChatIntroPanel : MonoBehaviour
 
         _panelRoot.AddComponent<CanvasRenderer>();
         var panelImg = _panelRoot.AddComponent<Image>();
+        ApplyUiOpaqueMaterial(panelImg);
+
+        if (uiOpaqueMaterial != null)
+        {
+            panelImg.material = uiOpaqueMaterial;
+        }
+
         if (_panelSprite != null)
         {
             panelImg.sprite = _panelSprite;
@@ -110,6 +151,8 @@ public class AIChatIntroPanel : MonoBehaviour
         {
             panelImg.color = PanelFallbackColor;
         }
+        panelImg.raycastTarget = true;
+
         panelImg.raycastTarget = true;
 
         BuildIntroText(rt);
@@ -292,6 +335,12 @@ public class AIChatIntroPanel : MonoBehaviour
         topRt.offsetMin = Vector2.zero;
         topRt.offsetMax = Vector2.zero;
         var topImage = top.AddComponent<Image>();
+
+        if (uiOpaqueMaterial != null)
+        {
+            topImage.material = uiOpaqueMaterial;
+        }
+
         topImage.color = ButtonTopTintColor;
         topImage.raycastTarget = false;
 
@@ -302,6 +351,12 @@ public class AIChatIntroPanel : MonoBehaviour
         bottomRt.offsetMin = Vector2.zero;
         bottomRt.offsetMax = Vector2.zero;
         var bottomImage = bottom.AddComponent<Image>();
+
+        if (uiOpaqueMaterial != null)
+        {
+            bottomImage.material = uiOpaqueMaterial;
+        }
+
         bottomImage.color = ButtonBottomTintColor;
         bottomImage.raycastTarget = false;
     }

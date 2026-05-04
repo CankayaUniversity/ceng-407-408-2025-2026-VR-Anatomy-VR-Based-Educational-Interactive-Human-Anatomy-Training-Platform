@@ -23,6 +23,10 @@ public class RagApiClient : MonoBehaviour
     [SerializeField] private Button askButton;
     [SerializeField] private TMP_Text answerText;
 
+    [Header("Answer Toggle Layout")]
+    [SerializeField] private Vector2 answerToggleOffset = Vector2.zero;
+    [SerializeField] private Vector2 answerToggleSizeOverride = Vector2.zero;
+
     [Header("API")]
     [SerializeField] private string apiUrl = "http://127.0.0.1:8000/docs/ask";
 
@@ -257,6 +261,13 @@ public class RagApiClient : MonoBehaviour
             (answerRT != null ? answerRT.sizeDelta.x : 420f);
         float width = Mathf.Clamp(chatWidthRef * 0.42f, 210f, 300f);
         float height = Mathf.Clamp(askRT.sizeDelta.y * 0.9f, 38f, 46f);
+
+        if (answerToggleSizeOverride.x > 0f)
+            width = answerToggleSizeOverride.x;
+
+        if (answerToggleSizeOverride.y > 0f)
+            height = answerToggleSizeOverride.y;
+
         toggleRT.sizeDelta = new Vector2(width, height);
 
         // Chatbox'ın hemen altına, yatayda ortalı yerleşim.
@@ -274,6 +285,7 @@ public class RagApiClient : MonoBehaviour
         {
             toggleRT.anchoredPosition = new Vector2(askRT.anchoredPosition.x - 90f, askRT.anchoredPosition.y - 125f);
         }
+        toggleRT.anchoredPosition += answerToggleOffset;
 
         // Tasarımsal iyileştirme: futuristik cyan tonları + yumuşak state geçişleri.
         Image img = _answerToggleButton != null ? _answerToggleButton.GetComponent<Image>() : null;
@@ -308,15 +320,17 @@ public class RagApiClient : MonoBehaviour
     }
 
     private void PositionAnswerTextBelowToggle(
-        RectTransform toggleRT,
-        RectTransform answerRT,
-        RectTransform questionRT)
-    {
-        if (toggleRT == null || answerRT == null) return;
+    RectTransform toggleRT,
+    RectTransform answerRT,
+    RectTransform questionRT)
+{
+    return;
 
-        RectTransform questionTextRT = (questionInput != null && questionInput.textComponent != null)
-            ? questionInput.textComponent.rectTransform
-            : null;
+    if (toggleRT == null || answerRT == null) return;
+
+    RectTransform questionTextRT = (questionInput != null && questionInput.textComponent != null)
+        ? questionInput.textComponent.rectTransform
+        : null;
         RectTransform parentRT = answerRT.parent as RectTransform;
         if (parentRT == null) return;
 
