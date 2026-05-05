@@ -17,6 +17,12 @@ public class RagApiClient : MonoBehaviour
     private const string MaleTtsVoice = "tr-TR-AhmetNeural";
     private const string MaleTtsPitch = "+8%";
     private const string MaleTtsRate = "+0%";
+    private const float ChatUiTargetWorldX = 0f;
+    private const float ChatAvatarLeftShift = 0.35f;
+    private const float ChatInputActionButtonSize = 58f;
+    private const float ChatTitleScaleMultiplier = 1.14f;
+    private const float ChatTitleForwardOffset = -0.04f;
+    private const float ChatUiVerticalOffset = 80f;
 
     [Header("UI")]
     [SerializeField] private TMP_InputField questionInput;
@@ -61,9 +67,17 @@ public class RagApiClient : MonoBehaviour
     private float _silenceTimer;
     private bool _hasDetectedSpeech;
     private float[] _silenceSampleBuffer;
+    private static Sprite _runtimeRoundedSprite;
+    private static Sprite _micIconSprite;
+    private static Sprite _speakerIconSprite;
+    private static Sprite _stopIconSprite;
+    private bool _chatUiRedesigned;
+    private ScrollRect _answerScrollRect;
+    private RectTransform _answerScrollContent;
+    private Scrollbar _answerScrollbar;
 
     private static readonly Regex CevaplaCommandRegex =
-        new Regex(@"\bcevapla\b", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        new Regex(@"\b(cevapla|tamam)\b", RegexOptions.IgnoreCase | RegexOptions.Compiled);
     private static readonly Regex MultiSpaceRegex =
         new Regex(@"\s+", RegexOptions.Compiled);
 
@@ -89,6 +103,10 @@ public class RagApiClient : MonoBehaviour
             _audio = gameObject.AddComponent<AudioSource>();
 
         CreateSpeechButtons();
+        if (SettingsManager.Instance != null)
+            SettingsManager.Instance.OnAIChatVoiceEnabledChanged += OnAIChatVoiceEnabledChanged;
+
+        ApplyAIChatVoiceSetting(IsAIChatVoiceEnabled());
         SetAnswerVisible(false);
         RefreshInteractableState();
         ShowIntroPanel();
@@ -103,6 +121,8 @@ public class RagApiClient : MonoBehaviour
         if (_micButton != null) _micButton.onClick.RemoveAllListeners();
         if (_speakerButton != null) _speakerButton.onClick.RemoveAllListeners();
         if (_answerToggleButton != null) _answerToggleButton.onClick.RemoveAllListeners();
+        if (SettingsManager.Instance != null)
+            SettingsManager.Instance.OnAIChatVoiceEnabledChanged -= OnAIChatVoiceEnabledChanged;
     }
 
     private void Update()
@@ -158,6 +178,7 @@ public class RagApiClient : MonoBehaviour
     {
         _isAsking = true;
         RefreshInteractableState();
+        string answerToSpeak = null;
 
         var payload = new AskRequest { question = question };
         string json = JsonUtility.ToJson(payload);
@@ -176,7 +197,9 @@ public class RagApiClient : MonoBehaviour
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-                ShowAnswerMessage("Sunucuya bağlanamadı. Lütfen bağlantınızı kontrol edip tekrar deneyin.");
+                string errorMessage = "Sunucuya bağlanamadı. Lütfen bağlantınızı kontrol edip tekrar deneyin.";
+                ShowAnswerMessage(errorMessage);
+                answerToSpeak = errorMessage;
                 Debug.LogWarning($"[RagApiClient] Ask hatası: {req.error} | HTTP {req.responseCode}");
             }
             else
@@ -185,13 +208,24 @@ public class RagApiClient : MonoBehaviour
                 try
                 {
                     var resp = JsonUtility.FromJson<AskResponse>(responseJson);
-                    ShowAnswerMessage(string.IsNullOrEmpty(resp?.answer)
-                        ? "Cevap alınamadı, tekrar deneyin."
-                        : resp.answer);
+                    string answer = resp?.answer;
+                    if (string.IsNullOrEmpty(answer))
+                    {
+                        string emptyAnswerMessage = "Cevap alınamadı, tekrar deneyin.";
+                        ShowAnswerMessage(emptyAnswerMessage);
+                        answerToSpeak = emptyAnswerMessage;
+                    }
+                    else
+                    {
+                        ShowAnswerMessage(answer);
+                        answerToSpeak = answer;
+                    }
                 }
                 catch
                 {
-                    ShowAnswerMessage("Sunucudan geçersiz cevap geldi, tekrar deneyin.");
+                    string invalidResponseMessage = "Sunucudan geçersiz cevap geldi, tekrar deneyin.";
+                    ShowAnswerMessage(invalidResponseMessage);
+                    answerToSpeak = invalidResponseMessage;
                 }
             }
         }
@@ -201,6 +235,9 @@ public class RagApiClient : MonoBehaviour
             _isAsking = false;
             RefreshInteractableState();
         }
+
+        if (!string.IsNullOrEmpty(answerToSpeak))
+            StartAutomaticTTS(answerToSpeak);
     }
 
     #endregion
@@ -215,10 +252,10 @@ public class RagApiClient : MonoBehaviour
         RectTransform askRT = askButton.GetComponent<RectTransform>();
         _defaultBtnColor = askButton.GetComponent<Image>().color;
 
-        // "Konuş" butonu — "Sor" butonunun hemen altında
+        // Mikrofon butonu runtime'da input bar'ın sol içine taşınır.
         _micButton = CloneButton(askButton, parent, "MicButton");
         _micLabel = _micButton.GetComponentInChildren<TMP_Text>();
-        _micLabel.text = "Konuş";
+        _micLabel.text = "Mik";
 
         RectTransform micRT = _micButton.GetComponent<RectTransform>();
         micRT.anchoredPosition = new Vector2(
@@ -227,10 +264,10 @@ public class RagApiClient : MonoBehaviour
         );
         _micButton.onClick.AddListener(OnMicClicked);
 
-        // "Dinle" butonu — "Konuş" butonunun hemen altında
+        // Sesli okuma butonu input dışında, sağ tarafta ikonlu iki durumlu buton olarak kalır.
         _speakerButton = CloneButton(askButton, parent, "SpeakerButton");
         _speakerLabel = _speakerButton.GetComponentInChildren<TMP_Text>();
-        _speakerLabel.text = "Dinle";
+        _speakerLabel.text = "Sesli Oku";
 
         RectTransform spkRT = _speakerButton.GetComponent<RectTransform>();
         spkRT.anchoredPosition = new Vector2(
@@ -238,15 +275,6 @@ public class RagApiClient : MonoBehaviour
             micRT.anchoredPosition.y - askRT.sizeDelta.y - 12f
         );
         _speakerButton.onClick.AddListener(OnSpeakerClicked);
-
-        // "Cevabı Gör" butonu — chatbox'ın altında, geniş tasarım
-        _answerToggleButton = CloneButton(askButton, parent, "AnswerToggleButton");
-        _answerToggleLabel = _answerToggleButton.GetComponentInChildren<TMP_Text>();
-        _answerToggleLabel.text = "Cevabı Gör";
-
-        RectTransform toggleRT = _answerToggleButton.GetComponent<RectTransform>();
-        PositionAndStyleAnswerToggle(toggleRT, askRT);
-        _answerToggleButton.onClick.AddListener(OnAnswerToggleClicked);
     }
 
     private void PositionAndStyleAnswerToggle(RectTransform toggleRT, RectTransform askRT)
@@ -430,7 +458,7 @@ public class RagApiClient : MonoBehaviour
         _isRecording = false;
         _silenceTimer = 0f;
         _hasDetectedSpeech = false;
-        _micLabel.text = "Konuş";
+        _micLabel.text = "Mik";
         _micButton.GetComponent<Image>().color = _defaultBtnColor;
         RefreshInteractableState();
 
@@ -540,7 +568,9 @@ public class RagApiClient : MonoBehaviour
                     {
                         // Sadece soru söylendiyse input'a yaz, otomatik gönderme.
                         questionInput.text = recognized.Trim();
-                        SetLatestAnswer("Sorunuz hazır. Göndermek için 'cevapla' deyin veya Sor butonuna basın.");
+                        const string readyMessage = "Sorunuz hazır. Göndermek için 'cevapla' veya 'tamam' deyin ya da gönder butonuna basın.";
+                        SetLatestAnswer(readyMessage);
+                        StartAutomaticTTS(readyMessage);
                     }
                 }
             }
@@ -572,32 +602,69 @@ public class RagApiClient : MonoBehaviour
 
     private void OnSpeakerClicked()
     {
+        if (!IsAIChatVoiceEnabled())
+        {
+            StopAIChatVoicePlayback();
+            ApplyAIChatVoiceSetting(false);
+            return;
+        }
+
         if (_isAsking || _isSttRunning || _isRecording) return;
 
         if (_audio.isPlaying)
         {
             _audio.Stop();
-            _speakerLabel.text = "Dinle";
+            SetSpeakerButtonState(false);
             return;
         }
 
-        string text = _latestAnswer;
-        if (string.IsNullOrEmpty(text)
-            || text.StartsWith("Cevap burada")
-            || text.StartsWith("Cevap hazırlanıyor")
-            || text.StartsWith("Düşünüyorum")
-            || text.StartsWith("Bir soru yaz")
-            || text.StartsWith("Devam etmek için")
-            || text.StartsWith("Henüz gösterilecek"))
+        if (_ttsRoutine != null)
+        {
+            StopAIChatVoicePlayback();
             return;
+        }
 
-        if (_ttsRoutine != null) StopCoroutine(_ttsRoutine);
+        StartTTSPlayback(_latestAnswer);
+    }
+
+    private void StartAutomaticTTS(string text)
+    {
+        StartTTSPlayback(text);
+    }
+
+    private void StartTTSPlayback(string text)
+    {
+        if (!IsAIChatVoiceEnabled() || !CanSpeakAnswer(text)) return;
+
+        if (_ttsRoutine != null)
+        {
+            StopCoroutine(_ttsRoutine);
+            _ttsRoutine = null;
+        }
+
+        if (_audio != null && _audio.isPlaying)
+            _audio.Stop();
+
+        SetSpeakerButtonState(true);
         _ttsRoutine = StartCoroutine(RequestTTS(text));
+    }
+
+    private static bool CanSpeakAnswer(string text)
+    {
+        return !string.IsNullOrEmpty(text)
+            && !text.StartsWith("Cevap burada")
+            && !text.StartsWith("Cevap hazırlanıyor")
+            && !text.StartsWith("Düşünüyorum")
+            && !text.StartsWith("Bir soru yaz")
+            && !text.StartsWith("Devam etmek için")
+            && !text.StartsWith("Henüz gösterilecek");
     }
 
     private IEnumerator RequestTTS(string text)
     {
-        _speakerLabel.text = "...";
+        if (!IsAIChatVoiceEnabled()) yield break;
+
+        SetSpeakerButtonState(true);
 
         bool isMaleAvatar = IsMaleAvatarSelected();
         TtsPayload payload = new TtsPayload
@@ -619,10 +686,18 @@ public class RagApiClient : MonoBehaviour
 
             yield return req.SendWebRequest();
 
+            if (!IsAIChatVoiceEnabled())
+            {
+                SetSpeakerButtonState(false);
+                _ttsRoutine = null;
+                yield break;
+            }
+
             if (req.result != UnityWebRequest.Result.Success)
             {
-                _speakerLabel.text = "Dinle";
+                SetSpeakerButtonState(false);
                 Debug.LogWarning($"[RagApiClient] TTS hatası: {req.error}");
+                _ttsRoutine = null;
                 yield break;
             }
 
@@ -637,24 +712,111 @@ public class RagApiClient : MonoBehaviour
             {
                 yield return audioReq.SendWebRequest();
 
+                if (!IsAIChatVoiceEnabled())
+                {
+                    SetSpeakerButtonState(false);
+                    _ttsRoutine = null;
+                    yield break;
+                }
+
                 if (audioReq.result == UnityWebRequest.Result.Success)
                 {
                     _audio.clip = DownloadHandlerAudioClip.GetContent(audioReq);
+                    if (!IsAIChatVoiceEnabled())
+                    {
+                        SetSpeakerButtonState(false);
+                        _ttsRoutine = null;
+                        yield break;
+                    }
+
                     _audio.Play();
-                    _speakerLabel.text = "Dur";
+                    SetSpeakerButtonState(true);
 
                     while (_audio.isPlaying)
-                        yield return null;
+                    {
+                        if (!IsAIChatVoiceEnabled())
+                        {
+                            StopAIChatVoicePlayback();
+                            _ttsRoutine = null;
+                            yield break;
+                        }
 
-                    _speakerLabel.text = "Dinle";
+                        yield return null;
+                    }
+
+                    SetSpeakerButtonState(false);
                 }
                 else
                 {
-                    _speakerLabel.text = "Dinle";
+                    SetSpeakerButtonState(false);
                     Debug.LogWarning(
                         $"[RagApiClient] Ses dosyası yüklenemedi: {audioReq.error}");
                 }
             }
+        }
+
+        _ttsRoutine = null;
+    }
+
+    private bool IsAIChatVoiceEnabled()
+    {
+        if (SettingsManager.Instance != null)
+            return SettingsManager.Instance.AIChatVoiceEnabled;
+
+        return PlayerPrefs.GetInt(SettingsManager.AIChatVoiceEnabledKey, 1) == 1;
+    }
+
+    private void OnAIChatVoiceEnabledChanged(bool enabled)
+    {
+        ApplyAIChatVoiceSetting(enabled);
+    }
+
+    private void ApplyAIChatVoiceSetting(bool enabled)
+    {
+        if (!enabled)
+            StopAIChatVoicePlayback();
+
+        if (_speakerButton != null)
+            _speakerButton.gameObject.SetActive(enabled);
+
+        RefreshInteractableState();
+    }
+
+    private void StopAIChatVoicePlayback()
+    {
+        if (_ttsRoutine != null)
+        {
+            StopCoroutine(_ttsRoutine);
+            _ttsRoutine = null;
+        }
+
+        if (_audio != null && _audio.isPlaying)
+            _audio.Stop();
+
+        if (_speakerLabel != null)
+            SetSpeakerButtonState(false);
+    }
+
+    private void SetSpeakerLabel(string text)
+    {
+        if (_speakerLabel != null)
+            _speakerLabel.text = text;
+    }
+
+    private void SetSpeakerButtonState(bool isStopState)
+    {
+        SetSpeakerLabel(isStopState ? "Durdur" : "Sesli Oku");
+
+        if (_speakerButton == null) return;
+
+        Transform iconTransform = _speakerButton.transform.Find("SpeakerButtonIcon");
+        Image iconImage = iconTransform != null ? iconTransform.GetComponent<Image>() : null;
+        if (iconImage != null)
+        {
+            iconImage.sprite = ResolveVoiceButtonIconSprite(isStopState);
+            iconImage.color = Color.white;
+            iconImage.preserveAspect = true;
+            iconImage.gameObject.SetActive(true);
         }
     }
 
@@ -736,7 +898,12 @@ public class RagApiClient : MonoBehaviour
         bool canAsk = !_isAsking && !_isSttRunning && !_isRecording;
         if (askButton != null) askButton.interactable = canAsk;
         if (_micButton != null) _micButton.interactable = !_isAsking && !_isSttRunning;
-        if (_speakerButton != null) _speakerButton.interactable = !_isAsking && !_isSttRunning && !_isRecording;
+        if (_speakerButton != null)
+        {
+            bool voiceEnabled = IsAIChatVoiceEnabled();
+            _speakerButton.gameObject.SetActive(voiceEnabled);
+            _speakerButton.interactable = voiceEnabled && !_isAsking && !_isSttRunning && !_isRecording;
+        }
         if (_answerToggleButton != null) _answerToggleButton.interactable = true;
     }
 
@@ -767,17 +934,20 @@ public class RagApiClient : MonoBehaviour
 
                 answerText.enableWordWrapping = true;
                 answerText.enableAutoSizing = false;
-                answerText.fontSize = Mathf.Clamp(answerText.fontSize, 28f, 36f);
+                answerText.fontSize = Mathf.Clamp(answerText.fontSize, 23f, 26f);
                 answerText.alignment = TextAlignmentOptions.TopLeft;
                 answerText.overflowMode = TextOverflowModes.Overflow;
                 answerText.lineSpacing = 2f;
+                answerText.margin = new Vector4(0f, 0f, 0f, 0f);
                 answerText.text = string.IsNullOrEmpty(_latestAnswer)
                     ? ""
                     : FormatAnswerForDisplay(_latestAnswer);
+                ResetAnswerScrollToTop();
             }
             else
             {
                 answerText.text = "";
+                ResetAnswerScrollToTop();
             }
         }
     }
@@ -786,7 +956,10 @@ public class RagApiClient : MonoBehaviour
     {
         _latestAnswer = text ?? "";
         if (_isAnswerVisible && answerText != null)
+        {
             answerText.text = FormatAnswerForDisplay(_latestAnswer);
+            ResetAnswerScrollToTop();
+        }
     }
 
     private void ShowAnswerMessage(string text)
@@ -805,6 +978,16 @@ public class RagApiClient : MonoBehaviour
         _latestAnswer = "";
         if (answerText != null)
             answerText.text = "";
+        ResetAnswerScrollToTop();
+    }
+
+    private void ResetAnswerScrollToTop()
+    {
+        if (_answerScrollRect == null) return;
+
+        Canvas.ForceUpdateCanvases();
+        _answerScrollRect.verticalNormalizedPosition = 1f;
+        if (_answerScrollbar != null) _answerScrollbar.value = 1f;
     }
 
     private void OnQuestionInputChanged(string value)
@@ -842,8 +1025,12 @@ public class RagApiClient : MonoBehaviour
 
     private void OnIntroContinue()
     {
-        // Chatbox'a geri dönünce cevap alanı kapalı kalmalı, toggle'a basılınca açılsın.
-        SetAnswerVisible(false);
+        // Sadece intro kapandıktan sonra chatbox ekranını yeniden tasarla.
+        // Intro / bilgilendirme paneline dokunmaz.
+        ApplyChatUiRedesign();
+
+        // Cevap paneli chatbox ekranında sürekli açık; "Cevabı Gör" toggle'ı yok.
+        SetAnswerVisible(true);
         RefreshInteractableState();
     }
 
@@ -854,6 +1041,1183 @@ public class RagApiClient : MonoBehaviour
 
         var controller = FindObjectOfType<ChatAvatarController>(true);
         return controller != null ? controller.gameObject : null;
+    }
+
+    private void ApplyChatUiRedesign()
+    {
+        if (_chatUiRedesigned) return;
+        _chatUiRedesigned = true;
+
+        RectTransform questionRT = questionInput != null
+            ? questionInput.GetComponent<RectTransform>()
+            : null;
+
+        RectTransform answerRT = answerText != null
+            ? answerText.GetComponent<RectTransform>()
+            : null;
+
+        RectTransform answerPanelRT = answerRT != null
+            ? answerRT.parent as RectTransform
+            : null;
+
+        // =========================
+        // 1) ÜST SORU / INPUT PANELİ
+        // =========================
+        if (questionInput != null && questionRT != null)
+        {
+            questionRT.anchorMin = new Vector2(0.5f, 0.5f);
+            questionRT.anchorMax = new Vector2(0.5f, 0.5f);
+            questionRT.pivot = new Vector2(0.5f, 0.5f);
+            questionRT.localScale = Vector3.one;
+
+            questionRT.anchoredPosition = new Vector2(
+                ResolveAnchoredXForWorldCenter(questionRT.parent as RectTransform, ChatUiTargetWorldX),
+                questionRT.anchoredPosition.y + ChatUiVerticalOffset);
+            questionRT.sizeDelta = new Vector2(1000f, 88f);
+
+            Image questionImage = questionInput.GetComponent<Image>();
+            if (questionImage != null)
+            {
+                StyleChatPanel(
+                    questionImage,
+                    new Color(0.95f, 0.985f, 1f, 0.96f),
+                    new Color(0.40f, 0.84f, 1f, 0.98f),
+                    new Color(0.00f, 0.76f, 1.00f, 0.34f));
+            }
+
+            CreateOrUpdatePanelGlow(questionRT, "QuestionOuterGlow", new Color(0.20f, 0.86f, 1f, 0.16f), 16f);
+            CreateOrUpdateSoftInputFrame(questionInput.transform);
+            CreateOrUpdateInputBadge(questionInput.transform, "InputChatIcon", "", false);
+            SetChildActive(questionInput.transform, "InputSendIcon", false);
+            ArrangeChatInputActions(questionRT);
+            CreateOrUpdatePanelAccentLine(questionRT, "QuestionAccentLine", new Color(0.64f, 0.92f, 1f, 0.48f), 2f, 28f);
+
+            RectTransform textArea = questionInput.transform.Find("Text Area") as RectTransform;
+            if (textArea != null)
+            {
+                textArea.anchorMin = Vector2.zero;
+                textArea.anchorMax = Vector2.one;
+                textArea.pivot = new Vector2(0.5f, 0.5f);
+                textArea.offsetMin = new Vector2(10, 14f);
+                textArea.offsetMax = new Vector2(-164f, -14f);
+            }
+
+            ApplyInputTextStyle(questionInput.textComponent, false);
+            TMP_Text placeholder = questionInput.placeholder as TMP_Text;
+            if (placeholder != null)
+                placeholder.text = "Bir soru girin...";
+            ApplyInputTextStyle(placeholder, true);
+        }
+
+        // =========================
+        // 2) ALT CEVAP PANELİ
+        // =========================
+        if (answerPanelRT != null)
+        {
+            answerPanelRT.anchorMin = new Vector2(0.5f, 0.5f);
+            answerPanelRT.anchorMax = new Vector2(0.5f, 0.5f);
+            answerPanelRT.pivot = new Vector2(0.5f, 1f);
+            answerPanelRT.localScale = Vector3.one;
+            answerPanelRT.sizeDelta = new Vector2(1000f, 420f);
+
+            if (questionRT != null && answerPanelRT.parent is RectTransform answerParentRT)
+            {
+                Vector3[] qCorners = new Vector3[4];
+                questionRT.GetWorldCorners(qCorners);
+                Vector3 questionBottomCenterWorld = (qCorners[0] + qCorners[3]) * 0.5f;
+                Vector2 questionBottomCenterLocal = answerParentRT.InverseTransformPoint(questionBottomCenterWorld);
+                const float gap = 10f;
+                answerPanelRT.anchoredPosition = questionBottomCenterLocal + new Vector2(0f, -gap);
+            }
+
+            Image answerImage = answerPanelRT.GetComponent<Image>();
+            if (answerImage != null)
+            {
+                StyleChatPanel(
+                    answerImage,
+                    new Color(0.74f, 0.93f, 1f, 0.78f),
+                    new Color(0.30f, 0.84f, 1f, 0.98f),
+                    new Color(0.00f, 0.72f, 1.00f, 0.30f));
+            }
+
+            CreateOrUpdatePanelGlow(answerPanelRT, "AnswerOuterGlow", new Color(0.18f, 0.82f, 1f, 0.22f), 26f);
+            CreateOrUpdateAnswerInnerFrame(answerPanelRT);
+            CreateOrUpdateAnswerBottomGlow(answerPanelRT);
+            CreateOrUpdateAnswerShine(answerPanelRT);
+            CreateOrUpdateAnswerHeader(answerPanelRT);
+            CreateOrUpdateAnswerDecor(answerPanelRT);
+
+            EnsureAnswerContentHost(answerPanelRT);
+
+            if (answerText != null)
+            {
+                if (_answerScrollContent != null && answerText.transform.parent != _answerScrollContent)
+                    answerText.transform.SetParent(_answerScrollContent, false);
+
+                answerRT = answerText.GetComponent<RectTransform>();
+                answerRT.anchorMin = new Vector2(0f, 1f);
+                answerRT.anchorMax = new Vector2(1f, 1f);
+                answerRT.pivot = new Vector2(0.5f, 1f);
+                answerRT.localScale = Vector3.one;
+                answerRT.anchoredPosition = Vector2.zero;
+                answerRT.sizeDelta = Vector2.zero;
+
+                ContentSizeFitter textFitter = answerText.GetComponent<ContentSizeFitter>();
+                if (textFitter == null) textFitter = answerText.gameObject.AddComponent<ContentSizeFitter>();
+                textFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                textFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+                LayoutElement textLayout = answerText.GetComponent<LayoutElement>();
+                if (textLayout == null) textLayout = answerText.gameObject.AddComponent<LayoutElement>();
+                textLayout.minHeight = 0f;
+                textLayout.preferredHeight = -1f;
+                textLayout.flexibleHeight = 0f;
+            }
+        }
+
+        if (answerText != null)
+        {
+            answerText.color = new Color(0.08f, 0.27f, 0.40f, 1f);
+            answerText.fontSize = 27f;
+            answerText.alignment = TextAlignmentOptions.TopLeft;
+            answerText.enableWordWrapping = true;
+            answerText.enableAutoSizing = false;
+            answerText.overflowMode = TextOverflowModes.Overflow;
+            answerText.lineSpacing = 4f;
+            answerText.margin = new Vector4(0f, 0f, 0f, 0f);
+        }
+
+        ApplyAIChatVoiceSetting(IsAIChatVoiceEnabled());
+        AlignTitleToChatCenter();
+        ShiftChatAvatarLeft();
+    }
+
+    private void ArrangeChatInputActions(RectTransform questionRT)
+    {
+        if (questionRT == null) return;
+
+        if (_micButton != null)
+        {
+            RectTransform micRT = _micButton.GetComponent<RectTransform>();
+            if (micRT != null)
+            {
+                _micButton.transform.SetParent(questionRT, false);
+                ConfigureChatInputActionButton(_micButton, _micLabel, false);
+            }
+        }
+
+        if (askButton != null)
+        {
+            RectTransform sendRT = askButton.GetComponent<RectTransform>();
+            if (sendRT != null)
+            {
+                askButton.transform.SetParent(questionRT, false);
+                TMP_Text sendLabel = askButton.GetComponentInChildren<TMP_Text>(true);
+                ConfigureChatInputActionButton(askButton, sendLabel, true);
+            }
+        }
+
+        PositionSpeakerButton(questionRT);
+    }
+
+    private void ConfigureChatInputActionButton(Button button, TMP_Text label, bool rightSide)
+    {
+        RectTransform rt = button.GetComponent<RectTransform>();
+        rt.anchorMin = new Vector2(1f, 0.5f);
+        rt.anchorMax = rt.anchorMin;
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.sizeDelta = new Vector2(ChatInputActionButtonSize, ChatInputActionButtonSize);
+        rt.anchoredPosition = rightSide ? new Vector2(-44f, 0f) : new Vector2(-110f, 0f);
+        rt.localScale = Vector3.one;
+
+        Image image = button.GetComponent<Image>();
+        if (image != null)
+        {
+            Color normal = rightSide
+                ? new Color(0.24f, 0.67f, 0.95f, 0.96f)
+                : new Color(0.50f, 0.82f, 1f, 0.94f);
+            image.sprite = GetRoundedRuntimeSprite();
+            image.type = Image.Type.Sliced;
+            image.color = normal;
+            image.raycastTarget = true;
+            if (!rightSide) _defaultBtnColor = image.color;
+
+            ColorBlock colors = button.colors;
+            colors.normalColor = normal;
+            colors.highlightedColor = rightSide
+                ? new Color(0.34f, 0.76f, 1f, 1f)
+                : new Color(0.82f, 0.96f, 1f, 1f);
+            colors.pressedColor = rightSide
+                ? new Color(0.16f, 0.54f, 0.84f, 1f)
+                : new Color(0.58f, 0.82f, 0.96f, 1f);
+            colors.selectedColor = colors.highlightedColor;
+            colors.disabledColor = new Color(0.42f, 0.58f, 0.66f, 0.52f);
+            colors.colorMultiplier = 1f;
+            colors.fadeDuration = 0.12f;
+            button.colors = colors;
+        }
+
+        if (label != null)
+        {
+            RectTransform labelRT = label.GetComponent<RectTransform>();
+            if (labelRT != null)
+            {
+                labelRT.anchorMin = Vector2.zero;
+                labelRT.anchorMax = Vector2.one;
+                labelRT.offsetMin = Vector2.zero;
+                labelRT.offsetMax = Vector2.zero;
+            }
+
+            label.gameObject.SetActive(rightSide);
+            label.text = rightSide ? ">" : "";
+            label.fontSize = rightSide ? 29f : 20f;
+            label.fontStyle = FontStyles.Bold;
+            label.alignment = TextAlignmentOptions.Center;
+            label.enableWordWrapping = false;
+            label.color = rightSide
+                ? new Color(0.95f, 0.99f, 1f, 1f)
+                : new Color(0.07f, 0.47f, 0.74f, 1f);
+            label.raycastTarget = false;
+        }
+
+        if (!rightSide)
+            CreateOrUpdateMicGlyph(button.transform);
+    }
+
+    private void CreateOrUpdateMicGlyph(Transform parent)
+    {
+        if (parent == null) return;
+
+        SetChildActive(parent, "MicGlyphBody", false);
+        SetChildActive(parent, "MicGlyphStem", false);
+        SetChildActive(parent, "MicGlyphBase", false);
+
+        Image icon = GetOrCreateInputGlyphImage(parent, "MicGlyphIcon");
+        RectTransform iconRT = icon.GetComponent<RectTransform>();
+        iconRT.anchorMin = new Vector2(0.5f, 0.5f);
+        iconRT.anchorMax = new Vector2(0.5f, 0.5f);
+        iconRT.pivot = new Vector2(0.5f, 0.5f);
+        iconRT.sizeDelta = new Vector2(70, 70);
+        iconRT.anchoredPosition = new Vector2(-10f, 0f);
+        iconRT.localScale = Vector3.one;
+
+        icon.sprite = ResolveMicIconSprite();
+        icon.type = Image.Type.Simple;
+        icon.preserveAspect = true;
+        icon.color = Color.white;
+        icon.raycastTarget = false;
+        icon.gameObject.SetActive(true);
+        icon.transform.SetAsLastSibling();
+    }
+
+    private Sprite ResolveMicIconSprite()
+    {
+        if (_micIconSprite != null) return _micIconSprite;
+
+        Texture2D texture = Resources.Load<Texture2D>("AI/mic_icon");
+        if (texture == null) return null;
+
+        _micIconSprite = Sprite.Create(
+            texture,
+            new Rect(0f, 0f, texture.width, texture.height),
+            new Vector2(0.5f, 0.5f),
+            100f);
+        return _micIconSprite;
+    }
+
+    private Image GetOrCreateInputGlyphImage(Transform parent, string name)
+    {
+        Transform existing = parent.Find(name);
+        if (existing == null)
+        {
+            GameObject go = new GameObject(name, typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(parent, false);
+            existing = go.transform;
+        }
+
+        return existing.GetComponent<Image>();
+    }
+
+    private void PositionSpeakerButton(RectTransform questionRT)
+    {
+        if (_speakerButton == null || questionRT == null) return;
+        if (!IsAIChatVoiceEnabled())
+        {
+            _speakerButton.gameObject.SetActive(false);
+            return;
+        }
+
+        _speakerButton.gameObject.SetActive(true);
+
+        RectTransform speakerRT = _speakerButton.GetComponent<RectTransform>();
+        RectTransform parentRT = _speakerButton.transform.parent as RectTransform;
+        if (speakerRT == null || parentRT == null) return;
+
+        if (speakerRT.parent != questionRT.parent)
+        {
+            speakerRT.SetParent(questionRT.parent, false);
+            parentRT = questionRT.parent as RectTransform;
+            if (parentRT == null) return;
+        }
+
+        Vector3[] questionCorners = new Vector3[4];
+        questionRT.GetWorldCorners(questionCorners);
+        Vector2 questionRightLocal = parentRT.InverseTransformPoint((questionCorners[2] + questionCorners[3]) * 0.5f);
+
+        speakerRT.anchorMin = new Vector2(0.5f, 0.5f);
+        speakerRT.anchorMax = new Vector2(0.5f, 0.5f);
+        speakerRT.pivot = new Vector2(0.5f, 0.5f);
+        speakerRT.sizeDelta = new Vector2(210f, 46f);
+        speakerRT.anchoredPosition = new Vector2(questionRightLocal.x + 126f, questionRT.anchoredPosition.y - 4f);
+        speakerRT.localScale = Vector3.one;
+
+        Image speakerImage = _speakerButton.GetComponent<Image>();
+        if (speakerImage != null)
+        {
+            Color normal = new Color(0.06f, 0.40f, 0.62f, 0.92f);
+            speakerImage.sprite = GetRoundedRuntimeSprite();
+            speakerImage.type = Image.Type.Sliced;
+            speakerImage.color = normal;
+
+            ColorBlock colors = _speakerButton.colors;
+            colors.normalColor = normal;
+            colors.highlightedColor = new Color(0.10f, 0.52f, 0.77f, 0.97f);
+            colors.pressedColor = new Color(0.05f, 0.33f, 0.52f, 0.96f);
+            colors.selectedColor = colors.highlightedColor;
+            colors.disabledColor = new Color(0.06f, 0.22f, 0.32f, 0.55f);
+            colors.colorMultiplier = 1f;
+            colors.fadeDuration = 0.12f;
+            _speakerButton.colors = colors;
+        }
+
+        if (_speakerLabel != null)
+        {
+            RectTransform labelRT = _speakerLabel.GetComponent<RectTransform>();
+            if (labelRT != null)
+            {
+                labelRT.anchorMin = Vector2.zero;
+                labelRT.anchorMax = Vector2.one;
+                labelRT.pivot = new Vector2(0.5f, 0.5f);
+                labelRT.offsetMin = new Vector2(56f, 4f);
+                labelRT.offsetMax = new Vector2(-14f, -4f);
+                labelRT.localScale = Vector3.one;
+            }
+
+            _speakerLabel.fontSize = 23f;
+            _speakerLabel.fontStyle = FontStyles.Bold;
+            _speakerLabel.alignment = TextAlignmentOptions.MidlineLeft;
+            _speakerLabel.enableWordWrapping = false;
+            _speakerLabel.color = new Color(0.92f, 0.98f, 1f, 1f);
+        }
+
+        Image icon = GetOrCreateInputGlyphImage(_speakerButton.transform, "SpeakerButtonIcon");
+        RectTransform iconRT = icon.GetComponent<RectTransform>();
+        iconRT.anchorMin = new Vector2(0f, 0.5f);
+        iconRT.anchorMax = new Vector2(0f, 0.5f);
+        iconRT.pivot = new Vector2(0.5f, 0.5f);
+        iconRT.anchoredPosition = new Vector2(30f, 0f);
+        iconRT.sizeDelta = new Vector2(30f, 30f);
+        iconRT.localScale = Vector3.one;
+        icon.type = Image.Type.Simple;
+        icon.preserveAspect = true;
+        icon.raycastTarget = false;
+        icon.transform.SetAsLastSibling();
+
+        SetSpeakerButtonState(_audio != null && _audio.isPlaying);
+    }
+
+    private Sprite ResolveVoiceButtonIconSprite(bool stopState)
+    {
+        if (stopState)
+        {
+            if (_stopIconSprite != null) return _stopIconSprite;
+
+            Texture2D texture = Resources.Load<Texture2D>("AI/stop_icon");
+            if (texture == null) return null;
+
+            _stopIconSprite = Sprite.Create(
+                texture,
+                new Rect(0f, 0f, texture.width, texture.height),
+                new Vector2(0.5f, 0.5f),
+                100f);
+            return _stopIconSprite;
+        }
+
+        if (_speakerIconSprite != null) return _speakerIconSprite;
+
+        Texture2D speakerTexture = Resources.Load<Texture2D>("AI/speaker_icon");
+        if (speakerTexture == null) return null;
+
+        _speakerIconSprite = Sprite.Create(
+            speakerTexture,
+            new Rect(0f, 0f, speakerTexture.width, speakerTexture.height),
+            new Vector2(0.5f, 0.5f),
+            100f);
+        return _speakerIconSprite;
+    }
+
+    private static float ResolveAnchoredXForWorldCenter(RectTransform parentRT, float targetWorldX)
+    {
+        if (parentRT == null) return 0f;
+
+        Vector3 targetWorldPosition = new Vector3(targetWorldX, parentRT.position.y, parentRT.position.z);
+        return parentRT.InverseTransformPoint(targetWorldPosition).x;
+    }
+
+    private void AlignTitleToChatCenter()
+    {
+        GameObject titleLogo = ResolveTitleLogo();
+        if (titleLogo == null) return;
+
+        Transform titleTransform = titleLogo.transform;
+        Vector3 pos = titleTransform.position;
+        float z = pos.z;
+
+        Canvas canvas = questionInput != null
+            ? questionInput.GetComponentInParent<Canvas>()
+            : null;
+        if (canvas != null)
+            z = canvas.transform.position.z + ChatTitleForwardOffset;
+
+        titleTransform.position = new Vector3(ChatUiTargetWorldX, pos.y, z);
+        titleTransform.localScale *= ChatTitleScaleMultiplier;
+    }
+
+    private void ShiftChatAvatarLeft()
+    {
+        GameObject avatar = FindChatAvatar();
+        if (avatar == null) return;
+
+        Transform avatarTransform = avatar.transform;
+        Vector3 pos = avatarTransform.position;
+        avatarTransform.position = new Vector3(pos.x - ChatAvatarLeftShift, pos.y, pos.z);
+    }
+
+    private RectTransform EnsureAnswerContentHost(RectTransform answerPanelRT)
+    {
+        Transform existing = answerPanelRT.Find("AnswerContentHost");
+        RectTransform hostRT;
+
+        if (existing == null)
+        {
+            GameObject go = new GameObject("AnswerContentHost", typeof(RectTransform));
+            go.transform.SetParent(answerPanelRT, false);
+            hostRT = go.GetComponent<RectTransform>();
+        }
+        else
+        {
+            hostRT = existing as RectTransform;
+        }
+
+        hostRT.anchorMin = Vector2.zero;
+        hostRT.anchorMax = Vector2.one;
+        hostRT.pivot = new Vector2(0.5f, 0.5f);
+        hostRT.localScale = Vector3.one;
+        hostRT.offsetMin = new Vector2(46f, 30f);
+        hostRT.offsetMax = new Vector2(-46f, -88f);
+        hostRT.SetAsLastSibling();
+
+        ScrollRect scrollRect = hostRT.GetComponent<ScrollRect>();
+        if (scrollRect == null) scrollRect = hostRT.gameObject.AddComponent<ScrollRect>();
+
+        scrollRect.horizontal = false;
+        scrollRect.vertical = true;
+        scrollRect.movementType = ScrollRect.MovementType.Clamped;
+        scrollRect.inertia = true;
+        scrollRect.scrollSensitivity = 30f;
+
+        RectTransform viewportRT = EnsureScrollViewport(hostRT);
+        RectTransform contentRT = EnsureScrollContent(viewportRT);
+        Scrollbar scrollbar = EnsureVerticalScrollbar(hostRT);
+
+        scrollRect.viewport = viewportRT;
+        scrollRect.content = contentRT;
+        scrollRect.verticalScrollbar = scrollbar;
+        scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
+        scrollRect.verticalScrollbarSpacing = 6f;
+
+        _answerScrollRect = scrollRect;
+        _answerScrollContent = contentRT;
+        _answerScrollbar = scrollbar;
+
+        return hostRT;
+    }
+
+    private RectTransform EnsureScrollViewport(RectTransform hostRT)
+    {
+        Transform existing = hostRT.Find("AnswerViewport");
+        RectTransform viewportRT;
+
+        if (existing == null)
+        {
+            GameObject go = new GameObject("AnswerViewport", typeof(RectTransform), typeof(Image), typeof(RectMask2D));
+            go.transform.SetParent(hostRT, false);
+            viewportRT = go.GetComponent<RectTransform>();
+        }
+        else
+        {
+            viewportRT = existing as RectTransform;
+        }
+
+        viewportRT.anchorMin = Vector2.zero;
+        viewportRT.anchorMax = Vector2.one;
+        viewportRT.pivot = new Vector2(0.5f, 0.5f);
+        viewportRT.offsetMin = Vector2.zero;
+        viewportRT.offsetMax = Vector2.zero;
+        viewportRT.localScale = Vector3.one;
+
+        Image viewportImage = viewportRT.GetComponent<Image>();
+        viewportImage.color = new Color(1f, 1f, 1f, 0.001f);
+        viewportImage.raycastTarget = true;
+
+        RectMask2D mask = viewportRT.GetComponent<RectMask2D>();
+        if (mask == null) mask = viewportRT.gameObject.AddComponent<RectMask2D>();
+
+        return viewportRT;
+    }
+
+    private RectTransform EnsureScrollContent(RectTransform viewportRT)
+    {
+        Transform existing = viewportRT.Find("AnswerScrollContent");
+        RectTransform contentRT;
+
+        if (existing == null)
+        {
+            GameObject go = new GameObject("AnswerScrollContent", typeof(RectTransform));
+            go.transform.SetParent(viewportRT, false);
+            contentRT = go.GetComponent<RectTransform>();
+        }
+        else
+        {
+            contentRT = existing as RectTransform;
+        }
+
+        contentRT.anchorMin = new Vector2(0f, 1f);
+        contentRT.anchorMax = new Vector2(1f, 1f);
+        contentRT.pivot = new Vector2(0.5f, 1f);
+        contentRT.anchoredPosition = Vector2.zero;
+        contentRT.sizeDelta = Vector2.zero;
+        contentRT.localScale = Vector3.one;
+
+        VerticalLayoutGroup vertical = contentRT.GetComponent<VerticalLayoutGroup>();
+        if (vertical == null) vertical = contentRT.gameObject.AddComponent<VerticalLayoutGroup>();
+        vertical.childAlignment = TextAnchor.UpperLeft;
+        vertical.childControlWidth = true;
+        vertical.childControlHeight = true;
+        vertical.childForceExpandWidth = true;
+        vertical.childForceExpandHeight = false;
+        vertical.spacing = 0f;
+        vertical.padding = new RectOffset(0, 0, 0, 0);
+
+        ContentSizeFitter fitter = contentRT.GetComponent<ContentSizeFitter>();
+        if (fitter == null) fitter = contentRT.gameObject.AddComponent<ContentSizeFitter>();
+        fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+        return contentRT;
+    }
+
+    private Scrollbar EnsureVerticalScrollbar(RectTransform hostRT)
+    {
+        Transform existing = hostRT.Find("AnswerScrollbar");
+        RectTransform scrollbarRT;
+
+        if (existing == null)
+        {
+            GameObject go = new GameObject("AnswerScrollbar", typeof(RectTransform), typeof(Image), typeof(Scrollbar));
+            go.transform.SetParent(hostRT, false);
+            scrollbarRT = go.GetComponent<RectTransform>();
+        }
+        else
+        {
+            scrollbarRT = existing as RectTransform;
+        }
+
+        scrollbarRT.anchorMin = new Vector2(1f, 0f);
+        scrollbarRT.anchorMax = new Vector2(1f, 1f);
+        scrollbarRT.pivot = new Vector2(1f, 0.5f);
+        scrollbarRT.sizeDelta = new Vector2(14f, 0f);
+        scrollbarRT.anchoredPosition = Vector2.zero;
+        scrollbarRT.localScale = Vector3.one;
+
+        Image background = scrollbarRT.GetComponent<Image>();
+        background.sprite = GetRoundedRuntimeSprite();
+        background.type = Image.Type.Sliced;
+        background.color = new Color(0.12f, 0.35f, 0.48f, 0.32f);
+        background.raycastTarget = true;
+
+        Transform handleArea = scrollbarRT.Find("SlidingArea");
+        RectTransform handleAreaRT;
+        if (handleArea == null)
+        {
+            GameObject areaGO = new GameObject("SlidingArea", typeof(RectTransform));
+            areaGO.transform.SetParent(scrollbarRT, false);
+            handleAreaRT = areaGO.GetComponent<RectTransform>();
+        }
+        else
+        {
+            handleAreaRT = handleArea as RectTransform;
+        }
+
+        handleAreaRT.anchorMin = Vector2.zero;
+        handleAreaRT.anchorMax = Vector2.one;
+        handleAreaRT.pivot = new Vector2(0.5f, 0.5f);
+        handleAreaRT.offsetMin = new Vector2(2f, 2f);
+        handleAreaRT.offsetMax = new Vector2(-2f, -2f);
+
+        Transform handle = handleAreaRT.Find("Handle");
+        RectTransform handleRT;
+        if (handle == null)
+        {
+            GameObject handleGO = new GameObject("Handle", typeof(RectTransform), typeof(Image));
+            handleGO.transform.SetParent(handleAreaRT, false);
+            handleRT = handleGO.GetComponent<RectTransform>();
+        }
+        else
+        {
+            handleRT = handle as RectTransform;
+        }
+
+        handleRT.anchorMin = Vector2.zero;
+        handleRT.anchorMax = Vector2.one;
+        handleRT.pivot = new Vector2(0.5f, 0.5f);
+        handleRT.offsetMin = Vector2.zero;
+        handleRT.offsetMax = Vector2.zero;
+
+        Image handleImage = handleRT.GetComponent<Image>();
+        handleImage.sprite = GetRoundedRuntimeSprite();
+        handleImage.type = Image.Type.Sliced;
+        handleImage.color = new Color(0.23f, 0.73f, 0.92f, 0.95f);
+        handleImage.raycastTarget = true;
+
+        Scrollbar scrollbar = scrollbarRT.GetComponent<Scrollbar>();
+        scrollbar.direction = Scrollbar.Direction.BottomToTop;
+        scrollbar.handleRect = handleRT;
+        scrollbar.targetGraphic = handleImage;
+        scrollbar.size = 1f;
+        scrollbar.value = 1f;
+        scrollbar.numberOfSteps = 0;
+
+        return scrollbar;
+    }
+
+    private void CreateOrUpdatePanelGlow(RectTransform panelRT, string name, Color color, float padding)
+    {
+        if (panelRT == null) return;
+
+        Transform glow = panelRT.Find(name);
+        if (glow == null)
+        {
+            GameObject go = new GameObject(name, typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(panelRT, false);
+            glow = go.transform;
+        }
+
+        RectTransform glowRT = glow.GetComponent<RectTransform>();
+        glowRT.anchorMin = Vector2.zero;
+        glowRT.anchorMax = Vector2.one;
+        glowRT.pivot = new Vector2(0.5f, 0.5f);
+        glowRT.offsetMin = new Vector2(-padding, -padding);
+        glowRT.offsetMax = new Vector2(padding, padding);
+        glowRT.localScale = Vector3.one;
+
+        Image glowImage = glow.GetComponent<Image>();
+        glowImage.sprite = GetRoundedRuntimeSprite();
+        glowImage.type = Image.Type.Sliced;
+        glowImage.color = color;
+        glowImage.raycastTarget = false;
+
+        glow.SetAsFirstSibling();
+    }
+
+    private void CreateOrUpdatePanelAccentLine(RectTransform panelRT, string name, Color color, float height, float horizontalInset)
+    {
+        if (panelRT == null) return;
+
+        Transform line = panelRT.Find(name);
+        if (line == null)
+        {
+            GameObject go = new GameObject(name, typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(panelRT, false);
+            line = go.transform;
+        }
+
+        RectTransform lineRT = line.GetComponent<RectTransform>();
+        lineRT.anchorMin = new Vector2(0f, 1f);
+        lineRT.anchorMax = new Vector2(1f, 1f);
+        lineRT.pivot = new Vector2(0.5f, 1f);
+        lineRT.anchoredPosition = new Vector2(0f, -10f);
+        lineRT.sizeDelta = new Vector2(-(horizontalInset * 2f), height);
+
+        Image lineImage = line.GetComponent<Image>();
+        lineImage.color = color;
+        lineImage.raycastTarget = false;
+
+        line.SetAsLastSibling();
+    }
+
+    private void CreateOrUpdateAnswerInnerFrame(RectTransform answerPanelRT)
+    {
+        if (answerPanelRT == null) return;
+
+        Transform frame = answerPanelRT.Find("AnswerInnerFrame");
+        if (frame == null)
+        {
+            GameObject go = new GameObject("AnswerInnerFrame", typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(answerPanelRT, false);
+            frame = go.transform;
+        }
+
+        RectTransform frameRT = frame.GetComponent<RectTransform>();
+        frameRT.anchorMin = Vector2.zero;
+        frameRT.anchorMax = Vector2.one;
+        frameRT.pivot = new Vector2(0.5f, 0.5f);
+        frameRT.offsetMin = new Vector2(12f, 12f);
+        frameRT.offsetMax = new Vector2(-12f, -12f);
+        frameRT.localScale = Vector3.one;
+
+        Image frameImage = frame.GetComponent<Image>();
+        frameImage.sprite = GetRoundedRuntimeSprite();
+        frameImage.type = Image.Type.Sliced;
+        frameImage.color = new Color(1f, 1f, 1f, 0.06f);
+        frameImage.raycastTarget = false;
+
+        Outline outline = frame.GetComponent<Outline>();
+        if (outline == null) outline = frame.gameObject.AddComponent<Outline>();
+        outline.effectColor = new Color(0.50f, 0.88f, 1f, 0.28f);
+        outline.effectDistance = new Vector2(1.4f, 1.4f);
+        outline.useGraphicAlpha = true;
+
+        frame.SetAsFirstSibling();
+    }
+
+    private void CreateOrUpdateAnswerBottomGlow(RectTransform answerPanelRT)
+    {
+        if (answerPanelRT == null) return;
+
+        Transform glow = answerPanelRT.Find("AnswerBottomGlow");
+        if (glow == null)
+        {
+            GameObject go = new GameObject("AnswerBottomGlow", typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(answerPanelRT, false);
+            glow = go.transform;
+        }
+
+        RectTransform glowRT = glow.GetComponent<RectTransform>();
+        glowRT.anchorMin = new Vector2(0.5f, 0f);
+        glowRT.anchorMax = new Vector2(0.5f, 0f);
+        glowRT.pivot = new Vector2(0.5f, 0f);
+        glowRT.anchoredPosition = new Vector2(0f, 16f);
+        glowRT.sizeDelta = new Vector2(760f, 86f);
+        glowRT.localScale = Vector3.one;
+
+        Image glowImage = glow.GetComponent<Image>();
+        glowImage.sprite = GetRoundedRuntimeSprite();
+        glowImage.type = Image.Type.Sliced;
+        glowImage.color = new Color(0.16f, 0.82f, 1f, 0.12f);
+        glowImage.raycastTarget = false;
+
+        glow.SetAsFirstSibling();
+    }
+
+    private void CreateOrUpdateAnswerShine(RectTransform answerPanelRT)
+    {
+        if (answerPanelRT == null) return;
+
+        Transform shine = answerPanelRT.Find("AnswerPanelShine");
+        if (shine == null)
+        {
+            GameObject go = new GameObject("AnswerPanelShine", typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(answerPanelRT, false);
+            shine = go.transform;
+        }
+
+        RectTransform shineRT = shine.GetComponent<RectTransform>();
+        shineRT.anchorMin = new Vector2(0f, 1f);
+        shineRT.anchorMax = new Vector2(1f, 1f);
+        shineRT.pivot = new Vector2(0.5f, 1f);
+        shineRT.anchoredPosition = new Vector2(0f, 0f);
+        shineRT.sizeDelta = new Vector2(-30f, 94f);
+
+        Image shineImage = shine.GetComponent<Image>();
+        shineImage.sprite = GetRoundedRuntimeSprite();
+        shineImage.type = Image.Type.Sliced;
+        shineImage.color = new Color(1f, 1f, 1f, 0.10f);
+        shineImage.raycastTarget = false;
+
+        shine.SetAsFirstSibling();
+    }
+
+    private void StyleChatPanel(Image panelImage, Color fill, Color border, Color shadowColor)
+    {
+        if (panelImage == null) return;
+
+        // Eski koyu/kütük sprite'ı bırakıp temiz rounded panel kullanıyoruz.
+        panelImage.sprite = GetRoundedRuntimeSprite();
+        panelImage.type = Image.Type.Sliced;
+        panelImage.material = null;
+        panelImage.color = fill;
+        panelImage.raycastTarget = true;
+
+        Outline outline = panelImage.GetComponent<Outline>();
+        if (outline == null) outline = panelImage.gameObject.AddComponent<Outline>();
+        outline.effectColor = border;
+        outline.effectDistance = new Vector2(2.8f, 2.8f);
+        outline.useGraphicAlpha = true;
+
+        Shadow shadow = panelImage.GetComponent<Shadow>();
+        if (shadow == null) shadow = panelImage.gameObject.AddComponent<Shadow>();
+        shadow.effectColor = shadowColor;
+        shadow.effectDistance = new Vector2(0f, -6f);
+        shadow.useGraphicAlpha = true;
+    }
+
+    private Sprite GetRoundedRuntimeSprite()
+    {
+        if (_runtimeRoundedSprite != null)
+            return _runtimeRoundedSprite;
+
+        const int size = 96;
+        const float radius = 24f;
+
+        Texture2D tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
+        tex.name = "RuntimeRoundedChatUISprite";
+        tex.wrapMode = TextureWrapMode.Clamp;
+        tex.filterMode = FilterMode.Bilinear;
+
+        float half = size * 0.5f;
+
+        for (int y = 0; y < size; y++)
+        {
+            for (int x = 0; x < size; x++)
+            {
+                float px = x + 0.5f - half;
+                float py = y + 0.5f - half;
+
+                float qx = Mathf.Abs(px) - (half - radius);
+                float qy = Mathf.Abs(py) - (half - radius);
+
+                float outsideX = Mathf.Max(qx, 0f);
+                float outsideY = Mathf.Max(qy, 0f);
+                float outsideDistance = Mathf.Sqrt(outsideX * outsideX + outsideY * outsideY);
+                float insideDistance = Mathf.Min(Mathf.Max(qx, qy), 0f);
+                float signedDistance = outsideDistance + insideDistance - radius;
+
+                float alpha = 1f - Mathf.SmoothStep(0f, 2f, signedDistance);
+                alpha = Mathf.Clamp01(alpha);
+
+                tex.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
+            }
+        }
+
+        tex.Apply();
+
+        _runtimeRoundedSprite = Sprite.Create(
+            tex,
+            new Rect(0f, 0f, size, size),
+            new Vector2(0.5f, 0.5f),
+            100f,
+            0,
+            SpriteMeshType.FullRect,
+            new Vector4(26f, 26f, 26f, 26f));
+
+        return _runtimeRoundedSprite;
+    }
+
+    private void ApplyInputTextStyle(TMP_Text text, bool isPlaceholder)
+    {
+        if (text == null) return;
+
+        RectTransform rt = text.GetComponent<RectTransform>();
+        if (rt != null)
+        {
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+        }
+
+        text.fontSize = isPlaceholder ? 28f : 29f;
+        text.fontStyle = isPlaceholder ? FontStyles.Italic : FontStyles.Normal;
+        text.color = isPlaceholder
+            ? new Color(0.38f, 0.54f, 0.65f, 0.78f)
+            : new Color(0.11f, 0.31f, 0.44f, 1f);
+        text.alignment = TextAlignmentOptions.MidlineLeft;
+        text.enableWordWrapping = false;
+        text.margin = new Vector4(8f, 3f, 8f, 3f);
+    }
+
+    private void CreateOrUpdateSoftInputFrame(Transform parent)
+    {
+        if (parent == null) return;
+
+        Transform frame = parent.Find("SoftInputFrame");
+        if (frame == null)
+        {
+            GameObject go = new GameObject("SoftInputFrame", typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(parent, false);
+            frame = go.transform;
+        }
+
+        RectTransform frameRT = frame.GetComponent<RectTransform>();
+        frameRT.anchorMin = Vector2.zero;
+        frameRT.anchorMax = Vector2.one;
+        frameRT.pivot = new Vector2(0.5f, 0.5f);
+        frameRT.offsetMin = new Vector2(70f, 13f);
+        frameRT.offsetMax = new Vector2(-76f, -13f);
+        frameRT.localScale = Vector3.one;
+
+        Image frameImage = frame.GetComponent<Image>();
+        frameImage.sprite = GetRoundedRuntimeSprite();
+        frameImage.type = Image.Type.Sliced;
+        frameImage.color = new Color(0.80f, 0.92f, 0.985f, 0.42f);
+        frameImage.raycastTarget = false;
+
+        frame.SetAsFirstSibling();
+    }
+
+    private void CreateOrUpdateInputBadge(Transform parent, string name, string text, bool rightSide)
+    {
+        if (parent == null) return;
+
+        Transform badge = parent.Find(name);
+        if (badge == null)
+        {
+            GameObject go = new GameObject(name, typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(parent, false);
+            badge = go.transform;
+        }
+
+        RectTransform badgeRT = badge.GetComponent<RectTransform>();
+        badgeRT.anchorMin = rightSide ? new Vector2(1f, 0.5f) : new Vector2(0f, 0.5f);
+        badgeRT.anchorMax = badgeRT.anchorMin;
+        badgeRT.pivot = new Vector2(0.5f, 0.5f);
+        badgeRT.sizeDelta = rightSide ? new Vector2(58f, 58f) : new Vector2(48f, 48f);
+        badgeRT.anchoredPosition = rightSide ? new Vector2(-44f, 0f) : new Vector2(42f, 0f);
+        badgeRT.localScale = Vector3.one;
+
+        Image badgeImage = badge.GetComponent<Image>();
+        badgeImage.sprite = GetRoundedRuntimeSprite();
+        badgeImage.type = Image.Type.Sliced;
+        badgeImage.color = rightSide
+            ? new Color(0.24f, 0.67f, 0.95f, 0.96f)
+            : new Color(0.70f, 0.90f, 1f, 0.98f);
+        badgeImage.raycastTarget = false;
+
+        TMP_Text label = badge.GetComponentInChildren<TMP_Text>(true);
+        if (label == null)
+        {
+            GameObject labelGO = new GameObject("BadgeText", typeof(RectTransform), typeof(TextMeshProUGUI));
+            labelGO.transform.SetParent(badge, false);
+            label = labelGO.GetComponent<TMP_Text>();
+        }
+
+        RectTransform labelRT = label.GetComponent<RectTransform>();
+        labelRT.anchorMin = Vector2.zero;
+        labelRT.anchorMax = Vector2.one;
+        labelRT.offsetMin = Vector2.zero;
+        labelRT.offsetMax = Vector2.zero;
+
+        if (rightSide)
+        {
+            label.gameObject.SetActive(true);
+            label.text = text;
+            label.fontSize = 29f;
+            label.fontStyle = FontStyles.Bold;
+            label.alignment = TextAlignmentOptions.Center;
+            label.color = new Color(0.95f, 0.99f, 1f, 1f);
+            label.raycastTarget = false;
+
+            SetChildActive(badge, "IconDot01", false);
+            SetChildActive(badge, "IconDot02", false);
+            SetChildActive(badge, "IconDot03", false);
+        }
+        else
+        {
+            // Sol ikonda font yerine üç noktalı sade chat göstergesi kullan.
+            label.gameObject.SetActive(false);
+            CreateOrUpdateDotIcon(badge, "IconDot01", new Vector2(-10f, 0f), 5.5f);
+            CreateOrUpdateDotIcon(badge, "IconDot02", new Vector2(0f, 0f), 5.5f);
+            CreateOrUpdateDotIcon(badge, "IconDot03", new Vector2(10f, 0f), 5.5f);
+        }
+
+        badge.SetAsLastSibling();
+    }
+
+    private void CreateOrUpdateDotIcon(Transform parent, string name, Vector2 position, float size)
+    {
+        Transform dot = parent.Find(name);
+        if (dot == null)
+        {
+            GameObject go = new GameObject(name, typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(parent, false);
+            dot = go.transform;
+        }
+
+        RectTransform dotRT = dot.GetComponent<RectTransform>();
+        dotRT.anchorMin = new Vector2(0.5f, 0.5f);
+        dotRT.anchorMax = new Vector2(0.5f, 0.5f);
+        dotRT.pivot = new Vector2(0.5f, 0.5f);
+        dotRT.anchoredPosition = position;
+        dotRT.sizeDelta = new Vector2(size, size);
+        dotRT.localScale = Vector3.one;
+        dotRT.localEulerAngles = Vector3.zero;
+
+        Image dotImage = dot.GetComponent<Image>();
+        dotImage.sprite = GetRoundedRuntimeSprite();
+        dotImage.type = Image.Type.Sliced;
+        dotImage.color = new Color(0.07f, 0.47f, 0.74f, 1f);
+        dotImage.raycastTarget = false;
+
+        dot.gameObject.SetActive(true);
+        dot.SetAsLastSibling();
+    }
+
+    private void SetChildActive(Transform parent, string childName, bool active)
+    {
+        Transform child = parent != null ? parent.Find(childName) : null;
+        if (child != null)
+            child.gameObject.SetActive(active);
+    }
+
+    private void CreateOrUpdateAnswerHeader(RectTransform answerPanelRT)
+    {
+        if (answerPanelRT == null) return;
+
+        Transform oldBadge = answerPanelRT.Find("ChatAnswerHeaderBadge");
+        if (oldBadge != null)
+            oldBadge.gameObject.SetActive(false);
+
+        Transform title = answerPanelRT.Find("ChatAnswerHeaderTitle");
+        if (title == null)
+        {
+            GameObject titleGO = new GameObject("ChatAnswerHeaderTitle", typeof(RectTransform), typeof(TextMeshProUGUI));
+            titleGO.transform.SetParent(answerPanelRT, false);
+            title = titleGO.transform;
+        }
+
+        RectTransform titleRT = title.GetComponent<RectTransform>();
+        titleRT.anchorMin = new Vector2(0f, 1f);
+        titleRT.anchorMax = new Vector2(0f, 1f);
+        titleRT.pivot = new Vector2(0f, 1f);
+        titleRT.anchoredPosition = new Vector2(46f, -28f);
+        titleRT.sizeDelta = new Vector2(430f, 42f);
+
+        TMP_Text titleText = title.GetComponent<TMP_Text>();
+        titleText.text = "Yapay Zekâ Cevabı";
+        titleText.fontSize = 30f;
+        titleText.fontStyle = FontStyles.Bold;
+        titleText.alignment = TextAlignmentOptions.MidlineLeft;
+        titleText.color = new Color(0.09f, 0.50f, 0.78f, 1f);
+        titleText.raycastTarget = false;
+
+        Transform underline = answerPanelRT.Find("ChatAnswerHeaderUnderline");
+        if (underline == null)
+        {
+            GameObject underlineGO = new GameObject("ChatAnswerHeaderUnderline", typeof(RectTransform), typeof(Image));
+            underlineGO.transform.SetParent(answerPanelRT, false);
+            underline = underlineGO.transform;
+        }
+
+        RectTransform underlineRT = underline.GetComponent<RectTransform>();
+        underlineRT.anchorMin = new Vector2(0f, 1f);
+        underlineRT.anchorMax = new Vector2(1f, 1f);
+        underlineRT.pivot = new Vector2(0.5f, 1f);
+        underlineRT.anchoredPosition = new Vector2(0f, -64f);
+        underlineRT.sizeDelta = new Vector2(-92f, 4f);
+
+        Image underlineImage = underline.GetComponent<Image>();
+        underlineImage.sprite = GetRoundedRuntimeSprite();
+        underlineImage.type = Image.Type.Sliced;
+        underlineImage.color = new Color(0.34f, 0.82f, 1f, 0.72f);
+        underlineImage.raycastTarget = false;
+
+        Shadow underlineShadow = underline.GetComponent<Shadow>();
+        if (underlineShadow == null) underlineShadow = underline.gameObject.AddComponent<Shadow>();
+        underlineShadow.effectColor = new Color(0.18f, 0.80f, 1f, 0.22f);
+        underlineShadow.effectDistance = new Vector2(0f, -1f);
+        underlineShadow.useGraphicAlpha = true;
+
+        Transform oldLine = answerPanelRT.Find("ChatAnswerHeaderLine");
+        if (oldLine != null)
+            oldLine.gameObject.SetActive(false);
+
+        title.SetAsLastSibling();
+        underline.SetAsLastSibling();
+    }
+
+    private void CreateOrUpdateAnswerDecor(RectTransform answerPanelRT)
+    {
+        if (answerPanelRT == null) return;
+
+        CreateDecorLine(answerPanelRT, "ChatDecorWaveLeft", new Vector2(0f, 0f), new Vector2(0f, 0f),
+            new Vector2(310f, 2f), new Vector2(190f, 86f), 11f, new Color(1f, 1f, 1f, 0.14f));
+
+        CreateDecorLine(answerPanelRT, "ChatDecorWaveCenter", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f),
+            new Vector2(380f, 2f), new Vector2(0f, 76f), -7f, new Color(1f, 1f, 1f, 0.18f));
+
+        CreateDecorLine(answerPanelRT, "ChatDecorWaveRight", new Vector2(1f, 0f), new Vector2(1f, 0f),
+            new Vector2(310f, 2f), new Vector2(-190f, 90f), -13f, new Color(1f, 1f, 1f, 0.22f));
+
+        CreateDecorDot(answerPanelRT, "ChatDecorDot01", new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(90f, 125f), 10f);
+        CreateDecorDot(answerPanelRT, "ChatDecorDot02", new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(145f, 165f), 7f);
+        CreateDecorDot(answerPanelRT, "ChatDecorDot03", new Vector2(1f, 0f), new Vector2(1f, 0f), new Vector2(-125f, 130f), 8f);
+
+        foreach (Transform child in answerPanelRT)
+        {
+            if (child.name.StartsWith("ChatDecor"))
+                child.SetAsFirstSibling();
+        }
+    }
+
+    private void CreateDecorLine(RectTransform parent, string name, Vector2 anchorMin, Vector2 anchorMax,
+        Vector2 size, Vector2 position, float rotation, Color color)
+    {
+        Image img = GetOrCreateDecorImage(parent, name);
+        RectTransform rt = img.GetComponent<RectTransform>();
+        rt.anchorMin = anchorMin;
+        rt.anchorMax = anchorMax;
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.sizeDelta = size;
+        rt.anchoredPosition = position;
+        rt.localEulerAngles = new Vector3(0f, 0f, rotation);
+        rt.localScale = Vector3.one;
+
+        img.color = color;
+        img.raycastTarget = false;
+    }
+
+    private void CreateDecorDot(RectTransform parent, string name, Vector2 anchorMin, Vector2 anchorMax,
+        Vector2 position, float size)
+    {
+        Image img = GetOrCreateDecorImage(parent, name);
+        RectTransform rt = img.GetComponent<RectTransform>();
+        rt.anchorMin = anchorMin;
+        rt.anchorMax = anchorMax;
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.sizeDelta = new Vector2(size, size);
+        rt.anchoredPosition = position;
+        rt.localEulerAngles = Vector3.zero;
+        rt.localScale = Vector3.one;
+
+        img.sprite = GetRoundedRuntimeSprite();
+        img.type = Image.Type.Sliced;
+        img.color = new Color(0.24f, 0.66f, 0.92f, 0.28f);
+        img.raycastTarget = false;
+    }
+
+    private Image GetOrCreateDecorImage(RectTransform parent, string name)
+    {
+        Transform existing = parent.Find(name);
+        if (existing == null)
+        {
+            GameObject go = new GameObject(name, typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(parent, false);
+            existing = go.transform;
+        }
+
+        return existing.GetComponent<Image>();
     }
 
     private Sprite ResolvePanelSprite()
@@ -909,7 +2273,7 @@ public class RagApiClient : MonoBehaviour
 
         // Premium bullet + hanging indent:
         // Alt satır bullet'ın altına değil, metnin başladığı hattan devam eder.
-        const string prefix = "<indent=34px><line-indent=-34px><color=#33CFFF><b>></b></color><space=10px>";
+        const string prefix = "<indent=22px><line-indent=-22px><color=#29C8FF><b>•</b></color><space=8px>";
         const string suffix = "</line-indent></indent>";
         var sb = new StringBuilder();
         for (int i = 0; i < entries.Count; i++)

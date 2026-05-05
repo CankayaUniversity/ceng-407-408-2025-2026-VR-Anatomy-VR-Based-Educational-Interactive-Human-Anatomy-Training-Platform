@@ -3,13 +3,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public static class AvatarSelectionSettingsInstaller
+public static class AIChatVoiceSettingsInstaller
 {
     private const string SettingsSceneName = "07_Settings";
     private const string SourceRowName = "ShowAnswerTextRow";
-    private const string InstalledRowName = "AvatarSelectionRow";
-    private const string FemaleToggleName = "AvatarFemaleToggle";
-    private const string MaleToggleName = "AvatarMaleToggle";
+    private const string InstalledRowName = "AIChatVoiceRow";
+    private const string EnabledToggleName = "AIChatVoiceEnabledToggle";
+    private const string DisabledToggleName = "AIChatVoiceDisabledToggle";
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Register()
@@ -21,17 +21,17 @@ public static class AvatarSelectionSettingsInstaller
     private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name != SettingsSceneName) return;
-        InstallAvatarRow();
+        InstallVoiceRow();
     }
 
-    private static void InstallAvatarRow()
+    private static void InstallVoiceRow()
     {
         if (GameObject.Find(InstalledRowName) != null) return;
 
         GameObject sourceRow = GameObject.Find(SourceRowName);
         if (sourceRow == null)
         {
-            Debug.LogWarning("[AvatarSelection] Source row not found.");
+            Debug.LogWarning("[AIChatVoice] Kaynak ayar satırı bulunamadı.");
             return;
         }
 
@@ -44,17 +44,15 @@ public static class AvatarSelectionSettingsInstaller
         var rowRect = newRow.GetComponent<RectTransform>();
         var sourceRect = sourceRow.GetComponent<RectTransform>();
         if (rowRect != null && sourceRect != null)
-        {
-            rowRect.anchoredPosition = sourceRect.anchoredPosition + new Vector2(0f, -58f);
-        }
+            rowRect.anchoredPosition = sourceRect.anchoredPosition + new Vector2(0f, -116f);
 
-        var femaleToggle = newRow.GetComponentInChildren<Toggle>(true);
-        if (femaleToggle == null)
+        Toggle enabledToggle = newRow.GetComponentInChildren<Toggle>(true);
+        if (enabledToggle == null)
         {
-            Debug.LogWarning("[AvatarSelection] Toggle could not be found on cloned row.");
+            Debug.LogWarning("[AIChatVoice] Toggle bulunamadı.");
             return;
         }
-        femaleToggle.name = FemaleToggleName;
+        enabledToggle.name = EnabledToggleName;
 
         CleanupSourceBinders(newRow);
 
@@ -65,19 +63,19 @@ public static class AvatarSelectionSettingsInstaller
 
         if (label != null)
         {
-            label.text = "Avatar Seçimi";
+            label.text = "Yapay Zekâ ile Konuş Avatar Sesi";
             AlignTitleWithOptions(label);
         }
 
-        Toggle maleToggle = Object.Instantiate(femaleToggle, femaleToggle.transform.parent);
-        maleToggle.name = MaleToggleName;
+        Toggle disabledToggle = Object.Instantiate(enabledToggle, enabledToggle.transform.parent);
+        disabledToggle.name = DisabledToggleName;
         CleanupSourceBinders(newRow);
 
-        ConfigureOptionToggle(femaleToggle, new Vector2(80f, -14f), "Kız");
-        ConfigureOptionToggle(maleToggle, new Vector2(205f, -14f), "Erkek");
+        ConfigureOptionToggle(enabledToggle, new Vector2(80f, -14f), "Açık");
+        ConfigureOptionToggle(disabledToggle, new Vector2(205f, -14f), "Kapalı");
 
-        var avatarBinder = newRow.AddComponent<AvatarSelectionToggleBinder>();
-        avatarBinder.Initialize(femaleToggle, maleToggle, label);
+        var voiceBinder = newRow.AddComponent<AIChatVoiceToggleBinder>();
+        voiceBinder.Initialize(enabledToggle, disabledToggle, label);
         SettingsSceneLayoutAdjuster.ApplyLayout();
     }
 
@@ -85,7 +83,13 @@ public static class AvatarSelectionSettingsInstaller
     {
         var labelRect = label.GetComponentInParent<RectTransform>();
         if (labelRect != null)
+        {
             labelRect.anchoredPosition = Vector2.zero;
+            labelRect.sizeDelta = new Vector2(270f, 42f);
+        }
+
+        label.enableWordWrapping = true;
+        label.fontSize = 18f;
     }
 
     private static void ConfigureOptionToggle(Toggle toggle, Vector2 anchoredPosition, string optionText)
@@ -94,7 +98,7 @@ public static class AvatarSelectionSettingsInstaller
         if (toggleRect != null)
         {
             toggleRect.anchoredPosition = anchoredPosition;
-            toggleRect.sizeDelta = new Vector2(95f, 24f);
+            toggleRect.sizeDelta = new Vector2(110f, 24f);
         }
 
         var legacyLabel = toggle.GetComponentInChildren<Text>(true);
