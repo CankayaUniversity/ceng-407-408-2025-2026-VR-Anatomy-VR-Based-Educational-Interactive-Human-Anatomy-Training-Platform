@@ -26,6 +26,26 @@ collection = client.get_or_create_collection(COLLECTION_NAME)
 
 app = FastAPI(title="VR Anatomy RAG")
 
+# --------------------
+# Simple memory
+# Son 1 soru-cevap çiftini tutar
+# --------------------
+last_turn = {
+    "question": None,
+    "answer": None
+}
+
+FOLLOWUP_PHRASES = [
+    "anlamadım",
+    "tekrar anlat",
+    "daha basit",
+    "basit anlat",
+    "bir daha açıkla",
+    "başka şekilde anlat",
+    "açıklar mısın",
+    "yeniden anlat"
+]
+
 
 class AskRequest(BaseModel):
     question: str
@@ -43,8 +63,96 @@ def short_for_context(doc: str, max_chars=900) -> str:
     return t if len(t) <= max_chars else (t[:max_chars].rstrip() + "...")
 
 
+def parse_gemini_json(raw: str):
+    raw = (raw or "").strip()
+
+    if raw.startswith("```"):
+        raw = raw.strip("`").strip()
+        if raw.lower().startswith("json"):
+            raw = raw[4:].strip()
+
+    parsed = json.loads(raw)
+
+    ans = parsed.get("answer")
+    used_pages = parsed.get("used_pages") or []
+
+    norm_pages = []
+    for p in used_pages:
+        try:
+            norm_pages.append(int(p))
+        except Exception:
+            pass
+
+    used_pages = list(dict.fromkeys(norm_pages))
+
+    if isinstance(ans, list):
+        answer_text = "\n".join(f"- {a}" for a in ans if a)
+    elif isinstance(ans, str):
+        answer_text = ans.strip()
+    else:
+        answer_text = (str(ans) if ans is not None else "").strip()
+
+    return answer_text, used_pages
+
+
 @app.post("/ask")
 def ask(req: AskRequest):
+    q_lower = req.question.lower()
+    is_followup = any(phrase in q_lower for phrase in FOLLOWUP_PHRASES) and last_turn["answer"]
+
+    # 0) Follow-up ise Chroma/RAG araması yapmadan önceki cevabı daha basit anlattır
+    if is_followup:
+        prompt = f"""
+Sen bir anatomi eğitmenisin.
+
+Öğrenci önceki cevabı anlamadığını söylüyor.
+Aynı cevabı tekrar etme.
+Aynı konuyu daha sade, daha kısa, daha anlaşılır ve farklı cümlelerle açıkla.
+Gerekirse günlük hayattan basit bir benzetme kullan.
+Cevap öğrenci dostu olsun.
+
+Önceki soru:
+{last_turn["question"]}
+
+Önceki cevap:
+{last_turn["answer"]}
+
+Öğrencinin yeni mesajı:
+{req.question}
+
+Sadece JSON üret. Başka hiçbir şey yazma.
+
+JSON:
+{{"answer":"", "used_pages":[]}}
+"""
+
+        try:
+            model = genai.GenerativeModel("models/gemini-2.5-flash")
+            out = model.generate_content(prompt)
+            raw = (out.text or "").strip()
+
+            try:
+                answer_text, used_pages = parse_gemini_json(raw)
+            except Exception:
+                answer_text = "Yanıt üretilemedi. Lütfen soruyu yeniden sor."
+                used_pages = []
+
+        except Exception as e:
+            msg = str(e)
+            if "RESOURCE_EXHAUSTED" in msg or "429" in msg:
+                raise HTTPException(status_code=429, detail="Generate rate limit/quota doldu. Biraz sonra tekrar dene.")
+            if "NOT_FOUND" in msg or "404" in msg:
+                raise HTTPException(status_code=500, detail="Model bulunamadı. Model adını kontrol et (örn: models/gemini-2.5-flash).")
+            raise HTTPException(status_code=500, detail=f"Generate hatası: {msg}")
+
+        last_turn["question"] = req.question
+        last_turn["answer"] = answer_text
+
+        return {
+            "answer": answer_text,
+            "used_pages": used_pages
+        }
+
     # 1) Embed the question
     try:
         emb_resp = genai.embed_content(
@@ -89,13 +197,18 @@ def ask(req: AskRequest):
             #"sources": [],
             "used_pages": []
         }
+
     print("[RAG] top distances:", [round(x, 4) for x in (dists[:min(len(dists), 5)] if dists else [])])
+
     # Context: her kaynağı sayfa numarasıyla ve kısaltılmış metinle ver
     context_blocks = []
     for d, m in zip(docs, metas):
         page = m.get("page")
         context_blocks.append(f"(Sayfa {page}): {short_for_context(d)}")
     context = "\n\n".join(context_blocks)
+
+    prev_q = last_turn["question"]
+    prev_a = last_turn["answer"]
 
     prompt = f"""
 Sen bir anatomi eğitmenisin.
@@ -108,8 +221,16 @@ Kurallar:
 - Eğer BAĞLAM yeterliyse:
   answer: kısa, net, maddeli olabilir
   used_pages: cevabı yazarken kullandığın BAĞLAM parçalarının sayfa numaraları (tekrar yok)
+- Eğer yeni soru önceki konuşmayla ilişkili değilse:
+  sadece yeni soruyu ve verilen BAĞLAM'ı dikkate al.
 
 Sadece JSON üret. Başka hiçbir şey yazma.
+
+ÖNCEKİ SORU:
+{prev_q}
+
+ÖNCEKİ CEVAP:
+{prev_a}
 
 BAĞLAM:
 {context}
@@ -127,28 +248,9 @@ JSON:
         out = model.generate_content(prompt)
         raw = (out.text or "").strip()
 
-        # Gemini bazen JSON'u ```json ... ``` içinde döndürür
-        if raw.startswith("```"):
-            raw = raw.strip("`").strip()
-            if raw.lower().startswith("json"):
-                raw = raw[4:].strip()
-
-        # JSON parse etmeye çalış
         try:
-            parsed = json.loads(raw)
+            answer_text, used_pages = parse_gemini_json(raw)
 
-            ans = parsed.get("answer")
-            used_pages = parsed.get("used_pages") or []
-                        # used_pages'i int'e normalize et (string gelebiliyor)
-            norm_pages = []
-            for p in used_pages:
-                try:
-                    norm_pages.append(int(p))
-                except Exception:
-                    pass
-            # tekrar yok, sırası korunsun
-            used_pages = list(dict.fromkeys(norm_pages))
-                # used_pages boş geldiyse fallback: retrieval'dan gelen sayfaları kullan
             if not used_pages:
                 fallback_pages = []
                 for m in metas:
@@ -159,14 +261,6 @@ JSON:
                         pass
                 used_pages = list(dict.fromkeys(fallback_pages))
 
-            # answer bazen string, bazen liste gelebilir
-            if isinstance(ans, list):
-                # listeyi maddeli string'e çevir
-                answer_text = "\n".join(f"- {a}" for a in ans if a)
-            elif isinstance(ans, str):
-                answer_text = ans.strip()
-            else:
-                answer_text = (str(ans) if ans is not None else "").strip()
         except Exception:
             answer_text = "Yanıt üretilemedi. Lütfen soruyu yeniden sor."
             used_pages = []
@@ -178,6 +272,10 @@ JSON:
         if "NOT_FOUND" in msg or "404" in msg:
             raise HTTPException(status_code=500, detail="Model bulunamadı. Model adını kontrol et (örn: models/gemini-2.5-flash).")
         raise HTTPException(status_code=500, detail=f"Generate hatası: {msg}")
+
+    # Memory güncelle: son soru-cevap çiftini sakla
+    last_turn["question"] = req.question
+    last_turn["answer"] = answer_text
 
  
     return {
