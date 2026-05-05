@@ -568,7 +568,9 @@ public class RagApiClient : MonoBehaviour
                     {
                         // Sadece soru söylendiyse input'a yaz, otomatik gönderme.
                         questionInput.text = recognized.Trim();
-                        SetLatestAnswer("Sorunuz hazır. Göndermek için 'cevapla' veya 'tamam' deyin ya da gönder butonuna basın.");
+                        const string readyMessage = "Sorunuz hazır. Göndermek için 'cevapla' veya 'tamam' deyin ya da gönder butonuna basın.";
+                        SetLatestAnswer(readyMessage);
+                        StartAutomaticTTS(readyMessage);
                     }
                 }
             }
