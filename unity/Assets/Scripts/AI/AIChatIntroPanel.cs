@@ -19,6 +19,8 @@ using UnityEngine.UI;
 public class AIChatIntroPanel : MonoBehaviour
 {
     private const string PanelName = "AIChatIntroPanel";
+    private const float PanelVerticalOffset = 80f;
+    private const float IntroPanelTargetWorldX = 0f;
     
     private const string MenuSceneName = "01_Menu";
 
@@ -127,7 +129,7 @@ private void ApplyUiOpaqueMaterial(Graphic graphic)
         rt.anchorMax = new Vector2(0.5f, 0.5f);
         rt.pivot = new Vector2(0.5f, 0.5f);
         rt.sizeDelta = ResolvePanelSize(canvas);
-        rt.anchoredPosition = new Vector2(0f, 80f);
+        rt.anchoredPosition = ResolvePanelPosition(canvas);
         rt.SetAsLastSibling();
 
         _panelRoot.AddComponent<CanvasRenderer>();
@@ -158,6 +160,26 @@ private void ApplyUiOpaqueMaterial(Graphic graphic)
         BuildIntroText(rt);
         BuildBackButton(rt);
         BuildContinueButton(rt);
+    }
+
+    private static Vector2 ResolvePanelPosition(Canvas canvas)
+    {
+        float x = 0f;
+
+        if (canvas != null && canvas.renderMode == RenderMode.WorldSpace)
+        {
+            RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+            if (canvasRect != null)
+            {
+                Vector3 targetWorldPosition = new Vector3(
+                    IntroPanelTargetWorldX,
+                    canvasRect.position.y,
+                    canvasRect.position.z);
+                x = canvasRect.InverseTransformPoint(targetWorldPosition).x;
+            }
+        }
+
+        return new Vector2(x, PanelVerticalOffset);
     }
 
     private static Vector2 ResolvePanelSize(Canvas canvas)
