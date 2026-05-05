@@ -21,13 +21,19 @@ public class SettingsManager : MonoBehaviour
 
     public float MasterVolume { get; private set; } = 1f;
 
-public event Action<float> OnMasterVolumeChanged;
+    public event Action<float> OnMasterVolumeChanged;
 
     private const string AvatarTypeKey = "AvatarType";
 
     public AvatarType SelectedAvatarType { get; private set; } = AvatarType.Female;
 
     public event Action<AvatarType> OnAvatarTypeChanged;
+
+    public const string AIChatVoiceEnabledKey = "AIChatVoiceEnabled";
+
+    public bool AIChatVoiceEnabled { get; private set; } = true;
+
+    public event Action<bool> OnAIChatVoiceEnabledChanged;
 
     private void Awake()
     {
@@ -53,6 +59,7 @@ public event Action<float> OnMasterVolumeChanged;
             PlayerPrefs.GetInt(AvatarTypeKey, (int)AvatarType.Female),
             (int)AvatarType.Female,
             (int)AvatarType.Male);
+        AIChatVoiceEnabled = PlayerPrefs.GetInt(AIChatVoiceEnabledKey, 1) == 1;
         AudioListener.volume = MasterVolume;
     }
 
@@ -69,18 +76,18 @@ public event Action<float> OnMasterVolumeChanged;
     }
 
     public void SetMasterVolume(float value)
-{
-    MasterVolume = value;
+    {
+        MasterVolume = value;
 
-    PlayerPrefs.SetFloat(MasterVolumeKey, value);
-    PlayerPrefs.Save();
+        PlayerPrefs.SetFloat(MasterVolumeKey, value);
+        PlayerPrefs.Save();
 
-    AudioListener.volume = value;
+        AudioListener.volume = value;
 
-    Debug.Log("MasterVolume set to: " + value);
+        Debug.Log("MasterVolume set to: " + value);
 
-    OnMasterVolumeChanged?.Invoke(value);
-}
+        OnMasterVolumeChanged?.Invoke(value);
+    }
 
     public void SetAvatarType(AvatarType avatarType)
     {
@@ -94,12 +101,25 @@ public event Action<float> OnMasterVolumeChanged;
         OnAvatarTypeChanged?.Invoke(avatarType);
     }
 
-    public void ResetToDefaults()
-{
-    SetShowAnswerText(true);
-    SetMasterVolume(1f);
-    SetAvatarType(AvatarType.Female);
+    public void SetAIChatVoiceEnabled(bool value)
+    {
+        AIChatVoiceEnabled = value;
 
-    Debug.Log("Settings reset to defaults.");
-}
+        PlayerPrefs.SetInt(AIChatVoiceEnabledKey, value ? 1 : 0);
+        PlayerPrefs.Save();
+
+        Debug.Log("AIChatVoiceEnabled set to: " + value);
+
+        OnAIChatVoiceEnabledChanged?.Invoke(value);
+    }
+
+    public void ResetToDefaults()
+    {
+        SetShowAnswerText(true);
+        SetMasterVolume(1f);
+        SetAvatarType(AvatarType.Female);
+        SetAIChatVoiceEnabled(true);
+
+        Debug.Log("Settings reset to defaults.");
+    }
 }

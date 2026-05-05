@@ -23,16 +23,12 @@ public class AIChatIntroPanel : MonoBehaviour
     private const float IntroPanelTargetWorldX = 0f;
     
     private const string MenuSceneName = "01_Menu";
+    private enum IntroInlineElement
+    {
+        SendBadge
+    }
 
     [SerializeField] private Material uiOpaqueMaterial;
-
-    private static readonly string[] BodyLines =
-    {
-        "Bu bölümde anatomi hakkında istediğin soruları sorabilirsin.",
-        "Sorunu yazabilir veya \"Konuş\" butonuna basarak sesli olarak iletebilirsin.",
-        "Konuşmanın sonunda \"cevapla\" diyerek sorunu otomatik gönderebilir ya da \"Sor\" butonuyla manuel olarak gönderebilirsin.",
-        "\"Dinle\" ile cevabı dinleyebilir, \"Cevabı Gör\" ile yazılı olarak inceleyebilirsin."
-    };
 
     // Quiz intro panelindeki renk değerleri.
     private static readonly Color TextColor       = new Color(0.8f, 0.94f, 1f, 1f);
@@ -58,6 +54,10 @@ public class AIChatIntroPanel : MonoBehaviour
     private Vector3 _titleOriginalScale;
     private bool _titleCentered;
     private Sprite _roundedButtonSprite;
+    private Sprite _micIconSprite;
+    private Sprite _sendIconSprite;
+    private Sprite _speakerIconSprite;
+    private Sprite _stopIconSprite;
 
     private Material _uiOpaqueMaterial;
 
@@ -211,46 +211,149 @@ private void ApplyUiOpaqueMaterial(Graphic graphic)
         rt.offsetMax = Vector2.zero;
         rt.anchoredPosition = new Vector2(0f, 16f);
 
-        go.AddComponent<CanvasRenderer>();
-        var tmp = go.AddComponent<TextMeshProUGUI>();
-        if (_fontAsset != null) tmp.font = _fontAsset;
-        tmp.text = BuildBodyText();
-        tmp.color = TextColor;
-        tmp.alignment = TextAlignmentOptions.TopLeft;
-        tmp.enableAutoSizing = true;
-        tmp.fontSizeMin = 20f;
-        tmp.fontSizeMax = 34f;
-        tmp.lineSpacing = 0f;
-        tmp.paragraphSpacing = -4f;
-        tmp.enableWordWrapping = true;
-        tmp.richText = true;
-        tmp.raycastTarget = false;
+        var vertical = go.AddComponent<VerticalLayoutGroup>();
+        vertical.childAlignment = TextAnchor.UpperLeft;
+        vertical.childControlWidth = true;
+        vertical.childControlHeight = true;
+        vertical.childForceExpandWidth = true;
+        vertical.childForceExpandHeight = false;
+        vertical.spacing = 10f;
+        vertical.padding = new RectOffset(0, 0, 0, 0);
+
+        BuildInfoRow(rt, new object[]
+        {
+            "Bu bölümde anatomi hakkında istediğin soruları sorabilirsin."
+        });
+        BuildInfoRow(rt, new object[]
+        {
+            "Sorunu yazabilir veya ", ResolveMicIconSprite(), " ile sesli olarak iletebilirsin."
+        });
+        BuildInfoRow(rt, new object[]
+        {
+            "Konuşmanın sonunda \"", "<b>cevapla</b>", "\" veya \"", "<b>tamam</b>", "\" diyerek"
+        });
+        BuildInfoRow(rt, false, new object[]
+        {
+            "sorunu otomatik gönderebilirsin."
+        });
+        BuildInfoRow(rt, new object[]
+        {
+            "Manuel göndermek için ", IntroInlineElement.SendBadge, " kullanabilirsin."
+        });
+        BuildInfoRow(rt, new object[]
+        {
+            "Cevabı ", ResolveSpeakerIconSprite(), " ile dinleyebilir; ",
+            ResolveStopIconSprite(), " ile durdurabilirsin."
+        });
     }
 
-    private static string BuildBodyText()
-{
-    var sb = new System.Text.StringBuilder();
-
-    const string bullet = "<indent=0%><color=#00D4FF>></color>  <indent=5%>";
-
-    for (int i = 0; i < BodyLines.Length; i++)
+    private void BuildInfoRow(RectTransform parent, object[] parts)
     {
-        sb.Append(bullet);
-
-        string line = BodyLines[i]
-            .Replace("\"Konuş\"", "\"<b>Konuş</b>\"")
-            .Replace("\"Sor\"", "\"<b>Sor</b>\"")
-            .Replace("\"Dinle\"", "\"<b>Dinle</b>\"")
-            .Replace("\"Cevabı Gör\"", "\"<b>Cevabı Gör</b>\"")
-            .Replace("\"cevapla\"", "\"<b>cevapla</b>\"");
-
-        sb.Append(line);
-
-        if (i < BodyLines.Length - 1) sb.Append('\n');
+        BuildInfoRow(parent, true, parts);
     }
 
-    return sb.ToString();
-}
+    private void BuildInfoRow(RectTransform parent, bool showBullet, object[] parts)
+    {
+        var row = CreateRect("IntroInfoRow", parent);
+        var rowRT = (RectTransform)row.transform;
+        rowRT.sizeDelta = new Vector2(0f, 48f);
+
+        var horizontal = row.AddComponent<HorizontalLayoutGroup>();
+        horizontal.childAlignment = TextAnchor.MiddleLeft;
+        horizontal.childControlWidth = true;
+        horizontal.childControlHeight = true;
+        horizontal.childForceExpandWidth = false;
+        horizontal.childForceExpandHeight = false;
+        horizontal.spacing = 7f;
+
+        TMP_Text bullet = CreateInlineText(row.transform, showBullet ? ">" : "", 30f, TextAlignmentOptions.MidlineLeft, false);
+        bullet.color = new Color(0f, 0.83f, 1f, 1f);
+        SetLayoutSize(bullet.gameObject, 28f, 44f, 0f);
+
+        foreach (object part in parts)
+        {
+            if (part is IntroInlineElement element)
+            {
+                if (element == IntroInlineElement.SendBadge)
+                    CreateInlineSendBadge(row.transform);
+                continue;
+            }
+
+            if (part is Sprite sprite)
+            {
+                CreateInlineIcon(row.transform, sprite);
+                continue;
+            }
+
+            string text = part as string;
+            if (string.IsNullOrEmpty(text)) continue;
+            TMP_Text inlineText = CreateInlineText(row.transform, text, 29f, TextAlignmentOptions.MidlineLeft, true);
+            inlineText.fontStyle = text.Contains("<b>") ? FontStyles.Bold : FontStyles.Normal;
+            float preferredWidth = Mathf.Clamp(inlineText.GetPreferredValues(text).x + 4f, 24f, 440f);
+            SetLayoutSize(inlineText.gameObject, preferredWidth, 44f, 0f);
+        }
+    }
+
+    private TMP_Text CreateInlineText(Transform parent, string text, float fontSize,
+        TextAlignmentOptions alignment, bool richText)
+    {
+        GameObject go = CreateRect("InlineText", parent);
+        go.AddComponent<CanvasRenderer>();
+        TMP_Text tmp = go.AddComponent<TextMeshProUGUI>();
+        if (_fontAsset != null) tmp.font = _fontAsset;
+        tmp.text = text;
+        tmp.color = TextColor;
+        tmp.fontSize = fontSize;
+        tmp.alignment = alignment;
+        tmp.enableWordWrapping = false;
+        tmp.enableAutoSizing = false;
+        tmp.richText = richText;
+        tmp.raycastTarget = false;
+        return tmp;
+    }
+
+    private void CreateInlineIcon(Transform parent, Sprite sprite)
+    {
+        GameObject go = CreateRect("InlineIcon", parent);
+        go.AddComponent<CanvasRenderer>();
+        Image image = go.AddComponent<Image>();
+        image.sprite = sprite;
+        image.type = Image.Type.Simple;
+        image.preserveAspect = true;
+        image.color = Color.white;
+        image.raycastTarget = false;
+
+        var rt = (RectTransform)go.transform;
+        rt.sizeDelta = new Vector2(38f, 38f);
+        SetLayoutSize(go, 42f, 42f, 0f);
+    }
+
+    private void CreateInlineSendBadge(Transform parent)
+    {
+        GameObject go = CreateRect("InlineSendBadge", parent);
+        go.AddComponent<CanvasRenderer>();
+        Image image = go.AddComponent<Image>();
+        image.sprite = ResolveSendIconSprite();
+        image.type = Image.Type.Simple;
+        image.preserveAspect = true;
+        image.color = Color.white;
+        image.raycastTarget = false;
+
+        RectTransform rt = (RectTransform)go.transform;
+        rt.sizeDelta = new Vector2(34f, 34f);
+        SetLayoutSize(go, 38f, 38f, 0f);
+    }
+
+    private static void SetLayoutSize(GameObject go, float width, float height, float flexibleWidth)
+    {
+        LayoutElement layout = go.GetComponent<LayoutElement>();
+        if (layout == null) layout = go.AddComponent<LayoutElement>();
+        layout.preferredWidth = width;
+        layout.minWidth = width;
+        layout.preferredHeight = height;
+        layout.minHeight = height;
+        layout.flexibleWidth = flexibleWidth;
+    }
 
     private void BuildBackButton(RectTransform parent)
     {
@@ -346,6 +449,46 @@ private void ApplyUiOpaqueMaterial(Graphic graphic)
         _roundedButtonSprite = Resources.GetBuiltinResource<Sprite>("UI/Skin/UISprite.psd");
 
         return _roundedButtonSprite;
+    }
+
+    private Sprite ResolveMicIconSprite()
+    {
+        if (_micIconSprite != null) return _micIconSprite;
+        _micIconSprite = LoadSpriteFromResources("AI/mic_icon");
+        return _micIconSprite;
+    }
+
+    private Sprite ResolveSendIconSprite()
+    {
+        if (_sendIconSprite != null) return _sendIconSprite;
+        _sendIconSprite = LoadSpriteFromResources("AI/send_icon");
+        return _sendIconSprite;
+    }
+
+    private Sprite ResolveSpeakerIconSprite()
+    {
+        if (_speakerIconSprite != null) return _speakerIconSprite;
+        _speakerIconSprite = LoadSpriteFromResources("AI/speaker_icon");
+        return _speakerIconSprite;
+    }
+
+    private Sprite ResolveStopIconSprite()
+    {
+        if (_stopIconSprite != null) return _stopIconSprite;
+        _stopIconSprite = LoadSpriteFromResources("AI/stop_icon");
+        return _stopIconSprite;
+    }
+
+    private static Sprite LoadSpriteFromResources(string resourcePath)
+    {
+        Texture2D texture = Resources.Load<Texture2D>(resourcePath);
+        if (texture == null) return null;
+
+        return Sprite.Create(
+            texture,
+            new Rect(0f, 0f, texture.width, texture.height),
+            new Vector2(0.5f, 0.5f),
+            100f);
     }
 
     private void BuildButtonToneOverlay(Transform buttonTransform)
