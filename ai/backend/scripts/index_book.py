@@ -1,19 +1,24 @@
 import os, re
+from pathlib import Path
 from dotenv import load_dotenv
 from pypdf import PdfReader
 import chromadb
 import google.generativeai as genai
 import time
 from google.api_core.exceptions import ResourceExhausted
-# API key yükle
-load_dotenv()
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+
+load_dotenv(BASE_DIR / ".env")
+
 api_key = os.environ.get("GEMINI_API_KEY")
 if not api_key:
     raise RuntimeError("GEMINI_API_KEY bulunamadı.")
+
 genai.configure(api_key=api_key)
 
-PDF_PATH = "book.pdf"
-DB_PATH = "./chroma_db"
+PDF_PATH = BASE_DIR / "data" / "book.pdf"
+DB_PATH = BASE_DIR / "chroma_db"
 COLLECTION_NAME = "vr_anatomy_book"
 
 def clean_text(t: str) -> str:
@@ -56,8 +61,8 @@ def embed_with_retry(chunk: str, max_retries=6, base_sleep=5.0):
             time.sleep(wait)
     raise RuntimeError("Quota/rate limit nedeniyle embedding alınamadı. Daha sonra tekrar dene.")
 def main():
-    reader = PdfReader(PDF_PATH)
-    client = chromadb.PersistentClient(path=DB_PATH)
+    reader = PdfReader(str(PDF_PATH))
+    client = chromadb.PersistentClient(path=str(DB_PATH))
     collection = client.get_or_create_collection(COLLECTION_NAME)
 
     total = 0

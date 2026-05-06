@@ -1,10 +1,10 @@
 fastapi
-uvicorn
+uvicorn[standard]
 pydantic
 python-multipart
-gTTS
-SpeechRecognition
 python-dotenv
-azure-search-documents
-openai
+pypdf
+chromadb
+google-generativeai
+SpeechRecognition
 edge-tts
