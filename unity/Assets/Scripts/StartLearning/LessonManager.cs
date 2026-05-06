@@ -33,6 +33,10 @@ public class LessonManager : MonoBehaviour
     
     public Button nextButton;
 
+    [Header("Simple Explanation")]
+    [SerializeField] private Button simpleExplanationButton;
+    [SerializeField] private SimpleBoneExplanationClient simpleExplanationClient;
+
     [Header("Bone Sequence")]
     public List<GameObject> bones;
     public BoneVisualManager visualsManager;
@@ -68,6 +72,11 @@ public class LessonManager : MonoBehaviour
         return !string.IsNullOrWhiteSpace(boneName) && !string.IsNullOrWhiteSpace(originalText);
     }
 
+    public bool TryGetCurrentBonePayload(out string boneName, out string unitName, out string originalText)
+    {
+        return TryGetBoneReviewPayload(currentIndex, out boneName, out unitName, out originalText);
+    }
+
     void OnEnable()
     {
         Instance = this;
@@ -79,6 +88,8 @@ public class LessonManager : MonoBehaviour
             nextButton.onClick.RemoveAllListeners();
             nextButton.onClick.AddListener(NextStep);
         }
+
+        WireSimpleExplanationButton();
     }
 
     void OnDisable()
@@ -88,6 +99,9 @@ public class LessonManager : MonoBehaviour
         // Clean up the button to prevent cross-talk
         if (nextButton != null)
             nextButton.onClick.RemoveAllListeners();
+
+        if (simpleExplanationButton != null)
+            simpleExplanationButton.onClick.RemoveListener(HandleSimpleExplanationClicked);
     }
 
     private void EnsureLessonVoiceReader()
@@ -100,6 +114,71 @@ public class LessonManager : MonoBehaviour
 
         gameObject.AddComponent<LessonUIReader>();
         Debug.Log("[LessonManager] LessonUIReader bulunamad?; bu LessonManager ùzerine otomatik eklendi.", this);
+    }
+
+    private void WireSimpleExplanationButton()
+    {
+        SimpleBoneExplanationClient client = ResolveSimpleExplanationClient();
+        Button button = ResolveSimpleExplanationButton();
+        if (client == null || button == null)
+            return;
+
+        button.onClick.RemoveListener(HandleSimpleExplanationClicked);
+        button.onClick.AddListener(HandleSimpleExplanationClicked);
+    }
+
+    private void HandleSimpleExplanationClicked()
+    {
+        SimpleBoneExplanationClient client = ResolveSimpleExplanationClient();
+        if (client == null)
+        {
+            Debug.LogError("[LessonManager] SimpleBoneExplanationClient bulunamadi; basit anlatim baslatilamadi.", this);
+            return;
+        }
+
+        LessonUIReader reader = GetComponent<LessonUIReader>();
+        if (reader == null)
+            reader = FindFirstObjectByType<LessonUIReader>();
+
+        client.Initialize(titleText, infoText, reader);
+        client.RequestCurrentBoneSimpleExplanation();
+    }
+
+    private SimpleBoneExplanationClient ResolveSimpleExplanationClient()
+    {
+        if (simpleExplanationClient != null)
+            return simpleExplanationClient;
+
+        simpleExplanationClient = GetComponent<SimpleBoneExplanationClient>();
+        if (simpleExplanationClient == null)
+            simpleExplanationClient = gameObject.AddComponent<SimpleBoneExplanationClient>();
+
+        return simpleExplanationClient;
+    }
+
+    private Button ResolveSimpleExplanationButton()
+    {
+        if (simpleExplanationButton != null)
+            return simpleExplanationButton;
+
+        GameObject buttonObject = GameObject.Find("BasitAnlatButton");
+        if (buttonObject != null)
+            simpleExplanationButton = buttonObject.GetComponent<Button>();
+
+        if (simpleExplanationButton == null)
+        {
+            Button[] buttons = FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (Button button in buttons)
+            {
+                if (button != null && button.name == "BasitAnlatButton")
+                {
+                    simpleExplanationButton = button;
+                    break;
+                }
+            }
+        }
+
+        return simpleExplanationButton;
     }
 
     void Start()

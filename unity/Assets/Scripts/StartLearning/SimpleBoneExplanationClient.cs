@@ -65,6 +65,30 @@ public class SimpleBoneExplanationClient : MonoBehaviour
         _requestRoutine = StartCoroutine(RequestSimpleExplanationRoutine(requestId, boneName, unitName, originalText));
     }
 
+    public void RequestCurrentBoneSimpleExplanation()
+    {
+        LessonManager lessonManager = LessonManager.Instance;
+        if (lessonManager == null)
+            lessonManager = FindFirstObjectByType<LessonManager>();
+
+        if (lessonManager == null)
+        {
+            Debug.LogError("[SimpleBoneExplanationClient] Aktif LessonManager bulunamadı; basit anlatım isteği gönderilemedi.", this);
+            return;
+        }
+
+        ResolveLessonUIReader();
+        Initialize(lessonManager.titleText, lessonManager.infoText, lessonUIReader);
+
+        if (!lessonManager.TryGetCurrentBonePayload(out string boneName, out string unitName, out string originalText))
+        {
+            Debug.LogError("[SimpleBoneExplanationClient] Aktif bilgi kartı verisi bulunamadı; basit anlatım isteği gönderilemedi.", this);
+            return;
+        }
+
+        RequestSimpleExplanation(boneName, unitName, originalText);
+    }
+
     private IEnumerator RequestSimpleExplanationRoutine(int requestId, string boneName, string unitName, string originalText)
     {
         boneName = SafeTrim(boneName);
@@ -147,7 +171,7 @@ public class SimpleBoneExplanationClient : MonoBehaviour
 
             ResolveLessonUIReader();
             if (lessonUIReader != null)
-                lessonUIReader.SpeakReviewText(response.speech_text);
+                lessonUIReader.SpeakReviewText(response.simple_explanation.Trim());
 
             _requestRoutine = null;
         }
@@ -179,11 +203,10 @@ public class SimpleBoneExplanationClient : MonoBehaviour
     }
 
     private static bool IsValidResponse(SimpleBoneExplanationResponse response)
-    {
-        return response != null
-               && !string.IsNullOrWhiteSpace(response.simple_explanation)
-               && !string.IsNullOrWhiteSpace(response.speech_text);
-    }
+{
+    return response != null
+           && !string.IsNullOrWhiteSpace(response.simple_explanation);
+}
 
     private static string SafeTrim(string value)
     {

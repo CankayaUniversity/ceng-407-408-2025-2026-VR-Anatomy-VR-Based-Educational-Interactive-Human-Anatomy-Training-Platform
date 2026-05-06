@@ -22,8 +22,6 @@ public class ReviewManager : MonoBehaviour
     public GameObject buttonPrefab;
     public Transform buttonContainer;
 
-    [Header("Simple Explanation Backend")]
-    [SerializeField] private SimpleBoneExplanationClient simpleExplanationClient;
     private bool _hasSpokenReviewPrompt;
 
     public void OpenReview()
@@ -176,33 +174,8 @@ public class ReviewManager : MonoBehaviour
             return;
         }
 
-        LessonUIReader lessonUIReader = ResolveLessonUIReader(lessonManager);
-        if (lessonUIReader != null)
-            lessonUIReader.SuppressNextCardRead();
-
         lessonManager.IsReviewMode = false;
-
         lessonManager.ActivateStep(index);
-
-        if (!lessonManager.TryGetBoneReviewPayload(index, out string boneName, out string unitName, out string originalText))
-        {
-            Debug.LogError("[ReviewManager] Seçilen kemik için review verisi bulunamadı.", this);
-            if (lessonUIReader != null)
-                lessonUIReader.SpeakReviewText(originalText);
-            return;
-        }
-
-        SimpleBoneExplanationClient client = ResolveSimpleExplanationClient(lessonManager, lessonUIReader);
-        if (client == null)
-        {
-            Debug.LogError("[ReviewManager] SimpleBoneExplanationClient oluşturulamadı. Orijinal bilgi kartı okunacak.", this);
-            if (lessonUIReader != null)
-                lessonUIReader.SpeakReviewText(originalText);
-            return;
-        }
-
-        client.Initialize(lessonManager.titleText, lessonManager.infoText, lessonUIReader);
-        client.RequestSimpleExplanation(boneName, unitName, originalText);
     }
 
     private LessonUIReader ResolveLessonUIReader(LessonManager lessonManager)
@@ -214,27 +187,6 @@ public class ReviewManager : MonoBehaviour
         return FindFirstObjectByType<LessonUIReader>();
     }
 
-    private SimpleBoneExplanationClient ResolveSimpleExplanationClient(LessonManager lessonManager, LessonUIReader lessonUIReader)
-    {
-        if (simpleExplanationClient != null)
-            return simpleExplanationClient;
-
-        simpleExplanationClient = FindFirstObjectByType<SimpleBoneExplanationClient>();
-        if (simpleExplanationClient != null)
-            return simpleExplanationClient;
-
-        if (lessonManager == null)
-            return null;
-
-        simpleExplanationClient = lessonManager.GetComponent<SimpleBoneExplanationClient>();
-        if (simpleExplanationClient == null)
-            simpleExplanationClient = lessonManager.gameObject.AddComponent<SimpleBoneExplanationClient>();
-
-        simpleExplanationClient.Initialize(lessonManager.titleText, lessonManager.infoText, lessonUIReader);
-        return simpleExplanationClient;
-    }
-
-    
     public void ReturnToReview()
     {
         lessonPanel.SetActive(false);
