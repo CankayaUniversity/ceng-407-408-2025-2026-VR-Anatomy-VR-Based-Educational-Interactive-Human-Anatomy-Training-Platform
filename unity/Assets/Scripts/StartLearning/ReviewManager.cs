@@ -5,6 +5,9 @@ using TMPro;
 
 public class ReviewManager : MonoBehaviour
 {
+    private const string ReviewTitleMessage = "Tekrar İncele";
+    private const string ReviewPromptMessage = "Anlamadığınız bir kısım varsa, tekrar incelemek istediğiniz kemiği seçebilirsiniz.";
+
     [Header("Lesson UI Buttons")]
     public GameObject skipButton;
     public GameObject anladimButton;
@@ -12,6 +15,8 @@ public class ReviewManager : MonoBehaviour
     [Header("UI Panels")]
     public GameObject lessonPanel;
     public GameObject reviewPanel;
+    [SerializeField] private TextMeshProUGUI reviewTitleText;
+    [SerializeField] private TextMeshProUGUI reviewPromptText;
 
     [Header("Button Settings")]
     public GameObject buttonPrefab;
@@ -19,13 +24,16 @@ public class ReviewManager : MonoBehaviour
 
     [Header("Simple Explanation Backend")]
     [SerializeField] private SimpleBoneExplanationClient simpleExplanationClient;
+    private bool _hasSpokenReviewPrompt;
 
     public void OpenReview()
     {
         lessonPanel.SetActive(false);
         reviewPanel.SetActive(true);
+        SetReviewStaticTexts();
 
         PopulateButtons();
+        SpeakReviewPromptOnce();
 
 
         skipButton.SetActive(false);
@@ -77,6 +85,83 @@ public class ReviewManager : MonoBehaviour
             int index = i;
             btn.onClick.AddListener(() => SelectBone(index)); //instead of dragging buttons OnClick() one by one we do this
         }
+    }
+
+    private void SetReviewStaticTexts()
+    {
+        SetReviewTitleText();
+        SetReviewPromptText();
+    }
+
+    private void SetReviewTitleText()
+    {
+        if (reviewTitleText == null)
+            reviewTitleText = ResolveReviewTitleText();
+
+        if (reviewTitleText != null)
+            reviewTitleText.text = ReviewTitleMessage;
+    }
+
+    private void SetReviewPromptText()
+    {
+        if (reviewPromptText == null)
+            reviewPromptText = ResolveReviewPromptText();
+
+        if (reviewPromptText != null)
+            reviewPromptText.text = ReviewPromptMessage;
+    }
+
+    private TextMeshProUGUI ResolveReviewTitleText()
+    {
+        if (reviewPanel == null) return null;
+
+        TextMeshProUGUI[] texts = reviewPanel.GetComponentsInChildren<TextMeshProUGUI>(true);
+        foreach (TextMeshProUGUI text in texts)
+        {
+            if (text != null && text.name == "TitleText")
+                return text;
+        }
+
+        foreach (TextMeshProUGUI text in texts)
+        {
+            if (text != null && text.text == "Review")
+                return text;
+        }
+
+        return null;
+    }
+
+    private TextMeshProUGUI ResolveReviewPromptText()
+    {
+        if (reviewPanel == null) return null;
+
+        TextMeshProUGUI[] texts = reviewPanel.GetComponentsInChildren<TextMeshProUGUI>(true);
+        foreach (TextMeshProUGUI text in texts)
+        {
+            if (text != null && text.name == "DescriptionText")
+                return text;
+        }
+
+        foreach (TextMeshProUGUI text in texts)
+        {
+            if (text != null && text.text.Contains("Would you like to review"))
+                return text;
+        }
+
+        return null;
+    }
+
+    private void SpeakReviewPromptOnce()
+    {
+        if (_hasSpokenReviewPrompt)
+            return;
+
+        LessonUIReader lessonUIReader = ResolveLessonUIReader(LessonManager.Instance);
+        if (lessonUIReader == null)
+            return;
+
+        _hasSpokenReviewPrompt = true;
+        lessonUIReader.SpeakReviewText(ReviewPromptMessage);
     }
 
     private void SelectBone(int index)
@@ -154,6 +239,7 @@ public class ReviewManager : MonoBehaviour
     {
         lessonPanel.SetActive(false);
         reviewPanel.SetActive(true);
+        SetReviewStaticTexts();
 
         LessonManager.Instance.IsReviewMode = true;
     }
@@ -165,6 +251,7 @@ public class ReviewManager : MonoBehaviour
         lessonPanel.SetActive(false);
 
         LessonManager.Instance.ResetLesson();
+        _hasSpokenReviewPrompt = false;
 
         if (anladimButton != null) anladimButton.SetActive(false);
         if (skipButton != null) skipButton.SetActive(true);
