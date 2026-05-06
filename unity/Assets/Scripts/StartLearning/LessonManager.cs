@@ -41,6 +41,33 @@ public class LessonManager : MonoBehaviour
     private int currentIndex = 0;
     public bool IsReviewMode = false;
 
+    public bool TryGetBoneReviewPayload(int index, out string boneName, out string unitName, out string originalText)
+    {
+        boneName = "";
+        unitName = GetSelectedUnitName();
+        originalText = "";
+
+        if (index < 0 || index >= bones.Count)
+            return false;
+
+        GameObject selectedBone = bones[index];
+        BoneIdentity identity = selectedBone != null ? selectedBone.GetComponent<BoneIdentity>() : null;
+
+        if (identity != null && !string.IsNullOrEmpty(identity.id) && dataLookup.TryGetValue(identity.id, out BoneData data))
+        {
+            boneName = data.title;
+            originalText = BuildFullDescription(data);
+            return !string.IsNullOrWhiteSpace(boneName) && !string.IsNullOrWhiteSpace(originalText);
+        }
+
+        boneName = identity != null && !string.IsNullOrEmpty(identity.fallbackDisplayName)
+            ? identity.fallbackDisplayName
+            : selectedBone != null ? selectedBone.name : "";
+
+        originalText = infoText != null ? infoText.text : "";
+        return !string.IsNullOrWhiteSpace(boneName) && !string.IsNullOrWhiteSpace(originalText);
+    }
+
     void OnEnable()
     {
         Instance = this;
@@ -171,14 +198,64 @@ public class LessonManager : MonoBehaviour
         {
             BoneData data = dataLookup[identity.id];
             titleText.text = data.title;
-            string fullDescription = data.body;
-            if (data.steps != null && data.steps.Length > 0)
-            {
-                fullDescription += "\n\n";
-                foreach (string step in data.steps)
-                    fullDescription += "ù " + step + "\n";
-            }
-            infoText.text = fullDescription;
+            infoText.text = BuildFullDescription(data);
+        }
+    }
+
+    private static string BuildFullDescription(BoneData data)
+    {
+        if (data == null)
+            return "";
+
+        string fullDescription = data.body;
+        if (data.steps != null && data.steps.Length > 0)
+        {
+            fullDescription += "\n\n";
+            foreach (string step in data.steps)
+                fullDescription += "ù " + step + "\n";
+        }
+
+        return fullDescription;
+    }
+
+    private static string GetSelectedUnitName()
+    {
+        switch (AnatomyState.SelectedLessonSection)
+        {
+            case LessonUIReader.LessonSection.HeadAndFaceBones:
+                return "Ba\u015f ve Y\u00fcz Kemikleri";
+            case LessonUIReader.LessonSection.TrunkBones:
+                return "G\u00f6vde Kemikleri";
+            case LessonUIReader.LessonSection.UpperExtremityBones:
+                return "\u00dcst Ekstremite Kemikleri";
+            case LessonUIReader.LessonSection.LowerExtremityBones:
+                return "Alt Ekstremite Kemikleri";
+            case LessonUIReader.LessonSection.SkeletalMuscles:
+                return "\u0130skelet Kaslar\u0131";
+            case LessonUIReader.LessonSection.HeartStructure:
+                return "Kalbin Yap\u0131s\u0131";
+            case LessonUIReader.LessonSection.Vessels:
+                return "Damarlar";
+        }
+
+        switch (AnatomyState.SelectedAnatomyUnitID)
+        {
+            case 1:
+                return "Ba\u015f ve Y\u00fcz Kemikleri";
+            case 2:
+                return "G\u00f6vde Kemikleri";
+            case 3:
+                return "\u00dcst Ekstremite Kemikleri";
+            case 4:
+                return "Alt Ekstremite Kemikleri";
+            case 5:
+                return "\u0130skelet Kaslar\u0131";
+            case 6:
+                return "Kalbin Yap\u0131s\u0131";
+            case 7:
+                return "Damarlar";
+            default:
+                return "Bilinmeyen \u00dcnite";
         }
     }
 }

@@ -55,6 +55,7 @@ public class ChatAvatarController : MonoBehaviour
     private Transform _cameraTransform;
     private bool _loaded;
     private bool _isMaleAvatar;
+    private bool _useExistingSceneAvatar;
     private Transform _maleModelRoot;
     private Transform _maleRightFoot;
     private Transform _maleRightToe;
@@ -95,12 +96,38 @@ public class ChatAvatarController : MonoBehaviour
     private float _prevVisemeWeight, _nextVisemeWeight;
     private float[] _samples = new float[256];
 
+    public void ConfigureExistingSceneAvatar(AudioSource ttsAudioSource, bool isMaleAvatar)
+    {
+        _useExistingSceneAvatar = true;
+        _isMaleAvatar = isMaleAvatar;
+        _ttsAudio = ttsAudioSource;
+    }
+
+    public void SetLipSyncAudioSource(AudioSource ttsAudioSource)
+    {
+        _ttsAudio = ttsAudioSource;
+    }
+
     private async void Start()
     {
         _cameraTransform = Camera.main != null ? Camera.main.transform : null;
+
+        if (_useExistingSceneAvatar)
+        {
+            InitExistingSceneAvatar();
+            return;
+        }
+
         glbFileName = ResolveAvatarFileName();
         _isMaleAvatar = IsMaleAvatarFile(glbFileName);
         await LoadAvatar();
+    }
+
+    private void InitExistingSceneAvatar()
+    {
+        InitFace();
+        _loaded = true;
+        Debug.Log("[ChatAvatar] Sahnedeki mevcut avatar yüz animasyonu için hazır.");
     }
 
     private string ResolveAvatarFileName()
@@ -471,13 +498,16 @@ public class ChatAvatarController : MonoBehaviour
 
         DetectVisemes();
 
-        AudioSource[] audioSources = FindObjectsOfType<AudioSource>();
-        foreach (var a in audioSources)
+        if (_ttsAudio == null)
         {
-            if (a.gameObject != gameObject) { _ttsAudio = a; break; }
+            AudioSource[] audioSources = FindObjectsOfType<AudioSource>();
+            foreach (var a in audioSources)
+            {
+                if (a.gameObject != gameObject) { _ttsAudio = a; break; }
+            }
+            if (_ttsAudio == null && audioSources.Length > 0)
+                _ttsAudio = audioSources[0];
         }
-        if (_ttsAudio == null && audioSources.Length > 0)
-            _ttsAudio = audioSources[0];
 
         _nextBlink = Time.time + Random.Range(blinkIntervalMin, blinkIntervalMax);
         _nextSmile = Time.time + Random.Range(smileIntervalMin, smileIntervalMax);
@@ -544,7 +574,7 @@ public class ChatAvatarController : MonoBehaviour
     {
         if (!_loaded) return;
 
-        if (lookAtCamera && _cameraTransform != null)
+        if (!_useExistingSceneAvatar && lookAtCamera && _cameraTransform != null)
         {
             Vector3 dir = _cameraTransform.position - transform.position;
             dir.y = 0f;
@@ -557,8 +587,11 @@ public class ChatAvatarController : MonoBehaviour
             }
         }
 
-        StabilizeMaleRightFootAfterAnimation();
-        GroundMaleAvatarAfterAnimation();
+        if (!_useExistingSceneAvatar)
+        {
+            StabilizeMaleRightFootAfterAnimation();
+            GroundMaleAvatarAfterAnimation();
+        }
 
         if (!_faceReady) return;
 

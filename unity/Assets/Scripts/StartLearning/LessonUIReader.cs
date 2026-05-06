@@ -42,6 +42,7 @@ public class LessonUIReader : MonoBehaviour
     private bool _introFinished;
     private bool _introPlayed;
     private bool _cardChangePendingDuringIntro;
+    private bool _suppressNextCardRead;
     private string _lastSpokenCardKey = "";
 
     [Serializable]
@@ -120,6 +121,15 @@ public class LessonUIReader : MonoBehaviour
         string boneName = newBoneTransform != null ? newBoneTransform.name : "null";
         Debug.Log($"[LessonUIReader] Kart değişimi algılandı: {boneName}", this);
 
+        if (_suppressNextCardRead)
+        {
+            _suppressNextCardRead = false;
+            _cardChangePendingDuringIntro = false;
+            StopRunningRoutine(ref _cardRoutine);
+            Debug.Log("[LessonUIReader] Review basit anlatım akışı için otomatik kart okuması atlandı.", this);
+            return;
+        }
+
         if (!_introFinished)
         {
             _cardChangePendingDuringIntro = true;
@@ -129,6 +139,38 @@ public class LessonUIReader : MonoBehaviour
 
         StopRunningRoutine(ref _cardRoutine);
         _cardRoutine = StartCoroutine(ReadCurrentCardAfterUiSettles(forceRead: false));
+    }
+
+    public void SuppressNextCardRead()
+    {
+        _suppressNextCardRead = true;
+    }
+
+    public void SpeakReviewText(string text)
+    {
+        StopRunningRoutine(ref _cardRoutine);
+        _cardRoutine = StartCoroutine(SpeakReviewTextRoutine(text));
+    }
+
+    public void StopCurrentSpeech()
+    {
+        StopSpeech();
+    }
+
+    private IEnumerator SpeakReviewTextRoutine(string text)
+    {
+        string safeText = SafeTrim(text);
+        if (string.IsNullOrEmpty(safeText))
+        {
+            Debug.Log("[LessonUIReader] Review metni boş; TTS çağrısı yapılmadı.", this);
+            _cardRoutine = null;
+            yield break;
+        }
+
+        _lastSpokenCardKey = safeText;
+        Debug.Log("[LessonUIReader] Review metni okunuyor.", this);
+        yield return SpeakAndWait(safeText, "review", stopCurrentSpeech: true);
+        _cardRoutine = null;
     }
 
     private IEnumerator ReadCurrentCardAfterUiSettles(bool forceRead)

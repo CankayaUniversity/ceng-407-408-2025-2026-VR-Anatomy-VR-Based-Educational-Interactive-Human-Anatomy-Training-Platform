@@ -17,6 +17,9 @@ public class ReviewManager : MonoBehaviour
     public GameObject buttonPrefab;
     public Transform buttonContainer;
 
+    [Header("Simple Explanation Backend")]
+    [SerializeField] private SimpleBoneExplanationClient simpleExplanationClient;
+
     public void OpenReview()
     {
         lessonPanel.SetActive(false);
@@ -81,10 +84,69 @@ public class ReviewManager : MonoBehaviour
         reviewPanel.SetActive(false);
         lessonPanel.SetActive(true);
 
-      
-        LessonManager.Instance.IsReviewMode = false;
+        LessonManager lessonManager = LessonManager.Instance;
+        if (lessonManager == null)
+        {
+            Debug.LogError("[ReviewManager] LessonManager bulunamadı; review kemik seçimi yapılamadı.", this);
+            return;
+        }
 
-        LessonManager.Instance.ActivateStep(index);
+        LessonUIReader lessonUIReader = ResolveLessonUIReader(lessonManager);
+        if (lessonUIReader != null)
+            lessonUIReader.SuppressNextCardRead();
+
+        lessonManager.IsReviewMode = false;
+
+        lessonManager.ActivateStep(index);
+
+        if (!lessonManager.TryGetBoneReviewPayload(index, out string boneName, out string unitName, out string originalText))
+        {
+            Debug.LogError("[ReviewManager] Seçilen kemik için review verisi bulunamadı.", this);
+            if (lessonUIReader != null)
+                lessonUIReader.SpeakReviewText(originalText);
+            return;
+        }
+
+        SimpleBoneExplanationClient client = ResolveSimpleExplanationClient(lessonManager, lessonUIReader);
+        if (client == null)
+        {
+            Debug.LogError("[ReviewManager] SimpleBoneExplanationClient oluşturulamadı. Orijinal bilgi kartı okunacak.", this);
+            if (lessonUIReader != null)
+                lessonUIReader.SpeakReviewText(originalText);
+            return;
+        }
+
+        client.Initialize(lessonManager.titleText, lessonManager.infoText, lessonUIReader);
+        client.RequestSimpleExplanation(boneName, unitName, originalText);
+    }
+
+    private LessonUIReader ResolveLessonUIReader(LessonManager lessonManager)
+    {
+        LessonUIReader reader = lessonManager != null ? lessonManager.GetComponent<LessonUIReader>() : null;
+        if (reader != null)
+            return reader;
+
+        return FindFirstObjectByType<LessonUIReader>();
+    }
+
+    private SimpleBoneExplanationClient ResolveSimpleExplanationClient(LessonManager lessonManager, LessonUIReader lessonUIReader)
+    {
+        if (simpleExplanationClient != null)
+            return simpleExplanationClient;
+
+        simpleExplanationClient = FindFirstObjectByType<SimpleBoneExplanationClient>();
+        if (simpleExplanationClient != null)
+            return simpleExplanationClient;
+
+        if (lessonManager == null)
+            return null;
+
+        simpleExplanationClient = lessonManager.GetComponent<SimpleBoneExplanationClient>();
+        if (simpleExplanationClient == null)
+            simpleExplanationClient = lessonManager.gameObject.AddComponent<SimpleBoneExplanationClient>();
+
+        simpleExplanationClient.Initialize(lessonManager.titleText, lessonManager.infoText, lessonUIReader);
+        return simpleExplanationClient;
     }
 
     

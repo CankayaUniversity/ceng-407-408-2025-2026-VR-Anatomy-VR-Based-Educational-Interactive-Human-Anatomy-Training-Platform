@@ -30,6 +30,7 @@ public class StartLearningAvatarVisibilityController : MonoBehaviour
     private AnimationClipPlayable _idlePlayable;
     private float _idleClipLength;
     private Coroutine _animationLookupRoutine;
+    private ChatAvatarController _activeLipSyncController;
 
     private void OnEnable()
     {
@@ -94,7 +95,39 @@ public class StartLearningAvatarVisibilityController : MonoBehaviour
         GameObject activeAvatar = showMaleAvatar ? maleAvatar : femaleAvatar;
         AnimationClip overrideClip = showMaleAvatar ? maleIdleClip : femaleIdleClip;
 
+        AttachLipSyncController(activeAvatar, showMaleAvatar);
         StartAnimationLookup(activeAvatar, overrideClip, showMaleAvatar);
+    }
+
+    private void AttachLipSyncController(GameObject avatarRoot, bool isMaleAvatar)
+    {
+        if (avatarRoot == null) return;
+
+        AudioSource speechAudio = ResolveLessonSpeechAudio();
+        if (speechAudio == null)
+        {
+            Debug.LogWarning("[StartLearningAvatarVisibilityController] LessonUIReader AudioSource bulunamadı; lip sync bağlanamadı.", this);
+            return;
+        }
+
+        _activeLipSyncController = avatarRoot.GetComponent<ChatAvatarController>();
+        if (_activeLipSyncController == null)
+            _activeLipSyncController = avatarRoot.AddComponent<ChatAvatarController>();
+
+        _activeLipSyncController.ConfigureExistingSceneAvatar(speechAudio, isMaleAvatar);
+        _activeLipSyncController.SetLipSyncAudioSource(speechAudio);
+    }
+
+    private AudioSource ResolveLessonSpeechAudio()
+    {
+        LessonUIReader reader = FindFirstObjectByType<LessonUIReader>();
+        if (reader == null)
+            reader = FindAnyObjectByType<LessonUIReader>(FindObjectsInactive.Include);
+
+        if (reader == null)
+            return null;
+
+        return reader.GetComponent<AudioSource>();
     }
 
     private void StartAnimationLookup(GameObject avatarRoot, AnimationClip overrideClip, bool isMaleAvatar)
