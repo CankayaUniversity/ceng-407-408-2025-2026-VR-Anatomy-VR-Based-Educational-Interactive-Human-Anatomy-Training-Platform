@@ -31,6 +31,9 @@ public class SkeletonInitializer : MonoBehaviour
        
 
         int selectedID = AnatomyState.SelectedAnatomyUnitID;
+        Debug.Log(
+            $"[SkeletonInitializer] StartLearning unit seçimi | AnatomyUnitID={selectedID} | " +
+            $"LessonSection={AnatomyState.SelectedLessonSection}");
 
        
         foreach (var mapping in unitList)

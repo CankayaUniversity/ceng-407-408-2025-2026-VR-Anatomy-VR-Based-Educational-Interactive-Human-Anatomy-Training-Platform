@@ -44,6 +44,7 @@ public class LessonManager : MonoBehaviour
     void OnEnable()
     {
         Instance = this;
+        EnsureLessonVoiceReader();
 
         // Automatically wire up the button when this unit becomes active
         if (nextButton != null)
@@ -60,6 +61,18 @@ public class LessonManager : MonoBehaviour
         // Clean up the button to prevent cross-talk
         if (nextButton != null)
             nextButton.onClick.RemoveAllListeners();
+    }
+
+    private void EnsureLessonVoiceReader()
+    {
+        if (GetComponent<LessonUIReader>() != null)
+            return;
+
+        if (FindFirstObjectByType<LessonUIReader>() != null)
+            return;
+
+        gameObject.AddComponent<LessonUIReader>();
+        Debug.Log("[LessonManager] LessonUIReader bulunamad?; bu LessonManager ùzerine otomatik eklendi.", this);
     }
 
     void Start()
@@ -163,7 +176,7 @@ public class LessonManager : MonoBehaviour
             {
                 fullDescription += "\n\n";
                 foreach (string step in data.steps)
-                    fullDescription += "ï " + step + "\n";
+                    fullDescription += "ù " + step + "\n";
             }
             infoText.text = fullDescription;
         }
