@@ -1,106 +1,260 @@
-import os, re
+import json
+import os
+import re
+import shutil
+import time
 from pathlib import Path
-from dotenv import load_dotenv
-from pypdf import PdfReader
+
 import chromadb
 import google.generativeai as genai
-import time
+from dotenv import load_dotenv
 from google.api_core.exceptions import ResourceExhausted
+from pypdf import PdfReader
+
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 
-load_dotenv(BASE_DIR / ".env")
-
-api_key = os.environ.get("GEMINI_API_KEY")
-if not api_key:
-    raise RuntimeError("GEMINI_API_KEY bulunamadı.")
-
-genai.configure(api_key=api_key)
-
 PDF_PATH = BASE_DIR / "data" / "book.pdf"
+CHUNKS_PATH = BASE_DIR / "data" / "book_chunks.jsonl"
 DB_PATH = BASE_DIR / "chroma_db"
-COLLECTION_NAME = "vr_anatomy_book"
 
-def clean_text(t: str) -> str:
-    t = t.replace("\x00", " ")
-    t = re.sub(r"[ \t]+", " ", t)
-    t = re.sub(r"\n{3,}", "\n\n", t)
-    return t.strip()
+COLLECTION_NAME = os.getenv("CHROMA_COLLECTION_NAME", "vr_anatomy_book")
+EMBEDDING_MODEL = os.getenv("GEMINI_EMBEDDING_MODEL", "models/gemini-embedding-001")
 
-def chunk_text(text: str, size=3500, overlap=500):
+
+def clean_text(text: str) -> str:
+    text = text.replace("\x00", " ")
+    text = re.sub(r"\s+", " ", text)
+    return text.strip()
+
+
+def chunk_text(text: str, max_chars: int = 1200, overlap: int = 200):
+    text = clean_text(text)
+
+    if not text:
+        return []
+
     chunks = []
-    i = 0
-    while i < len(text):
-        j = min(len(text), i + size)
-        chunk = text[i:j].strip()
+    start = 0
+
+    while start < len(text):
+        end = start + max_chars
+        chunk = text[start:end].strip()
+
         if chunk:
             chunks.append(chunk)
-        i += (size - overlap)
+
+        if end >= len(text):
+            break
+
+        start = end - overlap
+
     return chunks
-def id_exists(collection, doc_id: str) -> bool:
-    """Bu id daha önce Chroma'ya yazıldı mı?"""
-    try:
-        got = collection.get(ids=[doc_id])
-        return bool(got and got.get("ids"))
-    except Exception:
-        return False
 
-def embed_with_retry(chunk: str, max_retries=6, base_sleep=5.0):
-    """429 olursa bekleyip tekrar dener (backoff)."""
-    for attempt in range(max_retries):
-        try:
-            resp = genai.embed_content(
-                model="models/gemini-embedding-001",
-                content=chunk,
-                task_type="retrieval_document"
-            )
-            return resp["embedding"] if isinstance(resp, dict) else resp.embedding
-        except ResourceExhausted:
-            wait = base_sleep * (2 ** attempt)  # 5,10,20,40,80...
-            print(f"⚠️ 429 quota/rate limit. {wait:.0f}s bekliyorum... ({attempt+1}/{max_retries})")
-            time.sleep(wait)
-    raise RuntimeError("Quota/rate limit nedeniyle embedding alınamadı. Daha sonra tekrar dene.")
-def main():
+
+def load_records_from_pdf():
+    print(f"PDF bulundu, PDF üzerinden indexlenecek: {PDF_PATH}")
+
     reader = PdfReader(str(PDF_PATH))
-    client = chromadb.PersistentClient(path=str(DB_PATH))
-    collection = client.get_or_create_collection(COLLECTION_NAME)
+    records = []
 
-    total = 0
+    for page_index, page in enumerate(reader.pages):
+        page_number = page_index + 1
+        page_text = clean_text(page.extract_text() or "")
 
-    for page_no, page in enumerate(reader.pages, start=1):
-        raw_text = page.extract_text() or ""
-        text = clean_text(raw_text)
+        chunks = chunk_text(page_text)
 
-        if not text:
-            continue
+        for chunk_index, chunk in enumerate(chunks):
+            records.append(
+                {
+                    "id": f"page_{page_number}_chunk_{chunk_index}",
+                    "page": page_number,
+                    "chunk": chunk_index,
+                    "source": "book.pdf",
+                    "text": chunk,
+                }
+            )
 
-        chunks = chunk_text(text)
+        print(f"Sayfa {page_number}: {len(chunks)} chunk hazırlandı.")
 
-        for idx, chunk in enumerate(chunks):
-            doc_id = f"p{page_no}_c{idx}"
+    return records
 
-            #  Daha önce eklendiyse atla (resume)
-            if id_exists(collection, doc_id):
+
+def load_records_from_jsonl():
+    print(f"PDF yok, hazır chunk dosyası kullanılacak: {CHUNKS_PATH}")
+
+    records = []
+
+    with open(CHUNKS_PATH, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+
+            if not line:
                 continue
 
-            #  Embedding'i retry ile al
-            vec = embed_with_retry(chunk)
+            record = json.loads(line)
 
-            collection.add(
-                ids=[doc_id],
-                embeddings=[vec],
-                documents=[chunk],
-                metadatas=[{"page": page_no}]
+            text = clean_text(record.get("text", ""))
+
+            if not text:
+                continue
+
+            records.append(
+                {
+                    "id": record["id"],
+                    "page": record["page"],
+                    "chunk": record["chunk"],
+                    "source": record.get("source", "book.pdf"),
+                    "text": text,
+                }
             )
 
-            total += 1
+    print(f"JSONL içinden {len(records)} chunk okundu.")
+    return records
 
-            #  Her isteğe küçük ara (rate limit riskini azaltır)
-            time.sleep(0.6)
 
-        print(f"Sayfa {page_no}: {len(chunks)} chunk eklendi.")
+def load_records():
+    if PDF_PATH.exists():
+        return load_records_from_pdf()
 
-    print(f"🎉 Index tamamlandı. Toplam chunk: {total}")
+    if CHUNKS_PATH.exists():
+        return load_records_from_jsonl()
+
+    raise FileNotFoundError(
+        "Ne PDF ne de chunk dosyası bulundu.\n"
+        f"PDF_PATH: {PDF_PATH}\n"
+        f"CHUNKS_PATH: {CHUNKS_PATH}"
+    )
+
+
+def get_embedding(text: str, max_retries: int = 3):
+    for attempt in range(max_retries):
+        try:
+            response = genai.embed_content(
+                model=EMBEDDING_MODEL,
+                content=text,
+                task_type="retrieval_document",
+            )
+
+            if isinstance(response, dict):
+                return response["embedding"]
+
+            return response.embedding
+
+        except ResourceExhausted:
+            wait_seconds = 10 * (attempt + 1)
+            print(f"Embedding rate limit yedi. {wait_seconds} saniye bekleniyor...")
+            time.sleep(wait_seconds)
+
+        except Exception as e:
+            message = str(e)
+
+            if "429" in message or "RESOURCE_EXHAUSTED" in message:
+                wait_seconds = 10 * (attempt + 1)
+                print(f"Embedding quota/rate limit. {wait_seconds} saniye bekleniyor...")
+                time.sleep(wait_seconds)
+                continue
+
+            raise
+
+    raise RuntimeError("Embedding rate limit/quota nedeniyle indexleme tamamlanamadı.")
+
+
+def reset_chroma_db():
+    if DB_PATH.exists():
+        print(f"Eski ChromaDB siliniyor: {DB_PATH}")
+        shutil.rmtree(DB_PATH)
+
+    DB_PATH.mkdir(parents=True, exist_ok=True)
+
+
+def main():
+    load_dotenv(BASE_DIR / ".env")
+
+    api_key = os.getenv("GEMINI_API_KEY")
+
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY bulunamadı. Render Environment içine eklenmeli.")
+
+    genai.configure(api_key=api_key)
+
+    print("Indexleme başlıyor...")
+    print(f"BASE_DIR: {BASE_DIR}")
+    print(f"PDF_PATH: {PDF_PATH}")
+    print(f"CHUNKS_PATH: {CHUNKS_PATH}")
+    print(f"DB_PATH: {DB_PATH}")
+    print(f"COLLECTION_NAME: {COLLECTION_NAME}")
+    print(f"EMBEDDING_MODEL: {EMBEDDING_MODEL}")
+
+    records = load_records()
+
+    if not records:
+        raise RuntimeError("Indexlenecek chunk bulunamadı.")
+
+    reset_chroma_db()
+
+    chroma_client = chromadb.PersistentClient(path=str(DB_PATH))
+    collection = chroma_client.get_or_create_collection(name=COLLECTION_NAME)
+
+    ids = []
+    documents = []
+    embeddings = []
+    metadatas = []
+
+    total_chunks = 0
+
+    for record in records:
+        chunk_id = str(record["id"])
+        chunk_text_value = clean_text(record["text"])
+        page_number = int(record["page"])
+        chunk_index = int(record["chunk"])
+
+        print(f"Embedding hazırlanıyor: sayfa {page_number}, chunk {chunk_index}")
+
+        embedding = get_embedding(chunk_text_value)
+
+        ids.append(chunk_id)
+        documents.append(chunk_text_value)
+        embeddings.append(embedding)
+        metadatas.append(
+            {
+                "page": page_number,
+                "chunk": chunk_index,
+                "source": record.get("source", "book.pdf"),
+            }
+        )
+
+        total_chunks += 1
+
+        if len(ids) >= 50:
+            collection.add(
+                ids=ids,
+                documents=documents,
+                embeddings=embeddings,
+                metadatas=metadatas,
+            )
+
+            print(f"{total_chunks} chunk ChromaDB'ye yazıldı.")
+
+            ids.clear()
+            documents.clear()
+            embeddings.clear()
+            metadatas.clear()
+
+        time.sleep(0.1)
+
+    if ids:
+        collection.add(
+            ids=ids,
+            documents=documents,
+            embeddings=embeddings,
+            metadatas=metadatas,
+        )
+
+    print("Indexleme tamamlandı.")
+    print(f"Toplam chunk: {total_chunks}")
+    print(f"Collection count: {collection.count()}")
+
 
 if __name__ == "__main__":
     main()
