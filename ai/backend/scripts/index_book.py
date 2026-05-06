@@ -127,8 +127,15 @@ def load_records():
     )
 
 
-def get_embedding(text: str, max_retries: int = 3):
-    for attempt in range(max_retries):
+def get_embedding(text: str):
+    """
+    Gemini embedding rate limit yerse scripti düşürmez.
+    Aynı chunk için 30 saniye bekleyip tekrar dener.
+    Başarılı olana kadar kaldığı chunk'ta bekler.
+    """
+    attempt = 0
+
+    while True:
         try:
             response = genai.embed_content(
                 model=EMBEDDING_MODEL,
@@ -142,16 +149,34 @@ def get_embedding(text: str, max_retries: int = 3):
             return response.embedding
 
         except ResourceExhausted:
-            wait_seconds = 10 * (attempt + 1)
-            print(f"Embedding rate limit yedi. {wait_seconds} saniye bekleniyor...")
+            attempt += 1
+            wait_seconds = 30
+
+            print(
+                f"Embedding rate limit yedi. "
+                f"Aynı chunk tekrar denenecek. "
+                f"Bekleme: {wait_seconds} saniye. "
+                f"Deneme: {attempt}",
+                flush=True
+            )
+
             time.sleep(wait_seconds)
 
         except Exception as e:
             message = str(e)
 
-            if "429" in message or "RESOURCE_EXHAUSTED" in message:
-                wait_seconds = 10 * (attempt + 1)
-                print(f"Embedding quota/rate limit. {wait_seconds} saniye bekleniyor...")
+            if "429" in message or "RESOURCE_EXHAUSTED" in message or "quota" in message.lower():
+                attempt += 1
+                wait_seconds = 30
+
+                print(
+                    f"Embedding quota/rate limit. "
+                    f"Aynı chunk tekrar denenecek. "
+                    f"Bekleme: {wait_seconds} saniye. "
+                    f"Deneme: {attempt}",
+                    flush=True
+                )
+
                 time.sleep(wait_seconds)
                 continue
 
@@ -209,7 +234,10 @@ def main():
         page_number = int(record["page"])
         chunk_index = int(record["chunk"])
 
-        print(f"Embedding hazırlanıyor: sayfa {page_number}, chunk {chunk_index}")
+        print(
+            f"Embedding hazırlanıyor: sayfa {page_number}, chunk {chunk_index}",
+            flush=True
+        )
 
         embedding = get_embedding(chunk_text_value)
 
@@ -234,14 +262,14 @@ def main():
                 metadatas=metadatas,
             )
 
-            print(f"{total_chunks} chunk ChromaDB'ye yazıldı.")
+            print(f"{total_chunks} chunk ChromaDB'ye yazıldı.", flush=True)
 
             ids.clear()
             documents.clear()
             embeddings.clear()
             metadatas.clear()
 
-        time.sleep(0.1)
+        time.sleep(0.4)
 
     if ids:
         collection.add(
