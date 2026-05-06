@@ -473,6 +473,7 @@ GameObject:
   m_Component:
   - component: {fileID: 654183656}
   - component: {fileID: 654183657}
+  - component: {fileID: 654183658}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -512,14 +513,26 @@ MonoBehaviour:
   answerText: {fileID: 1160254746}
   answerToggleOffset: {x: 630, y: -28.77}
   answerToggleSizeOverride: {x: 0, y: 0}
-  apiUrl: http://127.0.0.1:8000/ask
-  sttUrl: http://127.0.0.1:8001/stt
-  ttsUrl: http://127.0.0.1:8001/tts
+  apiUrl: https://vr-anatomy-backend.onrender.com/ask
+  sttUrl: https://vr-anatomy-backend.onrender.com/stt
+  ttsUrl: https://vr-anatomy-backend.onrender.com/tts
   maxRecordSeconds: 30
   sampleRate: 16000
   silenceThreshold: 0.01
   silenceDurationToStop: 1.8
   silenceCheckSampleWindow: 512
+--- !u!114 &654183658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 654183654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c444537e1b83a6b4ebe0a7cc589f886b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &691209389
 GameObject:
   m_ObjectHideFlags: 0
