@@ -34,11 +34,11 @@ public class RagApiClient : MonoBehaviour
     [SerializeField] private Vector2 answerToggleSizeOverride = Vector2.zero;
 
     [Header("API")]
-    [SerializeField] private string apiUrl = "http://127.0.0.1:8000/docs/ask";
+    [SerializeField] private string apiUrl = "https://vr-anatomy-backend.onrender.com/ask";
 
     [Header("Speech API")]
-    [SerializeField] private string sttUrl = "http://127.0.0.1:8001/stt";
-    [SerializeField] private string ttsUrl = "http://127.0.0.1:8001/tts";
+    [SerializeField] private string sttUrl = "https://vr-anatomy-backend.onrender.com/stt";
+    [SerializeField] private string ttsUrl = "https://vr-anatomy-backend.onrender.com/tts";
 
     [Header("Kayıt Ayarları")]
     [SerializeField] private int maxRecordSeconds = 30;
@@ -82,7 +82,12 @@ public class RagApiClient : MonoBehaviour
         new Regex(@"\s+", RegexOptions.Compiled);
 
     [Serializable] private class AskRequest    { public string question; }
-    [Serializable] private class AskResponse   { public string answer; }
+    [Serializable]private class AskResponse
+    {
+        public string answer;
+        public int[] used_pages;
+        public string error;
+    }
     [Serializable] private class SttResponse    { public string text; }
     [Serializable] private class TtsPayload
     {
@@ -191,7 +196,7 @@ public class RagApiClient : MonoBehaviour
             req.uploadHandler = new UploadHandlerRaw(bodyRaw);
             req.downloadHandler = new DownloadHandlerBuffer();
             req.SetRequestHeader("Content-Type", "application/json");
-            req.timeout = 15;
+            req.timeout = 90;
 
             yield return req.SendWebRequest();
 
@@ -519,7 +524,7 @@ public class RagApiClient : MonoBehaviour
         try
         {
             req = UnityWebRequest.Post(sttUrl, form);
-            req.timeout = 15;
+            req.timeout = 60;
             yield return req.SendWebRequest();
 
             if (req.result == UnityWebRequest.Result.Success)
