@@ -31,6 +31,7 @@ public class MenuRestoreOnStart : MonoBehaviour
                 {
                     Debug.Log($"[MenuRestore] wanted='{target}'");
                     p.SetActive(true);
+                    NavigationState.ReturnMenuPanelName = "";
                     return;
                 }
             }

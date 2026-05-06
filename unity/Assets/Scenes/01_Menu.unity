@@ -9044,6 +9044,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6027501000854113292, guid: 18d2de17e5385424189f3065205cd33e, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6027501000854113292, guid: 18d2de17e5385424189f3065205cd33e, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 8934f7763af9e41ee8845ae14c5473f1, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17187,6 +17195,16 @@ MonoBehaviour:
   - {fileID: 1106653506}
   - {fileID: 1214146133}
   - {fileID: 281618794}
+  - {fileID: 1272544081}
+  - {fileID: 1485160462}
+  - {fileID: 25033068}
+  - {fileID: 98055839}
+  - {fileID: 505904424}
+  - {fileID: 225990825}
+  - {fileID: 513686085}
+  - {fileID: 1548670690}
+  - {fileID: 216623689}
+  - {fileID: 214844263}
   mainMenuPanel: {fileID: 498604550}
 --- !u!1 &1561060902
 GameObject:
