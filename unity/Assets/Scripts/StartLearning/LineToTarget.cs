@@ -1,22 +1,16 @@
 using UnityEngine;
 
-public class AnatomyUIController : MonoBehaviour
+[RequireComponent(typeof(LineRenderer))]
+public class LineToTarget : MonoBehaviour
 {
     [Header("Targets")]
     public Transform targetBone;
     public Transform leftUIAnchor;
 
-    [Header("Positioning & Rotation")]
+    [Header("Positioning")]
     public Vector3 manualOffset = new Vector3(0.25f, 0.25f, 0f);
     public float smoothSpeed = 5f;
-    public float rotationSpeed = 2f;
     public float verticalStartOffset = 0.3f;
-
-    [Header("Latency Settings")]
-    [Tooltip("Seconds to wait before the UI starts rotating toward you")]
-    public float rotationDelay = 0.5f;
-    private float currentDelayTimer = 0f;
-    private Quaternion lastTargetRot;
 
     [Header("Line Settings")]
     public int curveResolution = 10;
@@ -24,13 +18,23 @@ public class AnatomyUIController : MonoBehaviour
     public float sagAmount = 0.05f;
 
     private LineRenderer line;
-    private Camera mainCam;
     private Vector3 elasticMidPoint;
+
+    // SUBSCRIPTION: Connect the phone line when the object is active
+    void OnEnable()
+    {
+        LessonManager.OnBoneChanged += SetNewTarget;
+    }
+
+    // SUBSCRIPTION: Disconnect the phone line to prevent memory leaks/errors
+    void OnDisable()
+    {
+        LessonManager.OnBoneChanged -= SetNewTarget;
+    }
 
     void Start()
     {
         line = GetComponent<LineRenderer>();
-        mainCam = Camera.main;
         line.positionCount = curveResolution;
 
         if (targetBone != null) SnapToTarget();
@@ -38,59 +42,22 @@ public class AnatomyUIController : MonoBehaviour
 
     void LateUpdate()
     {
+        // Only run the line rendering if we have a target
         if (targetBone == null) return;
 
-        // 1. POSITIONING: Smooth float to target
         Vector3 desiredPos = targetBone.position + manualOffset;
         transform.position = Vector3.Lerp(transform.position, desiredPos, Time.deltaTime * smoothSpeed);
 
-        // 2. DELAYED ROTATION
-        HandleDelayedRotation();
-
-        // 3. CURVE
         UpdateCurve();
     }
 
-    private void HandleDelayedRotation()
-    {
-        // Direction from UI to Camera (all axes included now for crouching/looking up)
-        Vector3 dirToCam = mainCam.transform.position - transform.position;
-
-        if (dirToCam != Vector3.zero)
-        {
-            // The ideal rotation to face the user (No head-roll/tilt allowed)
-            Quaternion targetRot = Quaternion.LookRotation(-dirToCam, Vector3.up);
-
-            // Check if the camera's ideal rotation has changed significantly
-            if (Quaternion.Angle(lastTargetRot, targetRot) > 1.0f)
-            {
-                // Reset timer if we detect new movement
-                currentDelayTimer = rotationDelay;
-                lastTargetRot = targetRot;
-            }
-
-            // Countdown the latency
-            if (currentDelayTimer > 0)
-            {
-                currentDelayTimer -= Time.deltaTime;
-            }
-            else
-            {
-                // Once timer hits zero, start the smooth catch-up
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationSpeed);
-            }
-        }
-    }
-
+    // This method is now the "listener" that gets called by the event
     public void SetNewTarget(Transform newBone)
     {
         targetBone = newBone;
-
         Vector3 startPos = targetBone.position + manualOffset + (Vector3.down * verticalStartOffset);
         transform.position = startPos;
-
         elasticMidPoint = startPos;
-        currentDelayTimer = 0; // Rotate immediately on new target selection
     }
 
     private void UpdateCurve()
@@ -115,9 +82,5 @@ public class AnatomyUIController : MonoBehaviour
     {
         transform.position = targetBone.position + manualOffset;
         elasticMidPoint = transform.position;
-
-        // Face camera immediately on snap
-        Vector3 dir = mainCam.transform.position - transform.position;
-        if (dir != Vector3.zero) transform.rotation = Quaternion.LookRotation(-dir, Vector3.up);
     }
 }
