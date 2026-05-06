@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.UI; // Required for the Button reference
 
 [System.Serializable]
 public class BoneData
@@ -19,10 +20,18 @@ public class BoneList
 
 public class LessonManager : MonoBehaviour
 {
+    public static LessonManager Instance;
+    public static event System.Action<Transform> OnBoneChanged;
+
+    [Header("UI Managers")]
+    public ReviewManager reviewManager;
+
     [Header("UI References")]
-    public AnatomyUIController uiController;
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI infoText;
+
+    
+    public Button nextButton;
 
     [Header("Bone Sequence")]
     public List<GameObject> bones;
@@ -30,6 +39,28 @@ public class LessonManager : MonoBehaviour
 
     private Dictionary<string, BoneData> dataLookup = new Dictionary<string, BoneData>();
     private int currentIndex = 0;
+    public bool IsReviewMode = false;
+
+    void OnEnable()
+    {
+        Instance = this;
+
+        // Automatically wire up the button when this unit becomes active
+        if (nextButton != null)
+        {
+            nextButton.onClick.RemoveAllListeners();
+            nextButton.onClick.AddListener(NextStep);
+        }
+    }
+
+    void OnDisable()
+    {
+        if (Instance == this) Instance = null;
+
+        // Clean up the button to prevent cross-talk
+        if (nextButton != null)
+            nextButton.onClick.RemoveAllListeners();
+    }
 
     void Start()
     {
@@ -46,7 +77,17 @@ public class LessonManager : MonoBehaviour
 
     public void ResetLesson()
     {
+        IsReviewMode = false;
+
         currentIndex = 0;
+
+        //Reenable the button listener just in case
+        if (nextButton != null)
+        {
+            nextButton.onClick.RemoveAllListeners();
+            nextButton.onClick.AddListener(NextStep);
+        }
+
         ActivateStep(currentIndex);
     }
 
@@ -72,10 +113,20 @@ public class LessonManager : MonoBehaviour
 
     public void NextStep()
     {
+        if (IsReviewMode) return;
+
         if (currentIndex < bones.Count - 1)
         {
             currentIndex++;
             ActivateStep(currentIndex);
+        }
+        else
+        {
+            IsReviewMode = true;
+            if (reviewManager != null)
+            {
+                reviewManager.OpenReview();
+            }
         }
     }
 
@@ -88,16 +139,17 @@ public class LessonManager : MonoBehaviour
         }
     }
 
-    void ActivateStep(int index)
+    public void ActivateStep(int index)
     {
         if (index < 0 || index >= bones.Count) return;
 
+        currentIndex = index;
         GameObject currentBone = bones[index];
-        uiController.SetNewTarget(currentBone.transform);
+
+        OnBoneChanged?.Invoke(currentBone.transform);
 
         if (visualsManager != null)
         {
-            // This now triggers the material change AND the grab-script toggle
             visualsManager.FocusBone(currentBone, bones);
         }
 

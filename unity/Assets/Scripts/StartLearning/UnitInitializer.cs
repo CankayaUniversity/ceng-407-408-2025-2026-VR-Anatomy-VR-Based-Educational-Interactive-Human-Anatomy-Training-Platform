@@ -6,12 +6,18 @@ public class SkeletonInitializer : MonoBehaviour
     [System.Serializable]
     public struct UnitMapping
     {
-        public int unitID;         // The ID from button 
+        public int unitID;      
         public GameObject unitRoot; 
     }
 
     [Header("Setup")]
     public List<UnitMapping> unitList;
+
+
+
+    public GameObject lessonPanel; 
+    public GameObject reviewPanel;
+
 
     void Start()
     {
@@ -38,6 +44,11 @@ public class SkeletonInitializer : MonoBehaviour
         }
 
         Debug.LogWarning("No unit found for ID: " + selectedID);
-   
+
+
+
+        if (lessonPanel != null) lessonPanel.SetActive(true);
+        if (reviewPanel != null) reviewPanel.SetActive(false);
+
     }
 }
