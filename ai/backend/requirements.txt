@@ -1,10 +1,11 @@
 fastapi
 uvicorn[standard]
 pydantic
-python-multipart
 python-dotenv
+python-multipart
 pypdf
 chromadb
 google-generativeai
-SpeechRecognition
+google-genai
 edge-tts
+SpeechRecognition
