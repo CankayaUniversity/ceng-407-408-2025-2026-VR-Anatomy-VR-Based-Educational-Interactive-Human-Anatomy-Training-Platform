@@ -2761,9 +2761,9 @@ MonoBehaviour:
   answerText: {fileID: 0}
   answerToggleOffset: {x: 0, y: 0}
   answerToggleSizeOverride: {x: 0, y: 0}
-  apiUrl: http://127.0.0.1:8000/docs/ask
-  sttUrl: http://127.0.0.1:8001/stt
-  ttsUrl: http://127.0.0.1:8001/tts
+  apiUrl: https://vr-anatomy-backend.onrender.com/docs/ask
+  sttUrl: https://vr-anatomy-backend.onrender.com/stt
+  ttsUrl: https://vr-anatomy-backend.onrender.com/tts
   maxRecordSeconds: 30
   sampleRate: 16000
   silenceThreshold: 0.01
@@ -3082,7 +3082,7 @@ MonoBehaviour:
   section: 0
   fallbackSection: 1
   playIntroOnEnable: 1
-  ttsUrl: http://127.0.0.1:8001/tts
+  ttsUrl: https://vr-anatomy-backend.onrender.com/tts
   respectAIChatVoiceSetting: 1
 --- !u!82 &1754635369
 AudioSource:
@@ -3186,6 +3186,120 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -7981514964708312862, guid: 95b15ebb7b499564ca3c5bef3e623b36, type: 3}
   m_PrefabInstance: {fileID: 2114381046}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1776787535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776787534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1441607f0605394ba9f2f6874aa4512, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  section: 0
+  fallbackSection: 1
+  playIntroOnEnable: 1
+  ttsUrl: https://vr-anatomy-backend.onrender.com/tts
+  respectAIChatVoiceSetting: 1
+--- !u!82 &1776787536
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776787534}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &1840915161
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3616,7 +3730,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -7981514964708312862, guid: 95b15ebb7b499564ca3c5bef3e623b36, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1776787536}
+    - targetCorrespondingSourceObject: {fileID: -7981514964708312862, guid: 95b15ebb7b499564ca3c5bef3e623b36, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1776787535}
   m_SourcePrefab: {fileID: 3150474306388093854, guid: 95b15ebb7b499564ca3c5bef3e623b36, type: 3}
 --- !u!224 &194240712274731446
 RectTransform:
@@ -5116,7 +5236,6 @@ GameObject:
   - component: {fileID: 3990240385019951423}
   - component: {fileID: 8167192262107474739}
   - component: {fileID: 8167192262107474738}
-  - component: {fileID: 8167192262107474741}
   - component: {fileID: 8167192262107474740}
   m_Layer: 0
   m_Name: LessonUI
@@ -5256,23 +5375,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8167192262107474741
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8167192262107474737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1441607f0605394ba9f2f6874aa4512, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  section: 0
-  fallbackSection: 1
-  playIntroOnEnable: 1
-  ttsUrl: http://127.0.0.1:8001/tts
-  respectAIChatVoiceSetting: 1
 --- !u!1 &8526863351866561134 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 115236827691832851, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}

@@ -26,7 +26,7 @@ public class SimpleBoneExplanationResponse
 public class SimpleBoneExplanationClient : MonoBehaviour
 {
     [Header("Backend")]
-    [SerializeField] private string backendUrl = "http://127.0.0.1:8000/learning/simple-bone-explanation";
+    [SerializeField] private string backendUrl = "https://vr-anatomy-backend.onrender.com/learning/simple-bone-explanation";
     [SerializeField] private int timeoutSeconds = 30;
 
     [Header("Lesson UI")]
@@ -132,12 +132,16 @@ public class SimpleBoneExplanationClient : MonoBehaviour
                 yield break;
             }
 
-            if (request.result != UnityWebRequest.Result.Success || request.responseCode < 200 || request.responseCode >= 300)
+            if (request.result != UnityWebRequest.Result.Success)
             {
-                ApplyFallback(
-                    boneName,
-                    originalText,
-                    $"Gemini basit anlatım alınamadı: {request.error} | HTTP {request.responseCode}");
+                Debug.LogError(
+                    "[SimpleBoneExplanationClient] Gemini basit anlatım alınamadı.\n" +
+                    "HTTP Code: " + request.responseCode + "\n" +
+                    "Error: " + request.error + "\n" +
+                    "Response Body: " + request.downloadHandler.text
+                );
+
+                ApplyFallback(boneName, originalText, "Backend hatası nedeniyle basit anlatım alınamadı.");
                 yield break;
             }
 
