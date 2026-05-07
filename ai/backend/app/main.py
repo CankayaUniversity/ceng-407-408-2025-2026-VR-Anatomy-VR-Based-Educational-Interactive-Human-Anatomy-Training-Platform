@@ -11,6 +11,7 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from app.learning_review import router as learning_review_router
 
 from app.rag_core import answer_question
 
@@ -26,6 +27,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(learning_review_router)
 
 @app.get("/health")
 def health():
