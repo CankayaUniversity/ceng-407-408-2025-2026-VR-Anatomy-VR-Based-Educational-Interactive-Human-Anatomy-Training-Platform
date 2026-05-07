@@ -160,16 +160,28 @@ Kurallar:
 - Öğrenciye destekleyici, sakin ve açıklayıcı bir tonda konuş.
 - Markdown kullanma.
 - Cevabı sadece geçerli JSON olarak döndür.
+- simple_explanation ekranda gösterilecek yazılı metindir.
+- simple_explanation düz, sade ve bilgi odaklı kalsın.
+- simple_explanation içine samimi giriş cümlesi ekleme.
+- simple_explanation içinde "Tabii", "merak etme", "birlikte bakalım" gibi konuşma ifadeleri kullanma.
+
+- speech_text sadece avatarın sesli okuyacağı metindir.
+- speech_text daha kibar, sıcak ve doğal konuşma dilinde olsun.
+- speech_text "Tabii, bunu daha basit anlatalım." gibi yumuşak bir girişle başlayabilir.
+- speech_text simple_explanation ile aynı bilgiyi anlatsın.
+- speech_text yazılı metinde olmayan yeni tıbbi bilgi eklemesin.
+- speech_text gereksiz uzun olmasın.
+- speech_text içinde öğrenci adı kullanma.
 
 JSON formatı:
 {{
-  "simple_explanation": "Kemiğin basit açıklaması.",
+  "simple_explanation": "Ekranda gösterilecek düz, sade ve bilgi odaklı açıklama.",
   "key_points": [
     "Birinci kısa madde.",
     "İkinci kısa madde.",
     "Üçüncü kısa madde."
   ],
-  "speech_text": "Avatarın sesli okuyacağı doğal metin."
+  "speech_text": "Avatarın sesli okuyacağı daha kibar, sıcak ve doğal konuşma metni."
 }}
 """
 
