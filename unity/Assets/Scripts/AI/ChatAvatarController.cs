@@ -8,8 +8,10 @@ using UnityEngine;
 public class ChatAvatarController : MonoBehaviour
 {
     [Header("Avatar Source (GLB)")]
-    [SerializeField] private string glbFileName = "model1.glb";
-    [SerializeField] private string maleGlbFileName = "model 2.glb";
+    [SerializeField] private string glbFileName     = "model1.glb";    // Kız
+    [SerializeField] private string maleGlbFileName = "model 2.glb";   // Erkek
+    [SerializeField] private string youngFemaleGlbFileName = "model3.glb"; // Genç Kız
+    [SerializeField] private string youngMaleGlbFileName   = "model4.glb"; // Genç Erkek
 
     [Header("Male Avatar Alignment")]
     [SerializeField] private bool alignMaleFeetToAvatarRoot = true;
@@ -132,15 +134,26 @@ public class ChatAvatarController : MonoBehaviour
 
     private string ResolveAvatarFileName()
     {
-        // SettingsManager yoksa da son seçimi PlayerPrefs'ten okuyarak avatarı koru.
-        if (SettingsManager.Instance != null &&
-            SettingsManager.Instance.SelectedAvatarType == SettingsManager.AvatarType.Male)
+        SettingsManager.AvatarType selectedType;
+
+        if (SettingsManager.Instance != null)
         {
-            return maleGlbFileName;
+            selectedType = SettingsManager.Instance.SelectedAvatarType;
+        }
+        else
+        {
+            int raw = PlayerPrefs.GetInt("AvatarType", (int)SettingsManager.AvatarType.Female);
+            raw = Mathf.Clamp(raw, 0, 3);
+            selectedType = (SettingsManager.AvatarType)raw;
         }
 
-        int rawValue = PlayerPrefs.GetInt("AvatarType", (int)SettingsManager.AvatarType.Female);
-        return rawValue == (int)SettingsManager.AvatarType.Male ? maleGlbFileName : glbFileName;
+        return selectedType switch
+        {
+            SettingsManager.AvatarType.Male        => maleGlbFileName,
+            SettingsManager.AvatarType.YoungFemale => youngFemaleGlbFileName,
+            SettingsManager.AvatarType.YoungMale   => youngMaleGlbFileName,
+            _                                      => glbFileName
+        };
     }
 
     private async Task LoadAvatar()

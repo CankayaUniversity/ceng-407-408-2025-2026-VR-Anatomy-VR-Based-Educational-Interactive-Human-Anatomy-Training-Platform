@@ -29,8 +29,9 @@ public static class SettingsSceneLayoutAdjuster
         PositionPanel();
         PositionTitle();
         LayoutSingleToggleRow("ShowAnswerTextRow", new Vector2(0f, 76f), "Yapay Zekâ ile Konuş - Metni Göster");
-        LayoutSliderRow("VolumeRow", new Vector2(0f, 18f), "     Ses Seviyesi", 34f);
-        LayoutTwoOptionRow("AvatarSelectionRow", new Vector2(0f, -40f), "Avatar Seçimi", "Kız", "Erkek", false);
+        LayoutSliderRow("VolumeRow", new Vector2(0f, 18f), "                 Ses Seviyesi", 400);
+        LayoutFourOptionRow("AvatarSelectionRow", new Vector2(0f, -40f), "Avatar Seçimi",
+        "Kadın", "Erkek", "Genç Kız", "Genç Erkek");
         LayoutTwoOptionRow("AIChatVoiceRow", new Vector2(0f, -104f), "Yapay Zekâ ile Konuş - Avatar Sesi", "Açık", "Kapalı", true);
         LayoutBottomButtons();
     }
@@ -44,7 +45,7 @@ public static class SettingsSceneLayoutAdjuster
         if (panelRT != null)
         {
             panelRT.anchoredPosition = new Vector2(0f, -14f);
-            panelRT.sizeDelta = new Vector2(560f, 342f);
+            panelRT.sizeDelta = new Vector2(720f, 342f);
         }
     }
 
@@ -118,24 +119,82 @@ public static class SettingsSceneLayoutAdjuster
         if (toggles.Length > 1)
             ConfigureToggle(toggles[1], new Vector2(RowControlX + OptionTwoX, 0f), secondOptionText, 130f);
     }
+   private static void LayoutFourOptionRow(
+    string rowName,
+    Vector2 anchoredPosition,
+    string labelText,
+    string firstOptionText,
+    string secondOptionText,
+    string thirdOptionText,
+    string fourthOptionText)
+{
+    GameObject row = PrepareRow(rowName, anchoredPosition);
+    if (row == null) return;
 
-    private static GameObject PrepareRow(string rowName, Vector2 anchoredPosition)
+    ConfigureRowLabel(row, labelText, false);
+
+    Toggle[] toggles = EnsureToggleCount(row, 4);
+
+    if (toggles.Length > 0)
+    ConfigureToggle(toggles[0], new Vector2(RowControlX - 60f, 0f), firstOptionText, 85f);
+
+if (toggles.Length > 1)
+    ConfigureToggle(toggles[1], new Vector2(RowControlX + 20f, 0f), secondOptionText, 85f);
+
+if (toggles.Length > 2)
+    ConfigureToggle(toggles[2], new Vector2(RowControlX + 95f, 0f), thirdOptionText, 105f);
+
+if (toggles.Length > 3)
+    ConfigureToggle(toggles[3], new Vector2(RowControlX + 185f, 0f), fourthOptionText, 115f);
+}
+
+private static Toggle[] EnsureToggleCount(GameObject row, int requiredCount)
+{
+    Toggle[] toggles = row.GetComponentsInChildren<Toggle>(true);
+
+    if (toggles.Length == 0)
+        return toggles;
+
+    Toggle templateToggle = toggles[toggles.Length - 1];
+    Transform parent = templateToggle.transform.parent;
+
+    ToggleGroup toggleGroup = row.GetComponentInChildren<ToggleGroup>(true);
+
+    for (int i = toggles.Length; i < requiredCount; i++)
     {
-        GameObject row = GameObject.Find(rowName);
-        if (row == null) return null;
+        GameObject clone = Object.Instantiate(templateToggle.gameObject, parent);
+        clone.name = i == 2 ? "YoungFemaleAvatarToggle" : "YoungMaleAvatarToggle";
 
-        RectTransform rowRT = row.GetComponent<RectTransform>();
-        if (rowRT != null)
+        Toggle cloneToggle = clone.GetComponent<Toggle>();
+        if (cloneToggle != null)
         {
-            rowRT.anchorMin = new Vector2(0.5f, 0.5f);
-            rowRT.anchorMax = new Vector2(0.5f, 0.5f);
-            rowRT.pivot = new Vector2(0.5f, 0.5f);
-            rowRT.anchoredPosition = anchoredPosition;
-            rowRT.sizeDelta = new Vector2(640f, 54f);
-        }
+            cloneToggle.isOn = false;
 
-        return row;
+            if (toggleGroup != null)
+                cloneToggle.group = toggleGroup;
+        }
     }
+
+    return row.GetComponentsInChildren<Toggle>(true);
+}
+
+    private static GameObject PrepareRow(string rowName, Vector2 anchoredPosition, float rowHeight = 54f)
+{
+    GameObject row = GameObject.Find(rowName);
+    if (row == null) return null;
+
+    RectTransform rowRT = row.GetComponent<RectTransform>();
+    if (rowRT != null)
+    {
+        rowRT.anchorMin = new Vector2(0.5f, 0.5f);
+        rowRT.anchorMax = new Vector2(0.5f, 0.5f);
+        rowRT.pivot = new Vector2(0.5f, 0.5f);
+        rowRT.anchoredPosition = anchoredPosition;
+        rowRT.sizeDelta = new Vector2(760, rowHeight);
+    }
+
+    return row;
+}
 
     private static void ConfigureRowLabel(GameObject row, string labelText, bool compact, float offsetX = 0f)
     {
@@ -174,6 +233,9 @@ public static class SettingsSceneLayoutAdjuster
         label.alignment = TextAlignmentOptions.MidlineLeft;
         label.color = Color.white;
         label.lineSpacing = 0f;
+
+// Bu label sadece yazı; tıklamayı/tutmayı engellemesin.
+label.raycastTarget = false;
     }
 
     private static TMP_Text FindPrimaryTmpLabel(GameObject row)
@@ -183,49 +245,52 @@ public static class SettingsSceneLayoutAdjuster
     }
 
     private static void ConfigureToggle(Toggle toggle, Vector2 anchoredPosition, string optionText, float width)
+{
+    RectTransform toggleRT = toggle.GetComponent<RectTransform>();
+    if (toggleRT != null)
     {
-        RectTransform toggleRT = toggle.GetComponent<RectTransform>();
-        if (toggleRT != null)
-        {
-            toggleRT.anchorMin = new Vector2(0.5f, 0.5f);
-            toggleRT.anchorMax = new Vector2(0.5f, 0.5f);
-            toggleRT.pivot = new Vector2(0f, 0.5f);
-            toggleRT.anchoredPosition = anchoredPosition;
-            toggleRT.sizeDelta = new Vector2(width, 28f);
-            toggleRT.localScale = Vector3.one;
-        }
+        toggleRT.anchorMin = new Vector2(0.5f, 0.5f);
+        toggleRT.anchorMax = new Vector2(0.5f, 0.5f);
+        toggleRT.pivot = new Vector2(0f, 0.5f);
+        toggleRT.anchoredPosition = anchoredPosition;
+        toggleRT.sizeDelta = new Vector2(width, 28f);
+        toggleRT.localScale = Vector3.one;
+    }
 
-        RectTransform graphicRT = toggle.graphic != null ? toggle.graphic.GetComponent<RectTransform>() : null;
-        if (graphicRT != null)
-        {
-            graphicRT.anchorMin = new Vector2(0f, 0.5f);
-            graphicRT.anchorMax = new Vector2(0f, 0.5f);
-            graphicRT.pivot = new Vector2(0.5f, 0.5f);
-            graphicRT.anchoredPosition = new Vector2(14f, 0f);
-            graphicRT.sizeDelta = new Vector2(22f, 22f);
-            graphicRT.localScale = Vector3.one;
-        }
+    // Checkbox kutusu
+    RectTransform graphicRT = toggle.graphic != null ? toggle.graphic.GetComponent<RectTransform>() : null;
+    if (graphicRT != null)
+    {
+        graphicRT.anchorMin = new Vector2(0f, 0.5f);
+        graphicRT.anchorMax = new Vector2(0f, 0.5f);
+        graphicRT.pivot = new Vector2(0.5f, 0.5f);
+        graphicRT.anchoredPosition = new Vector2(10f, 0f);
+        graphicRT.sizeDelta = new Vector2(18f, 18f);
+        graphicRT.localScale = Vector3.one;
+    }
 
-        Text legacyLabel = toggle.GetComponentInChildren<Text>(true);
-        if (legacyLabel != null)
-        {
-            legacyLabel.text = optionText;
-            legacyLabel.fontSize = 14;
-            legacyLabel.color = Color.white;
-            legacyLabel.alignment = TextAnchor.MiddleLeft;
+    // Yazı
+    Text legacyLabel = toggle.GetComponentInChildren<Text>(true);
+    if (legacyLabel != null)
+    {
+        legacyLabel.text = optionText;
+        legacyLabel.fontSize = 14;
+        legacyLabel.color = Color.white;
+        legacyLabel.alignment = TextAnchor.MiddleLeft;
+        legacyLabel.raycastTarget = false;
 
-            RectTransform labelRT = legacyLabel.GetComponent<RectTransform>();
-            if (labelRT != null)
-            {
-                labelRT.anchorMin = new Vector2(0f, 0f);
-                labelRT.anchorMax = new Vector2(1f, 1f);
-                labelRT.pivot = new Vector2(0.5f, 0.5f);
-                labelRT.anchoredPosition = new Vector2(18f, 0f);
-                labelRT.sizeDelta = new Vector2(-28f, 0f);
-                labelRT.localScale = Vector3.one;
-            }
+        RectTransform labelRT = legacyLabel.GetComponent<RectTransform>();
+        if (labelRT != null)
+        {
+            labelRT.anchorMin = new Vector2(0f, 0.5f);
+            labelRT.anchorMax = new Vector2(0f, 0.5f);
+            labelRT.pivot = new Vector2(0f, 0.5f);
+            labelRT.anchoredPosition = new Vector2(24f, 0f);
+            labelRT.sizeDelta = new Vector2(width - 24f, 22f);
+            labelRT.localScale = Vector3.one;
         }
     }
+}
 
     private static void LayoutBottomButtons()
     {

@@ -8,8 +8,10 @@ public static class AvatarSelectionSettingsInstaller
     private const string SettingsSceneName = "07_Settings";
     private const string SourceRowName = "ShowAnswerTextRow";
     private const string InstalledRowName = "AvatarSelectionRow";
-    private const string FemaleToggleName = "AvatarFemaleToggle";
-    private const string MaleToggleName = "AvatarMaleToggle";
+    private const string FemaleToggleName     = "AvatarFemaleToggle";
+    private const string MaleToggleName       = "AvatarMaleToggle";
+    private const string YoungFemaleToggleName = "AvatarYoungFemaleToggle";
+    private const string YoungMaleToggleName   = "AvatarYoungMaleToggle";
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Register()
@@ -69,15 +71,25 @@ public static class AvatarSelectionSettingsInstaller
             AlignTitleWithOptions(label);
         }
 
-        Toggle maleToggle = Object.Instantiate(femaleToggle, femaleToggle.transform.parent);
-        maleToggle.name = MaleToggleName;
+        Toggle maleToggle      = Object.Instantiate(femaleToggle, femaleToggle.transform.parent);
+        Toggle youngFemToggle  = Object.Instantiate(femaleToggle, femaleToggle.transform.parent);
+        Toggle youngMaleToggle = Object.Instantiate(femaleToggle, femaleToggle.transform.parent);
+
+        maleToggle.name      = MaleToggleName;
+        youngFemToggle.name  = YoungFemaleToggleName;
+        youngMaleToggle.name = YoungMaleToggleName;
+
         CleanupSourceBinders(newRow);
 
-        ConfigureOptionToggle(femaleToggle, new Vector2(80f, -14f), "Kız");
-        ConfigureOptionToggle(maleToggle, new Vector2(205f, -14f), "Erkek");
+        // Satır 1: Kız | Erkek
+        ConfigureOptionToggle(femaleToggle,  new Vector2(75f,  -10f), "Kız");
+        ConfigureOptionToggle(maleToggle,    new Vector2(175f, -10f), "Erkek");
+        // Satır 2: Genç Kız | Genç Erkek
+        ConfigureOptionToggle(youngFemToggle,  new Vector2(75f,  -34f), "Genç Kız");
+        ConfigureOptionToggle(youngMaleToggle, new Vector2(175f, -34f), "Genç Erkek");
 
         var avatarBinder = newRow.AddComponent<AvatarSelectionToggleBinder>();
-        avatarBinder.Initialize(femaleToggle, maleToggle, label);
+        avatarBinder.Initialize(femaleToggle, maleToggle, youngFemToggle, youngMaleToggle, label);
         SettingsSceneLayoutAdjuster.ApplyLayout();
     }
 

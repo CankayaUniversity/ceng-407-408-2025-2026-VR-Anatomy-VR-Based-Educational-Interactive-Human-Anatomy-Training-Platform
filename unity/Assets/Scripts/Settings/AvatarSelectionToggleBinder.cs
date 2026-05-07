@@ -2,20 +2,28 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Avatar seçimi toggle'larını SettingsManager ile bağlar.
+/// 4 tip: Female (0), Male (1), YoungFemale (2), YoungMale (3)
+/// </summary>
 public class AvatarSelectionToggleBinder : MonoBehaviour
 {
     [SerializeField] private Toggle femaleToggle;
     [SerializeField] private Toggle maleToggle;
+    [SerializeField] private Toggle youngFemaleToggle;
+    [SerializeField] private Toggle youngMaleToggle;
     [SerializeField] private TMP_Text titleText;
 
     private bool _isInitialized;
     private bool _isUpdating;
 
-    public void Initialize(Toggle female, Toggle male, TMP_Text title)
+    public void Initialize(Toggle female, Toggle male, Toggle youngFemale, Toggle youngMale, TMP_Text title)
     {
-        femaleToggle = female;
-        maleToggle = male;
-        titleText = title;
+        femaleToggle      = female;
+        maleToggle        = male;
+        youngFemaleToggle = youngFemale;
+        youngMaleToggle   = youngMale;
+        titleText         = title;
         SetupIfPossible();
     }
 
@@ -26,11 +34,10 @@ public class AvatarSelectionToggleBinder : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (femaleToggle != null)
-            femaleToggle.onValueChanged.RemoveListener(OnFemaleToggleChanged);
-
-        if (maleToggle != null)
-            maleToggle.onValueChanged.RemoveListener(OnMaleToggleChanged);
+        if (femaleToggle != null)      femaleToggle.onValueChanged.RemoveListener(OnFemaleToggleChanged);
+        if (maleToggle != null)        maleToggle.onValueChanged.RemoveListener(OnMaleToggleChanged);
+        if (youngFemaleToggle != null) youngFemaleToggle.onValueChanged.RemoveListener(OnYoungFemaleToggleChanged);
+        if (youngMaleToggle != null)   youngMaleToggle.onValueChanged.RemoveListener(OnYoungMaleToggleChanged);
 
         if (SettingsManager.Instance != null)
             SettingsManager.Instance.OnAvatarTypeChanged -= OnAvatarTypeChanged;
@@ -41,7 +48,7 @@ public class AvatarSelectionToggleBinder : MonoBehaviour
         if (_isInitialized || femaleToggle == null || maleToggle == null) return;
         if (SettingsManager.Instance == null)
         {
-            Debug.LogError("SettingsManager not found.");
+            Debug.LogError("[AvatarSelectionToggleBinder] SettingsManager not found.");
             return;
         }
 
@@ -52,35 +59,46 @@ public class AvatarSelectionToggleBinder : MonoBehaviour
 
         femaleToggle.onValueChanged.AddListener(OnFemaleToggleChanged);
         maleToggle.onValueChanged.AddListener(OnMaleToggleChanged);
+
+        if (youngFemaleToggle != null)
+            youngFemaleToggle.onValueChanged.AddListener(OnYoungFemaleToggleChanged);
+
+        if (youngMaleToggle != null)
+            youngMaleToggle.onValueChanged.AddListener(OnYoungMaleToggleChanged);
+
         SettingsManager.Instance.OnAvatarTypeChanged += OnAvatarTypeChanged;
 
         _isInitialized = true;
     }
 
+    // ──────────────────────────── Toggle Handlers ────────────────────────────
+
     private void OnFemaleToggleChanged(bool isOn)
     {
         if (_isUpdating || SettingsManager.Instance == null) return;
-
-        if (isOn)
-        {
-            SettingsManager.Instance.SetAvatarType(SettingsManager.AvatarType.Female);
-            return;
-        }
-
-        KeepOneSelected();
+        if (isOn) SettingsManager.Instance.SetAvatarType(SettingsManager.AvatarType.Female);
+        else      KeepOneSelected();
     }
 
     private void OnMaleToggleChanged(bool isOn)
     {
         if (_isUpdating || SettingsManager.Instance == null) return;
+        if (isOn) SettingsManager.Instance.SetAvatarType(SettingsManager.AvatarType.Male);
+        else      KeepOneSelected();
+    }
 
-        if (isOn)
-        {
-            SettingsManager.Instance.SetAvatarType(SettingsManager.AvatarType.Male);
-            return;
-        }
+    private void OnYoungFemaleToggleChanged(bool isOn)
+    {
+        if (_isUpdating || SettingsManager.Instance == null) return;
+        if (isOn) SettingsManager.Instance.SetAvatarType(SettingsManager.AvatarType.YoungFemale);
+        else      KeepOneSelected();
+    }
 
-        KeepOneSelected();
+    private void OnYoungMaleToggleChanged(bool isOn)
+    {
+        if (_isUpdating || SettingsManager.Instance == null) return;
+        if (isOn) SettingsManager.Instance.SetAvatarType(SettingsManager.AvatarType.YoungMale);
+        else      KeepOneSelected();
     }
 
     private void OnAvatarTypeChanged(SettingsManager.AvatarType avatarType)
@@ -88,13 +106,20 @@ public class AvatarSelectionToggleBinder : MonoBehaviour
         UpdateToggleVisuals(avatarType);
     }
 
+    // ──────────────────────────── Visual Sync ────────────────────────────────
+
     private void UpdateToggleVisuals(SettingsManager.AvatarType avatarType)
     {
         _isUpdating = true;
 
-        bool isMale = avatarType == SettingsManager.AvatarType.Male;
-        femaleToggle.SetIsOnWithoutNotify(!isMale);
-        maleToggle.SetIsOnWithoutNotify(isMale);
+        if (femaleToggle != null)
+            femaleToggle.SetIsOnWithoutNotify(avatarType == SettingsManager.AvatarType.Female);
+        if (maleToggle != null)
+            maleToggle.SetIsOnWithoutNotify(avatarType == SettingsManager.AvatarType.Male);
+        if (youngFemaleToggle != null)
+            youngFemaleToggle.SetIsOnWithoutNotify(avatarType == SettingsManager.AvatarType.YoungFemale);
+        if (youngMaleToggle != null)
+            youngMaleToggle.SetIsOnWithoutNotify(avatarType == SettingsManager.AvatarType.YoungMale);
 
         _isUpdating = false;
     }

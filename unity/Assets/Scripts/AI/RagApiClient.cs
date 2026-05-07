@@ -820,13 +820,27 @@ public class RagApiClient : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Ses eşleşmesi:
+    ///   Female (0) + YoungFemale (2) → tr-TR-EmelNeural
+    ///   Male   (1) + YoungMale   (3) → tr-TR-AhmetNeural
+    /// </summary>
     private bool IsMaleAvatarSelected()
     {
-        if (SettingsManager.Instance != null)
-            return SettingsManager.Instance.SelectedAvatarType == SettingsManager.AvatarType.Male;
+        SettingsManager.AvatarType type;
 
-        int rawValue = PlayerPrefs.GetInt("AvatarType", (int)SettingsManager.AvatarType.Female);
-        return rawValue == (int)SettingsManager.AvatarType.Male;
+        if (SettingsManager.Instance != null)
+        {
+            type = SettingsManager.Instance.SelectedAvatarType;
+        }
+        else
+        {
+            int raw = PlayerPrefs.GetInt("AvatarType", (int)SettingsManager.AvatarType.Female);
+            type = (SettingsManager.AvatarType)Mathf.Clamp(raw, 0, 3);
+        }
+
+        return type == SettingsManager.AvatarType.Male
+            || type == SettingsManager.AvatarType.YoungMale;
     }
 
     #endregion

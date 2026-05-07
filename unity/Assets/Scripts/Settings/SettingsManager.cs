@@ -5,8 +5,10 @@ public class SettingsManager : MonoBehaviour
 {
     public enum AvatarType
     {
-        Female = 0,
-        Male = 1
+        Female      = 0,
+        Male        = 1,
+        YoungFemale = 2,
+        YoungMale   = 3
     }
 
     public static SettingsManager Instance;
@@ -58,7 +60,7 @@ public class SettingsManager : MonoBehaviour
         SelectedAvatarType = (AvatarType)Mathf.Clamp(
             PlayerPrefs.GetInt(AvatarTypeKey, (int)AvatarType.Female),
             (int)AvatarType.Female,
-            (int)AvatarType.Male);
+            (int)AvatarType.YoungMale);
         AIChatVoiceEnabled = PlayerPrefs.GetInt(AIChatVoiceEnabledKey, 1) == 1;
         AudioListener.volume = MasterVolume;
     }
@@ -117,7 +119,7 @@ public class SettingsManager : MonoBehaviour
     {
         SetShowAnswerText(true);
         SetMasterVolume(1f);
-        SetAvatarType(AvatarType.Female);
+        SetAvatarType(AvatarType.Female); // Varsayılan: Kız
         SetAIChatVoiceEnabled(true);
 
         Debug.Log("Settings reset to defaults.");
