@@ -35,6 +35,15 @@ public class MenuIntroManager : MonoBehaviour
     private bool _introRunning;
     private GameObject _skipButtonGO;
     private GameObject _menuInputBlocker;
+    private GameObject _userNamePanelGO;
+    private TMP_InputField _studentNameInput;
+    private TMP_InputField _studentNumberInput;
+    private Button _userNameContinueButton;
+    private bool _waitingForUserInfo;
+
+    private const string UserNamePanelName = "UserNamePanel";
+    private const string StudentNamePrefKey = "StudentName";
+    private const string StudentNumberPrefKey = "StudentNumber";
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void RegisterSceneCallback()
@@ -103,6 +112,9 @@ public class MenuIntroManager : MonoBehaviour
         if (_skipButton != null)
             _skipButton.onClick.RemoveListener(SkipIntro);
 
+        if (_userNameContinueButton != null)
+            _userNameContinueButton.onClick.RemoveListener(OnUserInfoContinueClicked);
+
         if (_skipButtonGO != null)
             Destroy(_skipButtonGO);
 
@@ -140,6 +152,8 @@ public class MenuIntroManager : MonoBehaviour
             Debug.LogWarning($"[MenuIntro] Welcome clip yüklenemedi: {WelcomeAudioPath}");
         else
             Debug.Log($"[MenuIntro] Welcome clip OK: {_welcomeClip.length:F1}s");
+
+        ConfigureUserNamePanel(canvas);
 
         var list = new List<IntroStep>();
         for (int i = 0; i < ButtonNames.Length; i++)
@@ -393,9 +407,13 @@ public class MenuIntroManager : MonoBehaviour
         _introCoroutine = null;
 
         ResetAllHighlighters();
-        SetMenuInputLocked(false);
         ShowSkipButton(false);
         ForceClearEventSystemSelection();
+
+        if (TryShowUserNamePanel())
+            return;
+
+        SetMenuInputLocked(false);
     }
 
     private void CleanUp()
@@ -411,8 +429,91 @@ public class MenuIntroManager : MonoBehaviour
 
         _introRunning = false;
         ResetAllHighlighters();
-        SetMenuInputLocked(false);
         ShowSkipButton(false);
+        ForceClearEventSystemSelection();
+
+        if (TryShowUserNamePanel())
+            return;
+
+        SetMenuInputLocked(false);
+    }
+
+    private void ConfigureUserNamePanel(Canvas canvas)
+    {
+        _userNamePanelGO = null;
+        _studentNameInput = null;
+        _studentNumberInput = null;
+        _userNameContinueButton = null;
+        _waitingForUserInfo = false;
+
+        if (canvas == null)
+            return;
+
+        Transform userPanelTransform = FindChildRecursive(canvas.transform, UserNamePanelName);
+        if (userPanelTransform == null)
+        {
+            Debug.LogWarning($"[MenuIntro] {UserNamePanelName} bulunamadı, intro sonrası normal akış devam edecek.");
+            return;
+        }
+
+        _userNamePanelGO = userPanelTransform.gameObject;
+        _userNamePanelGO.SetActive(false);
+
+        var fields = _userNamePanelGO.GetComponentsInChildren<TMP_InputField>(true);
+        if (fields != null && fields.Length > 0)
+            _studentNameInput = fields[0];
+        if (fields != null && fields.Length > 1)
+            _studentNumberInput = fields[1];
+
+        _userNameContinueButton = _userNamePanelGO.GetComponentInChildren<Button>(true);
+        if (_userNameContinueButton != null)
+        {
+            _userNameContinueButton.onClick.RemoveListener(OnUserInfoContinueClicked);
+            _userNameContinueButton.onClick.AddListener(OnUserInfoContinueClicked);
+        }
+        else
+        {
+            Debug.LogWarning($"[MenuIntro] {UserNamePanelName} içinde devam/ok butonu bulunamadı.");
+        }
+    }
+
+    private bool TryShowUserNamePanel()
+    {
+        if (_userNamePanelGO == null || _userNameContinueButton == null)
+            return false;
+
+        _waitingForUserInfo = true;
+        SetMenuInputLocked(true);
+
+        if (_studentNameInput != null)
+            _studentNameInput.text = string.Empty;
+
+        if (_studentNumberInput != null)
+            _studentNumberInput.text = string.Empty;
+
+        _userNamePanelGO.SetActive(true);
+        _userNamePanelGO.transform.SetAsLastSibling();
+        ForceClearEventSystemSelection();
+        return true;
+    }
+
+    private void OnUserInfoContinueClicked()
+    {
+        if (!_waitingForUserInfo)
+            return;
+
+        string studentName = _studentNameInput != null ? _studentNameInput.text.Trim() : string.Empty;
+        string studentNumber = _studentNumberInput != null ? _studentNumberInput.text.Trim() : string.Empty;
+
+        PlayerPrefs.SetString(StudentNamePrefKey, studentName);
+        PlayerPrefs.SetString(StudentNumberPrefKey, studentNumber);
+        PlayerPrefs.Save();
+
+        _waitingForUserInfo = false;
+        if (_userNamePanelGO != null)
+            _userNamePanelGO.SetActive(false);
+
+        SetMenuInputLocked(false);
         ForceClearEventSystemSelection();
     }
 

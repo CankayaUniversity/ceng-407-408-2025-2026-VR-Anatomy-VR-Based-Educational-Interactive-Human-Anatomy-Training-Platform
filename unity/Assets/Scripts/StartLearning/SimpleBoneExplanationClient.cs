@@ -169,9 +169,10 @@ public class SimpleBoneExplanationClient : MonoBehaviour
             if (infoBodyText != null)
                 infoBodyText.text = response.simple_explanation.Trim();
 
+            string speechText = ResolveSimpleExplanationSpeechText(response);
             ResolveLessonUIReader();
             if (lessonUIReader != null)
-                lessonUIReader.SpeakReviewText(response.simple_explanation.Trim());
+                lessonUIReader.SpeakReviewText(speechText);
 
             _requestRoutine = null;
         }
@@ -207,6 +208,15 @@ public class SimpleBoneExplanationClient : MonoBehaviour
     return response != null
            && !string.IsNullOrWhiteSpace(response.simple_explanation);
 }
+
+    private static string ResolveSimpleExplanationSpeechText(SimpleBoneExplanationResponse response)
+    {
+        string speechText = response != null ? SafeTrim(response.speech_text) : "";
+        if (!string.IsNullOrEmpty(speechText))
+            return speechText;
+
+        return response != null ? SafeTrim(response.simple_explanation) : "";
+    }
 
     private static string SafeTrim(string value)
     {
