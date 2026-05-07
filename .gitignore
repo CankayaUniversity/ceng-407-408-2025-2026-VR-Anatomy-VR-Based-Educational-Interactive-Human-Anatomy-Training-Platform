@@ -53,3 +53,6 @@ __pycache__/
 .venv/
 .env
 *.env
+ai/backend/.env
+ai/backend/data/book.pdf
+ai/backend/.env
