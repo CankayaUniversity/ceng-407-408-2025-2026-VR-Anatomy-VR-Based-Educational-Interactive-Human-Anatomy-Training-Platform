@@ -2836,8 +2836,8 @@ MonoBehaviour:
   answerToggleOffset: {x: 0, y: 0}
   answerToggleSizeOverride: {x: 0, y: 0}
   apiUrl: http://127.0.0.1:8000/docs/ask
-  sttUrl: http://127.0.0.1:8001/stt
-  ttsUrl: http://127.0.0.1:8001/tts
+  sttUrl: https://vr-anatomy-backend2.onrender.com/stt
+  ttsUrl: https://vr-anatomy-backend2.onrender.com/tts
   maxRecordSeconds: 30
   sampleRate: 16000
   silenceThreshold: 0.01

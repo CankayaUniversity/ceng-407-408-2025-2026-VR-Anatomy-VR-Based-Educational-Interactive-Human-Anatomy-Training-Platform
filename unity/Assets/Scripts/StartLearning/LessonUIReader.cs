@@ -33,7 +33,7 @@ public class LessonUIReader : MonoBehaviour
     [SerializeField] private bool playIntroOnEnable = true;
 
     [Header("Speech API")]
-    [SerializeField] private string ttsUrl = "http://127.0.0.1:8001/tts";
+    [SerializeField] private string ttsUrl = "https://vr-anatomy-backend2.onrender.com/tts";
     [SerializeField] private bool respectAIChatVoiceSetting = true;
 
     private AudioSource _audio;
