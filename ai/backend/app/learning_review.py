@@ -2,65 +2,36 @@ import os
 import json
 import re
 import time
+from pathlib import Path
 from typing import Optional, List
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from google import genai
 from google.genai import types
 
 
-# --------------------------------------------------
-# .env dosyasını yükle
-# --------------------------------------------------
+BASE_DIR = Path(__file__).resolve().parents[1]
+load_dotenv(BASE_DIR / ".env", override=True)
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ENV_PATH = os.path.join(BASE_DIR, ".env")
 
-load_dotenv(dotenv_path=ENV_PATH)
+router = APIRouter(
+    prefix="/learning",
+    tags=["Learning Review"]
+)
+
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 GEMINI_FALLBACK_MODEL = os.getenv("GEMINI_FALLBACK_MODEL", "gemini-2.5-flash-lite")
 
 if not GEMINI_API_KEY:
-    raise RuntimeError("GEMINI_API_KEY bulunamadı. .env dosyasını kontrol et.")
-
-
-# --------------------------------------------------
-# Gemini client
-# --------------------------------------------------
+    raise RuntimeError("GEMINI_API_KEY bulunamadı. .env veya Render Environment Variables kısmını kontrol et.")
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
-
-# --------------------------------------------------
-# FastAPI app
-# --------------------------------------------------
-
-app = FastAPI(
-    title="VR Anatomy Learning Review Backend",
-    description="Öğrenmeye Başla modu için bilgi kartı metnini öğrenci seviyesinde basitleştirir.",
-    version="1.0.0"
-)
-
-
-# Unity'den istek gelebilmesi için CORS açık
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-
-# --------------------------------------------------
-# Request / Response modelleri
-# --------------------------------------------------
 
 class SimpleBoneExplanationRequest(BaseModel):
     bone_name: str
@@ -76,40 +47,11 @@ class SimpleBoneExplanationResponse(BaseModel):
     speech_text: str
 
 
-# --------------------------------------------------
-# Basit test endpointleri
-# --------------------------------------------------
-
-@app.get("/")
-def root():
-    return {
-        "message": "VR Anatomy Learning Review Backend is running."
-    }
-
-
-@app.get("/health")
-def health():
-    return {
-        "status": "ok",
-        "primary_model": GEMINI_MODEL,
-        "fallback_model": GEMINI_FALLBACK_MODEL
-    }
-
-
-# --------------------------------------------------
-# Yardımcı fonksiyonlar
-# --------------------------------------------------
-
 def clean_json_text(text: str) -> str:
-    """
-    Gemini bazen JSON'u ```json ... ``` içinde döndürebilir.
-    Bu fonksiyon o gereksiz markdown işaretlerini temizler.
-    """
     if not text:
         return ""
 
     text = text.strip()
-
     text = re.sub(r"^```json", "", text)
     text = re.sub(r"^```", "", text)
     text = re.sub(r"```$", "", text)
@@ -133,7 +75,7 @@ Bilgi kartı metni gönderilmedi.
 Bu kemiği genel anatomi bilgisine dayanarak öğrenci seviyesinde basitçe anlat.
 """
 
-    prompt = f"""
+    return f"""
 Sen bir VR anatomi eğitim uygulamasında konuşan öğretici avatarsın.
 
 Öğrenci, daha önce anlatılan konuyu tam anlayamadı ve şu kemiği tekrar seçti:
@@ -160,40 +102,21 @@ Kurallar:
 - Öğrenciye destekleyici, sakin ve açıklayıcı bir tonda konuş.
 - Markdown kullanma.
 - Cevabı sadece geçerli JSON olarak döndür.
-- simple_explanation ekranda gösterilecek yazılı metindir.
-- simple_explanation düz, sade ve bilgi odaklı kalsın.
-- simple_explanation içine samimi giriş cümlesi ekleme.
-- simple_explanation içinde "Tabii", "merak etme", "birlikte bakalım" gibi konuşma ifadeleri kullanma.
-
-- speech_text sadece avatarın sesli okuyacağı metindir.
-- speech_text daha kibar, sıcak ve doğal konuşma dilinde olsun.
-- speech_text "Tabii, bunu daha basit anlatalım." gibi yumuşak bir girişle başlayabilir.
-- speech_text simple_explanation ile aynı bilgiyi anlatsın.
-- speech_text yazılı metinde olmayan yeni tıbbi bilgi eklemesin.
-- speech_text gereksiz uzun olmasın.
-- speech_text içinde öğrenci adı kullanma.
 
 JSON formatı:
 {{
-  "simple_explanation": "Ekranda gösterilecek düz, sade ve bilgi odaklı açıklama.",
+  "simple_explanation": "Kemiğin basit açıklaması.",
   "key_points": [
     "Birinci kısa madde.",
     "İkinci kısa madde.",
     "Üçüncü kısa madde."
   ],
-  "speech_text": "Avatarın sesli okuyacağı daha kibar, sıcak ve doğal konuşma metni."
+  "speech_text": "Avatarın sesli okuyacağı doğal metin."
 }}
 """
 
-    return prompt
-
 
 def generate_content_with_fallback_model(prompt: str):
-    """
-    Önce ana Gemini modelini dener.
-    Ana model yoğunluk / hata verirse yedek modeli dener.
-    """
-
     models_to_try = []
 
     if GEMINI_MODEL:
@@ -235,12 +158,8 @@ def generate_content_with_fallback_model(prompt: str):
     raise last_error
 
 
-# --------------------------------------------------
-# Ana endpoint
-# --------------------------------------------------
-
-@app.post(
-    "/learning/simple-bone-explanation",
+@router.post(
+    "/simple-bone-explanation",
     response_model=SimpleBoneExplanationResponse
 )
 def simple_bone_explanation(req: SimpleBoneExplanationRequest):
@@ -282,6 +201,11 @@ def simple_bone_explanation(req: SimpleBoneExplanationRequest):
 
         simple_explanation = simple_explanation.strip()
         speech_text = speech_text.strip()
+
+        if speech_text:
+            simple_explanation = speech_text
+
+        speech_text = simple_explanation
 
         if not simple_explanation:
             simple_explanation = "Bu kemik hakkında basit açıklama üretilemedi."

@@ -3,10 +3,9 @@ uvicorn[standard]
 pydantic
 python-dotenv
 python-multipart
-requests
+pypdf
 chromadb
 google-generativeai
 google-genai
 edge-tts
 SpeechRecognition
-gTTS
