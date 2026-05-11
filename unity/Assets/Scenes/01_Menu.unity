@@ -1827,6 +1827,7 @@ MonoBehaviour:
   sceneLoader: {fileID: 1774060356}
   targetSceneName: StartLearningDemo
   unitID: 2
+  lessonSection: 0
 --- !u!1 &174913578
 GameObject:
   m_ObjectHideFlags: 0
@@ -5453,6 +5454,7 @@ MonoBehaviour:
   sceneLoader: {fileID: 1774060356}
   targetSceneName: StartLearningDemo
   unitID: 3
+  lessonSection: 0
 --- !u!1001 &397261426
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14583,7 +14585,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6196027600238826984, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_IgnoreTrackingState
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6196027600238826984, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_PositionInput.m_Reference
@@ -18738,6 +18740,7 @@ MonoBehaviour:
   sceneLoader: {fileID: 1774060356}
   targetSceneName: StartLearningDemo
   unitID: 0
+  lessonSection: 0
 --- !u!1 &1663503678
 GameObject:
   m_ObjectHideFlags: 0
@@ -21806,6 +21809,7 @@ MonoBehaviour:
   sceneLoader: {fileID: 1774060356}
   targetSceneName: StartLearningDemo
   unitID: 1
+  lessonSection: 0
 --- !u!1 &1912571297
 GameObject:
   m_ObjectHideFlags: 0
@@ -23647,6 +23651,7 @@ MonoBehaviour:
   sceneLoader: {fileID: 1774060356}
   targetSceneName: StartLearningDemo
   unitID: 5
+  lessonSection: 0
 --- !u!1 &2105548721
 GameObject:
   m_ObjectHideFlags: 0
@@ -23933,6 +23938,7 @@ MonoBehaviour:
   sceneLoader: {fileID: 1774060356}
   targetSceneName: StartLearningDemo
   unitID: 4
+  lessonSection: 0
 --- !u!1 &2141302857
 GameObject:
   m_ObjectHideFlags: 0
