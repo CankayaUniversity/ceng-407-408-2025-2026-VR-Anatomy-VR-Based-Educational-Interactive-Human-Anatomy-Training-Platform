@@ -28,6 +28,9 @@ public class QuizUIController : MonoBehaviour
     public MatchingItemUI rightItemPrefab;
     public Button confirmButton;
 
+    [Header("Matching Arrows")]
+    [SerializeField] private MatchingArrowManager arrowManager;
+
     [Header("Quiz Result UI")]
     public GameObject quizCompletedPanel;
     public GameObject regionResultsHeader;
@@ -37,7 +40,7 @@ public class QuizUIController : MonoBehaviour
     public TMP_Text generalWrongText;
     public TMP_Text generalUnansweredText;
     public TMP_Text generalSuccessText;
-    public Image successRadialFill;///////////////////////////////////////////////////////////////////////
+    public Image successRadialFill;
 
     public Transform regionResultsContent;
     public RegionResultRowUI regionResultRowPrefab;
@@ -64,9 +67,14 @@ public class QuizUIController : MonoBehaviour
 
     private void Start()
     {
-        nextButton.gameObject.SetActive(false);
-        nextButton.onClick.RemoveAllListeners();
-        nextButton.onClick.AddListener(OnNextButtonPressed);
+        GetArrowManager();
+
+        if (nextButton != null)
+        {
+            nextButton.gameObject.SetActive(false);
+            nextButton.onClick.RemoveAllListeners();
+            nextButton.onClick.AddListener(OnNextButtonPressed);
+        }
 
         if (hintButton != null)
         {
@@ -87,6 +95,33 @@ public class QuizUIController : MonoBehaviour
             confirmButton.onClick.RemoveAllListeners();
             confirmButton.onClick.AddListener(OnConfirmMatchingPressed);
         }
+    }
+
+    private MatchingArrowManager GetArrowManager()
+    {
+        if (arrowManager != null)
+            return arrowManager;
+
+#if UNITY_2023_1_OR_NEWER
+        arrowManager = FindFirstObjectByType<MatchingArrowManager>();
+#else
+        arrowManager = FindObjectOfType<MatchingArrowManager>();
+#endif
+
+        if (arrowManager == null)
+        {
+            Debug.LogWarning("QuizUIController: MatchingArrowManager bulunamadı. ArrowLayer üzerinde MatchingArrowManager component'i var mı kontrol et.");
+        }
+
+        return arrowManager;
+    }
+
+    private void ClearMatchingArrows()
+    {
+        MatchingArrowManager manager = GetArrowManager();
+
+        if (manager != null)
+            manager.ClearAll();
     }
 
     public void ShowQuestion(Question q)
@@ -129,8 +164,11 @@ public class QuizUIController : MonoBehaviour
         Debug.Log("questionText objesi aktif mi?: " + questionText.gameObject.activeInHierarchy);
         Debug.Log("questionText final text: " + questionText.text);
 
-        nextButton.gameObject.SetActive(false);
-        rationalePopup.Hide();
+        if (nextButton != null)
+            nextButton.gameObject.SetActive(false);
+
+        if (rationalePopup != null)
+            rationalePopup.Hide();
 
         ClearButtons();
         ClearMatchingItems();
@@ -205,6 +243,8 @@ public class QuizUIController : MonoBehaviour
 
     void ShowMatchingQuestion(Question q)
     {
+        ClearMatchingArrows();
+
         List<string> leftItems = q.GetMatchingLeft();
         List<string> rightItems = q.GetMatchingRight();
 
@@ -226,12 +266,15 @@ public class QuizUIController : MonoBehaviour
             return;
         }
 
+        MatchingArrowManager manager = GetArrowManager();
+
         LoadCorrectMatches(q);
 
         for (int i = 0; i < leftItems.Count; i++)
         {
             MatchingItemUI leftItem = Instantiate(leftItemPrefab, leftColumn);
             leftItem.Setup(leftItems[i], i, true, this);
+            leftItem.SetArrowManager(manager);
             spawnedLeftItems.Add(leftItem);
         }
 
@@ -239,6 +282,7 @@ public class QuizUIController : MonoBehaviour
         {
             MatchingItemUI rightItem = Instantiate(rightItemPrefab, rightColumn);
             rightItem.Setup(rightItems[i], i, false, this);
+            rightItem.SetArrowManager(manager);
             spawnedRightItems.Add(rightItem);
         }
 
@@ -267,7 +311,9 @@ public class QuizUIController : MonoBehaviour
     public void OnAnswerSelected(string optionKey)
     {
         ResetHintUI();
-        quizManager.SubmitAnswer(optionKey);
+
+        if (quizManager != null)
+            quizManager.SubmitAnswer(optionKey);
     }
 
     public void ShowAnswerResult(string correctOption, string selectedOption, string rationale)
@@ -286,21 +332,27 @@ public class QuizUIController : MonoBehaviour
 
         if (!isCorrect && !string.IsNullOrEmpty(rationale))
         {
-            rationalePopup.Show(rationale);
+            if (rationalePopup != null)
+                rationalePopup.Show(rationale);
         }
 
-        nextButton.gameObject.SetActive(true);
+        if (nextButton != null)
+            nextButton.gameObject.SetActive(true);
     }
 
     public void ShowTimeUpResult(string message)
     {
         ResetHintUI();
 
-        questionText.text = message;
-        rationalePopup.Hide();
+        if (questionText != null)
+            questionText.text = message;
+
+        if (rationalePopup != null)
+            rationalePopup.Hide();
 
         ClearButtons();
         ClearMatchingItems();
+        ResetMatchingState();
 
         if (multipleChoicePanel != null)
             multipleChoicePanel.SetActive(false);
@@ -311,12 +363,14 @@ public class QuizUIController : MonoBehaviour
         if (confirmButton != null)
             confirmButton.gameObject.SetActive(false);
 
-        nextButton.gameObject.SetActive(true);
+        if (nextButton != null)
+            nextButton.gameObject.SetActive(true);
     }
 
     private void OnNextButtonPressed()
     {
-        quizManager.NextQuestion();
+        if (quizManager != null)
+            quizManager.NextQuestion();
     }
 
     public void UpdateTimer(float time)
@@ -325,6 +379,7 @@ public class QuizUIController : MonoBehaviour
         {
             if (timerRoot != null)
                 timerRoot.SetActive(false);
+
             return;
         }
 
@@ -339,38 +394,12 @@ public class QuizUIController : MonoBehaviour
     {
         ResetHintUI();
 
-        questionText.text = "Quiz tamamlandı!";
+        if (questionText != null)
+            questionText.text = "Quiz tamamlandı!";
 
         ClearButtons();
         ClearMatchingItems();
-
-        if (timerRoot != null)
-        timerRoot.SetActive(false);
-
-        if (multipleChoicePanel != null)
-            multipleChoicePanel.SetActive(false);
-
-        if (matchingPanel != null)
-            matchingPanel.SetActive(false);
-
-        if (confirmButton != null)
-            confirmButton.gameObject.SetActive(false);
-
-        nextButton.gameObject.SetActive(false);
-        rationalePopup.Hide();
-    }
-
-    public void ShowQuizFinishedResults(
-        int totalCorrect,
-        int totalWrong,
-        int totalUnanswered,
-        float overallAverageScore,
-        List<RegionAnalysisResult> regionAnalysis)
-    {
-        ResetHintUI();
-
-        ClearButtons();
-        ClearMatchingItems();
+        ResetMatchingState();
 
         if (timerRoot != null)
             timerRoot.SetActive(false);
@@ -384,17 +413,50 @@ public class QuizUIController : MonoBehaviour
         if (confirmButton != null)
             confirmButton.gameObject.SetActive(false);
 
-        nextButton.gameObject.SetActive(false);
-        rationalePopup.Hide();
+        if (nextButton != null)
+            nextButton.gameObject.SetActive(false);
+
+        if (rationalePopup != null)
+            rationalePopup.Hide();
+    }
+
+    public void ShowQuizFinishedResults(
+        int totalCorrect,
+        int totalWrong,
+        int totalUnanswered,
+        float overallAverageScore,
+        List<RegionAnalysisResult> regionAnalysis)
+    {
+        ResetHintUI();
+
+        ClearButtons();
+        ClearMatchingItems();
+        ResetMatchingState();
+
+        if (timerRoot != null)
+            timerRoot.SetActive(false);
+
+        if (multipleChoicePanel != null)
+            multipleChoicePanel.SetActive(false);
+
+        if (matchingPanel != null)
+            matchingPanel.SetActive(false);
+
+        if (confirmButton != null)
+            confirmButton.gameObject.SetActive(false);
+
+        if (nextButton != null)
+            nextButton.gameObject.SetActive(false);
+
+        if (rationalePopup != null)
+            rationalePopup.Hide();
 
         if (questionText != null)
             questionText.text = "";
 
-        // PANELİ AÇ
         if (quizCompletedPanel != null)
             quizCompletedPanel.SetActive(true);
 
-        // GENEL SONUÇ
         if (generalCorrectText != null)
             generalCorrectText.text = $"Doğru: {totalCorrect}";
 
@@ -412,14 +474,12 @@ public class QuizUIController : MonoBehaviour
 
         if (regionResultsHeader != null)
             regionResultsHeader.SetActive(true);
-        
+
         if (resultsTitleText != null)
             resultsTitleText.text = "Genel Test Sonuçları";
 
-        // ESKİ SATIRLARI TEMİZLE
         ClearRegionResultRows();
 
-        // YENİ SATIRLARI EKLE
         if (regionResultsContent == null || regionResultRowPrefab == null || regionAnalysis == null)
             return;
 
@@ -429,11 +489,7 @@ public class QuizUIController : MonoBehaviour
             row.Setup(region);
         }
 
-
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
         UpdateSuccessUI(overallAverageScore);
-        ///////////////////////////////////////////////////////////////////////
     }
 
     public void ShowBasicConceptsFinishedResults(
@@ -446,6 +502,7 @@ public class QuizUIController : MonoBehaviour
 
         ClearButtons();
         ClearMatchingItems();
+        ResetMatchingState();
 
         if (timerRoot != null)
             timerRoot.SetActive(false);
@@ -488,15 +545,19 @@ public class QuizUIController : MonoBehaviour
 
         if (regionResultsHeader != null)
             regionResultsHeader.SetActive(false);
-        
+
         if (resultsTitleText != null)
             resultsTitleText.text = "Quiz Tamamlandı";
 
         ClearRegionResultRows();
+        UpdateSuccessUI(overallAverageScore);
     }
 
     void ClearButtons()
     {
+        if (answerContainer == null)
+            return;
+
         foreach (Transform child in answerContainer)
             Destroy(child.gameObject);
 
@@ -505,6 +566,8 @@ public class QuizUIController : MonoBehaviour
 
     void ClearMatchingItems()
     {
+        ClearMatchingArrows();
+
         if (leftColumn != null)
         {
             foreach (Transform child in leftColumn)
@@ -523,6 +586,8 @@ public class QuizUIController : MonoBehaviour
 
     void ResetMatchingState()
     {
+        ClearMatchingArrows();
+
         playerMatches.Clear();
         correctMatches.Clear();
         matchingSubmitted = false;
@@ -626,20 +691,25 @@ public class QuizUIController : MonoBehaviour
             bool isCorrect = false;
 
             if (correctMatches.ContainsKey(leftIndex))
-                isCorrect = (correctMatches[leftIndex] == rightIndex);
+                isCorrect = correctMatches[leftIndex] == rightIndex;
+
             if (isCorrect)
                 correctCount++;
 
             if (leftIndex >= 0 && leftIndex < spawnedLeftItems.Count)
             {
-                if (isCorrect) spawnedLeftItems[leftIndex].SetCorrect();
-                else spawnedLeftItems[leftIndex].SetWrong();
+                if (isCorrect)
+                    spawnedLeftItems[leftIndex].SetCorrect();
+                else
+                    spawnedLeftItems[leftIndex].SetWrong();
             }
 
             if (rightIndex >= 0 && rightIndex < spawnedRightItems.Count)
             {
-                if (isCorrect) spawnedRightItems[rightIndex].SetCorrect();
-                else spawnedRightItems[rightIndex].SetWrong();
+                if (isCorrect)
+                    spawnedRightItems[rightIndex].SetCorrect();
+                else
+                    spawnedRightItems[rightIndex].SetWrong();
             }
         }
 
@@ -666,13 +736,13 @@ public class QuizUIController : MonoBehaviour
         {
             quizManager.OnMatchingQuestionAnswered(direction);
             quizManager.RecordMatchingQuestionResult(currentQuestion, correctCount, totalCount);
-            
         }
 
         if (confirmButton != null)
             confirmButton.interactable = false;
 
-        nextButton.gameObject.SetActive(true);
+        if (nextButton != null)
+            nextButton.gameObject.SetActive(true);
     }
 
     void ClearRegionResultRows()
@@ -751,10 +821,10 @@ public class QuizUIController : MonoBehaviour
         return matchingSubmitted;
     }
 
-    ////////////////////////////////////////////////////////////////////
     private void UpdateSuccessUI(float scoreRatio)
     {
-        if (successRadialFill == null) return;
+        if (successRadialFill == null)
+            return;
 
         successRadialFill.fillAmount = scoreRatio;
 
@@ -765,7 +835,4 @@ public class QuizUIController : MonoBehaviour
         else
             successRadialFill.color = Color.green;
     }
-
-
-
 }

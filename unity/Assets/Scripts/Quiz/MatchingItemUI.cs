@@ -5,7 +5,13 @@ using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(RectTransform))]
 [RequireComponent(typeof(CanvasGroup))]
-public class MatchingItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler
+public class MatchingItemUI : MonoBehaviour,
+    IBeginDragHandler,
+    IDragHandler,
+    IEndDragHandler,
+    IDropHandler,
+    IPointerEnterHandler,
+    IPointerExitHandler
 {
     [Header("UI")]
     public TMP_Text labelText;
@@ -13,10 +19,13 @@ public class MatchingItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
 
     [Header("Colors")]
     public Color normalColor = Color.white;
-    public Color draggingColor = new Color(0.8f, 0.8f, 0.8f, 1f);       // gri
-    public Color matchedColor = new Color(1f, 0.75f, 0.35f, 1f);        // turuncumsu
-    public Color correctColor = new Color(0.3f, 0.9f, 0.3f, 1f);        // yeşil
-    public Color wrongColor = new Color(0.9f, 0.3f, 0.3f, 1f);          // kırmızı
+    public Color draggingColor = new Color(0.8f, 0.8f, 0.8f, 1f);
+    public Color matchedColor = new Color(1f, 0.75f, 0.35f, 1f);
+    public Color correctColor = new Color(0.3f, 0.9f, 0.3f, 1f);
+    public Color wrongColor = new Color(0.9f, 0.3f, 0.3f, 1f);
+
+    [Header("Arrow System")]
+    [SerializeField] private MatchingArrowManager arrowManager;
 
     private QuizUIController controller;
     private RectTransform rectTransform;
@@ -26,15 +35,12 @@ public class MatchingItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     private Vector2 originalAnchoredPosition;
     private int itemIndex;
     private bool isLeftSide;
+    private bool isMatched = false;
 
     public int ItemIndex => itemIndex;
     public bool IsLeftSide => isLeftSide;
-    private bool isMatched = false;
+    public RectTransform RectTransform => rectTransform;
 
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        Debug.Log($"Pointer hedefin üstüne geldi: {labelText.text}");
-    }
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -61,12 +67,45 @@ public class MatchingItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         Debug.Log($"Setup tamamlandı: {text} | index={index} | isLeft={isLeft}");
     }
 
+    public void SetArrowManager(MatchingArrowManager manager)
+    {
+        arrowManager = manager;
+    }
+
+    private MatchingArrowManager GetArrowManager(MatchingItemUI otherItem = null)
+    {
+        if (arrowManager != null)
+            return arrowManager;
+
+        if (otherItem != null && otherItem.arrowManager != null)
+        {
+            arrowManager = otherItem.arrowManager;
+            return arrowManager;
+        }
+
+#if UNITY_2023_1_OR_NEWER
+        arrowManager = FindFirstObjectByType<MatchingArrowManager>();
+#else
+        arrowManager = FindObjectOfType<MatchingArrowManager>();
+#endif
+
+        if (arrowManager == null)
+            Debug.LogWarning("Sahnede MatchingArrowManager bulunamadı! ArrowLayer üzerinde MatchingArrowManager component'i var mı kontrol et.");
+
+        return arrowManager;
+    }
+
     public void ResetVisual()
     {
         isMatched = false;
 
         if (backgroundImage != null)
             backgroundImage.color = normalColor;
+
+        MatchingArrowManager manager = GetArrowManager();
+
+        if (manager != null)
+            manager.HidePreview();
     }
 
     public void SetMatched(bool matched)
@@ -99,9 +138,18 @@ public class MatchingItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
             return;
 
         originalAnchoredPosition = rectTransform.anchoredPosition;
+
         canvasGroup.blocksRaycasts = false;
+
         if (backgroundImage != null)
             backgroundImage.color = draggingColor;
+
+        MatchingArrowManager manager = GetArrowManager();
+
+        if (manager != null)
+            manager.HidePreview();
+        else
+            Debug.LogWarning("ArrowManager bulunamadı! Preview temizlenemedi.");
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -119,13 +167,59 @@ public class MatchingItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     {
         Debug.Log($"OnEndDrag: {labelText.text}");
 
+        rectTransform.anchoredPosition = originalAnchoredPosition;
+        canvasGroup.blocksRaycasts = true;
+
         if (controller == null || controller.IsMatchingSubmitted())
             return;
 
-        rectTransform.anchoredPosition = originalAnchoredPosition;
-        canvasGroup.blocksRaycasts = true;
         if (backgroundImage != null)
             backgroundImage.color = isMatched ? matchedColor : normalColor;
+
+        MatchingArrowManager manager = GetArrowManager();
+
+        if (manager != null)
+            manager.HidePreview();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Debug.Log($"Pointer hedefin üstüne geldi: {labelText.text}");
+
+        if (controller == null || controller.IsMatchingSubmitted())
+            return;
+
+        if (eventData.pointerDrag == null)
+            return;
+
+        MatchingItemUI draggedItem = eventData.pointerDrag.GetComponent<MatchingItemUI>();
+
+        if (draggedItem == null)
+            return;
+
+        if (!CanMatchWith(draggedItem))
+            return;
+
+        MatchingArrowManager manager = GetArrowManager(draggedItem);
+
+        if (manager == null)
+        {
+            Debug.LogWarning("Preview ok gösterilemedi çünkü ArrowManager bulunamadı.");
+            return;
+        }
+
+        GetLeftAndRightRects(draggedItem, this, out RectTransform leftRect, out RectTransform rightRect);
+
+        Debug.Log($"Preview ok gösteriliyor: {leftRect.name} -> {rightRect.name}");
+        manager.ShowPreview(leftRect, rightRect);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        MatchingArrowManager manager = GetArrowManager();
+
+        if (manager != null)
+            manager.HidePreview();
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -151,17 +245,8 @@ public class MatchingItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
 
         Debug.Log($"Sürüklenen item: {draggedItem.labelText.text} -> Hedef item: {labelText.text}");
 
-        if (draggedItem == this)
-        {
-            Debug.Log("OnDrop: item kendisine bırakıldı");
+        if (!CanMatchWith(draggedItem))
             return;
-        }
-
-        if (draggedItem.IsLeftSide == this.IsLeftSide)
-        {
-            Debug.Log("OnDrop: aynı taraftaki iteme bırakıldı, eşleşme yapılmaz");
-            return;
-        }
 
         int leftIndex;
         int rightIndex;
@@ -184,5 +269,57 @@ public class MatchingItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
 
         Debug.Log($"RegisterMatch çağrılıyor: Left {leftIndex} -> Right {rightIndex}");
         controller.RegisterMatch(leftIndex, rightIndex);
+
+        MatchingArrowManager manager = GetArrowManager(draggedItem);
+
+        if (manager != null)
+        {
+            GetLeftAndRightRects(draggedItem, this, out RectTransform leftRect, out RectTransform rightRect);
+
+            Debug.Log($"Kalıcı ok çiziliyor: {leftRect.name} -> {rightRect.name}");
+            manager.ConfirmMatch(leftRect, rightRect);
+        }
+        else
+        {
+            Debug.LogWarning("Eşleşme yapıldı ama ArrowManager bulunamadığı için ok çizilemedi.");
+        }
+    }
+
+    private bool CanMatchWith(MatchingItemUI otherItem)
+    {
+        if (otherItem == null)
+            return false;
+
+        if (otherItem == this)
+        {
+            Debug.Log("Eşleşme yapılmadı: item kendisine bırakıldı.");
+            return false;
+        }
+
+        if (otherItem.IsLeftSide == this.IsLeftSide)
+        {
+            Debug.Log("Eşleşme yapılmadı: aynı taraftaki iteme bırakıldı.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void GetLeftAndRightRects(
+        MatchingItemUI firstItem,
+        MatchingItemUI secondItem,
+        out RectTransform leftRect,
+        out RectTransform rightRect)
+    {
+        if (firstItem.IsLeftSide)
+        {
+            leftRect = firstItem.RectTransform;
+            rightRect = secondItem.RectTransform;
+        }
+        else
+        {
+            leftRect = secondItem.RectTransform;
+            rightRect = firstItem.RectTransform;
+        }
     }
 }
