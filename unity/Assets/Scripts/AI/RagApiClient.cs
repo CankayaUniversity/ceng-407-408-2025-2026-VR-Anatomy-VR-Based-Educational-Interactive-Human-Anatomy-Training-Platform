@@ -1,3 +1,7 @@
+#if UNITY_ANDROID && !UNITY_EDITOR
+using UnityEngine.Android;
+#endif
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -438,6 +442,15 @@ public class RagApiClient : MonoBehaviour
     private void StartRecording()
     {
         if (_isRecording) return;
+
+    #if UNITY_ANDROID && !UNITY_EDITOR
+        if (!Permission.HasUserAuthorizedPermission(Permission.Microphone))
+        {
+            Permission.RequestUserPermission(Permission.Microphone);
+            SetLatestAnswer("Mikrofon izni gerekli. Lütfen izin verip tekrar deneyin.");
+            return;
+        }
+    #endif
 
         if (Microphone.devices.Length == 0)
         {
