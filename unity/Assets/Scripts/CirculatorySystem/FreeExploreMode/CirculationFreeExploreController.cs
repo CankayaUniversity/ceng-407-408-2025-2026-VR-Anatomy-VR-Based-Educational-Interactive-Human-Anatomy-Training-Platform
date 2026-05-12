@@ -1,7 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
-
 
 public class CirculationFreeExploreController : MonoBehaviour
 {
@@ -16,6 +15,10 @@ public class CirculationFreeExploreController : MonoBehaviour
         public List<GameObject> interactionTargets = new List<GameObject>();
 
         public float overviewDurationOverride = 10f;
+
+        [Header("Ray Name Inspection")]
+        [Tooltip("Açıksa bu alt ünitede ray ile isim/hover tarama kapatılır. Grab ile isim gösterme etkilenmez.")]
+        public bool disableRayNameInspectionImmediately = false;
     }
 
     [Header("Sequence Definitions")]
@@ -27,7 +30,7 @@ public class CirculationFreeExploreController : MonoBehaviour
     [SerializeField] private FreeExploreRotationController rotationController;
     [SerializeField] private CirculationFreeExploreInteractionController interactionController;
 
-    [Tooltip("Ray ile isim gösterme/hover sistemini yöneten controller.")]
+    [Tooltip("Ray ile isim gösterme / hover sistemini yöneten controller.")]
     [SerializeField] private CirculationFreeExploreNameInspectionController nameInspectionController;
 
     [Header("Overview")]
@@ -63,11 +66,22 @@ public class CirculationFreeExploreController : MonoBehaviour
         if (interactionController != null)
             interactionController.DisableAllInteractions();
 
+        /*
+         * Burada önemli ayrım şu:
+         *
+         * - Ray inspection: Koldan çıkan isim tarama ışını.
+         * - Grab inspection: Obje ele alınınca isim gösterme.
+         *
+         * Kalpte sadece ray inspection kapanacak.
+         * Grab sistemi ve grablayınca isim gösterme çalışmaya devam edecek.
+         */
         if (nameInspectionController != null)
+        {
             nameInspectionController.ClearAllowedInspectionTargets();
+            nameInspectionController.SetRayInspectionEnabled(!def.disableRayNameInspectionImmediately);
+        }
 
         // 2) Overview aşaması: tüm context objeler görünsün.
-        // Bu aşamada ray ile isim/hover hedefi yok.
         if (visibilityController != null)
             visibilityController.ShowOnly(def.contextObjects);
 
@@ -95,11 +109,17 @@ public class CirculationFreeExploreController : MonoBehaviour
         if (interactionController != null)
             interactionController.EnableOnly(def.interactionTargets);
 
-        // 4) En kritik kısım:
-        // Ray artık sadece seçilen alt ünitenin interactionTargets listesindeki objeleri algılar.
-        // Dim target collider'ları çarpsa bile isim/hover almaz.
+        /*
+         * 4) Allowed target listesini HER DURUMDA veriyoruz.
+         *
+         * Çünkü kalpte ray kapalı olsa bile, grablanan objenin ismini gösterebilmek için
+         * nameInspectionController bu listeyi bilmek zorunda.
+         */
         if (nameInspectionController != null)
+        {
             nameInspectionController.SetAllowedInspectionTargets(def.interactionTargets);
+            nameInspectionController.SetRayInspectionEnabled(!def.disableRayNameInspectionImmediately);
+        }
     }
 
     private List<GameObject> BuildVisibleSet(SequenceDefinition def)

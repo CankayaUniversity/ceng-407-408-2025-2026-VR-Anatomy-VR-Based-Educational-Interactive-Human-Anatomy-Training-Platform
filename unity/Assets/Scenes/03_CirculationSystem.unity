@@ -4917,7 +4917,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1645354754}
-  - component: {fileID: 1645354753}
   - component: {fileID: 1645354752}
   m_Layer: 0
   m_Name: CirculationRayNameHoverManager
@@ -4956,33 +4955,9 @@ MonoBehaviour:
   leftLineRenderer: {fileID: 233368716}
   introPanelRoot: {fileID: 271874900}
   hideInspectionWhileIntroIsOpen: 1
-  startPanelClosed: 1
-  clearDelay: 0.15
   startNamePanelClosed: 1
---- !u!114 &1645354753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1645354751}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d894482764653949a4c23d5e0f9fd1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rightRayOrigin: {fileID: 437395729}
-  leftRayOrigin: {fileID: 1236206704}
-  maxDistance: 5
-  sphereRadius: 0.025
-  targetLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  namePresenter: {fileID: 337243866}
-  rightLineRenderer: {fileID: 0}
-  leftLineRenderer: {fileID: 0}
-  emptyText: 
   clearDelay: 0.15
+  rayInspectionEnabled: 1
 --- !u!4 &1645354754
 Transform:
   m_ObjectHideFlags: 0
@@ -5392,7 +5367,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5531,6 +5506,7 @@ MonoBehaviour:
     - {fileID: 3982376271919151852}
     - {fileID: 520392810189679740}
     overviewDurationOverride: 0
+    disableRayNameInspectionImmediately: 1
   - subUnitValue: 2
     contextObjects:
     - {fileID: 1934466127}
@@ -5546,6 +5522,7 @@ MonoBehaviour:
     - {fileID: 1635989992547095354}
     - {fileID: 1451215826773867901}
     overviewDurationOverride: 0
+    disableRayNameInspectionImmediately: 1
   - subUnitValue: 3
     contextObjects:
     - {fileID: 63835537}
@@ -5568,6 +5545,7 @@ MonoBehaviour:
     - {fileID: 2465782332238962606}
     - {fileID: 727690445724742112}
     overviewDurationOverride: 0
+    disableRayNameInspectionImmediately: 0
   - subUnitValue: 5
     contextObjects:
     - {fileID: 1525795543}
@@ -5590,6 +5568,7 @@ MonoBehaviour:
     - {fileID: 8773204961395767036}
     - {fileID: 187952651352262526}
     overviewDurationOverride: 0
+    disableRayNameInspectionImmediately: 0
   - subUnitValue: 6
     contextObjects:
     - {fileID: 7614541191357653157}
@@ -6262,6 +6241,7 @@ MonoBehaviour:
     - {fileID: 8590377138931514052}
     - {fileID: 5468163281384715414}
     overviewDurationOverride: 0
+    disableRayNameInspectionImmediately: 0
   - subUnitValue: 7
     contextObjects:
     - {fileID: 63835537}
@@ -6294,6 +6274,7 @@ MonoBehaviour:
     - {fileID: 2206750401922038626}
     - {fileID: 3587182155474866525}
     overviewDurationOverride: 0
+    disableRayNameInspectionImmediately: 0
   - subUnitValue: 8
     contextObjects:
     - {fileID: 1768731324}
@@ -6318,6 +6299,7 @@ MonoBehaviour:
     - {fileID: 2979891584576914470}
     - {fileID: 5473882504056530650}
     overviewDurationOverride: 0
+    disableRayNameInspectionImmediately: 0
   visibilityController: {fileID: 179172388}
   visualController: {fileID: 726309783}
   rotationController: {fileID: 1529383777}

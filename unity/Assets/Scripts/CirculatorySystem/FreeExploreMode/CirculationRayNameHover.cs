@@ -19,7 +19,6 @@ public class CirculationRayNameHover : MonoBehaviour
     [SerializeField] private LineRenderer leftLineRenderer;
 
     [Header("Behavior")]
-    [SerializeField] private string emptyText = "";
     [SerializeField] private float clearDelay = 0.15f;
 
     private GameObject _currentTarget;

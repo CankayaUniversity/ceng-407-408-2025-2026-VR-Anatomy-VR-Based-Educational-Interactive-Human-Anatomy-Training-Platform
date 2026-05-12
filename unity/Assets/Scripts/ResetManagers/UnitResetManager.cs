@@ -20,14 +20,17 @@ public class UnitResetManager : MonoBehaviour
 
     [Header("Reset Input")]
     public InputActionReference resetAction;   // Quest tuşu
-    public KeyCode debugKey = KeyCode.R;       // Editor test
+
+    [Header("Editor Test")]
+    public Key debugKey = Key.R;               // New Input System editor test tuşu
 
     // Her ünite root'u için cache
     private readonly Dictionary<Transform, List<ItemData>> _cache = new();
 
     private void Awake()
     {
-        if (unitsRoot == null) unitsRoot = this.transform;
+        if (unitsRoot == null)
+            unitsRoot = this.transform;
 
         // unitsRoot altındaki her "ünite root" için başlangıç snapshot al
         for (int i = 0; i < unitsRoot.childCount; i++)
@@ -41,6 +44,7 @@ public class UnitResetManager : MonoBehaviour
             foreach (var tr in transforms)
             {
                 var rb = tr.GetComponent<Rigidbody>();
+
                 list.Add(new ItemData
                 {
                     t = tr,
@@ -76,8 +80,12 @@ public class UnitResetManager : MonoBehaviour
     private void Update()
     {
 #if UNITY_EDITOR
-        if (debugKey != KeyCode.None && Input.GetKeyDown(debugKey))
+        if (Keyboard.current != null &&
+            debugKey != Key.None &&
+            Keyboard.current[debugKey].wasPressedThisFrame)
+        {
             ResetActiveUnit();
+        }
 #endif
     }
 
@@ -89,12 +97,15 @@ public class UnitResetManager : MonoBehaviour
     // unitsRoot altında aktif olan ilk üniteyi bulup resetler
     public void ResetActiveUnit()
     {
-        if (unitsRoot == null) return;
+        if (unitsRoot == null)
+            return;
 
         Transform activeUnit = null;
+
         for (int i = 0; i < unitsRoot.childCount; i++)
         {
             var unit = unitsRoot.GetChild(i);
+
             if (unit.gameObject.activeInHierarchy)
             {
                 activeUnit = unit;
@@ -113,12 +124,14 @@ public class UnitResetManager : MonoBehaviour
 
     private void ResetUnit(Transform unitRoot)
     {
-        // 1) Eğer XRGrabInteractable tutuluysa, önce disable/enable ile bırakmayı zorlayabiliriz (pratik hack)
-        // (En sağlamı interactionManager üzerinden select exit, ama hızlı çözüm bu.)
+        // 1) Eğer XRGrabInteractable tutuluysa, önce disable/enable ile bırakmayı zorlayabiliriz
         var grabs = unitRoot.GetComponentsInChildren<XRGrabInteractable>(includeInactive: true);
+
         foreach (var g in grabs)
         {
-            if (!g.enabled) continue;
+            if (!g.enabled)
+                continue;
+
             g.enabled = false;
             g.enabled = true;
         }

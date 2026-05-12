@@ -1866,7 +1866,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2154,20 +2154,6 @@ MonoBehaviour:
   regionResultRowPrefab: {fileID: 6923537813613394708, guid: c5e3a17875784604aa03468c0366f842, type: 3}
   hintDelay: 7
   quizManager: {fileID: 657276926}
---- !u!114 &840573385
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
-  m_Name: XRI Left/Rotation
-  m_EditorClassIdentifier: 
-  m_Asset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  m_ActionId: cb6b7130-2bac-4ef7-abe4-6991ae7d419d
 --- !u!1 &879579319
 GameObject:
   m_ObjectHideFlags: 0
@@ -3355,9 +3341,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8c9af70dcb31f14486a20b0552349e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {fileID: 2016994960}
-  rotation: {fileID: 840573385}
-  trackingState: {fileID: 1970187788}
+  position: {fileID: 0}
+  rotation: {fileID: 0}
+  trackingState: {fileID: 0}
 --- !u!224 &1448365011 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4419786147990349907, guid: 786680b7b6428f34eb0f5336b3750dd5, type: 3}
@@ -4377,20 +4363,6 @@ RectTransform:
   m_AnchoredPosition: {x: 1872, y: -355.75482}
   m_SizeDelta: {x: 1821, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1970187788
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
-  m_Name: XRI Left/Tracking State
-  m_EditorClassIdentifier: 
-  m_Asset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  m_ActionId: d20fc51c-7916-43a7-8b03-706049966aea
 --- !u!1 &1998876105
 GameObject:
   m_ObjectHideFlags: 0
@@ -4528,20 +4500,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1998876105}
   m_CullTransparentMesh: 1
---- !u!114 &2016994960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
-  m_Name: XRI Left/Position
-  m_EditorClassIdentifier: 
-  m_Asset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  m_ActionId: 3acf96af-6e00-4386-8444-7bcfb82c73e9
 --- !u!1 &2032446653
 GameObject:
   m_ObjectHideFlags: 0

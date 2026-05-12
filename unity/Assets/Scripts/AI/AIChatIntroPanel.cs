@@ -309,7 +309,7 @@ private void ApplyUiOpaqueMaterial(Graphic graphic)
         tmp.color = TextColor;
         tmp.fontSize = fontSize;
         tmp.alignment = alignment;
-        tmp.enableWordWrapping = false;
+        tmp.textWrappingMode = TextWrappingModes.NoWrap;
         tmp.enableAutoSizing = false;
         tmp.richText = richText;
         tmp.raycastTarget = false;

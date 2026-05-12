@@ -356,7 +356,7 @@ public class RagApiClient : MonoBehaviour
         {
             _answerToggleLabel.fontSize = 25f;
             _answerToggleLabel.alignment = TextAlignmentOptions.Center;
-            _answerToggleLabel.enableWordWrapping = false;
+            _answerToggleLabel.textWrappingMode = TextWrappingModes.NoWrap;
             _answerToggleLabel.overflowMode = TextOverflowModes.Truncate;
             _answerToggleLabel.color = new Color(0.92f, 0.98f, 1f, 1f);
         }
@@ -369,7 +369,6 @@ public class RagApiClient : MonoBehaviour
     RectTransform answerRT,
     RectTransform questionRT)
 {
-    return;
 
     if (toggleRT == null || answerRT == null) return;
 
@@ -961,7 +960,7 @@ public class RagApiClient : MonoBehaviour
                     ? questionInput.GetComponent<RectTransform>() : null;
                 PositionAnswerTextBelowToggle(toggleRT, answerRT, questionRT);
 
-                answerText.enableWordWrapping = true;
+                answerText.textWrappingMode = TextWrappingModes.Normal;
                 answerText.enableAutoSizing = false;
                 answerText.fontSize = Mathf.Clamp(answerText.fontSize, 23f, 26f);
                 answerText.alignment = TextAlignmentOptions.TopLeft;
@@ -1065,13 +1064,16 @@ public class RagApiClient : MonoBehaviour
     }
 
     private GameObject FindChatAvatar()
-    {
-        var go = GameObject.Find("ChatAvatar");
-        if (go != null) return go;
+{
+    var go = GameObject.Find("ChatAvatar");
+    if (go != null) return go;
 
-        var controller = FindObjectOfType<ChatAvatarController>(true);
-        return controller != null ? controller.gameObject : null;
-    }
+    var controller = UnityEngine.Object.FindFirstObjectByType<ChatAvatarController>(
+        FindObjectsInactive.Include
+    );
+
+    return controller != null ? controller.gameObject : null;
+}
 
     private void ApplyChatUiRedesign()
     {
@@ -1211,7 +1213,7 @@ public class RagApiClient : MonoBehaviour
             answerText.color = new Color(0.08f, 0.27f, 0.40f, 1f);
             answerText.fontSize = 27f;
             answerText.alignment = TextAlignmentOptions.TopLeft;
-            answerText.enableWordWrapping = true;
+            answerText.textWrappingMode = TextWrappingModes.Normal;
             answerText.enableAutoSizing = false;
             answerText.overflowMode = TextOverflowModes.Overflow;
             answerText.lineSpacing = 4f;
@@ -1304,7 +1306,7 @@ public class RagApiClient : MonoBehaviour
             label.fontSize = rightSide ? 29f : 20f;
             label.fontStyle = FontStyles.Bold;
             label.alignment = TextAlignmentOptions.Center;
-            label.enableWordWrapping = false;
+            label.textWrappingMode = TextWrappingModes.NoWrap;
             label.color = rightSide
                 ? new Color(0.95f, 0.99f, 1f, 1f)
                 : new Color(0.07f, 0.47f, 0.74f, 1f);
@@ -1437,7 +1439,7 @@ public class RagApiClient : MonoBehaviour
             _speakerLabel.fontSize = 23f;
             _speakerLabel.fontStyle = FontStyles.Bold;
             _speakerLabel.alignment = TextAlignmentOptions.MidlineLeft;
-            _speakerLabel.enableWordWrapping = false;
+            _speakerLabel.textWrappingMode = TextWrappingModes.NoWrap;
             _speakerLabel.color = new Color(0.92f, 0.98f, 1f, 1f);
         }
 
@@ -1975,7 +1977,7 @@ public class RagApiClient : MonoBehaviour
             ? new Color(0.38f, 0.54f, 0.65f, 0.78f)
             : new Color(0.11f, 0.31f, 0.44f, 1f);
         text.alignment = TextAlignmentOptions.MidlineLeft;
-        text.enableWordWrapping = false;
+        text.textWrappingMode = TextWrappingModes.NoWrap;
         text.margin = new Vector4(8f, 3f, 8f, 3f);
     }
 

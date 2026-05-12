@@ -500,7 +500,7 @@ public class ChatAvatarController : MonoBehaviour
 
         if (_ttsAudio == null)
         {
-            AudioSource[] audioSources = FindObjectsOfType<AudioSource>();
+            AudioSource[] audioSources = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
             foreach (var a in audioSources)
             {
                 if (a.gameObject != gameObject) { _ttsAudio = a; break; }
