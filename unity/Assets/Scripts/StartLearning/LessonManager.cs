@@ -291,7 +291,7 @@ public class LessonManager : MonoBehaviour
         {
             fullDescription += "\n\n";
             foreach (string step in data.steps)
-                fullDescription += "ù " + step + "\n";
+                fullDescription += "ï " + step + "\n";
         }
 
         return fullDescription;
