@@ -5,6 +5,9 @@ using TMPro;
 
 public class ReviewManager : MonoBehaviour
 {
+    [Header("Review AI Settings")]
+    public TextMeshProUGUI reviewDescriptionText;
+
     [Header("Lesson UI Buttons")]
     public GameObject skipButton;
     public GameObject anladimButton;
@@ -19,8 +22,31 @@ public class ReviewManager : MonoBehaviour
 
     public void OpenReview()
     {
+        //stop the last bone audio
+        if (TTSClient.Instance != null) TTSClient.Instance.Stop();
+
         lessonPanel.SetActive(false);
         reviewPanel.SetActive(true);
+
+
+        // Reset bones to original mat
+        if (BoneVisualManager.Active != null && LessonManager.Instance != null)
+        {
+            BoneVisualManager.Active.ResetAllBones(LessonManager.Instance.bones);
+            Debug.LogError("[REVIEW] Resetting materials for " + LessonManager.Instance.bones.Count + " bones.");
+        }
+        else
+        {
+            Debug.LogError("[REVIEW] Reset failed. Active Visuals or LessonInstance is null!");
+        }
+
+
+
+        if (reviewDescriptionText != null && !string.IsNullOrWhiteSpace(reviewDescriptionText.text))
+        {
+            TTSClient.Instance.Speak(reviewDescriptionText.text);
+        }
+
 
         PopulateButtons();
 
@@ -90,15 +116,38 @@ public class ReviewManager : MonoBehaviour
     
     public void ReturnToReview()
     {
+        if (TTSClient.Instance != null) TTSClient.Instance.Stop();
+
         lessonPanel.SetActive(false);
         reviewPanel.SetActive(true);
 
+
+        // Reset bones to original mat
+        if (BoneVisualManager.Active != null && LessonManager.Instance != null)
+        {
+            BoneVisualManager.Active.ResetAllBones(LessonManager.Instance.bones);
+            Debug.LogError("[REVIEW] Resetting materials for " + LessonManager.Instance.bones.Count + " bones.");
+        }
+        else
+        {
+            Debug.LogError("[REVIEW] Reset failed. Active Visuals or LessonInstance is null!");
+        }
+
         LessonManager.Instance.IsReviewMode = true;
+
+        if (reviewDescriptionText != null)
+        {
+            TTSClient.Instance.Speak(reviewDescriptionText.text);
+        }
+
+
     }
 
 
     public void ExitReviewMode()
     {
+        if (TTSClient.Instance != null) TTSClient.Instance.Stop();
+
         reviewPanel.SetActive(false);
         lessonPanel.SetActive(false);
 

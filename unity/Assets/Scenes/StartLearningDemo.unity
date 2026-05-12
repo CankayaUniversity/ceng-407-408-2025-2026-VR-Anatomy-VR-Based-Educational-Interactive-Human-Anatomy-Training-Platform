@@ -374,6 +374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbe511f693d18954a8f1e7163c8e7235, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  reviewDescriptionText: {fileID: 703161270}
   skipButton: {fileID: 2251649202945690102}
   anladimButton: {fileID: 893753130}
   lessonPanel: {fileID: 8167192262107474737}
@@ -882,9 +883,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Would you like to review?Would you like to review?Would you like to review?Would
-    you like to review?Would you like to review?Would you like to review?Would you
-    like to review?
+  m_text: "Anlamad\u0131\u011F\u0131n\u0131z bir k\u0131s\u0131m varsa, tekrar incelemek
+    istedi\u011Finiz kemi\u011Fi se\xE7ebilirsiniz."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1348,7 +1348,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Review
+  m_text: "Tekrar \u0130ncele"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

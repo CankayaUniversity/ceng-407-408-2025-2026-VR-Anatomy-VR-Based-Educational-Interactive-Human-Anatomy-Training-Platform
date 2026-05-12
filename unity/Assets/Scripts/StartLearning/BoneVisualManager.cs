@@ -9,16 +9,32 @@ public class BoneVisualManager : MonoBehaviour
 
     private Dictionary<Renderer, Material> _originalMaterials = new Dictionary<Renderer, Material>();
 
+    public static BoneVisualManager Active;
+
     void Awake()
     {
+        // Cache materials here so they are ready before anything else happens
+        CacheOriginalMaterials();
+    }
+
+    void OnEnable()
+    {
+        Active = this;
+    }
+
+    private void CacheOriginalMaterials()
+    {
+        // Get all renderers including inactive ones
         Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
         foreach (Renderer r in renderers)
         {
             if (r != null && !_originalMaterials.ContainsKey(r))
             {
+                // We use sharedMaterial to get the actual asset reference
                 _originalMaterials[r] = r.sharedMaterial;
             }
         }
+        Debug.Log($"[VISUAL_MANAGER] Cached {_originalMaterials.Count} materials for unit {gameObject.name}");
     }
 
     private void SetAllToGhost()
@@ -37,7 +53,6 @@ public class BoneVisualManager : MonoBehaviour
         foreach (GameObject bone in allBones)
         {
             if (bone == null) continue;
-            // Get all grabables in children as well to ensure total lockdown
             XRGrabInteractable[] allGrabs = bone.GetComponentsInChildren<XRGrabInteractable>(true);
             foreach (var g in allGrabs) g.enabled = false;
         }
@@ -49,7 +64,7 @@ public class BoneVisualManager : MonoBehaviour
             g.enabled = true;
         }
 
-        // 3. Handle Visuals
+        // 3. Handle Visuals: Set target hierarchy back to original materials
         Renderer[] targetRenderers = targetBone.GetComponentsInChildren<Renderer>(true);
         foreach (Renderer r in targetRenderers)
         {
@@ -58,5 +73,21 @@ public class BoneVisualManager : MonoBehaviour
                 r.sharedMaterial = _originalMaterials[r];
             }
         }
+    }
+
+    public void ResetAllBones(List<GameObject> allBones)
+    {
+        // Loop through every cached renderer and restore its original material
+        foreach (var item in _originalMaterials)
+        {
+            Renderer r = item.Key;
+            Material originalMat = item.Value;
+
+            if (r != null)
+            {
+                r.sharedMaterial = originalMat;
+            }
+        }
+        Debug.Log("[VISUAL_MANAGER] All materials reset to solid.");
     }
 }
