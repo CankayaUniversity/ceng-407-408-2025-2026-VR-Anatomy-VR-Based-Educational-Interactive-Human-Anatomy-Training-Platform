@@ -212,16 +212,22 @@ MonoBehaviour:
   unitList:
   - unitID: 0
     unitRoot: {fileID: 8526863351866561134}
+    lessonManager: {fileID: 1040138042372038014}
   - unitID: 1
     unitRoot: {fileID: 8578632219862651242}
+    lessonManager: {fileID: 1040138042372038013}
   - unitID: 2
     unitRoot: {fileID: 2499865814279435945}
+    lessonManager: {fileID: 1040138042372038012}
   - unitID: 3
     unitRoot: {fileID: 358437555567454851}
+    lessonManager: {fileID: 1040138042372038011}
   - unitID: 4
     unitRoot: {fileID: 1782372908556215536}
+    lessonManager: {fileID: 1040138042372038010}
   - unitID: 5
     unitRoot: {fileID: 1115898285804265894}
+    lessonManager: {fileID: 1040138042372038009}
 --- !u!4 &149889375
 Transform:
   m_ObjectHideFlags: 0
@@ -247,6 +253,7 @@ GameObject:
   m_Component:
   - component: {fileID: 204360481}
   - component: {fileID: 204360480}
+  - component: {fileID: 204360482}
   m_Layer: 0
   m_Name: UnitIntroManager
   m_TagString: Untagged
@@ -266,6 +273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e688a03b912a93449dabc11fce9357d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initializer: {fileID: 149889374}
   introList:
   - unitID: 0
     introText: "Ba\u015F ve y\xFCz kemikleri b\xF6l\xFCm\xFCne ho\u015F geldiniz.
@@ -284,7 +292,7 @@ MonoBehaviour:
       Bu b\xF6l\xFCmde omuz, kol, \xF6n kol ve el b\xF6lgesindeki kemikleri inceleyeceksiniz.
       Bilgi kartlar\u0131 size kemiklerin konumunu ve g\xF6revini k\u0131sa \u015Fekilde
       anlatacak. S\u0131radaki butonuna basarak s\u0131radaki karta ge\xE7ebilirsiniz.
-      Haydi \xFCst ekstremite kemiklerini ke\u015Ffedelim."
+      Hadi \xFCst ekstremite kemiklerini ke\u015Ffedelim."
   - unitID: 3
     introText: "Alt ekstremite kemikleri b\xF6l\xFCm\xFCne ho\u015F geldiniz. Bu
       b\xF6l\xFCmde kal\xE7a, uyluk, bacak ve ayak b\xF6lgesindeki kemik yap\u0131lar\u0131n\u0131
@@ -305,6 +313,7 @@ MonoBehaviour:
       ve genel g\xF6revleri k\u0131sa \u015Fekilde anlat\u0131lacak. S\u0131radaki
       butonuna basarak bir sonraki karta ge\xE7ebilirsiniz. Haz\u0131rsan\u0131z
       kas sistemini tan\u0131maya ba\u015Flayal\u0131m."
+  lessonPanel: {fileID: 8167192262107474737}
   startDelay: 1
 --- !u!4 &204360481
 Transform:
@@ -321,6 +330,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &204360482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204360479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1441607f0605394ba9f2f6874aa4512, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  titleSlot: {fileID: 8777015957708029154}
+  descriptionSlot: {fileID: 2831077547328853405}
+  lessonPanel: {fileID: 8167192262107474737}
 --- !u!1 &212386922
 GameObject:
   m_ObjectHideFlags: 0
@@ -1508,7 +1532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f035256876656fc40b5b38fc5e3dbddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ttsUrl: http://127.0.0.0:8001/tts
+  ttsUrl: http://127.0.0.1:8001/tts
 --- !u!4 &1023691342
 Transform:
   m_ObjectHideFlags: 0
@@ -3403,6 +3427,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2831077547328853405}
     - target: {fileID: 519582785060303724, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 519582785060303724, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
       propertyPath: titleText
       value: 
       objectReference: {fileID: 8777015957708029154}
@@ -3426,6 +3454,10 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1658168125}
+    - target: {fileID: 853881236401068975, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 917425257239522540, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -3466,6 +3498,10 @@ PrefabInstance:
       propertyPath: infoText
       value: 
       objectReference: {fileID: 2831077547328853405}
+    - target: {fileID: 1392338671529008119, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1392338671529008119, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
       propertyPath: titleText
       value: 
@@ -3518,6 +3554,10 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1658168125}
+    - target: {fileID: 2450182995218520317, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2555135525277032575, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -3542,6 +3582,10 @@ PrefabInstance:
       propertyPath: infoText
       value: 
       objectReference: {fileID: 2831077547328853405}
+    - target: {fileID: 2797537282789604800, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2797537282789604800, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
       propertyPath: titleText
       value: 
@@ -3582,6 +3626,10 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1658168125}
+    - target: {fileID: 3447932067255560561, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3457191521741604174, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -3610,6 +3658,10 @@ PrefabInstance:
       propertyPath: infoText
       value: 
       objectReference: {fileID: 2831077547328853405}
+    - target: {fileID: 4184716761052039735, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4184716761052039735, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
       propertyPath: titleText
       value: 
@@ -3670,6 +3722,10 @@ PrefabInstance:
       propertyPath: infoText
       value: 
       objectReference: {fileID: 2831077547328853405}
+    - target: {fileID: 5502939981562946711, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5502939981562946711, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
       propertyPath: titleText
       value: 
@@ -3750,6 +3806,10 @@ PrefabInstance:
       propertyPath: infoText
       value: 
       objectReference: {fileID: 2831077547328853405}
+    - target: {fileID: 7077516503816267604, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7077516503816267604, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
       propertyPath: titleText
       value: 
@@ -3947,6 +4007,72 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
+--- !u!114 &1040138042372038009 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1392338671529008119, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
+  m_PrefabInstance: {fileID: 1040138042372038008}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115898285804265894}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eff2ade6f2e172e47a2973a5380d5226, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1040138042372038010 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2797537282789604800, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
+  m_PrefabInstance: {fileID: 1040138042372038008}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782372908556215536}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eff2ade6f2e172e47a2973a5380d5226, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1040138042372038011 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4184716761052039735, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
+  m_PrefabInstance: {fileID: 1040138042372038008}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358437555567454851}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eff2ade6f2e172e47a2973a5380d5226, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1040138042372038012 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7077516503816267604, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
+  m_PrefabInstance: {fileID: 1040138042372038008}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2499865814279435945}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eff2ade6f2e172e47a2973a5380d5226, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1040138042372038013 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 519582785060303724, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
+  m_PrefabInstance: {fileID: 1040138042372038008}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8578632219862651242}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eff2ade6f2e172e47a2973a5380d5226, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1040138042372038014 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5502939981562946711, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
+  m_PrefabInstance: {fileID: 1040138042372038008}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8526863351866561134}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eff2ade6f2e172e47a2973a5380d5226, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1115898285804265894 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7370345955920171489, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}
@@ -4748,14 +4874,13 @@ GameObject:
   - component: {fileID: 3990240385019951423}
   - component: {fileID: 8167192262107474739}
   - component: {fileID: 8167192262107474738}
-  - component: {fileID: 8167192262107474740}
   m_Layer: 0
   m_Name: LessonUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &8167192262107474738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4790,20 +4915,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 2
   rotationDelay: 0.5
---- !u!114 &8167192262107474740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8167192262107474737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1441607f0605394ba9f2f6874aa4512, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  titleText: {fileID: 8777015957708029154}
-  descriptionText: {fileID: 2831077547328853405}
 --- !u!1 &8526863351866561134 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 115236827691832851, guid: 72dd6126d54a5ce47ad6d7ad243901df, type: 3}

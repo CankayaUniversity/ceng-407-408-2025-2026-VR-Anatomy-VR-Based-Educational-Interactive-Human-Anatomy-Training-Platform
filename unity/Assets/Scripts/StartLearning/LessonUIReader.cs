@@ -4,10 +4,17 @@ using TMPro;
 public class LessonUIReader : MonoBehaviour
 {
     [Header("Drag UI Text Objects From Canvas")]
-    public TextMeshProUGUI titleText;
-    public TextMeshProUGUI descriptionText;
+    public TextMeshProUGUI titleSlot;
+    public TextMeshProUGUI descriptionSlot;
 
-    void OnEnable() { LessonManager.OnBoneChanged += HandleBoneChanged; }
+    // Drag your LessonPanel here
+    public GameObject lessonPanel;
+
+    void OnEnable()
+    {
+        LessonManager.OnBoneChanged += HandleBoneChanged;
+    }
+
     void OnDisable()
     {
         LessonManager.OnBoneChanged -= HandleBoneChanged;
@@ -16,14 +23,25 @@ public class LessonUIReader : MonoBehaviour
 
     private void HandleBoneChanged(Transform newBone)
     {
-        // Delay 0.1s to allow JSON script to update the text slots first
-        Invoke(nameof(ReadCurrentCard), 0.1f);
+        // Only read if the panel is active
+        if (lessonPanel != null && lessonPanel.activeInHierarchy)
+        {
+            CancelInvoke(nameof(ReadCurrentCard));
+            Invoke(nameof(ReadCurrentCard), 0.1f);
+        }
     }
 
     private void ReadCurrentCard()
     {
-        if (titleText == null || descriptionText == null) return;
-        string text = $"{titleText.text}. {descriptionText.text}";
+        if (lessonPanel == null || !lessonPanel.activeInHierarchy) return;
+
+        if (string.IsNullOrWhiteSpace(titleSlot.text))
+        {
+            Invoke(nameof(ReadCurrentCard), 0.2f);
+            return;
+        }
+
+        string text = titleSlot.text + ". " + descriptionSlot.text;
         TTSClient.Instance.Speak(text);
     }
 }

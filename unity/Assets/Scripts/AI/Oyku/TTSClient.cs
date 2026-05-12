@@ -15,14 +15,22 @@ public class TTSClient : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         _audio = GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
+        _audio.spatialBlend = 0;
+        _audio.playOnAwake = false;
     }
 
     public void Speak(string text)
     {
         if (string.IsNullOrWhiteSpace(text)) return;
-        _currentRequestId++; // Incremented to cancel older voices
+        _currentRequestId++;
         StopAllCoroutines();
         StartCoroutine(SpeakRoutine(text, _currentRequestId));
+    }
+
+    // New logic to check if AI is currently talking
+    public bool IsSpeaking()
+    {
+        return _audio != null && _audio.isPlaying;
     }
 
     public void Stop()
@@ -33,14 +41,19 @@ public class TTSClient : MonoBehaviour
 
     private IEnumerator SpeakRoutine(string text, int requestId)
     {
-        // Check gender from SettingsManager (keeping your friend's logic)
         bool isMale = SettingsManager.Instance != null &&
                       SettingsManager.Instance.SelectedAvatarType == SettingsManager.AvatarType.Male;
 
         string voice = isMale ? "tr-TR-AhmetNeural" : "tr-TR-EmelNeural";
-        string pitch = isMale ? "+8%" : "0%";
 
-        string json = $"{{\"text\":\"{text.Trim()}\", \"voice\":\"{voice}\", \"pitch\":\"{pitch}\"}}";
+        // CLEANING THE TEXT (Fixes Code 422)
+        string cleanText = text.Trim()
+            .Replace("\n", " ")      // Remove line breaks
+            .Replace("\r", " ")      // Remove carriage returns
+            .Replace("\"", "\\\"")   // Escape double quotes
+            .Replace("•", "");       // Remove bullet points
+
+        string json = "{\"text\":\"" + cleanText + "\", \"voice\":\"" + voice + "\"}";
         byte[] body = Encoding.UTF8.GetBytes(json);
 
         using (UnityWebRequest req = new UnityWebRequest(ttsUrl, "POST"))
@@ -51,12 +64,20 @@ public class TTSClient : MonoBehaviour
 
             yield return req.SendWebRequest();
 
-            if (requestId != _currentRequestId) yield break; // Newer request started
+            if (requestId != _currentRequestId) yield break;
 
-            if (req.result == UnityWebRequest.Result.Success)
+            if (req.result != UnityWebRequest.Result.Success)
             {
-                _audio.clip = DownloadHandlerAudioClip.GetContent(req);
+                Debug.LogError("[AI_SERVICE] FAILED! Error: " + req.error + " | Code: " + req.responseCode);
+                yield break;
+            }
+
+            AudioClip clip = DownloadHandlerAudioClip.GetContent(req);
+            if (clip != null && clip.length > 0)
+            {
+                _audio.clip = clip;
                 _audio.Play();
+                Debug.LogError("[AI_SERVICE] SUCCESS! Playing " + clip.length.ToString("F2") + "s of audio.");
             }
         }
     }

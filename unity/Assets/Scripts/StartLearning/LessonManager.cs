@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
-using UnityEngine.UI; // Required for the Button reference
+using UnityEngine.UI;
 
 [System.Serializable]
 public class BoneData
@@ -29,8 +29,6 @@ public class LessonManager : MonoBehaviour
     [Header("UI References")]
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI infoText;
-
-    
     public Button nextButton;
 
     [Header("Bone Sequence")]
@@ -45,28 +43,30 @@ public class LessonManager : MonoBehaviour
     {
         Instance = this;
 
-        // Automatically wire up the button when this unit becomes active
         if (nextButton != null)
         {
             nextButton.onClick.RemoveAllListeners();
             nextButton.onClick.AddListener(NextStep);
+        }
+
+        // Logic only starts when IntroManager enables this script
+        LoadJsonData();
+        if (bones != null && bones.Count > 0)
+        {
+            StartLesson();
         }
     }
 
     void OnDisable()
     {
         if (Instance == this) Instance = null;
-
-        // Clean up the button to prevent cross-talk
-        if (nextButton != null)
-            nextButton.onClick.RemoveAllListeners();
+        if (nextButton != null) nextButton.onClick.RemoveAllListeners();
     }
 
     void Start()
     {
-        LoadJsonData();
-        if (bones.Count > 0)
-            Invoke(nameof(StartLesson), 0.1f);
+        // Removed the Invoke. We wait for OnEnable.
+        //LoadJsonData();
     }
 
     private void StartLesson()
@@ -78,21 +78,13 @@ public class LessonManager : MonoBehaviour
     public void ResetLesson()
     {
         IsReviewMode = false;
-
         currentIndex = 0;
-
-        //Reenable the button listener just in case
-        if (nextButton != null)
-        {
-            nextButton.onClick.RemoveAllListeners();
-            nextButton.onClick.AddListener(NextStep);
-        }
-
         ActivateStep(currentIndex);
     }
 
     void LoadJsonData()
     {
+        if (dataLookup.Count > 0) return;
         TextAsset jsonAsset = Resources.Load<TextAsset>("JsonFiles/StartLearning/motion_system_education_data");
         if (jsonAsset != null)
         {
@@ -105,16 +97,9 @@ public class LessonManager : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space)) NextStep();
-        if (Input.GetKeyDown(KeyCode.Backspace)) PreviousStep();
-    }
-
     public void NextStep()
     {
         if (IsReviewMode) return;
-
         if (currentIndex < bones.Count - 1)
         {
             currentIndex++;
@@ -123,10 +108,7 @@ public class LessonManager : MonoBehaviour
         else
         {
             IsReviewMode = true;
-            if (reviewManager != null)
-            {
-                reviewManager.OpenReview();
-            }
+            if (reviewManager != null) reviewManager.OpenReview();
         }
     }
 
@@ -148,10 +130,7 @@ public class LessonManager : MonoBehaviour
 
         OnBoneChanged?.Invoke(currentBone.transform);
 
-        if (visualsManager != null)
-        {
-            visualsManager.FocusBone(currentBone, bones);
-        }
+        if (visualsManager != null) visualsManager.FocusBone(currentBone, bones);
 
         BoneIdentity identity = currentBone.GetComponent<BoneIdentity>();
         if (identity != null && dataLookup.ContainsKey(identity.id))
