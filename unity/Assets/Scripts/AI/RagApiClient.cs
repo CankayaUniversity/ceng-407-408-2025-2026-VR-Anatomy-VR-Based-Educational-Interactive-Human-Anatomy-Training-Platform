@@ -27,6 +27,9 @@ public class RagApiClient : MonoBehaviour
     private const float ChatTitleScaleMultiplier = 1.14f;
     private const float ChatTitleForwardOffset = -0.04f;
     private const float ChatUiVerticalOffset = 80f;
+    private const float VirtualKeyboardWidth = 940f;
+    private const float VirtualKeyboardHeight = 330f;
+    private const float VirtualKeyboardGapBelowInput = 18f;
 
     [Header("UI")]
     [SerializeField] private TMP_InputField questionInput;
@@ -54,6 +57,7 @@ public class RagApiClient : MonoBehaviour
     private Button _micButton;
     private Button _speakerButton;
     private Button _answerToggleButton;
+    private Button _keyboardButton;
     private TMP_Text _micLabel;
     private TMP_Text _speakerLabel;
     private TMP_Text _answerToggleLabel;
@@ -79,6 +83,8 @@ public class RagApiClient : MonoBehaviour
     private ScrollRect _answerScrollRect;
     private RectTransform _answerScrollContent;
     private Scrollbar _answerScrollbar;
+    private GameObject _virtualKeyboardPanel;
+    private bool _keyboardVisible;
 
     private static readonly Regex CevaplaCommandRegex =
         new Regex(@"\b(cevapla|tamam)\b", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -130,6 +136,7 @@ public class RagApiClient : MonoBehaviour
         if (_micButton != null) _micButton.onClick.RemoveAllListeners();
         if (_speakerButton != null) _speakerButton.onClick.RemoveAllListeners();
         if (_answerToggleButton != null) _answerToggleButton.onClick.RemoveAllListeners();
+        if (_keyboardButton != null) _keyboardButton.onClick.RemoveListener(OnKeyboardClicked);
         if (SettingsManager.Instance != null)
             SettingsManager.Instance.OnAIChatVoiceEnabledChanged -= OnAIChatVoiceEnabledChanged;
     }
@@ -179,6 +186,7 @@ public class RagApiClient : MonoBehaviour
             return;
         }
 
+        SetVirtualKeyboardVisible(false);
         ShowAnswerMessage("Cevap hazırlanıyor...");
         StartCoroutine(SendQuestion(q));
     }
@@ -435,6 +443,7 @@ public class RagApiClient : MonoBehaviour
     private void OnMicClicked()
     {
         if (_isAsking || _isSttRunning) return;
+        SetVirtualKeyboardVisible(false);
         if (_isRecording) StopRecording();
         else              StartRecording();
     }
@@ -923,6 +932,8 @@ public class RagApiClient : MonoBehaviour
             _speakerButton.interactable = voiceEnabled && !_isAsking && !_isSttRunning && !_isRecording;
         }
         if (_answerToggleButton != null) _answerToggleButton.interactable = true;
+        if (_keyboardButton != null) _keyboardButton.interactable = canAsk;
+        if (!canAsk && _keyboardVisible) SetVirtualKeyboardVisible(false);
     }
 
     private void OnAnswerToggleClicked()
@@ -1024,6 +1035,7 @@ public class RagApiClient : MonoBehaviour
         if (_micButton != null) hideList.Add(_micButton.gameObject);
         if (_speakerButton != null) hideList.Add(_speakerButton.gameObject);
         if (_answerToggleButton != null) hideList.Add(_answerToggleButton.gameObject);
+        if (_virtualKeyboardPanel != null) hideList.Add(_virtualKeyboardPanel);
         if (questionInput != null) hideList.Add(questionInput.gameObject);
 
         GameObject answerGroup = answerText != null && answerText.transform.parent != null
@@ -1116,7 +1128,8 @@ public class RagApiClient : MonoBehaviour
                 textArea.anchorMin = Vector2.zero;
                 textArea.anchorMax = Vector2.one;
                 textArea.pivot = new Vector2(0.5f, 0.5f);
-                textArea.offsetMin = new Vector2(10, 14f);
+                // Sol taraftaki klavye ikonunun metnin üstüne binmemesi için başlangıcı içeri alıyoruz.
+                textArea.offsetMin = new Vector2(86f, 14f);
                 textArea.offsetMax = new Vector2(-164f, -14f);
             }
 
@@ -2021,7 +2034,7 @@ public class RagApiClient : MonoBehaviour
         badgeImage.color = rightSide
             ? new Color(0.24f, 0.67f, 0.95f, 0.96f)
             : new Color(0.70f, 0.90f, 1f, 0.98f);
-        badgeImage.raycastTarget = false;
+        badgeImage.raycastTarget = !rightSide;
 
         TMP_Text label = badge.GetComponentInChildren<TMP_Text>(true);
         if (label == null)
@@ -2053,14 +2066,356 @@ public class RagApiClient : MonoBehaviour
         }
         else
         {
-            // Sol ikonda font yerine üç noktalı sade chat göstergesi kullan.
+            // Sol yuvarlak artık üç nokta değil: tıklanabilir VR klavye butonu.
             label.gameObject.SetActive(false);
-            CreateOrUpdateDotIcon(badge, "IconDot01", new Vector2(-10f, 0f), 5.5f);
-            CreateOrUpdateDotIcon(badge, "IconDot02", new Vector2(0f, 0f), 5.5f);
-            CreateOrUpdateDotIcon(badge, "IconDot03", new Vector2(10f, 0f), 5.5f);
+            SetChildActive(badge, "IconDot01", false);
+            SetChildActive(badge, "IconDot02", false);
+            SetChildActive(badge, "IconDot03", false);
+            CreateOrUpdateKeyboardGlyph(badge);
+            ConfigureKeyboardBadgeButton(badge);
         }
 
         badge.SetAsLastSibling();
+    }
+
+    private void ConfigureKeyboardBadgeButton(Transform badge)
+    {
+        if (badge == null) return;
+
+        _keyboardButton = badge.GetComponent<Button>();
+        if (_keyboardButton == null)
+            _keyboardButton = badge.gameObject.AddComponent<Button>();
+
+        _keyboardButton.onClick.RemoveListener(OnKeyboardClicked);
+        _keyboardButton.onClick.AddListener(OnKeyboardClicked);
+        _keyboardButton.transition = Selectable.Transition.ColorTint;
+
+        ColorBlock colors = _keyboardButton.colors;
+        colors.normalColor = Color.white;
+        colors.highlightedColor = new Color(0.86f, 0.98f, 1f, 1f);
+        colors.pressedColor = new Color(0.58f, 0.84f, 0.98f, 1f);
+        colors.selectedColor = colors.highlightedColor;
+        colors.disabledColor = new Color(0.65f, 0.75f, 0.80f, 0.45f);
+        colors.colorMultiplier = 1f;
+        colors.fadeDuration = 0.10f;
+        _keyboardButton.colors = colors;
+    }
+
+    private void OnKeyboardClicked()
+    {
+        if (_isAsking || _isSttRunning || _isRecording) return;
+        ToggleVirtualKeyboard();
+    }
+
+    private void ToggleVirtualKeyboard()
+    {
+        SetVirtualKeyboardVisible(!_keyboardVisible);
+    }
+
+    private void SetVirtualKeyboardVisible(bool visible)
+    {
+        _keyboardVisible = visible;
+
+        if (visible)
+        {
+            EnsureVirtualKeyboardPanel();
+        }
+
+        if (_virtualKeyboardPanel != null)
+        {
+            _virtualKeyboardPanel.SetActive(visible);
+            if (visible)
+                _virtualKeyboardPanel.transform.SetAsLastSibling();
+        }
+
+        if (questionInput != null)
+        {
+            ForceQuestionInputLeftToRight();
+
+            // VR klavyede Android/Quest native klavyeyi tetiklememek için input field'ı aktif etmiyoruz.
+            // Sadece imleci metnin sonuna sabitliyoruz.
+            int endPosition = questionInput.text != null ? questionInput.text.Length : 0;
+            questionInput.caretPosition = endPosition;
+            questionInput.stringPosition = endPosition;
+
+            if (!visible)
+                questionInput.DeactivateInputField();
+        }
+    }
+
+    private void EnsureVirtualKeyboardPanel()
+    {
+        if (_virtualKeyboardPanel != null || questionInput == null) return;
+
+        RectTransform questionRT = questionInput.GetComponent<RectTransform>();
+        RectTransform parentRT = questionRT != null ? questionRT.parent as RectTransform : null;
+        if (questionRT == null || parentRT == null) return;
+
+        _virtualKeyboardPanel = new GameObject("VRVirtualKeyboardPanel", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        _virtualKeyboardPanel.transform.SetParent(parentRT, false);
+
+        RectTransform panelRT = _virtualKeyboardPanel.GetComponent<RectTransform>();
+        panelRT.anchorMin = new Vector2(0.5f, 0.5f);
+        panelRT.anchorMax = new Vector2(0.5f, 0.5f);
+        panelRT.pivot = new Vector2(0.5f, 1f);
+        panelRT.sizeDelta = new Vector2(VirtualKeyboardWidth, VirtualKeyboardHeight);
+        panelRT.localScale = Vector3.one;
+
+        Vector3[] qCorners = new Vector3[4];
+        questionRT.GetWorldCorners(qCorners);
+        Vector3 questionBottomCenterWorld = (qCorners[0] + qCorners[3]) * 0.5f;
+        Vector2 questionBottomCenterLocal = parentRT.InverseTransformPoint(questionBottomCenterWorld);
+        panelRT.anchoredPosition = questionBottomCenterLocal + new Vector2(0f, -VirtualKeyboardGapBelowInput);
+
+        Image panelImage = _virtualKeyboardPanel.GetComponent<Image>();
+        panelImage.sprite = GetRoundedRuntimeSprite();
+        panelImage.type = Image.Type.Sliced;
+        panelImage.color = new Color(0.04f, 0.24f, 0.34f, 0.94f);
+        panelImage.raycastTarget = true;
+
+        VerticalLayoutGroup vertical = _virtualKeyboardPanel.AddComponent<VerticalLayoutGroup>();
+        vertical.childAlignment = TextAnchor.MiddleCenter;
+        vertical.childControlWidth = false;
+        vertical.childControlHeight = false;
+        vertical.childForceExpandWidth = false;
+        vertical.childForceExpandHeight = false;
+        vertical.spacing = 10f;
+        vertical.padding = new RectOffset(18, 18, 18, 18);
+
+        CreateKeyboardRow(panelRT, new[] { "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "Ğ", "Ü" });
+        CreateKeyboardRow(panelRT, new[] { "A", "S", "D", "F", "G", "H", "J", "K", "L", "Ş", "İ" });
+        CreateKeyboardRow(panelRT, new[] { "Z", "X", "C", "V", "B", "N", "M", "Ö", "Ç" });
+        CreateKeyboardRow(panelRT, new[] { "SİL", "BOŞLUK", "TEMİZLE", "KAPAT", "GÖNDER" }, true);
+
+        _virtualKeyboardPanel.SetActive(false);
+    }
+
+    private void CreateKeyboardRow(RectTransform parent, string[] keys, bool controlRow = false)
+    {
+        GameObject rowGO = new GameObject(controlRow ? "KeyboardControlRow" : "KeyboardRow", typeof(RectTransform));
+        rowGO.transform.SetParent(parent, false);
+
+        RectTransform rowRT = rowGO.GetComponent<RectTransform>();
+        rowRT.sizeDelta = new Vector2(VirtualKeyboardWidth - 36f, controlRow ? 62f : 56f);
+        rowRT.localScale = Vector3.one;
+
+        HorizontalLayoutGroup horizontal = rowGO.AddComponent<HorizontalLayoutGroup>();
+        horizontal.childAlignment = TextAnchor.MiddleCenter;
+        horizontal.childControlWidth = false;
+        horizontal.childControlHeight = false;
+        horizontal.childForceExpandWidth = false;
+        horizontal.childForceExpandHeight = false;
+        horizontal.spacing = 8f;
+
+        foreach (string key in keys)
+        {
+            float width = GetKeyboardKeyWidth(key);
+            CreateKeyboardKey(rowRT, key, width, controlRow ? 56f : 52f);
+        }
+    }
+
+    private float GetKeyboardKeyWidth(string key)
+    {
+        switch (key)
+        {
+            case "BOŞLUK": return 280f;
+            case "TEMİZLE": return 118f;
+            case "KAPAT": return 104f;
+            case "GÖNDER": return 122f;
+            case "SİL": return 86f;
+            default: return 58f;
+        }
+    }
+
+    private void CreateKeyboardKey(RectTransform rowRT, string label, float width, float height)
+    {
+        GameObject keyGO = new GameObject("Key_" + label, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+        keyGO.transform.SetParent(rowRT, false);
+
+        RectTransform keyRT = keyGO.GetComponent<RectTransform>();
+        keyRT.sizeDelta = new Vector2(width, height);
+        keyRT.localScale = Vector3.one;
+
+        Image keyImage = keyGO.GetComponent<Image>();
+        keyImage.sprite = GetRoundedRuntimeSprite();
+        keyImage.type = Image.Type.Sliced;
+        keyImage.color = IsControlKeyboardKey(label)
+            ? new Color(0.10f, 0.50f, 0.72f, 0.96f)
+            : new Color(0.78f, 0.93f, 1f, 0.94f);
+        keyImage.raycastTarget = true;
+
+        Button keyButton = keyGO.GetComponent<Button>();
+        ColorBlock colors = keyButton.colors;
+        colors.normalColor = Color.white;
+        colors.highlightedColor = new Color(0.88f, 0.99f, 1f, 1f);
+        colors.pressedColor = new Color(0.58f, 0.84f, 0.96f, 1f);
+        colors.selectedColor = colors.highlightedColor;
+        colors.disabledColor = new Color(0.50f, 0.60f, 0.65f, 0.45f);
+        colors.colorMultiplier = 1f;
+        colors.fadeDuration = 0.08f;
+        keyButton.colors = colors;
+
+        GameObject textGO = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
+        textGO.transform.SetParent(keyGO.transform, false);
+        TMP_Text keyText = textGO.GetComponent<TMP_Text>();
+        RectTransform textRT = keyText.GetComponent<RectTransform>();
+        textRT.anchorMin = Vector2.zero;
+        textRT.anchorMax = Vector2.one;
+        textRT.offsetMin = Vector2.zero;
+        textRT.offsetMax = Vector2.zero;
+
+        keyText.text = label;
+        keyText.fontSize = IsControlKeyboardKey(label) ? 21f : 25f;
+        keyText.fontStyle = FontStyles.Bold;
+        keyText.alignment = TextAlignmentOptions.Center;
+        keyText.color = IsControlKeyboardKey(label)
+            ? new Color(0.94f, 0.99f, 1f, 1f)
+            : new Color(0.06f, 0.32f, 0.46f, 1f);
+        keyText.raycastTarget = false;
+
+        string capturedLabel = label;
+        keyButton.onClick.AddListener(() => HandleKeyboardKey(capturedLabel));
+    }
+
+    private bool IsControlKeyboardKey(string key)
+    {
+        return key == "SİL" || key == "BOŞLUK" || key == "TEMİZLE" || key == "KAPAT" || key == "GÖNDER";
+    }
+
+    private void HandleKeyboardKey(string key)
+    {
+        if (questionInput == null) return;
+
+        switch (key)
+        {
+            case "SİL":
+                BackspaceQuestionInput();
+                break;
+            case "BOŞLUK":
+                InsertTextIntoQuestionInput(" ");
+                break;
+            case "TEMİZLE":
+                questionInput.text = "";
+                questionInput.caretPosition = 0;
+                break;
+            case "KAPAT":
+                SetVirtualKeyboardVisible(false);
+                break;
+            case "GÖNDER":
+                SetVirtualKeyboardVisible(false);
+                OnAskClicked();
+                break;
+            default:
+                InsertTextIntoQuestionInput(ConvertTurkishKeyToInput(key));
+                break;
+        }
+
+        if (_keyboardVisible)
+        {
+            ForceQuestionInputLeftToRight();
+            int endPosition = questionInput.text != null ? questionInput.text.Length : 0;
+            questionInput.caretPosition = endPosition;
+            questionInput.stringPosition = endPosition;
+        }
+    }
+
+    private void InsertTextIntoQuestionInput(string value)
+    {
+        if (questionInput == null || string.IsNullOrEmpty(value)) return;
+
+        ForceQuestionInputLeftToRight();
+
+        // VR butonuna tıklanınca TMP_InputField imleci bazen 0'a düşüyor.
+        // Bu da yazıyı tersten yazdırıyor. Bu yüzden VR klavyede her karakteri sona ekliyoruz.
+        string current = questionInput.text ?? "";
+        questionInput.text = current + value;
+
+        int endPosition = questionInput.text.Length;
+        questionInput.caretPosition = endPosition;
+        questionInput.stringPosition = endPosition;
+    }
+
+    private void BackspaceQuestionInput()
+    {
+        if (questionInput == null) return;
+
+        ForceQuestionInputLeftToRight();
+
+        string current = questionInput.text ?? "";
+        if (current.Length == 0) return;
+
+        // VR klavyede SİL her zaman sondaki karakteri silsin.
+        questionInput.text = current.Remove(current.Length - 1, 1);
+
+        int endPosition = questionInput.text.Length;
+        questionInput.caretPosition = endPosition;
+        questionInput.stringPosition = endPosition;
+    }
+
+    private void ForceQuestionInputLeftToRight()
+    {
+        if (questionInput == null) return;
+
+        if (questionInput.textComponent != null)
+            questionInput.textComponent.isRightToLeftText = false;
+
+        if (questionInput.placeholder is TMP_Text placeholderText)
+            placeholderText.isRightToLeftText = false;
+    }
+
+    private string ConvertTurkishKeyToInput(string key)
+    {
+        switch (key)
+        {
+            case "I": return "ı";
+            case "İ": return "i";
+            case "Ğ": return "ğ";
+            case "Ü": return "ü";
+            case "Ş": return "ş";
+            case "Ö": return "ö";
+            case "Ç": return "ç";
+            default: return key.ToLowerInvariant();
+        }
+    }
+
+    private void CreateOrUpdateKeyboardGlyph(Transform parent)
+    {
+        if (parent == null) return;
+
+        Image body = GetOrCreateInputGlyphImage(parent, "KeyboardGlyphBody");
+        RectTransform bodyRT = body.GetComponent<RectTransform>();
+        bodyRT.anchorMin = new Vector2(0.5f, 0.5f);
+        bodyRT.anchorMax = new Vector2(0.5f, 0.5f);
+        bodyRT.pivot = new Vector2(0.5f, 0.5f);
+        bodyRT.anchoredPosition = Vector2.zero;
+        bodyRT.sizeDelta = new Vector2(30f, 22f);
+        bodyRT.localScale = Vector3.one;
+
+        body.sprite = GetRoundedRuntimeSprite();
+        body.type = Image.Type.Sliced;
+        body.color = new Color(0.07f, 0.47f, 0.74f, 1f);
+        body.raycastTarget = false;
+
+        CreateKeyboardGlyphLine(parent, "KeyboardGlyphLine01", new Vector2(0f, 5f), new Vector2(21f, 2.6f));
+        CreateKeyboardGlyphLine(parent, "KeyboardGlyphLine02", new Vector2(0f, 0f), new Vector2(21f, 2.6f));
+        CreateKeyboardGlyphLine(parent, "KeyboardGlyphLine03", new Vector2(0f, -5.5f), new Vector2(15f, 2.6f));
+    }
+
+    private void CreateKeyboardGlyphLine(Transform parent, string name, Vector2 position, Vector2 size)
+    {
+        Image line = GetOrCreateInputGlyphImage(parent, name);
+        RectTransform lineRT = line.GetComponent<RectTransform>();
+        lineRT.anchorMin = new Vector2(0.5f, 0.5f);
+        lineRT.anchorMax = new Vector2(0.5f, 0.5f);
+        lineRT.pivot = new Vector2(0.5f, 0.5f);
+        lineRT.anchoredPosition = position;
+        lineRT.sizeDelta = size;
+        lineRT.localScale = Vector3.one;
+
+        line.sprite = GetRoundedRuntimeSprite();
+        line.type = Image.Type.Sliced;
+        line.color = new Color(0.78f, 0.94f, 1f, 0.96f);
+        line.raycastTarget = false;
     }
 
     private void CreateOrUpdateDotIcon(Transform parent, string name, Vector2 position, float size)
