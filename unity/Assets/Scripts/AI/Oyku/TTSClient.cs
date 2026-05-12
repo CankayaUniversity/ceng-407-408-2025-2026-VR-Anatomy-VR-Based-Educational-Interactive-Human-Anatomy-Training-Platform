@@ -22,6 +22,13 @@ public class TTSClient : MonoBehaviour
     public void Speak(string text)
     {
         if (string.IsNullOrWhiteSpace(text)) return;
+
+        if (_audio.isPlaying)
+        {
+            _audio.Stop();
+            Debug.LogError("[AI_SERVICE] Previous audio killed to make room for new bone.");
+        }
+
         _currentRequestId++;
         StopAllCoroutines();
         StartCoroutine(SpeakRoutine(text, _currentRequestId));

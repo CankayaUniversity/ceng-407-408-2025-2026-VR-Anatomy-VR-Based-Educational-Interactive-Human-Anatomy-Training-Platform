@@ -23,6 +23,13 @@ public class LessonUIReader : MonoBehaviour
 
     private void HandleBoneChanged(Transform newBone)
     {
+
+        if (TTSClient.Instance != null)
+        {
+            TTSClient.Instance.Stop();
+        }
+
+
         // Only read if the panel is active
         if (lessonPanel != null && lessonPanel.activeInHierarchy)
         {
