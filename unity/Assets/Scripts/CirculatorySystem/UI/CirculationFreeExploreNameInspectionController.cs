@@ -6,7 +6,6 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class CirculationFreeExploreNameInspectionController : MonoBehaviour
 {
-    
     [Header("XR Interactors - Grab yapan interactor'lar")]
     [SerializeField] private XRBaseInteractor rightInteractor;
     [SerializeField] private XRBaseInteractor leftInteractor;
@@ -33,8 +32,7 @@ public class CirculationFreeExploreNameInspectionController : MonoBehaviour
     [Header("Visual Feedback")]
     [SerializeField] private CirculationFreeExploreVisualController visualController;
 
-    private readonly HashSet<GameObject> allowedInspectionTargets = new();
-
+    [Header("Allowed Target Settings")]
     [SerializeField] private bool restrictInspectionToAllowedTargets = true;
 
     [Header("Optional Ray Visual")]
@@ -46,12 +44,16 @@ public class CirculationFreeExploreNameInspectionController : MonoBehaviour
     [SerializeField] private bool hideInspectionWhileIntroIsOpen = true;
 
     [Header("Start State")]
-    [SerializeField] private bool startPanelClosed = true;
+    [SerializeField] private bool startNamePanelClosed = true;
 
     [Header("Behavior")]
     [SerializeField] private float clearDelay = 0.15f;
 
-    [SerializeField] private bool startNamePanelClosed = true;
+    [Header("Runtime Ray State")]
+    [Tooltip("Kapalıysa ray ile isim tarama yapılmaz. Ama grablayınca isim gösterme çalışmaya devam eder.")]
+    [SerializeField] private bool rayInspectionEnabled = true;
+
+    private readonly HashSet<GameObject> allowedInspectionTargets = new();
 
     private bool namePanelVisible;
     private GameObject currentTarget;
@@ -69,6 +71,8 @@ public class CirculationFreeExploreNameInspectionController : MonoBehaviour
 
         if (panelRoot != null)
             panelRoot.SetActive(namePanelVisible);
+
+        SetRayVisualsActive(rayInspectionEnabled);
     }
 
     private void OnDisable()
@@ -82,6 +86,10 @@ public class CirculationFreeExploreNameInspectionController : MonoBehaviour
 
     private void Update()
     {
+        /*
+         * Tanıtım ekranı açıksa bu custom isim/hover sistemi çalışmasın.
+         * UI için kullanılan XR Ray Interactor'a dokunmuyoruz.
+         */
         if (ShouldBlockInspection())
         {
             SetRayVisualsActive(false);
@@ -89,26 +97,54 @@ public class CirculationFreeExploreNameInspectionController : MonoBehaviour
             return;
         }
 
-        SetRayVisualsActive(true);
-
-        // 1) Öncelik: elde tutulan obje
+        /*
+         * 1) Öncelik HER ZAMAN grablanan objede.
+         *
+         * Kalpte ray kapalı olsa bile, obje eldeyse isim paneli çalışacak.
+         */
         GameObject heldTarget = GetCurrentSelectedObject();
         GameObject resolvedHeldTarget = ResolveTarget(heldTarget);
 
         if (resolvedHeldTarget != null && IsAllowedInspectionTarget(resolvedHeldTarget))
         {
+            SetRayVisualsActive(rayInspectionEnabled);
             ShowTargetName(resolvedHeldTarget);
             return;
         }
 
-        // 2) Grab yoksa: ışının değdiği obje
+        /*
+         * 2) Eğer ray inspection kapalıysa:
+         * - Koldan çıkan isim tarama ışını görünmesin.
+         * - Ray ile isim aramasın.
+         * - Ama sistem komple kapanmasın, çünkü grab isimleri lazım.
+         */
+        if (!rayInspectionEnabled)
+        {
+            SetRayVisualsActive(false);
+
+            if (currentTarget != null && Time.time - lastValidTargetTime > clearDelay)
+            {
+                ClearInspectionState();
+            }
+
+            return;
+        }
+
+        /*
+         * 3) Normal alt ünitelerde ray açık.
+         * Grab yoksa ışının değdiği objeden isim göster.
+         */
+        SetRayVisualsActive(true);
+
         if (TryGetBestRayTarget(out GameObject rayTarget))
         {
             ShowTargetName(rayTarget);
             return;
         }
 
-        // 3) Hedef yoksa kısa gecikmeden sonra temizle
+        /*
+         * 4) Hedef yoksa kısa gecikmeden sonra temizle.
+         */
         if (currentTarget != null && Time.time - lastValidTargetTime > clearDelay)
         {
             ClearInspectionState();
@@ -185,8 +221,19 @@ public class CirculationFreeExploreNameInspectionController : MonoBehaviour
     {
         target = null;
 
-        bool rightHasHit = TryCastFromOrigin(rightRayOrigin, rightLineRenderer, out GameObject rightTarget, out float rightDistance);
-        bool leftHasHit = TryCastFromOrigin(leftRayOrigin, leftLineRenderer, out GameObject leftTarget, out float leftDistance);
+        bool rightHasHit = TryCastFromOrigin(
+            rightRayOrigin,
+            rightLineRenderer,
+            out GameObject rightTarget,
+            out float rightDistance
+        );
+
+        bool leftHasHit = TryCastFromOrigin(
+            leftRayOrigin,
+            leftLineRenderer,
+            out GameObject leftTarget,
+            out float leftDistance
+        );
 
         if (rightHasHit && leftHasHit)
         {
@@ -209,7 +256,12 @@ public class CirculationFreeExploreNameInspectionController : MonoBehaviour
         return false;
     }
 
-    private bool TryCastFromOrigin(Transform origin, LineRenderer lineRenderer, out GameObject target, out float distance)
+    private bool TryCastFromOrigin(
+        Transform origin,
+        LineRenderer lineRenderer,
+        out GameObject target,
+        out float distance
+    )
     {
         target = null;
         distance = maxDistance;
@@ -235,6 +287,9 @@ public class CirculationFreeExploreNameInspectionController : MonoBehaviour
         for (int i = 0; i < hits.Length; i++)
         {
             RaycastHit hit = hits[i];
+
+            if (hit.collider == null)
+                continue;
 
             GameObject candidate = ResolveTarget(hit.collider.gameObject);
 
@@ -286,7 +341,6 @@ public class CirculationFreeExploreNameInspectionController : MonoBehaviour
         lineRenderer.useWorldSpace = true;
         lineRenderer.positionCount = 2;
 
-        // Width grafiğiyle uğraşmamak için kalınlığı koddan sabitliyoruz.
         lineRenderer.widthMultiplier = 0.005f;
         lineRenderer.widthCurve = AnimationCurve.Linear(0f, 1f, 1f, 1f);
 
@@ -300,8 +354,8 @@ public class CirculationFreeExploreNameInspectionController : MonoBehaviour
     private bool ShouldBlockInspection()
     {
         return hideInspectionWhileIntroIsOpen &&
-            introPanelRoot != null &&
-            introPanelRoot.activeInHierarchy;
+               introPanelRoot != null &&
+               introPanelRoot.activeInHierarchy;
     }
 
     private void SetRayVisualsActive(bool active)
@@ -325,10 +379,8 @@ public class CirculationFreeExploreNameInspectionController : MonoBehaviour
             if (root == null)
                 continue;
 
-            // Root objeyi ekle
             allowedInspectionTargets.Add(root);
 
-            // Root altında VeinIdentity varsa onları da ekle
             VeinIdentity[] identities = root.GetComponentsInChildren<VeinIdentity>(true);
 
             foreach (VeinIdentity identity in identities)
@@ -345,6 +397,27 @@ public class CirculationFreeExploreNameInspectionController : MonoBehaviour
     {
         allowedInspectionTargets.Clear();
         ClearInspectionState();
+    }
+
+    public void SetRayInspectionEnabled(bool enabled)
+    {
+        rayInspectionEnabled = enabled;
+
+        if (!rayInspectionEnabled)
+        {
+            SetRayVisualsActive(false);
+
+            /*
+             * Burada panelRoot'u kapatmıyoruz.
+             * Çünkü grablayınca isim paneli çalışmaya devam etmeli.
+             */
+            if (currentTarget == null && namePresenter != null)
+                namePresenter.ShowName(null);
+        }
+        else
+        {
+            SetRayVisualsActive(true);
+        }
     }
 
     private bool IsAllowedInspectionTarget(GameObject target)

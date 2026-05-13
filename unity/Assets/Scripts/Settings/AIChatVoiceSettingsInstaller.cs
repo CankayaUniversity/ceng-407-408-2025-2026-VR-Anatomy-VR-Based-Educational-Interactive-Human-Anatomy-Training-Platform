@@ -88,7 +88,7 @@ public static class AIChatVoiceSettingsInstaller
             labelRect.sizeDelta = new Vector2(270f, 42f);
         }
 
-        label.enableWordWrapping = true;
+        label.textWrappingMode = TextWrappingModes.Normal;
         label.fontSize = 18f;
     }
 

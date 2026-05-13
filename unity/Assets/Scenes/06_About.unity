@@ -386,6 +386,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Asset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   m_ActionId: bd7fc534-75e3-489d-94fb-3d45cb78d8f3
+--- !u!114 &420259818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
+  m_Name: FreeExplore/Menu
+  m_EditorClassIdentifier: 
+  m_Asset: {fileID: -944628639613478452, guid: 0acb5d62861787642a8c83c72045e607, type: 3}
+  m_ActionId: 10b5ddb9-0cd5-46d4-8e39-12cfe36b7b45
 --- !u!114 &468713969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -643,6 +657,10 @@ PrefabInstance:
       propertyPath: m_BackGroundColor.r
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 657184242161839408, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.39
+      objectReference: {fileID: 0}
     - target: {fileID: 707463414564568815, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -650,6 +668,10 @@ PrefabInstance:
     - target: {fileID: 1691571359758317101, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820897918385990095, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: m_RequestedTrackingOriginMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1970516718757149861, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_IsActive
@@ -920,7 +942,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1065,8 +1087,31 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3910352455498236889, guid: 094ab6737cf0d1c488020ebc8032676f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 986287141}
   m_SourcePrefab: {fileID: 100100000, guid: 094ab6737cf0d1c488020ebc8032676f, type: 3}
+--- !u!1 &986287140 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3910352455498236889, guid: 094ab6737cf0d1c488020ebc8032676f, type: 3}
+  m_PrefabInstance: {fileID: 986287139}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &986287141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986287140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e943d00594d1e1c458c35c0d4627f62e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuSceneName: 01_Menu
+  backToMenuAction: {fileID: 420259818}
+  backKey: 27
 --- !u!1 &1020119183
 GameObject:
   m_ObjectHideFlags: 0

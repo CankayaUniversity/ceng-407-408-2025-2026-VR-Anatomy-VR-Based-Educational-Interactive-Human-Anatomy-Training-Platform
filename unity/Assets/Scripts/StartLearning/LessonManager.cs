@@ -1,7 +1,8 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using TMPro;
-using UnityEngine.UI; // Required for the Button reference
+using UnityEngine.UI;
 
 [System.Serializable]
 public class BoneData
@@ -113,7 +114,7 @@ public class LessonManager : MonoBehaviour
             return;
 
         gameObject.AddComponent<LessonUIReader>();
-        Debug.Log("[LessonManager] LessonUIReader bulunamad?; bu LessonManager ùzerine otomatik eklendi.", this);
+        Debug.Log("[LessonManager] LessonUIReader bulunamad?; bu LessonManager ÔøΩzerine otomatik eklendi.", this);
     }
 
     private void WireSimpleExplanationButton()
@@ -225,10 +226,16 @@ public class LessonManager : MonoBehaviour
     }
 
     void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space)) NextStep();
-        if (Input.GetKeyDown(KeyCode.Backspace)) PreviousStep();
-    }
+{
+    if (Keyboard.current == null)
+        return;
+
+    if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        NextStep();
+
+    if (Keyboard.current.backspaceKey.wasPressedThisFrame)
+        PreviousStep();
+}
 
     public void NextStep()
     {
@@ -291,7 +298,7 @@ public class LessonManager : MonoBehaviour
         {
             fullDescription += "\n\n";
             foreach (string step in data.steps)
-                fullDescription += "ù " + step + "\n";
+                fullDescription += "ÔøΩ " + step + "\n";
         }
 
         return fullDescription;

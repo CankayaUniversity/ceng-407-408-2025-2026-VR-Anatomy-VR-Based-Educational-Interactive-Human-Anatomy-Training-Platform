@@ -63,7 +63,6 @@ public class QuizUIController : MonoBehaviour
     // Hint state
     private Coroutine hintCoroutine;
     private Question currentQuestion;
-    private bool hintShownForCurrentQuestion = false;
 
     private void Start()
     {
@@ -757,21 +756,19 @@ public class QuizUIController : MonoBehaviour
     }
 
     void ResetHintUI()
+{
+    if (hintCoroutine != null)
     {
-        hintShownForCurrentQuestion = false;
-
-        if (hintCoroutine != null)
-        {
-            StopCoroutine(hintCoroutine);
-            hintCoroutine = null;
-        }
-
-        if (hintButton != null)
-            hintButton.gameObject.SetActive(false);
-
-        if (hintPopup != null)
-            hintPopup.Hide();
+        StopCoroutine(hintCoroutine);
+        hintCoroutine = null;
     }
+
+    if (hintButton != null)
+        hintButton.gameObject.SetActive(false);
+
+    if (hintPopup != null)
+        hintPopup.Hide();
+}
 
     void TryStartHintTimer(Question q)
     {
@@ -788,16 +785,14 @@ public class QuizUIController : MonoBehaviour
     }
 
     IEnumerator ShowHintButtonAfterDelay()
-    {
-        yield return new WaitForSeconds(hintDelay);
+{
+    yield return new WaitForSeconds(hintDelay);
 
-        hintShownForCurrentQuestion = true;
+    if (hintButton != null)
+        hintButton.gameObject.SetActive(true);
 
-        if (hintButton != null)
-            hintButton.gameObject.SetActive(true);
-
-        hintCoroutine = null;
-    }
+    hintCoroutine = null;
+}
 
     void OnHintButtonPressed()
     {
