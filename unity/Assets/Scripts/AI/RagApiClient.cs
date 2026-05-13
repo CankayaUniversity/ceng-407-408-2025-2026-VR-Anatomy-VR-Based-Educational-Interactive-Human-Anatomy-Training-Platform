@@ -108,38 +108,68 @@ public class RagApiClient : MonoBehaviour
     }
 
     private void Awake()
-    {
+{
+    if (askButton != null)
         askButton.onClick.AddListener(OnAskClicked);
-        if (questionInput != null)
-            questionInput.onValueChanged.AddListener(OnQuestionInputChanged);
+    else
+        Debug.LogError("[RagApiClient] askButton Inspector'da atanmamış!");
 
-        _audio = GetComponent<AudioSource>();
-        if (_audio == null)
-            _audio = gameObject.AddComponent<AudioSource>();
+    if (questionInput != null)
+        questionInput.onValueChanged.AddListener(OnQuestionInputChanged);
 
-        CreateSpeechButtons();
-        if (SettingsManager.Instance != null)
-            SettingsManager.Instance.OnAIChatVoiceEnabledChanged += OnAIChatVoiceEnabledChanged;
+    _audio = GetComponent<AudioSource>();
+    if (_audio == null)
+        _audio = gameObject.AddComponent<AudioSource>();
 
-        ApplyAIChatVoiceSetting(IsAIChatVoiceEnabled());
-        SetAnswerVisible(false);
-        RefreshInteractableState();
-        ShowIntroPanel();
-    }
+    CreateSpeechButtons();
+
+    if (SettingsManager.Instance != null)
+        SettingsManager.Instance.OnAIChatVoiceEnabledChanged += OnAIChatVoiceEnabledChanged;
+
+    ApplyAIChatVoiceSetting(IsAIChatVoiceEnabled());
+    SetAnswerVisible(false);
+    RefreshInteractableState();
+    ShowIntroPanel();
+}
 
     private void OnDestroy()
-    {
+{
+    if (askButton != null)
         askButton.onClick.RemoveListener(OnAskClicked);
-        if (questionInput != null)
-            questionInput.onValueChanged.RemoveListener(OnQuestionInputChanged);
-        if (_isRecording) Microphone.End(null);
-        if (_micButton != null) _micButton.onClick.RemoveAllListeners();
-        if (_speakerButton != null) _speakerButton.onClick.RemoveAllListeners();
-        if (_answerToggleButton != null) _answerToggleButton.onClick.RemoveAllListeners();
-        if (_keyboardButton != null) _keyboardButton.onClick.RemoveListener(OnKeyboardClicked);
-        if (SettingsManager.Instance != null)
-            SettingsManager.Instance.OnAIChatVoiceEnabledChanged -= OnAIChatVoiceEnabledChanged;
+
+    if (questionInput != null)
+        questionInput.onValueChanged.RemoveListener(OnQuestionInputChanged);
+
+    if (_isRecording)
+    {
+        Microphone.End(null);
+        _isRecording = false;
     }
+
+    if (_micButton != null)
+        _micButton.onClick.RemoveAllListeners();
+
+    if (_speakerButton != null)
+        _speakerButton.onClick.RemoveAllListeners();
+
+    if (_answerToggleButton != null)
+        _answerToggleButton.onClick.RemoveAllListeners();
+
+    if (_keyboardButton != null)
+        _keyboardButton.onClick.RemoveListener(OnKeyboardClicked);
+
+    if (_ttsRoutine != null)
+    {
+        StopCoroutine(_ttsRoutine);
+        _ttsRoutine = null;
+    }
+
+    if (_audio != null && _audio.isPlaying)
+        _audio.Stop();
+
+    if (SettingsManager.Instance != null)
+        SettingsManager.Instance.OnAIChatVoiceEnabledChanged -= OnAIChatVoiceEnabledChanged;
+}
 
     private void Update()
     {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +10,7 @@ public class ChatAvatarController : MonoBehaviour
 {
     [Header("Avatar Source (GLB)")]
     [SerializeField] private string glbFileName = "model1.glb";
-    [SerializeField] private string maleGlbFileName = "model 2.glb";
+    [SerializeField] private string maleGlbFileName = "model2.glb";
 
     [Header("Male Avatar Alignment")]
     [SerializeField] private bool alignMaleFeetToAvatarRoot = true;
@@ -162,39 +163,59 @@ public class ChatAvatarController : MonoBehaviour
     }
 
     private async Task<bool> TryLoadAvatarFromKnownPaths(string fileName)
+{
+    if (string.IsNullOrWhiteSpace(fileName))
     {
-        var candidates = new List<(bool useStreamingAsset, string url)>
-        {
-            (true, fileName),
-            (true, $"Avatars/{fileName}")
-        };
-
-        string streamingPath = Path.Combine(Application.dataPath, "StreamingAssets", fileName);
-        string avatarsPath = Path.Combine(Application.dataPath, "Avatars", fileName);
-
-        if (File.Exists(streamingPath))
-            candidates.Add((false, $"file:///{streamingPath.Replace("\\", "/")}"));
-
-        if (File.Exists(avatarsPath))
-            candidates.Add((false, $"file:///{avatarsPath.Replace("\\", "/")}"));
-
-        for (int i = 0; i < candidates.Count; i++)
-        {
-            var candidate = candidates[i];
-            _gltfAsset.StreamingAsset = candidate.useStreamingAsset;
-            _gltfAsset.Url = candidate.url;
-
-            string fullUrl = _gltfAsset.FullUrl;
-            bool loaded = await _gltfAsset.Load(fullUrl);
-            if (loaded)
-            {
-                Debug.Log($"[ChatAvatar] Avatar yüklendi: {fullUrl}");
-                return true;
-            }
-        }
-
+        Debug.LogError("[ChatAvatar] GLB dosya adı boş.");
         return false;
     }
+
+    string cleanFileName = fileName.Trim().Replace("\\", "/");
+
+    var candidates = new List<(bool useStreamingAsset, string url)>
+    {
+        // Build için en güvenli yol:
+        (true, $"Avatars/{cleanFileName}"),
+
+        // Yedek olarak StreamingAssets root:
+        (true, cleanFileName)
+    };
+
+#if UNITY_EDITOR
+    // Sadece Editor testleri için fallback.
+    string editorStreamingPath = Path.Combine(Application.dataPath, "StreamingAssets", "Avatars", cleanFileName);
+    string editorAssetsPath = Path.Combine(Application.dataPath, "Avatars", cleanFileName);
+
+    if (File.Exists(editorStreamingPath))
+        candidates.Add((false, new System.Uri(editorStreamingPath).AbsoluteUri));
+
+    if (File.Exists(editorAssetsPath))
+        candidates.Add((false, new System.Uri(editorAssetsPath).AbsoluteUri));
+#endif
+
+    foreach (var candidate in candidates)
+    {
+        _gltfAsset.StreamingAsset = candidate.useStreamingAsset;
+        _gltfAsset.Url = candidate.url;
+
+        string fullUrl = _gltfAsset.FullUrl;
+
+        Debug.Log($"[ChatAvatar] Avatar yükleme deneniyor: {candidate.url} | FullUrl: {fullUrl}");
+
+        bool loaded = await _gltfAsset.Load(fullUrl);
+
+        if (loaded)
+        {
+            Debug.Log($"[ChatAvatar] Avatar başarıyla yüklendi: {fullUrl}");
+            return true;
+        }
+
+        Debug.LogWarning($"[ChatAvatar] Avatar yüklenemedi, sonraki yol denenecek: {fullUrl}");
+    }
+
+    Debug.LogError($"[ChatAvatar] Hiçbir yoldan avatar yüklenemedi: {cleanFileName}");
+    return false;
+}
 
     private IEnumerator SetupAfterLoad()
     {
@@ -509,8 +530,8 @@ public class ChatAvatarController : MonoBehaviour
                 _ttsAudio = audioSources[0];
         }
 
-        _nextBlink = Time.time + Random.Range(blinkIntervalMin, blinkIntervalMax);
-        _nextSmile = Time.time + Random.Range(smileIntervalMin, smileIntervalMax);
+        _nextBlink = Time.time + UnityEngine.Random.Range(blinkIntervalMin, blinkIntervalMax);
+        _nextSmile = Time.time + UnityEngine.Random.Range(smileIntervalMin, smileIntervalMax);
 
         _faceReady = _useSingleMesh
             ? (_primarySkin != null && (_primaryJawOpen >= 0 || _primaryMouthOpen >= 0 || _primarySmileL >= 0))
@@ -659,7 +680,7 @@ public class ChatAvatarController : MonoBehaviour
         {
             w = 0f;
             _blinking = false;
-            _nextBlink = Time.time + Random.Range(blinkIntervalMin, blinkIntervalMax);
+            _nextBlink = Time.time + UnityEngine.Random.Range(blinkIntervalMin, blinkIntervalMax);
         }
 
         if (_useSingleMesh)
@@ -719,7 +740,7 @@ public class ChatAvatarController : MonoBehaviour
         {
             w = 0f;
             _smiling = false;
-            _nextSmile = Time.time + Random.Range(smileIntervalMin, smileIntervalMax);
+            _nextSmile = Time.time + UnityEngine.Random.Range(smileIntervalMin, smileIntervalMax);
         }
 
         if (_useSingleMesh)
