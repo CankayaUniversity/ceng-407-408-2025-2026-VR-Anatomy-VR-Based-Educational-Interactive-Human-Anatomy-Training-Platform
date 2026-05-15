@@ -7,26 +7,62 @@ using UnityEngine.Networking;
 public class TTSClient : MonoBehaviour
 {
     public static TTSClient Instance;
+
+    [Header("TTS Settings")]
     [SerializeField] private string ttsUrl = "http://127.0.0.1:8001/tts";
+
+    [Header("Voice Settings")]
+    [SerializeField] private bool useFemaleVoice = true;
+
+    [SerializeField] private string femaleVoice = "tr-TR-EmelNeural";
+    [SerializeField] private string maleVoice = "tr-TR-AhmetNeural";
+
+    [Header("Audio Source Search")]
+    [Tooltip("Put all avatar/model GameObjects under this parent. The script will use the active AudioSource found inside it.")]
+    [SerializeField] private Transform audioSourceSearchRoot;
+
+    [Tooltip("If true, the script searches for the active AudioSource before every speech.")]
+    [SerializeField] private bool refreshAudioSourceBeforeSpeaking = true;
+
     private AudioSource _audio;
     private int _currentRequestId = 0;
 
+    [Serializable]
+    private class TTSRequest
+    {
+        public string text;
+        public string voice;
+    }
+
     void Awake()
     {
-        if (Instance == null) Instance = this;
-        _audio = GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
-        _audio.spatialBlend = 0;
-        _audio.playOnAwake = false;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+
+        RefreshActiveAudioSource();
     }
 
     public void Speak(string text)
     {
         if (string.IsNullOrWhiteSpace(text)) return;
 
+        if (refreshAudioSourceBeforeSpeaking)
+        {
+            RefreshActiveAudioSource();
+        }
+
+        if (_audio == null)
+        {
+            Debug.LogError("[AI_SERVICE] No active AudioSource found. Please assign Audio Source Search Root and make sure one model with AudioSource is active.");
+            return;
+        }
+
         if (_audio.isPlaying)
         {
             _audio.Stop();
-            Debug.LogError("[AI_SERVICE] Previous audio killed to make room for new bone.");
+            Debug.Log("[AI_SERVICE] Previous audio stopped to play new speech.");
         }
 
         _currentRequestId++;
@@ -34,33 +70,111 @@ public class TTSClient : MonoBehaviour
         StartCoroutine(SpeakRoutine(text, _currentRequestId));
     }
 
-    // New logic to check if AI is currently talking
+    private void RefreshActiveAudioSource()
+    {
+        _audio = null;
+
+        if (audioSourceSearchRoot == null)
+        {
+            Debug.LogWarning("[AI_SERVICE] Audio Source Search Root is not assigned. Trying to find AudioSource on this object instead.");
+
+            _audio = GetComponent<AudioSource>();
+
+            if (_audio != null)
+            {
+                ConfigureAudioSource(_audio);
+            }
+
+            return;
+        }
+
+        AudioSource[] audioSources = audioSourceSearchRoot.GetComponentsInChildren<AudioSource>(false);
+
+        int activeAudioSourceCount = 0;
+
+        foreach (AudioSource source in audioSources)
+        {
+            if (source != null && source.isActiveAndEnabled && source.gameObject.activeInHierarchy)
+            {
+                activeAudioSourceCount++;
+
+                if (_audio == null)
+                {
+                    _audio = source;
+                }
+            }
+        }
+
+        if (_audio == null)
+        {
+            Debug.LogWarning("[AI_SERVICE] No active AudioSource found under: " + audioSourceSearchRoot.name);
+            return;
+        }
+
+        if (activeAudioSourceCount > 1)
+        {
+            Debug.LogWarning("[AI_SERVICE] More than one active AudioSource found under " + audioSourceSearchRoot.name + ". Using: " + _audio.gameObject.name);
+        }
+
+        ConfigureAudioSource(_audio);
+
+        Debug.Log("[AI_SERVICE] Active AudioSource selected: " + _audio.gameObject.name);
+    }
+
+    private void ConfigureAudioSource(AudioSource audioSource)
+    {
+        if (audioSource == null) return;
+
+        audioSource.playOnAwake = false;
+
+        // Important:
+        // Do NOT force spatialBlend here if you want each model to have different AudioSource settings.
+        // Example: one model can be 2D, another can be 3D/spatial.
+        //
+        // audioSource.spatialBlend = 0;
+    }
+
     public bool IsSpeaking()
     {
+        if (_audio == null && refreshAudioSourceBeforeSpeaking)
+        {
+            RefreshActiveAudioSource();
+        }
+
         return _audio != null && _audio.isPlaying;
     }
 
     public void Stop()
     {
         _currentRequestId++;
-        if (_audio.isPlaying) _audio.Stop();
+
+        if (_audio == null && refreshAudioSourceBeforeSpeaking)
+        {
+            RefreshActiveAudioSource();
+        }
+
+        if (_audio != null && _audio.isPlaying)
+        {
+            _audio.Stop();
+        }
     }
 
     private IEnumerator SpeakRoutine(string text, int requestId)
     {
-        bool isMale = SettingsManager.Instance != null &&
-                      SettingsManager.Instance.SelectedAvatarType == SettingsManager.AvatarType.Male;
+        string voice = useFemaleVoice ? femaleVoice : maleVoice;
 
-        string voice = isMale ? "tr-TR-AhmetNeural" : "tr-TR-EmelNeural";
-
-        // CLEANING THE TEXT (Fixes Code 422)
         string cleanText = text.Trim()
-            .Replace("\n", " ")      // Remove line breaks
-            .Replace("\r", " ")      // Remove carriage returns
-            .Replace("\"", "\\\"")   // Escape double quotes
-            .Replace("•", "");       // Remove bullet points
+            .Replace("\n", " ")
+            .Replace("\r", " ")
+            .Replace("•", "");
 
-        string json = "{\"text\":\"" + cleanText + "\", \"voice\":\"" + voice + "\"}";
+        TTSRequest requestData = new TTSRequest
+        {
+            text = cleanText,
+            voice = voice
+        };
+
+        string json = JsonUtility.ToJson(requestData);
         byte[] body = Encoding.UTF8.GetBytes(json);
 
         using (UnityWebRequest req = new UnityWebRequest(ttsUrl, "POST"))
@@ -71,7 +185,10 @@ public class TTSClient : MonoBehaviour
 
             yield return req.SendWebRequest();
 
-            if (requestId != _currentRequestId) yield break;
+            if (requestId != _currentRequestId)
+            {
+                yield break;
+            }
 
             if (req.result != UnityWebRequest.Result.Success)
             {
@@ -80,19 +197,37 @@ public class TTSClient : MonoBehaviour
             }
 
             AudioClip clip = DownloadHandlerAudioClip.GetContent(req);
+
             if (clip != null && clip.length > 0)
             {
+                if (_audio == null)
+                {
+                    RefreshActiveAudioSource();
+                }
+
+                if (_audio == null)
+                {
+                    Debug.LogError("[AI_SERVICE] Audio was generated, but no active AudioSource is available to play it.");
+                    yield break;
+                }
+
                 _audio.clip = clip;
                 _audio.Play();
-                Debug.LogError("[AI_SERVICE] SUCCESS! Playing " + clip.length.ToString("F2") + "s of audio.");
+
+                Debug.Log("[AI_SERVICE] SUCCESS! Playing " + voice + " voice on " + _audio.gameObject.name + ". Length: " + clip.length.ToString("F2") + "s");
             }
         }
     }
 
-
-    
     public void TogglePause()
     {
+        if (_audio == null && refreshAudioSourceBeforeSpeaking)
+        {
+            RefreshActiveAudioSource();
+        }
+
+        if (_audio == null) return;
+
         if (_audio.isPlaying)
         {
             _audio.Pause();
@@ -100,21 +235,18 @@ public class TTSClient : MonoBehaviour
         }
         else if (_audio.clip != null && _audio.time > 0)
         {
-            // time > 0 ensures we have a clip that started playing
             _audio.UnPause();
             Debug.Log("[AI_SERVICE] Audio Resumed.");
         }
     }
 
-    
     public bool IsPaused()
     {
-        return !_audio.isPlaying && _audio.clip != null && _audio.time > 0;
+        if (_audio == null && refreshAudioSourceBeforeSpeaking)
+        {
+            RefreshActiveAudioSource();
+        }
+
+        return _audio != null && !_audio.isPlaying && _audio.clip != null && _audio.time > 0;
     }
-
-
-
-
-
-
 }
