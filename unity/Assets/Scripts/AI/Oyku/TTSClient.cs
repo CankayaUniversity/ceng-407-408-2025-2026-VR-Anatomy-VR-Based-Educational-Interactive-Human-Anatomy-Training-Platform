@@ -88,4 +88,33 @@ public class TTSClient : MonoBehaviour
             }
         }
     }
+
+
+    
+    public void TogglePause()
+    {
+        if (_audio.isPlaying)
+        {
+            _audio.Pause();
+            Debug.Log("[AI_SERVICE] Audio Paused.");
+        }
+        else if (_audio.clip != null && _audio.time > 0)
+        {
+            // time > 0 ensures we have a clip that started playing
+            _audio.UnPause();
+            Debug.Log("[AI_SERVICE] Audio Resumed.");
+        }
+    }
+
+    
+    public bool IsPaused()
+    {
+        return !_audio.isPlaying && _audio.clip != null && _audio.time > 0;
+    }
+
+
+
+
+
+
 }
