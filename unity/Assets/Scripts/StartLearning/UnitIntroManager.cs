@@ -38,17 +38,16 @@ public class UnitIntroManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(textToRead))
         {
-            Debug.LogError("[INTRO_MANAGER] No intro text found. Enabling systems immediately.");
             EnableSystems();
             yield break;
         }
 
         yield return new WaitForSeconds(startDelay);
 
-        // 1. Request speech
+        // request speech
         TTSClient.Instance.Speak(textToRead);
 
-        // 2. WAIT until the AI actually starts talking (Handshaking)
+        // wait until the AI actually starts talking (Handshaking)
         float timeout = 4.0f;
         while (!TTSClient.Instance.IsSpeaking() && timeout > 0)
         {
@@ -56,16 +55,15 @@ public class UnitIntroManager : MonoBehaviour
             yield return null;
         }
 
-        // 3. NOW wait until it stops talking
+        // wait until it stops talking
         while (TTSClient.Instance.IsSpeaking())
         {
             yield return null;
         }
 
-        // 4. Final safety buffer
+        // final safety buffer
         yield return new WaitForSeconds(0.3f);
 
-        Debug.LogError("[INTRO_MANAGER] Intro finished correctly. Enabling systems.");
         EnableSystems();
     }
 

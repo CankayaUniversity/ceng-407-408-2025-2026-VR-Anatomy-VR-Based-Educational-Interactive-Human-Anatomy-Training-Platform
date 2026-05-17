@@ -33,7 +33,7 @@ public class ReviewManager : MonoBehaviour
         if (BoneVisualManager.Active != null && LessonManager.Instance != null)
         {
             BoneVisualManager.Active.ResetAllBones(LessonManager.Instance.bones);
-            Debug.LogError("[REVIEW] Resetting materials for " + LessonManager.Instance.bones.Count + " bones.");
+            
         }
         else
         {
@@ -126,7 +126,7 @@ public class ReviewManager : MonoBehaviour
         if (BoneVisualManager.Active != null && LessonManager.Instance != null)
         {
             BoneVisualManager.Active.ResetAllBones(LessonManager.Instance.bones);
-            Debug.LogError("[REVIEW] Resetting materials for " + LessonManager.Instance.bones.Count + " bones.");
+            
         }
         else
         {

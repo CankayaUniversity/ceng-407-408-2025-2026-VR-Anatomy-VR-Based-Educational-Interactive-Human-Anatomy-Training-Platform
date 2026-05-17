@@ -30,6 +30,7 @@ public class LessonManager : MonoBehaviour
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI infoText;
     public Button nextButton;
+    public Button previousButton; // --- DRAG YOUR NEW PREVIOUS BUTTON HERE ---
 
     [Header("Bone Sequence")]
     public List<GameObject> bones;
@@ -43,13 +44,20 @@ public class LessonManager : MonoBehaviour
     {
         Instance = this;
 
+        // 1. SETUP NEXT BUTTON LISTENER
         if (nextButton != null)
         {
             nextButton.onClick.RemoveAllListeners();
             nextButton.onClick.AddListener(NextStep);
         }
 
-        // Logic only starts when IntroManager enables this script
+        // 2. SETUP PREVIOUS BUTTON LISTENER
+        if (previousButton != null)
+        {
+            previousButton.onClick.RemoveAllListeners();
+            previousButton.onClick.AddListener(PreviousStep);
+        }
+
         LoadJsonData();
         if (bones != null && bones.Count > 0)
         {
@@ -60,13 +68,15 @@ public class LessonManager : MonoBehaviour
     void OnDisable()
     {
         if (Instance == this) Instance = null;
+
+        // Clean up listeners safely to avoid memory leaks
         if (nextButton != null) nextButton.onClick.RemoveAllListeners();
+        if (previousButton != null) previousButton.onClick.RemoveAllListeners();
     }
 
     void Start()
     {
-        // Removed the Invoke. We wait for OnEnable.
-        //LoadJsonData();
+        // Handled via OnEnable sequence
     }
 
     private void StartLesson()
@@ -114,6 +124,9 @@ public class LessonManager : MonoBehaviour
 
     public void PreviousStep()
     {
+        // Block going backward if we are in review dashboard mode
+        if (IsReviewMode) return;
+
         if (currentIndex > 0)
         {
             currentIndex--;
@@ -145,6 +158,14 @@ public class LessonManager : MonoBehaviour
                     fullDescription += "• " + step + "\n";
             }
             infoText.text = fullDescription;
+        }
+
+        // --- OPTIONAL POLISH: DYNAMIC BUTTON VISIBILITY ---
+        // Automatically hide the previous button on the very first bone, 
+        // and show it when scrolling forward.
+        if (previousButton != null)
+        {
+            previousButton.gameObject.SetActive(currentIndex > 0);
         }
     }
 }

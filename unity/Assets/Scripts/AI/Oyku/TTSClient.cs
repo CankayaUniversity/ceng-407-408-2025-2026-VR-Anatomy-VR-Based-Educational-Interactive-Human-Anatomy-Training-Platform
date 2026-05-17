@@ -18,10 +18,9 @@ public class TTSClient : MonoBehaviour
     [SerializeField] private string maleVoice = "tr-TR-AhmetNeural";
 
     [Header("Audio Source Search")]
-    [Tooltip("Put all avatar/model GameObjects under this parent. The script will use the active AudioSource found inside it.")]
     [SerializeField] private Transform audioSourceSearchRoot;
 
-    [Tooltip("If true, the script searches for the active AudioSource before every speech.")]
+    
     [SerializeField] private bool refreshAudioSourceBeforeSpeaking = true;
 
     private AudioSource _audio;
@@ -62,7 +61,7 @@ public class TTSClient : MonoBehaviour
         if (_audio.isPlaying)
         {
             _audio.Stop();
-            Debug.Log("[AI_SERVICE] Previous audio stopped to play new speech.");
+            
         }
 
         _currentRequestId++;
@@ -76,7 +75,6 @@ public class TTSClient : MonoBehaviour
 
         if (audioSourceSearchRoot == null)
         {
-            Debug.LogWarning("[AI_SERVICE] Audio Source Search Root is not assigned. Trying to find AudioSource on this object instead.");
 
             _audio = GetComponent<AudioSource>();
 
@@ -118,7 +116,6 @@ public class TTSClient : MonoBehaviour
 
         ConfigureAudioSource(_audio);
 
-        Debug.Log("[AI_SERVICE] Active AudioSource selected: " + _audio.gameObject.name);
     }
 
     private void ConfigureAudioSource(AudioSource audioSource)
@@ -127,11 +124,6 @@ public class TTSClient : MonoBehaviour
 
         audioSource.playOnAwake = false;
 
-        // Important:
-        // Do NOT force spatialBlend here if you want each model to have different AudioSource settings.
-        // Example: one model can be 2D, another can be 3D/spatial.
-        //
-        // audioSource.spatialBlend = 0;
     }
 
     public bool IsSpeaking()
@@ -214,7 +206,7 @@ public class TTSClient : MonoBehaviour
                 _audio.clip = clip;
                 _audio.Play();
 
-                Debug.Log("[AI_SERVICE] SUCCESS! Playing " + voice + " voice on " + _audio.gameObject.name + ". Length: " + clip.length.ToString("F2") + "s");
+                
             }
         }
     }
@@ -231,12 +223,12 @@ public class TTSClient : MonoBehaviour
         if (_audio.isPlaying)
         {
             _audio.Pause();
-            Debug.Log("[AI_SERVICE] Audio Paused.");
+           
         }
         else if (_audio.clip != null && _audio.time > 0)
         {
             _audio.UnPause();
-            Debug.Log("[AI_SERVICE] Audio Resumed.");
+         
         }
     }
 

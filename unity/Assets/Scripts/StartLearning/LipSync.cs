@@ -133,7 +133,7 @@ public class LipSync : MonoBehaviour
 
         initialized = true;
 
-        Debug.Log("[ChatAvatar] Lip sync controller initialized.");
+      
     }
 
     public void SetSpeechAudioSource(AudioSource newAudioSource)
@@ -149,7 +149,7 @@ public class LipSync : MonoBehaviour
         if (TryGetComponent(out AudioSource ownAudio))
         {
             speechAudioSource = ownAudio;
-            Debug.Log("[ChatAvatar] AudioSource found on same GameObject.");
+            
             return;
         }
 
@@ -159,7 +159,7 @@ public class LipSync : MonoBehaviour
 
             if (speechAudioSource != null)
             {
-                Debug.Log("[ChatAvatar] AudioSource found in children.");
+               
                 return;
             }
         }
@@ -170,7 +170,7 @@ public class LipSync : MonoBehaviour
 
             if (speechAudioSource != null)
             {
-                Debug.Log("[ChatAvatar] AudioSource found in parents.");
+                
                 return;
             }
         }
@@ -184,7 +184,7 @@ public class LipSync : MonoBehaviour
                 if (source != null && source.isPlaying)
                 {
                     speechAudioSource = source;
-                    Debug.Log("[ChatAvatar] Playing scene AudioSource found.");
+                    
                     return;
                 }
             }
@@ -192,7 +192,7 @@ public class LipSync : MonoBehaviour
             if (allAudioSources.Length > 0)
             {
                 speechAudioSource = allAudioSources[0];
-                Debug.Log("[ChatAvatar] First scene AudioSource assigned.");
+             
                 return;
             }
         }
@@ -216,7 +216,7 @@ public class LipSync : MonoBehaviour
             Mesh mesh = smr.sharedMesh;
             string objectName = smr.gameObject.name;
 
-            Debug.Log("[Face] Mesh: " + objectName + " - " + mesh.blendShapeCount + " blendshape(s)");
+           
 
             if (mesh.blendShapeCount > maxBlendShapes)
             {
@@ -269,7 +269,7 @@ public class LipSync : MonoBehaviour
                 if (headSmileR < 0)
                     headSmileR = FindPartial2(mesh, "smile", "r");
 
-                Debug.Log("[Face] Head smile indices - Center: " + headSmile + ", Left: " + headSmileL + ", Right: " + headSmileR);
+               
 
                 foundSeparatedFaceMeshes = true;
             }
@@ -331,8 +331,7 @@ public class LipSync : MonoBehaviour
             if (primarySmileR < 0)
                 primarySmileR = FindPartial2(mesh, "smile", "r");
 
-            Debug.Log("[Face] Single mesh mode enabled.");
-            Debug.Log("[Face] Primary smile indices - Left: " + primarySmileL + ", Right: " + primarySmileR);
+          
         }
 
         DetectVisemes();
@@ -692,7 +691,7 @@ public class LipSync : MonoBehaviour
 
             hasVisemes = true;
 
-            Debug.Log("[Face] Viseme support found on " + smr.gameObject.name);
+            
             return;
         }
 

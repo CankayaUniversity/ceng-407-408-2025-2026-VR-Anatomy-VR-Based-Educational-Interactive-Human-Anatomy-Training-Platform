@@ -34,7 +34,7 @@ public class BoneVisualManager : MonoBehaviour
                 _originalMaterials[r] = r.sharedMaterial;
             }
         }
-        Debug.Log($"[VISUAL_MANAGER] Cached {_originalMaterials.Count} materials for unit {gameObject.name}");
+        
     }
 
     private void SetAllToGhost()
@@ -88,6 +88,6 @@ public class BoneVisualManager : MonoBehaviour
                 r.sharedMaterial = originalMat;
             }
         }
-        Debug.Log("[VISUAL_MANAGER] All materials reset to solid.");
+       
     }
 }

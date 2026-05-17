@@ -16,7 +16,6 @@ public class UnitInitializer : MonoBehaviour
 
     void Start()
     {
-        Debug.LogError("[INITIALIZER] Start called. Checking List Size: " + unitList.Count);
 
         foreach (var mapping in unitList)
         {
@@ -26,7 +25,7 @@ public class UnitInitializer : MonoBehaviour
             if (mapping.lessonManager != null)
             {
                 mapping.lessonManager.enabled = false;
-                Debug.LogError("[INITIALIZER] Force-Disabled LessonManager for ID: " + mapping.unitID);
+                
             }
             else
             {
@@ -35,7 +34,7 @@ public class UnitInitializer : MonoBehaviour
         }
 
         int selectedID = AnatomyState.SelectedAnatomyUnitID;
-        Debug.LogError("[INITIALIZER] Looking for Selected ID: " + selectedID);
+        
 
         foreach (var mapping in unitList)
         {
@@ -44,7 +43,7 @@ public class UnitInitializer : MonoBehaviour
                 if (mapping.unitRoot != null)
                 {
                     mapping.unitRoot.SetActive(true);
-                    Debug.LogError("[INITIALIZER] Found and Activated 3D model for Unit: " + selectedID);
+                    
                 }
                 return;
             }
