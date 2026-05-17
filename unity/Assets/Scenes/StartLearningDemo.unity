@@ -903,7 +903,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2098015664}
         m_TargetAssemblyTypeName: TTSClient, Assembly-CSharp
         m_MethodName: TogglePause
         m_Mode: 1
@@ -1745,7 +1745,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2098015664}
         m_TargetAssemblyTypeName: TTSClient, Assembly-CSharp
         m_MethodName: TogglePause
         m_Mode: 1
