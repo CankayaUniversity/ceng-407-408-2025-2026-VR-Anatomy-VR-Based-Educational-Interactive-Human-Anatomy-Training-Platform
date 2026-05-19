@@ -12,6 +12,7 @@ public class LessonUIReader : MonoBehaviour
     private const string MaleTtsVoice = "tr-TR-AhmetNeural";
     private const string MaleTtsPitch = "+8%";
     private const string MaleTtsRate = "+0%";
+    private const string StudentNamePrefKey = "StudentName";
 
     public enum LessonSection
     {
@@ -32,7 +33,7 @@ public class LessonUIReader : MonoBehaviour
     [SerializeField] private bool playIntroOnEnable = true;
 
     [Header("Speech API")]
-    [SerializeField] private string ttsUrl = "https://vr-anatomy-backend.onrender.com/tts";
+    [SerializeField] private string ttsUrl = "https://vr-anatomy-backend2.onrender.com/tts";
     [SerializeField] private bool respectAIChatVoiceSetting = true;
 
     private AudioSource _audio;
@@ -94,7 +95,7 @@ public class LessonUIReader : MonoBehaviour
         _cardChangePendingDuringIntro = false;
 
         LessonSection resolvedSection = ResolveSection();
-        string introText = GetIntroText(resolvedSection);
+        string introText = BuildIntroSpeechText(resolvedSection);
         string introTitle = GetIntroTitle(resolvedSection);
 
         Debug.Log(
@@ -438,24 +439,120 @@ public class LessonUIReader : MonoBehaviour
         switch (resolvedSection)
         {
             case LessonSection.HeadAndFaceBones:
-                return "Baş ve yüz kemikleri bölümüne hoş geldiniz. Bu bölümde kafatasını oluşturan temel kemikleri ve yüz bölgesindeki önemli yapıları inceleyeceksiniz. Bilgi kartları sırayla ekrana gelecek. Sıradaki butonuna basarak bir sonraki bilgi kartına geçebilirsiniz. Hazırsanız başlayalım.";
+                return "Şimdi baş ve yüz kemikleri bölümünü birlikte inceleyelim. Bu bölümde kafatasını oluşturan temel kemikleri ve yüz bölgesindeki önemli yapıları adım adım göreceksin. Bilgi kartları sırayla ekrana gelecek. Hazır olduğunda Sıradaki butonuna basarak bir sonraki karta geçebilirsin.";
             case LessonSection.TrunkBones:
-                return "Gövde kemikleri bölümüne hoş geldiniz. Bu bölümde omurga, göğüs kafesi ve gövdeyi destekleyen temel kemik yapıları inceleyeceksiniz. Her bilgi kartında ilgili kemiğe ait kısa açıklamalar yer alacak. Sıradaki butonuna basarak kartlar arasında ilerleyebilirsiniz. Hazırsanız ilk yapı ile başlayalım.";
+                return "Şimdi gövde kemikleri bölümünü birlikte inceleyelim. Bu bölümde omurga, göğüs kafesi ve gövdeyi destekleyen temel kemik yapıları üzerinde duracağız. Her bilgi kartında ilgili kemiğe ait kısa ve anlaşılır bilgiler göreceksin. Hazır olduğunda Sıradaki butonuna basarak kartlar arasında ilerleyebilirsin.";
             case LessonSection.UpperExtremityBones:
-                return "Üst ekstremite kemikleri bölümüne hoş geldiniz. Bu bölümde omuz, kol, ön kol ve el bölgesindeki kemikleri inceleyeceksiniz. Bilgi kartları size kemiklerin konumunu ve görevini kısa şekilde anlatacak. Sıradaki butonuna basarak sıradaki karta geçebilirsiniz. Haydi üst ekstremite kemiklerini keşfedelim.";
+                return "Şimdi üst ekstremite kemikleri bölümünü birlikte inceleyelim. Bu bölümde omuz, kol, ön kol ve el bölgesindeki kemikleri adım adım ele alacağız. Bilgi kartları kemiklerin konumunu ve temel görevini sade bir dille anlatacak. Hazır olduğunda Sıradaki butonuna basarak ilerleyebilirsin.";
             case LessonSection.LowerExtremityBones:
-                return "Alt ekstremite kemikleri bölümüne hoş geldiniz. Bu bölümde kalça, uyluk, bacak ve ayak bölgesindeki kemik yapılarını inceleyeceksiniz. Bilgi kartları ekrana sırayla gelecek ve her kartta ilgili kemiğin temel bilgileri yer alacak. Sıradaki butonuna basarak ilerleyebilirsiniz. Hazırsanız başlayalım.";
+                return "Şimdi alt ekstremite kemikleri bölümünü birlikte inceleyelim. Bu bölümde kalça, uyluk, bacak ve ayak bölgesindeki kemik yapıları üzerinde duracağız. Bilgi kartları ekrana sırayla gelecek ve her kartta ilgili kemiğin temel bilgileri yer alacak. Hazır olduğunda Sıradaki butonuna basarak ilerleyebilirsin.";
             case LessonSection.SkeletalMuscles:
-                return "İskelet kasları bölümüne hoş geldiniz. Bu bölümde vücudun hareket etmesini sağlayan temel kas gruplarını inceleyeceksiniz. Bilgi kartlarında kasların bulunduğu bölge ve genel görevleri kısa şekilde anlatılacak. Sıradaki butonuna basarak bir sonraki karta geçebilirsiniz. Hazırsanız kas sistemini tanımaya başlayalım.";
+                return "Şimdi iskelet kasları bölümünü birlikte inceleyelim. Bu bölümde vücudun hareket etmesini sağlayan temel kas gruplarını tanıyacağız. Bilgi kartlarında kasların bulunduğu bölge ve genel görevleri kısa ve anlaşılır şekilde göreceksin. Hazır olduğunda Sıradaki butonuna basarak bir sonraki karta geçebilirsin.";
             case LessonSection.HeartStructure:
-                return "Kalbin yapısı bölümüne hoş geldiniz. Bu bölümde kalbin temel bölümlerini, odacıklarını ve kanın kalp içindeki ilerleyişini inceleyeceksiniz. Bilgi kartları sırayla ekrana gelecek. Sıradaki butonuna basarak bir sonraki karta geçebilirsiniz. Hazırsanız kalbin yapısını birlikte inceleyelim.";
+                return "Şimdi kalbin yapısı bölümünü birlikte inceleyelim. Bu bölümde kalbin temel bölümlerini, odacıklarını ve kanın kalp içindeki ilerleyişini adım adım göreceğiz. Bilgi kartları sırayla ekrana gelecek. Hazır olduğunda Sıradaki butonuna basarak bir sonraki karta geçebilirsin.";
             case LessonSection.Vessels:
-                return "Damarlar bölümüne hoş geldiniz. Bu bölümde atardamarlar, toplardamarlar ve kılcal damarlar gibi dolaşım sisteminin temel damar yapılarını inceleyeceksiniz. Her bilgi kartında damarların görevleri kısa ve anlaşılır şekilde anlatılacak. Sıradaki butonuna basarak kartlar arasında ilerleyebilirsiniz. Hazırsanız başlayalım.";
+                return "Şimdi damarlar bölümünü birlikte inceleyelim. Bu bölümde atardamarlar, toplardamarlar ve kılcal damarlar gibi dolaşım sisteminin temel damar yapılarını ele alacağız. Her bilgi kartında damarların görevleri kısa ve anlaşılır şekilde anlatılacak. Hazır olduğunda Sıradaki butonuna basarak kartlar arasında ilerleyebilirsin.";
             default:
                 return "";
         }
     }
 
+    private static string BuildIntroSpeechText(LessonSection resolvedSection)
+{
+    string intro = GetIntroText(resolvedSection);
+    if (string.IsNullOrWhiteSpace(intro))
+        return "";
+
+    string studentName = SafeTrim(PlayerPrefs.GetString(StudentNamePrefKey, ""));
+    if (string.IsNullOrEmpty(studentName))
+        return intro;
+
+    string affectionateName = BuildAffectionateName(studentName);
+
+    return $"Merhaba {affectionateName}, hoş geldin. {intro}";
+}
+private static string BuildAffectionateName(string rawName)
+{
+    string name = SafeTrim(rawName);
+
+    if (string.IsNullOrEmpty(name))
+        return "";
+
+    // Eğer kullanıcı "Çağla Pelin" gibi iki isim girdiyse,
+    // selamlamada ilk ismi kullanmak daha doğal olur.
+    string firstName = name.Split(' ')[0];
+
+    char lastVowel = FindLastTurkishVowel(firstName);
+
+    string suffix;
+
+    switch (lastVowel)
+    {
+        case 'a':
+        case 'A':
+        case 'ı':
+        case 'I':
+            suffix = "cığım";
+            break;
+
+        case 'e':
+        case 'E':
+        case 'i':
+        case 'İ':
+            suffix = "ciğim";
+            break;
+
+        case 'o':
+        case 'O':
+        case 'u':
+        case 'U':
+            suffix = "cuğum";
+            break;
+
+        case 'ö':
+        case 'Ö':
+        case 'ü':
+        case 'Ü':
+            suffix = "cüğüm";
+            break;
+
+        default:
+            suffix = "cığım";
+            break;
+    }
+
+    // TTS daha doğal okusun diye apostrof koymuyoruz:
+    // Çağla'cığım yerine Çağlacığım
+    return firstName + suffix;
+}
+
+private static char FindLastTurkishVowel(string text)
+{
+    if (string.IsNullOrEmpty(text))
+        return '\0';
+
+    for (int i = text.Length - 1; i >= 0; i--)
+    {
+        char c = text[i];
+
+        if (IsTurkishVowel(c))
+            return c;
+    }
+
+    return '\0';
+}
+
+private static bool IsTurkishVowel(char c)
+{
+    return c == 'a' || c == 'A'
+        || c == 'e' || c == 'E'
+        || c == 'ı' || c == 'I'
+        || c == 'i' || c == 'İ'
+        || c == 'o' || c == 'O'
+        || c == 'ö' || c == 'Ö'
+        || c == 'u' || c == 'U'
+        || c == 'ü' || c == 'Ü';
+}
     private static string GetIntroTitle(LessonSection resolvedSection)
     {
         switch (resolvedSection)
@@ -479,12 +576,26 @@ public class LessonUIReader : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Ses eşleşmesi:
+    ///   Female (0) + YoungFemale (2) → tr-TR-EmelNeural
+    ///   Male   (1) + YoungMale   (3) → tr-TR-AhmetNeural
+    /// </summary>
     private static bool IsMaleAvatarSelected()
     {
-        if (SettingsManager.Instance != null)
-            return SettingsManager.Instance.SelectedAvatarType == SettingsManager.AvatarType.Male;
+        SettingsManager.AvatarType type;
 
-        int rawValue = PlayerPrefs.GetInt("AvatarType", (int)SettingsManager.AvatarType.Female);
-        return rawValue == (int)SettingsManager.AvatarType.Male;
+        if (SettingsManager.Instance != null)
+        {
+            type = SettingsManager.Instance.SelectedAvatarType;
+        }
+        else
+        {
+            int raw = PlayerPrefs.GetInt("AvatarType", (int)SettingsManager.AvatarType.Female);
+            type = (SettingsManager.AvatarType)Mathf.Clamp(raw, 0, 3);
+        }
+
+        return type == SettingsManager.AvatarType.Male
+            || type == SettingsManager.AvatarType.YoungMale;
     }
 }

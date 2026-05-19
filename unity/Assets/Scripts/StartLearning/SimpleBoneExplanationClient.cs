@@ -26,7 +26,7 @@ public class SimpleBoneExplanationResponse
 public class SimpleBoneExplanationClient : MonoBehaviour
 {
     [Header("Backend")]
-    [SerializeField] private string backendUrl = "https://vr-anatomy-backend.onrender.com/learning/simple-bone-explanation";
+    [SerializeField] private string backendUrl = "https://vr-anatomy-backend2.onrender.com/learning/simple-bone-explanation";
     [SerializeField] private int timeoutSeconds = 30;
 
     [Header("Lesson UI")]
@@ -132,16 +132,12 @@ public class SimpleBoneExplanationClient : MonoBehaviour
                 yield break;
             }
 
-            if (request.result != UnityWebRequest.Result.Success)
+            if (request.result != UnityWebRequest.Result.Success || request.responseCode < 200 || request.responseCode >= 300)
             {
-                Debug.LogError(
-                    "[SimpleBoneExplanationClient] Gemini basit anlatım alınamadı.\n" +
-                    "HTTP Code: " + request.responseCode + "\n" +
-                    "Error: " + request.error + "\n" +
-                    "Response Body: " + request.downloadHandler.text
-                );
-
-                ApplyFallback(boneName, originalText, "Backend hatası nedeniyle basit anlatım alınamadı.");
+                ApplyFallback(
+                    boneName,
+                    originalText,
+                    $"Gemini basit anlatım alınamadı: {request.error} | HTTP {request.responseCode}");
                 yield break;
             }
 
@@ -173,9 +169,10 @@ public class SimpleBoneExplanationClient : MonoBehaviour
             if (infoBodyText != null)
                 infoBodyText.text = response.simple_explanation.Trim();
 
+            string speechText = ResolveSimpleExplanationSpeechText(response);
             ResolveLessonUIReader();
             if (lessonUIReader != null)
-                lessonUIReader.SpeakReviewText(response.simple_explanation.Trim());
+                lessonUIReader.SpeakReviewText(speechText);
 
             _requestRoutine = null;
         }
@@ -211,6 +208,15 @@ public class SimpleBoneExplanationClient : MonoBehaviour
     return response != null
            && !string.IsNullOrWhiteSpace(response.simple_explanation);
 }
+
+    private static string ResolveSimpleExplanationSpeechText(SimpleBoneExplanationResponse response)
+    {
+        string speechText = response != null ? SafeTrim(response.speech_text) : "";
+        if (!string.IsNullOrEmpty(speechText))
+            return speechText;
+
+        return response != null ? SafeTrim(response.simple_explanation) : "";
+    }
 
     private static string SafeTrim(string value)
     {

@@ -20,11 +20,15 @@ public class StartLearningAvatarVisibilityController : MonoBehaviour
     [Header("Scene Avatar Roots")]
     [SerializeField] private GameObject femaleAvatar;
     [SerializeField] private GameObject maleAvatar;
+    [SerializeField] private GameObject youngFemaleAvatar;   // model3.glb
+    [SerializeField] private GameObject youngMaleAvatar;     // model4.glb
 
     [Header("Optional Clip Overrides")]
     [Tooltip("Otomatik bulunan idle clip yanlışsa, ilgili avatar için doğru clip'i buraya sürükle.")]
     [SerializeField] private AnimationClip femaleIdleClip;
     [SerializeField] private AnimationClip maleIdleClip;
+    [SerializeField] private AnimationClip youngFemaleIdleClip;
+    [SerializeField] private AnimationClip youngMaleIdleClip;
 
     private PlayableGraph _idleGraph;
     private AnimationClipPlayable _idlePlayable;
@@ -71,7 +75,7 @@ public class StartLearningAvatarVisibilityController : MonoBehaviour
         savedValue = Mathf.Clamp(
             savedValue,
             (int)SettingsManager.AvatarType.Female,
-            (int)SettingsManager.AvatarType.Male);
+            (int)SettingsManager.AvatarType.YoungMale);
 
         return (SettingsManager.AvatarType)savedValue;
     }
@@ -80,23 +84,46 @@ public class StartLearningAvatarVisibilityController : MonoBehaviour
     {
         if (femaleAvatar == null)
             Debug.LogWarning("[StartLearningAvatarVisibilityController] Female avatar reference is missing.", this);
-
         if (maleAvatar == null)
             Debug.LogWarning("[StartLearningAvatarVisibilityController] Male avatar reference is missing.", this);
+        if (youngFemaleAvatar == null)
+            Debug.LogWarning("[StartLearningAvatarVisibilityController] YoungFemale avatar (model3.glb) reference is missing.", this);
+        if (youngMaleAvatar == null)
+            Debug.LogWarning("[StartLearningAvatarVisibilityController] YoungMale avatar (model4.glb) reference is missing.", this);
 
-        bool showMaleAvatar = avatarType == SettingsManager.AvatarType.Male;
+        // Hepsini kapat, sonra sadece seçileni aç
+        SetAvatarActive(femaleAvatar,      avatarType == SettingsManager.AvatarType.Female);
+        SetAvatarActive(maleAvatar,        avatarType == SettingsManager.AvatarType.Male);
+        SetAvatarActive(youngFemaleAvatar, avatarType == SettingsManager.AvatarType.YoungFemale);
+        SetAvatarActive(youngMaleAvatar,   avatarType == SettingsManager.AvatarType.YoungMale);
 
-        if (femaleAvatar != null)
-            femaleAvatar.SetActive(!showMaleAvatar);
+        GameObject activeAvatar = avatarType switch
+        {
+            SettingsManager.AvatarType.Male        => maleAvatar,
+            SettingsManager.AvatarType.YoungFemale => youngFemaleAvatar,
+            SettingsManager.AvatarType.YoungMale   => youngMaleAvatar,
+            _                                      => femaleAvatar
+        };
 
-        if (maleAvatar != null)
-            maleAvatar.SetActive(showMaleAvatar);
+        AnimationClip overrideClip = avatarType switch
+        {
+            SettingsManager.AvatarType.Male        => maleIdleClip,
+            SettingsManager.AvatarType.YoungFemale => youngFemaleIdleClip,
+            SettingsManager.AvatarType.YoungMale   => youngMaleIdleClip,
+            _                                      => femaleIdleClip
+        };
 
-        GameObject activeAvatar = showMaleAvatar ? maleAvatar : femaleAvatar;
-        AnimationClip overrideClip = showMaleAvatar ? maleIdleClip : femaleIdleClip;
+        bool isMaleVoice = avatarType == SettingsManager.AvatarType.Male
+                        || avatarType == SettingsManager.AvatarType.YoungMale;
 
-        AttachLipSyncController(activeAvatar, showMaleAvatar);
-        StartAnimationLookup(activeAvatar, overrideClip, showMaleAvatar);
+        AttachLipSyncController(activeAvatar, isMaleVoice);
+        StartAnimationLookup(activeAvatar, overrideClip, isMaleVoice);
+    }
+
+    private static void SetAvatarActive(GameObject avatar, bool active)
+    {
+        if (avatar != null)
+            avatar.SetActive(active);
     }
 
     private void AttachLipSyncController(GameObject avatarRoot, bool isMaleAvatar)
@@ -274,8 +301,8 @@ public class StartLearningAvatarVisibilityController : MonoBehaviour
     private static AnimationClip PickClipMatchingAvatar(List<AnimationClip> clips, bool isMaleAvatar)
     {
         string[] avatarKeywords = isMaleAvatar
-            ? new[] { "model 2", "model2", "male" }
-            : new[] { "model 1", "model1", "female" };
+            ? new[] { "model 2", "model2", "male", "model 4", "model4" }
+            : new[] { "model 1", "model1", "female", "model 3", "model3" };
 
         AnimationClip bestIdle = null;
         AnimationClip bestAny = null;

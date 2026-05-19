@@ -7,6 +7,9 @@ public class ReviewManager : MonoBehaviour
 {
     private const string ReviewTitleMessage = "Tekrar İncele";
     private const string ReviewPromptMessage = "Anlamadığınız bir kısım varsa, tekrar incelemek istediğiniz kemiği seçebilirsiniz.";
+    private const string StudentNamePrefKey = "StudentName";
+    private const string ReviewWelcomeWithNameTemplate = "Çok güzel ilerledin {0}. Aklında kalan bir yer varsa buradan tekrar inceleyebilirsin.";
+    private const string ReviewWelcomeWithoutName = "Çok güzel ilerledin. Aklında kalan bir yer varsa buradan tekrar inceleyebilirsin.";
 
     [Header("Lesson UI Buttons")]
     public GameObject skipButton;
@@ -159,8 +162,95 @@ public class ReviewManager : MonoBehaviour
             return;
 
         _hasSpokenReviewPrompt = true;
-        lessonUIReader.SpeakReviewText(ReviewPromptMessage);
+        lessonUIReader.SpeakReviewText(BuildReviewWelcomeSpeech());
     }
+
+    private static string BuildReviewWelcomeSpeech()
+{
+    string studentName = PlayerPrefs.GetString(StudentNamePrefKey, "").Trim();
+    if (string.IsNullOrEmpty(studentName))
+        return ReviewWelcomeWithoutName;
+
+    return string.Format(ReviewWelcomeWithNameTemplate, BuildAffectionateName(studentName));
+}
+private static string BuildAffectionateName(string rawName)
+{
+    string name = rawName.Trim();
+
+    if (string.IsNullOrEmpty(name))
+        return "";
+
+    string firstName = name.Split(' ')[0];
+
+    char lastVowel = FindLastTurkishVowel(firstName);
+
+    string suffix;
+
+    switch (lastVowel)
+    {
+        case 'a':
+        case 'A':
+        case 'ı':
+        case 'I':
+            suffix = "cığım";
+            break;
+
+        case 'e':
+        case 'E':
+        case 'i':
+        case 'İ':
+            suffix = "ciğim";
+            break;
+
+        case 'o':
+        case 'O':
+        case 'u':
+        case 'U':
+            suffix = "cuğum";
+            break;
+
+        case 'ö':
+        case 'Ö':
+        case 'ü':
+        case 'Ü':
+            suffix = "cüğüm";
+            break;
+
+        default:
+            suffix = "cığım";
+            break;
+    }
+
+    return firstName + suffix;
+}
+
+private static char FindLastTurkishVowel(string text)
+{
+    if (string.IsNullOrEmpty(text))
+        return '\0';
+
+    for (int i = text.Length - 1; i >= 0; i--)
+    {
+        char c = text[i];
+
+        if (IsTurkishVowel(c))
+            return c;
+    }
+
+    return '\0';
+}
+
+private static bool IsTurkishVowel(char c)
+{
+    return c == 'a' || c == 'A'
+        || c == 'e' || c == 'E'
+        || c == 'ı' || c == 'I'
+        || c == 'i' || c == 'İ'
+        || c == 'o' || c == 'O'
+        || c == 'ö' || c == 'Ö'
+        || c == 'u' || c == 'U'
+        || c == 'ü' || c == 'Ü';
+}
 
     private void SelectBone(int index)
     {
