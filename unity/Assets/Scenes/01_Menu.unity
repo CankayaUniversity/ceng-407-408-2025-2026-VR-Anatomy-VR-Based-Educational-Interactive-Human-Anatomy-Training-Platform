@@ -5610,7 +5610,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7306,6 +7306,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 526375623}
   m_CullTransparentMesh: 1
+--- !u!1 &535532915
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 535532916}
+  - component: {fileID: 535532917}
+  m_Layer: 0
+  m_Name: VRKeyboardManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &535532916
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535532915}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 718329013}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &535532917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535532915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42994fe234bfc474d8cab595e2840ac7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyboardParentOverride: {fileID: 0}
+  keyboardPositionReferenceInput: {fileID: 0}
+  keyboardOffset: {x: 80, y: -8}
+  keyboardSize: {x: 360, y: 125}
+  letterKeyWidth: 23
+  letterKeyHeight: 22
+  controlKeyHeight: 24
+  keySpacing: 3
+  rowSpacing: 3
+  defaultSubmitButton: {fileID: 1639089415}
+  onSendPressed:
+    m_PersistentCalls:
+      m_Calls: []
+  hideKeyboardOnSend: 1
 --- !u!1 &536429173
 GameObject:
   m_ObjectHideFlags: 0
@@ -9579,6 +9641,7 @@ RectTransform:
   - {fileID: 1507349529}
   - {fileID: 947458014}
   - {fileID: 1639089414}
+  - {fileID: 535532916}
   m_Father: {fileID: 1111768752}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -11380,6 +11443,7 @@ GameObject:
   - component: {fileID: 947458017}
   - component: {fileID: 947458016}
   - component: {fileID: 947458015}
+  - component: {fileID: 947458018}
   m_Layer: 0
   m_Name: KodInputField
   m_TagString: Untagged
@@ -11546,6 +11610,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 947458013}
   m_CullTransparentMesh: 1
+--- !u!114 &947458018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947458013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c0fce4a922df9346b2f6c941288867c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyboard: {fileID: 535532917}
+  submitButtonForThisInput: {fileID: 0}
 --- !u!1 &955034700
 GameObject:
   m_ObjectHideFlags: 0
@@ -17859,6 +17937,7 @@ GameObject:
   - component: {fileID: 1507349532}
   - component: {fileID: 1507349531}
   - component: {fileID: 1507349530}
+  - component: {fileID: 1507349533}
   m_Layer: 0
   m_Name: NameInputField
   m_TagString: Untagged
@@ -18025,6 +18104,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1507349528}
   m_CullTransparentMesh: 1
+--- !u!114 &1507349533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1507349528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c0fce4a922df9346b2f6c941288867c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyboard: {fileID: 535532917}
+  submitButtonForThisInput: {fileID: 1639089415}
 --- !u!1 &1548670690
 GameObject:
   m_ObjectHideFlags: 0
