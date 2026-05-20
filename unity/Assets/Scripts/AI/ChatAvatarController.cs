@@ -3,34 +3,16 @@ using UnityEngine;
 
 public class ChatAvatarController : MonoBehaviour
 {
-    [Header("Avatar Source (Inspector Prefab)")]
-    [Tooltip("Kadın avatar prefabını Project panelinden buraya sürükle.")]
-    [SerializeField] private GameObject femaleAvatarPrefab;
+    [Header("Avatar Source (Inspector Models)")]
+    [SerializeField] private GameObject femaleAvatarModel;       // model1
+    [SerializeField] private GameObject maleAvatarModel;         // model2
+    [SerializeField] private GameObject youngFemaleAvatarModel;  // model3
+    [SerializeField] private GameObject youngMaleAvatarModel;    // model4
 
-    [Tooltip("Erkek avatar prefabını Project panelinden buraya sürükle.")]
-    [SerializeField] private GameObject maleAvatarPrefab;
-
-    [Tooltip("Avatarın instantiate edileceği parent. Boş kalırsa bu objenin transformu kullanılır.")]
-    [SerializeField] private Transform avatarSpawnParent;
-
-    [Tooltip("Prefab instantiate edilince local position/rotation/scale sıfırlansın mı?")]
-    [SerializeField] private bool resetPrefabLocalTransform = true;
-
-    [Header("TTS / Lip Sync Audio Source")]
-    [Tooltip("RagApiClient üzerindeki TTS AudioSource'u buraya atayabilirsin. Boş kalırsa otomatik RagApiClient aranır.")]
-    [SerializeField] private AudioSource ttsAudioSource;
-    [SerializeField] private bool autoFindRagApiClientAudioSource = true;
-
-    [Header("No-Blendshape Lip Sync Fallback")]
-    [Tooltip("Erkek modelde blendshape yoksa jaw/head bone ile sahte konuşma hareketi yapar.")]
-    [SerializeField] private bool enableTransformLipSyncFallback = true;
-    [Tooltip("Varsa erkek modelin Jaw/LowerJaw kemiğini elle buraya atayabilirsin. Boşsa otomatik aranır.")]
-    [SerializeField] private Transform manualJawBone;
-    [Tooltip("Jaw yoksa konuşma hareketi için Head/Neck gibi bir hedefi buraya atayabilirsin. Boşsa otomatik aranır.")]
-    [SerializeField] private Transform manualSpeechMotionTarget;
-    [SerializeField] private Vector3 fallbackJawOpenEulerOffset = new Vector3(-14f, 0f, 0f);
-    [SerializeField] private Vector3 fallbackHeadSpeechEulerOffset = new Vector3(2.5f, 0f, 0f);
-    [SerializeField] private float fallbackTransformLipSyncMultiplier = 1f;
+    [Header("Spawn Settings")]
+    [SerializeField] private Vector3 spawnedModelLocalPosition = Vector3.zero;
+    [SerializeField] private Vector3 spawnedModelLocalEuler = Vector3.zero;
+    [SerializeField] private Vector3 spawnedModelLocalScale = Vector3.one;
 
     [Header("Male Avatar Alignment")]
     [SerializeField] private bool alignMaleFeetToAvatarRoot = true;
@@ -72,11 +54,12 @@ public class ChatAvatarController : MonoBehaviour
     [SerializeField] private float mouthMaxWeight = 1.5f;
     [SerializeField] private float visemeMaxWeight = 4f;
 
-    private GameObject _currentAvatarInstance;
     private Transform _cameraTransform;
     private bool _loaded;
     private bool _isMaleAvatar;
     private bool _useExistingSceneAvatar;
+
+    private GameObject _spawnedAvatarInstance;
     private Transform _maleModelRoot;
     private Transform _maleRightFoot;
     private Transform _maleRightToe;
@@ -106,13 +89,6 @@ public class ChatAvatarController : MonoBehaviour
     private bool _hasVisemes;
     private SkinnedMeshRenderer _visemeSkin;
 
-    // ── Transform / bone fallback lip sync ──
-    private bool _useTransformLipSync;
-    private Transform _jawBone;
-    private Transform _speechMotionTarget;
-    private Quaternion _jawClosedLocalRotation;
-    private Quaternion _speechClosedLocalRotation;
-
     // ── Blendshape anim state ──
     private float _nextBlink, _blinkT;
     private bool _blinking;
@@ -121,8 +97,7 @@ public class ChatAvatarController : MonoBehaviour
     private float _jawWeight, _mouthWeight;
     private float _currentVisemeTime;
     private int _currentVisemeIdx;
-    private float _prevVisemeWeight, _nextVisemeWeight;
-    private float[] _samples = new float[256];
+    private readonly float[] _samples = new float[256];
 
     public void ConfigureExistingSceneAvatar(AudioSource ttsAudioSource, bool isMaleAvatar)
     {
@@ -146,11 +121,15 @@ public class ChatAvatarController : MonoBehaviour
             return;
         }
 
-        _isMaleAvatar = ResolveIsMaleAvatarSelected();
+        GameObject selectedModel = ResolveAvatarModel(out _isMaleAvatar);
 
-        if (!InstantiateSelectedAvatarPrefab())
+        if (selectedModel == null)
+        {
+            Debug.LogError("[ChatAvatar] Seçilen avatar modeli Inspector'da atanmamış! model1/model2/model3/model4 slotlarını doldur.");
             return;
+        }
 
+        SpawnAvatarFromInspectorModel(selectedModel);
         StartCoroutine(SetupAfterLoad());
     }
 
@@ -161,50 +140,59 @@ public class ChatAvatarController : MonoBehaviour
         Debug.Log("[ChatAvatar] Sahnedeki mevcut avatar yüz animasyonu için hazır.");
     }
 
-    private bool ResolveIsMaleAvatarSelected()
+    private GameObject ResolveAvatarModel(out bool isMale)
     {
+        SettingsManager.AvatarType selectedType;
+
         if (SettingsManager.Instance != null)
-            return SettingsManager.Instance.SelectedAvatarType == SettingsManager.AvatarType.Male;
+        {
+            selectedType = SettingsManager.Instance.SelectedAvatarType;
+        }
+        else
+        {
+            int raw = PlayerPrefs.GetInt("AvatarType", (int)SettingsManager.AvatarType.Female);
+            raw = Mathf.Clamp(raw, 0, 3);
+            selectedType = (SettingsManager.AvatarType)raw;
+        }
 
-        int rawValue = PlayerPrefs.GetInt("AvatarType", (int)SettingsManager.AvatarType.Female);
-        return rawValue == (int)SettingsManager.AvatarType.Male;
+        isMale = selectedType == SettingsManager.AvatarType.Male ||
+                 selectedType == SettingsManager.AvatarType.YoungMale;
+
+        switch (selectedType)
+        {
+            case SettingsManager.AvatarType.Male:
+                return maleAvatarModel;
+
+            case SettingsManager.AvatarType.YoungFemale:
+                return youngFemaleAvatarModel;
+
+            case SettingsManager.AvatarType.YoungMale:
+                return youngMaleAvatarModel;
+
+            case SettingsManager.AvatarType.Female:
+            default:
+                return femaleAvatarModel;
+        }
     }
 
-    private bool InstantiateSelectedAvatarPrefab()
+private void SpawnAvatarFromInspectorModel(GameObject avatarModel)
+{
+    if (_spawnedAvatarInstance != null)
     {
-        GameObject selectedPrefab = _isMaleAvatar ? maleAvatarPrefab : femaleAvatarPrefab;
-
-        if (selectedPrefab == null)
-        {
-            Debug.LogError(
-                _isMaleAvatar
-                    ? "[ChatAvatar] Erkek avatar prefabı Inspector'da atanmamış."
-                    : "[ChatAvatar] Kadın avatar prefabı Inspector'da atanmamış.",
-                this
-            );
-            return false;
-        }
-
-        Transform parent = avatarSpawnParent != null ? avatarSpawnParent : transform;
-
-        if (_currentAvatarInstance != null)
-            Destroy(_currentAvatarInstance);
-
-        _currentAvatarInstance = Instantiate(selectedPrefab, parent);
-        _currentAvatarInstance.name = selectedPrefab.name + "_Instance";
-
-        if (resetPrefabLocalTransform)
-        {
-            _currentAvatarInstance.transform.localPosition = Vector3.zero;
-            _currentAvatarInstance.transform.localRotation = Quaternion.identity;
-            _currentAvatarInstance.transform.localScale = Vector3.one;
-        }
-
-        _currentAvatarInstance.SetActive(true);
-
-        Debug.Log($"[ChatAvatar] Avatar prefab instantiate edildi: {_currentAvatarInstance.name} | Male: {_isMaleAvatar}", this);
-        return true;
+        Destroy(_spawnedAvatarInstance);
     }
+
+    _spawnedAvatarInstance = Instantiate(avatarModel, transform);
+    _spawnedAvatarInstance.name = avatarModel.name + "_Instance";
+
+    _spawnedAvatarInstance.transform.localPosition = spawnedModelLocalPosition;
+    _spawnedAvatarInstance.transform.localRotation = Quaternion.Euler(spawnedModelLocalEuler);
+
+    Vector3 safeScale = spawnedModelLocalScale == Vector3.zero ? Vector3.one : spawnedModelLocalScale;
+    _spawnedAvatarInstance.transform.localScale = safeScale;
+
+    Debug.Log($"[ChatAvatar] Inspector modeli spawn edildi: {avatarModel.name}");
+}
 
     private IEnumerator SetupAfterLoad()
     {
@@ -217,11 +205,11 @@ public class ChatAvatarController : MonoBehaviour
         InitFace();
 
         _loaded = true;
-        Debug.Log("[ChatAvatar] Avatar prefab tamamen hazır.");
+        Debug.Log("[ChatAvatar] Avatar tamamen hazır.");
     }
 
     // ═══════════════════════════════════════════════════════════
-    //  ANİMASYON — prefab içindeki animasyonları bul ve oynat
+    //  ANİMASYON
     // ═══════════════════════════════════════════════════════════
 
     private void SetupAnimation()
@@ -229,10 +217,11 @@ public class ChatAvatarController : MonoBehaviour
         if (_isMaleAvatar && disableMaleImportedIdleAnimation)
         {
             Debug.Log("[ChatAvatar] Erkek avatar sabit idle pozunda tutuluyor.");
+            ConfigureMaleRigForStableStanding();
             return;
         }
 
-        Animation legacyAnim = GetComponentInChildren<Animation>();
+        Animation legacyAnim = GetComponentInChildren<Animation>(true);
         if (legacyAnim != null)
         {
             if (legacyAnim.clip != null)
@@ -255,21 +244,25 @@ public class ChatAvatarController : MonoBehaviour
             }
         }
 
-        Animator animator = GetComponentInChildren<Animator>();
+        Animator animator = GetComponentInChildren<Animator>(true);
         if (animator != null && animator.runtimeAnimatorController != null)
         {
+            animator.applyRootMotion = false;
             Debug.Log("[ChatAvatar] Animator + Controller bulundu.");
             return;
         }
 
-        Debug.LogWarning("[ChatAvatar] Prefab içinde animasyon bulunamadı.");
+        Debug.LogWarning("[ChatAvatar] Modelde animasyon bulunamadı.");
     }
 
     private void ApplyAvatarModelAlignment()
     {
         if (!_isMaleAvatar) return;
 
-        _maleModelRoot = FindLoadedModelRoot();
+        _maleModelRoot = _spawnedAvatarInstance != null
+            ? _spawnedAvatarInstance.transform
+            : FindLoadedModelRoot();
+
         if (_maleModelRoot == null)
         {
             Debug.LogWarning("[ChatAvatar] Erkek avatar root transform bulunamadı, hizalama atlandı.");
@@ -278,6 +271,7 @@ public class ChatAvatarController : MonoBehaviour
 
         _maleModelRoot.localPosition += maleModelPositionOffset;
         _maleModelRoot.localRotation = Quaternion.Euler(maleModelEulerOffset) * _maleModelRoot.localRotation;
+
         Vector3 scaleMultiplier = maleModelScaleMultiplier == Vector3.zero ? Vector3.one : maleModelScaleMultiplier;
         _maleModelRoot.localScale = Vector3.Scale(_maleModelRoot.localScale, scaleMultiplier);
 
@@ -286,6 +280,7 @@ public class ChatAvatarController : MonoBehaviour
 
         ConfigureMaleRigForStableStanding();
         CacheMaleRightFootBones(_maleModelRoot);
+
         Debug.Log("[ChatAvatar] Erkek avatar zemine göre hizalandı.");
     }
 
@@ -315,11 +310,12 @@ public class ChatAvatarController : MonoBehaviour
 
     private bool TryGetModelBounds(Transform modelRoot, out Bounds bounds)
     {
-        var renderers = modelRoot.GetComponentsInChildren<Renderer>(true);
+        Renderer[] renderers = modelRoot.GetComponentsInChildren<Renderer>(true);
         bounds = default;
 
         bool hasBounds = false;
-        foreach (var renderer in renderers)
+
+        foreach (Renderer renderer in renderers)
         {
             if (!hasBounds)
             {
@@ -336,17 +332,18 @@ public class ChatAvatarController : MonoBehaviour
 
     private void ConfigureMaleRigForStableStanding()
     {
-        var animator = GetComponentInChildren<Animator>(true);
+        Animator animator = GetComponentInChildren<Animator>(true);
         if (animator != null)
             animator.applyRootMotion = false;
 
         if (!disableMaleImportedIdleAnimation) return;
 
-        var legacyAnim = GetComponentInChildren<Animation>(true);
+        Animation legacyAnim = GetComponentInChildren<Animation>(true);
         if (legacyAnim == null) return;
 
         legacyAnim.Stop();
         legacyAnim.enabled = false;
+
         Debug.Log("[ChatAvatar] Erkek avatar import idle animasyonu devre dışı bırakıldı.");
     }
 
@@ -373,7 +370,7 @@ public class ChatAvatarController : MonoBehaviour
     }
 
     // ═══════════════════════════════════════════════════════════
-    //  AYDINLATMA — 3-nokta stüdyo ışığı
+    //  AYDINLATMA
     // ═══════════════════════════════════════════════════════════
 
     private void SetupAvatarLighting()
@@ -382,6 +379,7 @@ public class ChatAvatarController : MonoBehaviour
         keyLightObj.transform.SetParent(transform);
         keyLightObj.transform.localPosition = new Vector3(0.5f, 1.5f, -1.5f);
         keyLightObj.transform.LookAt(transform.position + Vector3.up * 0.8f);
+
         Light keyLight = keyLightObj.AddComponent<Light>();
         keyLight.type = LightType.Spot;
         keyLight.color = new Color(1f, 0.97f, 0.92f);
@@ -395,6 +393,7 @@ public class ChatAvatarController : MonoBehaviour
         fillLightObj.transform.SetParent(transform);
         fillLightObj.transform.localPosition = new Vector3(-1f, 1f, -1f);
         fillLightObj.transform.LookAt(transform.position + Vector3.up * 0.8f);
+
         Light fillLight = fillLightObj.AddComponent<Light>();
         fillLight.type = LightType.Spot;
         fillLight.color = new Color(0.85f, 0.9f, 1f);
@@ -407,6 +406,7 @@ public class ChatAvatarController : MonoBehaviour
         rimLightObj.transform.SetParent(transform);
         rimLightObj.transform.localPosition = new Vector3(0f, 1.2f, 1f);
         rimLightObj.transform.LookAt(transform.position + Vector3.up * 0.8f);
+
         Light rimLight = rimLightObj.AddComponent<Light>();
         rimLight.type = LightType.Spot;
         rimLight.color = new Color(0.7f, 0.85f, 1f);
@@ -424,15 +424,16 @@ public class ChatAvatarController : MonoBehaviour
 
     private void InitFace()
     {
-        SkinnedMeshRenderer[] all = GetComponentsInChildren<SkinnedMeshRenderer>();
+        SkinnedMeshRenderer[] all = GetComponentsInChildren<SkinnedMeshRenderer>(true);
         bool foundWolf3D = false;
 
         SkinnedMeshRenderer bestSingleMesh = null;
         int maxBlendShapes = 0;
 
-        foreach (var smr in all)
+        foreach (SkinnedMeshRenderer smr in all)
         {
             if (smr.sharedMesh == null) continue;
+
             Mesh m = smr.sharedMesh;
             string meshName = smr.gameObject.name;
 
@@ -449,8 +450,10 @@ public class ChatAvatarController : MonoBehaviour
                 _headSkin = smr;
                 _headMouthOpen = FindShapeMulti(m, "mouthOpen", "jawOpen");
                 if (_headMouthOpen < 0) _headMouthOpen = FindPartial(m, "mouth");
+
                 _headSmile = FindShapeMulti(m, "mouthSmile", "mouthSmileLeft");
                 if (_headSmile < 0) _headSmile = FindPartial(m, "smile");
+
                 foundWolf3D = true;
             }
             else if (meshName.Contains("Teeth") || meshName.Contains("teeth"))
@@ -459,6 +462,7 @@ public class ChatAvatarController : MonoBehaviour
                 _teethMouthOpen = FindShapeMulti(m, "mouthOpen", "jawOpen");
                 if (_teethMouthOpen < 0) _teethMouthOpen = FindPartial(m, "mouth");
                 if (_teethMouthOpen < 0) _teethMouthOpen = FindPartial(m, "jaw");
+
                 foundWolf3D = true;
             }
             else if (meshName.Contains("EyeLeft") || meshName.Contains("Eye_L"))
@@ -483,8 +487,10 @@ public class ChatAvatarController : MonoBehaviour
 
             _primaryBlinkL = FindShapeMulti(pm, "eyeBlinkLeft", "eyeBlink_L", "EyeBlinkLeft", "blink_L", "blinkLeft");
             _primaryBlinkR = FindShapeMulti(pm, "eyeBlinkRight", "eyeBlink_R", "EyeBlinkRight", "blink_R", "blinkRight");
+
             _primaryJawOpen = FindShapeMulti(pm, "jawOpen", "Jaw_Open", "JawOpen", "jaw_open");
             _primaryMouthOpen = FindShapeMulti(pm, "mouthOpen", "Mouth_Open", "MouthOpen", "mouth_open", "viseme_O", "viseme_aa");
+
             _primarySmileL = FindShapeMulti(pm, "mouthSmileLeft", "mouthSmile_L", "MouthSmileLeft", "smile_L", "smileLeft", "mouthSmile");
             _primarySmileR = FindShapeMulti(pm, "mouthSmileRight", "mouthSmile_R", "MouthSmileRight", "smile_R", "smileRight");
 
@@ -493,6 +499,7 @@ public class ChatAvatarController : MonoBehaviour
                 _primaryJawOpen = FindPartial2(pm, "jaw", "open");
                 _primaryMouthOpen = FindPartial2(pm, "mouth", "open");
             }
+
             if (_primaryBlinkL < 0) _primaryBlinkL = FindPartial2(pm, "blink", "l");
             if (_primaryBlinkR < 0) _primaryBlinkR = FindPartial2(pm, "blink", "r");
             if (_primarySmileL < 0) _primarySmileL = FindPartial2(pm, "smile", "l");
@@ -502,134 +509,32 @@ public class ChatAvatarController : MonoBehaviour
         }
 
         DetectVisemes();
-        ResolveTtsAudioSource();
-        SetupTransformLipSyncFallback();
 
-        _nextBlink = Time.time + UnityEngine.Random.Range(blinkIntervalMin, blinkIntervalMax);
-        _nextSmile = Time.time + UnityEngine.Random.Range(smileIntervalMin, smileIntervalMax);
+        if (_ttsAudio == null)
+        {
+            AudioSource[] audioSources = FindObjectsOfType<AudioSource>();
 
-        bool blendshapeFaceReady = _useSingleMesh
+            foreach (AudioSource a in audioSources)
+            {
+                if (a.gameObject != gameObject)
+                {
+                    _ttsAudio = a;
+                    break;
+                }
+            }
+
+            if (_ttsAudio == null && audioSources.Length > 0)
+                _ttsAudio = audioSources[0];
+        }
+
+        _nextBlink = Time.time + Random.Range(blinkIntervalMin, blinkIntervalMax);
+        _nextSmile = Time.time + Random.Range(smileIntervalMin, smileIntervalMax);
+
+        _faceReady = _useSingleMesh
             ? (_primarySkin != null && (_primaryJawOpen >= 0 || _primaryMouthOpen >= 0 || _primarySmileL >= 0))
             : (_headSkin != null && (_headMouthOpen >= 0 || _headSmile >= 0));
 
-        _faceReady = blendshapeFaceReady || _useTransformLipSync;
-
-        if (blendshapeFaceReady)
-            Debug.Log("[Face] Blendshape yüz animasyonu hazır!");
-        else if (_useTransformLipSync)
-            Debug.Log("[Face] Blendshape yok; transform/bone fallback lip sync hazır.");
-        else
-            Debug.Log("[Face] Blendshape veya jaw/head fallback bulunamadı — yüz/lip sync devre dışı.");
-    }
-
-    private void ResolveTtsAudioSource()
-    {
-        if (ttsAudioSource != null)
-        {
-            _ttsAudio = ttsAudioSource;
-            Debug.Log("[ChatAvatar] TTS AudioSource Inspector üzerinden kullanılıyor: " + _ttsAudio.name, this);
-            return;
-        }
-
-        if (_ttsAudio != null) return;
-
-        if (autoFindRagApiClientAudioSource)
-        {
-            RagApiClient ragApiClient = FindFirstObjectByType<RagApiClient>();
-            if (ragApiClient == null)
-                ragApiClient = FindAnyObjectByType<RagApiClient>(FindObjectsInactive.Include);
-
-            if (ragApiClient != null)
-            {
-                _ttsAudio = ragApiClient.GetComponent<AudioSource>();
-                if (_ttsAudio == null)
-                    _ttsAudio = ragApiClient.gameObject.AddComponent<AudioSource>();
-
-                Debug.Log("[ChatAvatar] TTS AudioSource RagApiClient üzerinden bulundu: " + _ttsAudio.name, this);
-                return;
-            }
-        }
-
-        AudioSource[] audioSources = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
-        foreach (var a in audioSources)
-        {
-            if (a == null) continue;
-            if (_currentAvatarInstance != null && a.transform.IsChildOf(_currentAvatarInstance.transform)) continue;
-            if (a.gameObject == gameObject) continue;
-
-            _ttsAudio = a;
-            Debug.LogWarning("[ChatAvatar] RagApiClient bulunamadı; fallback AudioSource seçildi: " + _ttsAudio.name, this);
-            return;
-        }
-
-        Debug.LogWarning("[ChatAvatar] Lip sync için AudioSource bulunamadı.", this);
-    }
-
-    private void SetupTransformLipSyncFallback()
-    {
-        _useTransformLipSync = false;
-        if (!enableTransformLipSyncFallback) return;
-
-        bool hasMouthBlendshape = _hasVisemes ||
-            (_useSingleMesh && (_primaryJawOpen >= 0 || _primaryMouthOpen >= 0)) ||
-            (!_useSingleMesh && ((_headSkin != null && _headMouthOpen >= 0) || (_teethSkin != null && _teethMouthOpen >= 0)));
-
-        if (hasMouthBlendshape) return;
-
-        Transform searchRoot = _currentAvatarInstance != null ? _currentAvatarInstance.transform : transform;
-
-        _jawBone = manualJawBone != null
-            ? manualJawBone
-            : FindChildByAnyKeyword(searchRoot, "jaw", "lowerjaw", "lower_jaw", "mandible", "cc_base_jaw");
-
-        if (_jawBone != null)
-        {
-            _jawClosedLocalRotation = _jawBone.localRotation;
-            _useTransformLipSync = true;
-            Debug.Log("[ChatAvatar] Jaw bone fallback bulundu: " + _jawBone.name, this);
-            return;
-        }
-
-        _speechMotionTarget = manualSpeechMotionTarget != null
-            ? manualSpeechMotionTarget
-            : FindChildByAnyKeyword(searchRoot, "head", "neck");
-
-        if (_speechMotionTarget != null)
-        {
-            _speechClosedLocalRotation = _speechMotionTarget.localRotation;
-            _useTransformLipSync = true;
-            Debug.LogWarning("[ChatAvatar] Jaw bulunamadı; Head/Neck hareketi ile fallback lip sync kullanılacak: " + _speechMotionTarget.name, this);
-        }
-    }
-
-    private Transform FindChildByAnyKeyword(Transform root, params string[] keywords)
-    {
-        if (root == null) return null;
-
-        string normalized = NormalizeName(root.name);
-        foreach (string keyword in keywords)
-        {
-            if (normalized.Contains(NormalizeName(keyword)))
-                return root;
-        }
-
-        for (int i = 0; i < root.childCount; i++)
-        {
-            Transform match = FindChildByAnyKeyword(root.GetChild(i), keywords);
-            if (match != null) return match;
-        }
-
-        return null;
-    }
-
-    private string NormalizeName(string value)
-    {
-        if (string.IsNullOrEmpty(value)) return string.Empty;
-        return value.ToLowerInvariant()
-            .Replace(" ", "")
-            .Replace("_", "")
-            .Replace("-", "")
-            .Replace(":", "");
+        Debug.Log(_faceReady ? "[Face] Yüz animasyonu hazır!" : "[Face] Blendshape bulunamadı — yüz devre dışı.");
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -638,12 +543,21 @@ public class ChatAvatarController : MonoBehaviour
 
     private int FindBlinkShape(Mesh m)
     {
-        string[] names = { "eyeBlinkLeft", "eyeBlinkRight", "eyeBlink_L", "eyeBlink_R", "blink" };
-        foreach (var n in names)
+        string[] names =
+        {
+            "eyeBlinkLeft",
+            "eyeBlinkRight",
+            "eyeBlink_L",
+            "eyeBlink_R",
+            "blink"
+        };
+
+        foreach (string n in names)
         {
             int idx = m.GetBlendShapeIndex(n);
             if (idx >= 0) return idx;
         }
+
         return FindPartial(m, "blink");
     }
 
@@ -654,15 +568,20 @@ public class ChatAvatarController : MonoBehaviour
             int idx = m.GetBlendShapeIndex(n);
             if (idx >= 0) return idx;
         }
+
         return -1;
     }
 
     private int FindPartial(Mesh m, string keyword)
     {
         string kw = keyword.ToLowerInvariant();
+
         for (int i = 0; i < m.blendShapeCount; i++)
+        {
             if (m.GetBlendShapeName(i).ToLowerInvariant().Contains(kw))
                 return i;
+        }
+
         return -1;
     }
 
@@ -670,12 +589,15 @@ public class ChatAvatarController : MonoBehaviour
     {
         string k1 = keyword1.ToLowerInvariant();
         string k2 = keyword2.ToLowerInvariant();
+
         for (int i = 0; i < m.blendShapeCount; i++)
         {
             string name = m.GetBlendShapeName(i).ToLowerInvariant();
+
             if (name.Contains(k1) && name.Contains(k2))
                 return i;
         }
+
         return -1;
     }
 
@@ -691,12 +613,17 @@ public class ChatAvatarController : MonoBehaviour
         {
             Vector3 dir = _cameraTransform.position - transform.position;
             dir.y = 0f;
+
             if (dir.sqrMagnitude > 0.001f)
             {
                 Quaternion yaw = Quaternion.LookRotation(dir);
                 Quaternion target = yaw * Quaternion.Euler(lookAtPitchOffset, 0f, 0f);
+
                 transform.rotation = Quaternion.Slerp(
-                    transform.rotation, target, Time.deltaTime * rotationSpeed);
+                    transform.rotation,
+                    target,
+                    Time.deltaTime * rotationSpeed
+                );
             }
         }
 
@@ -711,7 +638,10 @@ public class ChatAvatarController : MonoBehaviour
         bool speaking = _ttsAudio != null && _ttsAudio.isPlaying;
 
         DoBlink();
-        if (!speaking) DoBlendshapeBreath();
+
+        if (!speaking)
+            DoBlendshapeBreath();
+
         DoSmile();
         DoLipSync(speaking);
     }
@@ -726,19 +656,29 @@ public class ChatAvatarController : MonoBehaviour
         {
             Vector3 toeDirection = _maleRightToe.position - _maleRightFoot.position;
             Vector3 flatToeDirection = Vector3.ProjectOnPlane(toeDirection, Vector3.up);
+
             if (toeDirection.sqrMagnitude > 0.0001f && flatToeDirection.sqrMagnitude > 0.0001f)
             {
-                targetRotation = Quaternion.FromToRotation(toeDirection.normalized, flatToeDirection.normalized) * targetRotation;
+                targetRotation = Quaternion.FromToRotation(
+                    toeDirection.normalized,
+                    flatToeDirection.normalized
+                ) * targetRotation;
             }
         }
 
         targetRotation *= Quaternion.Euler(maleRightFootEulerOffset);
-        _maleRightFoot.rotation = Quaternion.Slerp(_maleRightFoot.rotation, targetRotation, maleRightFootStabilizeWeight);
+
+        _maleRightFoot.rotation = Quaternion.Slerp(
+            _maleRightFoot.rotation,
+            targetRotation,
+            maleRightFootStabilizeWeight
+        );
     }
 
     private void GroundMaleAvatarAfterAnimation()
     {
         if (!_isMaleAvatar || !keepMaleAvatarGroundedDuringAnimation || _maleModelRoot == null) return;
+
         AlignModelBottomToRoot(_maleModelRoot);
     }
 
@@ -751,28 +691,35 @@ public class ChatAvatarController : MonoBehaviour
         bool hasTarget = _useSingleMesh
             ? (_primaryBlinkL >= 0 || _primaryBlinkR >= 0)
             : (_eyeLBlink >= 0 || _eyeRBlink >= 0);
+
         if (!hasTarget) return;
 
         if (!_blinking)
         {
             if (Time.time < _nextBlink) return;
+
             _blinking = true;
             _blinkT = 0f;
         }
 
         _blinkT += Time.deltaTime;
+
         float half = blinkSpeed * 0.5f;
         float w;
 
         if (_blinkT < half)
+        {
             w = Mathf.Lerp(0f, 100f, _blinkT / half);
+        }
         else if (_blinkT < blinkSpeed)
+        {
             w = Mathf.Lerp(100f, 0f, (_blinkT - half) / half);
+        }
         else
         {
             w = 0f;
             _blinking = false;
-            _nextBlink = Time.time + UnityEngine.Random.Range(blinkIntervalMin, blinkIntervalMax);
+            _nextBlink = Time.time + Random.Range(blinkIntervalMin, blinkIntervalMax);
         }
 
         if (_useSingleMesh)
@@ -801,6 +748,7 @@ public class ChatAvatarController : MonoBehaviour
         {
             if (_headMouthOpen >= 0 && _headSkin != null)
                 _headSkin.SetBlendShapeWeight(_headMouthOpen, w);
+
             if (_teethSkin != null && _teethMouthOpen >= 0)
                 _teethSkin.SetBlendShapeWeight(_teethMouthOpen, _mouthWeight * 1.95f);
         }
@@ -811,28 +759,35 @@ public class ChatAvatarController : MonoBehaviour
         bool hasSmile = _useSingleMesh
             ? (_primarySmileL >= 0 || _primarySmileR >= 0)
             : (_headSmile >= 0 && _headSkin != null);
+
         if (!hasSmile) return;
 
         if (!_smiling)
         {
             if (Time.time < _nextSmile) return;
+
             _smiling = true;
             _smileT = 0f;
         }
 
         _smileT += Time.deltaTime;
+
         float half = smileDuration * 0.5f;
         float w;
 
         if (_smileT < half)
+        {
             w = Mathf.SmoothStep(0f, smileIntensity, _smileT / half);
+        }
         else if (_smileT < smileDuration)
+        {
             w = Mathf.SmoothStep(smileIntensity, 0f, (_smileT - half) / half);
+        }
         else
         {
             w = 0f;
             _smiling = false;
-            _nextSmile = Time.time + UnityEngine.Random.Range(smileIntervalMin, smileIntervalMax);
+            _nextSmile = Time.time + Random.Range(smileIntervalMin, smileIntervalMax);
         }
 
         if (_useSingleMesh)
@@ -848,16 +803,20 @@ public class ChatAvatarController : MonoBehaviour
 
     private void DetectVisemes()
     {
-        SkinnedMeshRenderer[] allSmr = GetComponentsInChildren<SkinnedMeshRenderer>();
-        foreach (var smr in allSmr)
+        SkinnedMeshRenderer[] allSmr = GetComponentsInChildren<SkinnedMeshRenderer>(true);
+
+        foreach (SkinnedMeshRenderer smr in allSmr)
         {
             if (smr.sharedMesh == null) continue;
+
             Mesh m = smr.sharedMesh;
+
             int aa = FindViseme(m, "viseme_aa");
             if (aa < 0) continue;
 
             _visemeSkin = smr;
             _visemeAA = aa;
+
             _visemeSil = FindViseme(m, "viseme_sil");
             _visemeE = FindViseme(m, "viseme_E");
             _visemeI = FindViseme(m, "viseme_I");
@@ -872,16 +831,39 @@ public class ChatAvatarController : MonoBehaviour
             _visemeNN = FindViseme(m, "viseme_nn");
             _visemeRR = FindViseme(m, "viseme_RR");
             _visemeKK = FindViseme(m, "viseme_kk");
+
             _hasVisemes = true;
 
             int count = 0;
-            int[] all = { _visemeSil, _visemeAA, _visemeE, _visemeI, _visemeO, _visemeU,
-                         _visemePP, _visemeFF, _visemeTH, _visemeDD, _visemeCH, _visemeSS,
-                         _visemeNN, _visemeRR, _visemeKK };
-            foreach (int v in all) if (v >= 0) count++;
+
+            int[] all =
+            {
+                _visemeSil,
+                _visemeAA,
+                _visemeE,
+                _visemeI,
+                _visemeO,
+                _visemeU,
+                _visemePP,
+                _visemeFF,
+                _visemeTH,
+                _visemeDD,
+                _visemeCH,
+                _visemeSS,
+                _visemeNN,
+                _visemeRR,
+                _visemeKK
+            };
+
+            foreach (int v in all)
+            {
+                if (v >= 0) count++;
+            }
+
             Debug.Log($"[Face] Viseme desteği bulundu! {count} viseme ({smr.gameObject.name})");
             return;
         }
+
         Debug.Log("[Face] Viseme blendshape bulunamadı — basit lip sync kullanılacak.");
     }
 
@@ -889,24 +871,36 @@ public class ChatAvatarController : MonoBehaviour
     {
         int idx = m.GetBlendShapeIndex(name);
         if (idx >= 0) return idx;
+
         string lower = name.ToLowerInvariant();
+
         for (int i = 0; i < m.blendShapeCount; i++)
+        {
             if (m.GetBlendShapeName(i).ToLowerInvariant() == lower)
                 return i;
+        }
+
         return -1;
     }
 
-    private static readonly int[] VisemeCycle = { 0, 1, 2, 3, 4, 5, 6, 3, 1, 7, 2, 4 };
+    private static readonly int[] VisemeCycle =
+    {
+        0, 1, 2, 3, 4, 5, 6, 3, 1, 7, 2, 4
+    };
 
     private void DoLipSync(bool speaking)
     {
         float rms = 0f;
+
         if (speaking && _ttsAudio != null)
         {
             _ttsAudio.GetOutputData(_samples, 0);
+
             float sum = 0f;
+
             for (int i = 0; i < _samples.Length; i++)
                 sum += _samples[i] * _samples[i];
+
             rms = Mathf.Sqrt(sum / _samples.Length);
         }
 
@@ -924,25 +918,23 @@ public class ChatAvatarController : MonoBehaviour
         float openSpeed = Time.deltaTime * lipSyncSmooth;
         float closeSpeed = Time.deltaTime * lipSyncCloseSpeed;
 
-        _jawWeight = Mathf.Lerp(_jawWeight, jawTarget,
-            jawTarget > _jawWeight ? openSpeed : closeSpeed);
-        _mouthWeight = Mathf.Lerp(_mouthWeight, mouthTarget,
-            mouthTarget > _mouthWeight ? openSpeed : closeSpeed);
+        _jawWeight = Mathf.Lerp(
+            _jawWeight,
+            jawTarget,
+            jawTarget > _jawWeight ? openSpeed : closeSpeed
+        );
 
-        bool hasBlendshapeMouthTarget = _useSingleMesh
-            ? (_primaryJawOpen >= 0 || _primaryMouthOpen >= 0)
-            : ((_headSkin != null && _headMouthOpen >= 0) || (_teethSkin != null && _teethMouthOpen >= 0));
-
-        if (!hasBlendshapeMouthTarget && _useTransformLipSync)
-        {
-            DoTransformLipSync(speaking, amplitude);
-            return;
-        }
+        _mouthWeight = Mathf.Lerp(
+            _mouthWeight,
+            mouthTarget,
+            mouthTarget > _mouthWeight ? openSpeed : closeSpeed
+        );
 
         if (_useSingleMesh)
         {
             if (_primaryJawOpen >= 0)
                 _primarySkin.SetBlendShapeWeight(_primaryJawOpen, _jawWeight);
+
             if (_primaryMouthOpen >= 0)
                 _primarySkin.SetBlendShapeWeight(_primaryMouthOpen, _mouthWeight);
         }
@@ -950,62 +942,59 @@ public class ChatAvatarController : MonoBehaviour
         {
             if (_headMouthOpen >= 0 && _headSkin != null)
                 _headSkin.SetBlendShapeWeight(_headMouthOpen, _jawWeight);
+
             if (_teethSkin != null && _teethMouthOpen >= 0)
                 _teethSkin.SetBlendShapeWeight(_teethMouthOpen, _jawWeight * 0.5f);
         }
     }
 
-    private void DoTransformLipSync(bool speaking, float amplitude)
-    {
-        float target = speaking ? amplitude * fallbackTransformLipSyncMultiplier : 0f;
-        float lerpSpeed = Time.deltaTime * (speaking ? lipSyncSmooth : lipSyncCloseSpeed);
-
-        if (_jawBone != null)
-        {
-            Quaternion openRotation = _jawClosedLocalRotation * Quaternion.Euler(fallbackJawOpenEulerOffset * target);
-            _jawBone.localRotation = Quaternion.Slerp(_jawBone.localRotation, openRotation, lerpSpeed);
-            return;
-        }
-
-        if (_speechMotionTarget != null)
-        {
-            Quaternion speechRotation = _speechClosedLocalRotation * Quaternion.Euler(fallbackHeadSpeechEulerOffset * target);
-            _speechMotionTarget.localRotation = Quaternion.Slerp(_speechMotionTarget.localRotation, speechRotation, lerpSpeed);
-        }
-    }
-
     private void DoVisemeLipSync(bool speaking, float amplitude)
     {
-        int[] visemeIndices = {
-            _visemeSil, _visemeAA, _visemeE, _visemeO,
-            _visemeU, _visemeFF, _visemePP, _visemeDD
+        int[] visemeIndices =
+        {
+            _visemeSil,
+            _visemeAA,
+            _visemeE,
+            _visemeO,
+            _visemeU,
+            _visemeFF,
+            _visemePP,
+            _visemeDD
         };
 
         if (!speaking || amplitude < 0.01f)
         {
             foreach (int idx in visemeIndices)
-                if (idx >= 0) _visemeSkin.SetBlendShapeWeight(idx,
-                    Mathf.Lerp(_visemeSkin.GetBlendShapeWeight(idx), 0f, Time.deltaTime * lipSyncCloseSpeed));
-            if (_visemeNN >= 0) _visemeSkin.SetBlendShapeWeight(_visemeNN,
-                Mathf.Lerp(_visemeSkin.GetBlendShapeWeight(_visemeNN), 0f, Time.deltaTime * lipSyncCloseSpeed));
-            if (_visemeSS >= 0) _visemeSkin.SetBlendShapeWeight(_visemeSS,
-                Mathf.Lerp(_visemeSkin.GetBlendShapeWeight(_visemeSS), 0f, Time.deltaTime * lipSyncCloseSpeed));
-            if (_visemeTH >= 0) _visemeSkin.SetBlendShapeWeight(_visemeTH,
-                Mathf.Lerp(_visemeSkin.GetBlendShapeWeight(_visemeTH), 0f, Time.deltaTime * lipSyncCloseSpeed));
-            if (_visemeCH >= 0) _visemeSkin.SetBlendShapeWeight(_visemeCH,
-                Mathf.Lerp(_visemeSkin.GetBlendShapeWeight(_visemeCH), 0f, Time.deltaTime * lipSyncCloseSpeed));
-            if (_visemeRR >= 0) _visemeSkin.SetBlendShapeWeight(_visemeRR,
-                Mathf.Lerp(_visemeSkin.GetBlendShapeWeight(_visemeRR), 0f, Time.deltaTime * lipSyncCloseSpeed));
-            if (_visemeKK >= 0) _visemeSkin.SetBlendShapeWeight(_visemeKK,
-                Mathf.Lerp(_visemeSkin.GetBlendShapeWeight(_visemeKK), 0f, Time.deltaTime * lipSyncCloseSpeed));
-            if (_visemeI >= 0) _visemeSkin.SetBlendShapeWeight(_visemeI,
-                Mathf.Lerp(_visemeSkin.GetBlendShapeWeight(_visemeI), 0f, Time.deltaTime * lipSyncCloseSpeed));
+            {
+                if (idx >= 0)
+                {
+                    _visemeSkin.SetBlendShapeWeight(
+                        idx,
+                        Mathf.Lerp(
+                            _visemeSkin.GetBlendShapeWeight(idx),
+                            0f,
+                            Time.deltaTime * lipSyncCloseSpeed
+                        )
+                    );
+                }
+            }
+
+            ResetExtraViseme(_visemeNN);
+            ResetExtraViseme(_visemeSS);
+            ResetExtraViseme(_visemeTH);
+            ResetExtraViseme(_visemeCH);
+            ResetExtraViseme(_visemeRR);
+            ResetExtraViseme(_visemeKK);
+            ResetExtraViseme(_visemeI);
+
             _currentVisemeTime = 0f;
             return;
         }
 
         _currentVisemeTime += Time.deltaTime;
+
         float cycleSpeed = 0.08f + (1f - amplitude) * 0.06f;
+
         if (_currentVisemeTime > cycleSpeed)
         {
             _currentVisemeTime = 0f;
@@ -1018,11 +1007,33 @@ public class ChatAvatarController : MonoBehaviour
         for (int v = 0; v < visemeIndices.Length; v++)
         {
             if (visemeIndices[v] < 0) continue;
+
             int cycleVal = VisemeCycle[_currentVisemeIdx];
-            float w = (v == cycleVal) ? Mathf.Lerp(0f, targetWeight, blend) : 0f;
+
+            float w = (v == cycleVal)
+                ? Mathf.Lerp(0f, targetWeight, blend)
+                : 0f;
+
             float current = _visemeSkin.GetBlendShapeWeight(visemeIndices[v]);
-            _visemeSkin.SetBlendShapeWeight(visemeIndices[v],
-                Mathf.Lerp(current, w, Time.deltaTime * lipSyncSmooth));
+
+            _visemeSkin.SetBlendShapeWeight(
+                visemeIndices[v],
+                Mathf.Lerp(current, w, Time.deltaTime * lipSyncSmooth)
+            );
         }
+    }
+
+    private void ResetExtraViseme(int idx)
+    {
+        if (idx < 0 || _visemeSkin == null) return;
+
+        _visemeSkin.SetBlendShapeWeight(
+            idx,
+            Mathf.Lerp(
+                _visemeSkin.GetBlendShapeWeight(idx),
+                0f,
+                Time.deltaTime * lipSyncCloseSpeed
+            )
+        );
     }
 }

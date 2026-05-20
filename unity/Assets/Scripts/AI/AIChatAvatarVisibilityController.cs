@@ -6,14 +6,14 @@ public class AIChatAvatarVisibilityController : MonoBehaviour
     private const string AvatarTypeKey = "AvatarType";
 
     [Header("Scene Avatar Roots")]
-    [SerializeField] private GameObject femaleAvatar;
-    [SerializeField] private GameObject maleAvatar;
+    [SerializeField] private GameObject femaleAvatar;       // model1
+    [SerializeField] private GameObject maleAvatar;         // model2
+    [SerializeField] private GameObject youngFemaleAvatar;  // model3
+    [SerializeField] private GameObject youngMaleAvatar;    // model4
 
     [Header("TTS Audio Source")]
     [Tooltip("Boş bırakılırsa sahnedeki RagApiClient üzerindeki AudioSource otomatik bulunur.")]
     [SerializeField] private AudioSource ttsAudioSource;
-
-    private ChatAvatarController _activeLipSyncController;
 
     private void OnEnable()
     {
@@ -23,9 +23,7 @@ public class AIChatAvatarVisibilityController : MonoBehaviour
 
     private IEnumerator Start()
     {
-        // RagApiClient Awake içinde AudioSource eklediği için bir frame beklemek güvenli.
         yield return null;
-
         ApplyAvatarSelection(GetSelectedAvatarType());
     }
 
@@ -45,58 +43,131 @@ public class AIChatAvatarVisibilityController : MonoBehaviour
             (int)SettingsManager.AvatarType.Female
         );
 
-        savedValue = Mathf.Clamp(
-            savedValue,
-            (int)SettingsManager.AvatarType.Female,
-            (int)SettingsManager.AvatarType.Male
-        );
-
+        savedValue = Mathf.Clamp(savedValue, 0, 3);
         return (SettingsManager.AvatarType)savedValue;
     }
 
     private void ApplyAvatarSelection(SettingsManager.AvatarType avatarType)
     {
-        if (femaleAvatar == null)
-            Debug.LogWarning("[AIChatAvatarVisibilityController] Female avatar reference missing.", this);
+        Debug.Log("[AIChatAvatarVisibilityController] Selected avatar: " + avatarType);
 
-        if (maleAvatar == null)
-            Debug.LogWarning("[AIChatAvatarVisibilityController] Male avatar reference missing.", this);
+        SetAvatarActive(femaleAvatar, avatarType == SettingsManager.AvatarType.Female);
+        SetAvatarActive(maleAvatar, avatarType == SettingsManager.AvatarType.Male);
+        SetAvatarActive(youngFemaleAvatar, avatarType == SettingsManager.AvatarType.YoungFemale);
+        SetAvatarActive(youngMaleAvatar, avatarType == SettingsManager.AvatarType.YoungMale);
 
-        bool showMaleAvatar = avatarType == SettingsManager.AvatarType.Male;
+        GameObject activeAvatar = GetActiveAvatarObject(avatarType);
 
-        if (femaleAvatar != null)
-            femaleAvatar.SetActive(!showMaleAvatar);
+        bool isMaleAvatar =
+            avatarType == SettingsManager.AvatarType.Male ||
+            avatarType == SettingsManager.AvatarType.YoungMale;
 
-        if (maleAvatar != null)
-            maleAvatar.SetActive(showMaleAvatar);
-
-        GameObject activeAvatar = showMaleAvatar ? maleAvatar : femaleAvatar;
-
-        AttachLipSyncController(activeAvatar, showMaleAvatar);
-        TryStartIdleAnimation(activeAvatar);
-
-        Debug.Log("[AIChatAvatarVisibilityController] Active avatar: " + avatarType);
+        SetupActiveAvatar(activeAvatar, isMaleAvatar);
     }
 
-    private void AttachLipSyncController(GameObject avatarRoot, bool isMaleAvatar)
+    private GameObject GetActiveAvatarObject(SettingsManager.AvatarType avatarType)
     {
-        if (avatarRoot == null) return;
+        switch (avatarType)
+        {
+            case SettingsManager.AvatarType.Male:
+                return maleAvatar;
+
+            case SettingsManager.AvatarType.YoungFemale:
+                return youngFemaleAvatar;
+
+            case SettingsManager.AvatarType.YoungMale:
+                return youngMaleAvatar;
+
+            case SettingsManager.AvatarType.Female:
+            default:
+                return femaleAvatar;
+        }
+    }
+
+    private void SetAvatarActive(GameObject avatar, bool active)
+    {
+        if (avatar == null)
+        {
+            return;
+        }
+
+        avatar.SetActive(active);
+
+        Renderer[] renderers = avatar.GetComponentsInChildren<Renderer>(true);
+        foreach (Renderer renderer in renderers)
+        {
+            renderer.enabled = active;
+        }
+
+        SkinnedMeshRenderer[] skinnedRenderers = avatar.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+        foreach (SkinnedMeshRenderer skinnedRenderer in skinnedRenderers)
+        {
+            skinnedRenderer.enabled = active;
+            skinnedRenderer.updateWhenOffscreen = true;
+        }
+
+        Animator animator = avatar.GetComponentInChildren<Animator>(true);
+        if (animator != null)
+        {
+            animator.enabled = active;
+            animator.applyRootMotion = false;
+        }
+
+        Animation animation = avatar.GetComponentInChildren<Animation>(true);
+        if (animation != null)
+        {
+            animation.enabled = active;
+
+            if (active)
+            {
+                animation.wrapMode = WrapMode.Loop;
+
+                if (animation.clip != null)
+                {
+                    animation.clip.wrapMode = WrapMode.Loop;
+                    animation.Play();
+                }
+                else
+                {
+                    foreach (AnimationState state in animation)
+                    {
+                        if (state.clip == null) continue;
+
+                        state.wrapMode = WrapMode.Loop;
+                        animation.clip = state.clip;
+                        animation.Play();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void SetupActiveAvatar(GameObject activeAvatar, bool isMaleAvatar)
+    {
+        if (activeAvatar == null)
+        {
+            Debug.LogWarning("[AIChatAvatarVisibilityController] Aktif avatar null. Inspector referanslarını kontrol et.");
+            return;
+        }
 
         AudioSource speechAudio = ResolveTtsAudioSource();
 
         if (speechAudio == null)
         {
-            Debug.LogWarning("[AIChatAvatarVisibilityController] RagApiClient AudioSource bulunamadı; lip sync bağlanamadı.", this);
+            Debug.LogWarning("[AIChatAvatarVisibilityController] TTS AudioSource bulunamadı. Lip sync bağlanamadı.");
             return;
         }
 
-        _activeLipSyncController = avatarRoot.GetComponent<ChatAvatarController>();
+        ChatAvatarController lipSyncController = activeAvatar.GetComponent<ChatAvatarController>();
 
-        if (_activeLipSyncController == null)
-            _activeLipSyncController = avatarRoot.AddComponent<ChatAvatarController>();
+        if (lipSyncController == null)
+            lipSyncController = activeAvatar.AddComponent<ChatAvatarController>();
 
-        _activeLipSyncController.ConfigureExistingSceneAvatar(speechAudio, isMaleAvatar);
-        _activeLipSyncController.SetLipSyncAudioSource(speechAudio);
+        lipSyncController.ConfigureExistingSceneAvatar(speechAudio, isMaleAvatar);
+        lipSyncController.SetLipSyncAudioSource(speechAudio);
+
+        Debug.Log("[AIChatAvatarVisibilityController] Aktif avatar hazır: " + activeAvatar.name);
     }
 
     private AudioSource ResolveTtsAudioSource()
@@ -118,47 +189,5 @@ public class AIChatAvatarVisibilityController : MonoBehaviour
             ttsAudioSource = ragApiClient.gameObject.AddComponent<AudioSource>();
 
         return ttsAudioSource;
-    }
-
-    private void TryStartIdleAnimation(GameObject avatarRoot)
-    {
-        if (avatarRoot == null) return;
-
-        Animation legacyAnimation = avatarRoot.GetComponentInChildren<Animation>(true);
-
-        if (legacyAnimation != null)
-        {
-            legacyAnimation.enabled = true;
-            legacyAnimation.playAutomatically = true;
-            legacyAnimation.wrapMode = WrapMode.Loop;
-
-            if (legacyAnimation.clip != null)
-            {
-                legacyAnimation.clip.wrapMode = WrapMode.Loop;
-
-                if (!legacyAnimation.isPlaying)
-                    legacyAnimation.Play();
-
-                return;
-            }
-
-            foreach (AnimationState state in legacyAnimation)
-            {
-                if (state.clip == null) continue;
-
-                state.wrapMode = WrapMode.Loop;
-                legacyAnimation.clip = state.clip;
-                legacyAnimation.Play();
-                return;
-            }
-        }
-
-        Animator animator = avatarRoot.GetComponentInChildren<Animator>(true);
-
-        if (animator != null)
-        {
-            animator.enabled = true;
-            animator.applyRootMotion = false;
-        }
     }
 }

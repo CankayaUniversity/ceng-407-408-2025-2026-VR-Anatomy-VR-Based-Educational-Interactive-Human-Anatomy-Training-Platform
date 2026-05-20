@@ -41,11 +41,11 @@ public class RagApiClient : MonoBehaviour
     [SerializeField] private Vector2 answerToggleSizeOverride = Vector2.zero;
 
     [Header("API")]
-    [SerializeField] private string apiUrl = "https://vr-anatomy-backend.onrender.com/ask";
+    [SerializeField] private string apiUrl = "https://vr-anatomy-backend2.onrender.com/ask";
 
     [Header("Speech API")]
-    [SerializeField] private string sttUrl = "https://vr-anatomy-backend.onrender.com/stt";
-    [SerializeField] private string ttsUrl = "https://vr-anatomy-backend.onrender.com/tts";
+    [SerializeField] private string sttUrl = "https://vr-anatomy-backend2.onrender.com/stt";
+    [SerializeField] private string ttsUrl = "https://vr-anatomy-backend2.onrender.com/tts";
 
     [Header("Kayıt Ayarları")]
     [SerializeField] private int maxRecordSeconds = 30;
@@ -877,13 +877,32 @@ public class RagApiClient : MonoBehaviour
     }
 
     private bool IsMaleAvatarSelected()
-    {
-        if (SettingsManager.Instance != null)
-            return SettingsManager.Instance.SelectedAvatarType == SettingsManager.AvatarType.Male;
+{
+    SettingsManager.AvatarType selectedType;
 
-        int rawValue = PlayerPrefs.GetInt("AvatarType", (int)SettingsManager.AvatarType.Female);
-        return rawValue == (int)SettingsManager.AvatarType.Male;
+    if (SettingsManager.Instance != null)
+    {
+        selectedType = SettingsManager.Instance.SelectedAvatarType;
     }
+    else
+    {
+        int rawValue = PlayerPrefs.GetInt(
+            "AvatarType",
+            (int)SettingsManager.AvatarType.Female
+        );
+
+        rawValue = Mathf.Clamp(rawValue, 0, 3);
+        selectedType = (SettingsManager.AvatarType)rawValue;
+    }
+
+    bool isMale =
+        selectedType == SettingsManager.AvatarType.Male ||
+        selectedType == SettingsManager.AvatarType.YoungMale;
+
+    Debug.Log($"[RagApiClient] TTS avatar type = {selectedType}, isMaleVoice = {isMale}");
+
+    return isMale;
+}
 
     #endregion
 

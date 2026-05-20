@@ -173,7 +173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -353,7 +353,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 223372724}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7951c64acb0fa62458bf30a60089fe2d, type: 3}
   m_Name: 
@@ -3967,7 +3967,7 @@ MonoBehaviour:
   answerText: {fileID: 0}
   answerToggleOffset: {x: 0, y: 0}
   answerToggleSizeOverride: {x: 0, y: 0}
-  apiUrl: http://127.0.0.1:8000/docs/ask
+  apiUrl: https://vr-anatomy-backend2.onrender.com/ask
   sttUrl: https://vr-anatomy-backend2.onrender.com/stt
   ttsUrl: https://vr-anatomy-backend2.onrender.com/tts
   maxRecordSeconds: 30
@@ -4723,6 +4723,18 @@ MonoBehaviour:
       - m_Target: {fileID: 212386923}
         m_TargetAssemblyTypeName: ReviewManager, Assembly-CSharp
         m_MethodName: ExitReviewMode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1287345538}
+        m_TargetAssemblyTypeName: BackToMenu, Assembly-CSharp
+        m_MethodName: GoBackToMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

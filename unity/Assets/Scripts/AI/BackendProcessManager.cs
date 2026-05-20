@@ -48,17 +48,13 @@ public class BackendProcessManager : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void AutoCreate()
     {
-    #if UNITY_ANDROID && !UNITY_EDITOR
-        Debug.Log("[BackendManager] Quest/Android build: local Python backend başlatılmayacak. Render API kullanılacak.");
-        return;
-    #else
         if (_instance != null) return;
 
         var go = new GameObject("BackendManager");
         go.AddComponent<BackendProcessManager>();
+        // Awake() içinde DontDestroyOnLoad çağrılacak
         Debug.Log("[BackendManager] Otomatik oluşturuldu (RuntimeInitializeOnLoadMethod).");
-    #endif
-}
+    }
 
     // ───────────────────────── Lifecycle ─────────────────────────
 
@@ -75,12 +71,7 @@ public class BackendProcessManager : MonoBehaviour
 
     private void Start()
     {
-    #if UNITY_ANDROID && !UNITY_EDITOR
-        Debug.Log("[BackendManager] Quest/Android build: local backend routine atlandı.");
-        return;
-    #else
         StartCoroutine(StartBackendRoutine());
-    #endif
     }
 
     private void OnApplicationQuit()
