@@ -220,7 +220,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4275,7 +4275,6 @@ GameObject:
   - component: {fileID: 160259245}
   - component: {fileID: 160259243}
   - component: {fileID: 160259242}
-  - component: {fileID: 160259244}
   m_Layer: 0
   m_Name: LHand_Metacarpals_PivotRoot
   m_TagString: Untagged
@@ -4457,20 +4456,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &160259244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 160259240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35978699eca0b3641b289aad1e5f9ede, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: ossa_metacarpi
-  fallbackDisplayName: 
 --- !u!114 &160259245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4484,7 +4469,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: ossa_metacarpii_hand
-  fallbackDisplayName: 
+  fallbackDisplayName: Ossa Metacarpi
 --- !u!114 &163165569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14701,7 +14686,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: hamstring
-  fallbackDisplayName: 
+  fallbackDisplayName: Hamstring
 --- !u!114 &504337003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16644,7 +16629,6 @@ GameObject:
   - component: {fileID: 597575297}
   - component: {fileID: 597575295}
   - component: {fileID: 597575294}
-  - component: {fileID: 597575296}
   m_Layer: 0
   m_Name: RHand_Metacarpals_PivotRoot
   m_TagString: Untagged
@@ -16826,20 +16810,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &597575296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 597575292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35978699eca0b3641b289aad1e5f9ede, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: ossa_metacarpi
-  fallbackDisplayName: 
 --- !u!114 &597575297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16853,7 +16823,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: ossa_metacarpii_hand
-  fallbackDisplayName: 
+  fallbackDisplayName: Ossa Metacarpi
 --- !u!64 &598533934
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -17011,18 +16981,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 611277194}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.046}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.677}
   m_LocalScale: {x: 0.0071973815, y: 0.004728589, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 916321113}
   - {fileID: 1099987342}
-  m_Father: {fileID: 1197844853}
+  m_Father: {fileID: 1570151433}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.25, y: 0.338}
+  m_AnchoredPosition: {x: -0.21, y: 0.27}
   m_SizeDelta: {x: 800, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &611277196
@@ -18882,6 +18852,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1559140114}
     m_Modifications:
+    - target: {fileID: -2368749419795825841, guid: 1fd3a7c43c8190f4d8c167ebde694364, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5686134208185136530, guid: 1fd3a7c43c8190f4d8c167ebde694364, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.001
@@ -19024,7 +18998,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: m_biceps_brachialis
-  fallbackDisplayName: 
+  fallbackDisplayName: M. Biceps Brachialis
 --- !u!114 &755142938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23725,7 +23699,6 @@ GameObject:
   - component: {fileID: 926825269}
   - component: {fileID: 926825267}
   - component: {fileID: 926825266}
-  - component: {fileID: 926825268}
   m_Layer: 0
   m_Name: RHand_Phalanges_PivotRoot
   m_TagString: Untagged
@@ -23925,20 +23898,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &926825268
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 926825264}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35978699eca0b3641b289aad1e5f9ede, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: ossa_digitorum_manus
-  fallbackDisplayName: 
 --- !u!114 &926825269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23952,7 +23911,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: ossa_digitorum_manusi_hand
-  fallbackDisplayName: 
+  fallbackDisplayName: 'Ossa Digitorum Manus (Phalanges) '
 --- !u!64 &926922838
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -24643,7 +24602,6 @@ GameObject:
   - component: {fileID: 975779751}
   - component: {fileID: 975779749}
   - component: {fileID: 975779748}
-  - component: {fileID: 975779750}
   m_Layer: 0
   m_Name: LHand_Phalanges_PivotRoot
   m_TagString: Untagged
@@ -24843,20 +24801,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &975779750
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 975779746}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35978699eca0b3641b289aad1e5f9ede, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: ossa_digitorum_manus
-  fallbackDisplayName: 
 --- !u!114 &975779751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24870,7 +24814,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: ossa_digitorum_manusi_hand
-  fallbackDisplayName: 
+  fallbackDisplayName: 'Ossa Digitorum Manus (Phalanges) '
 --- !u!1 &975854498
 GameObject:
   m_ObjectHideFlags: 0
@@ -24953,7 +24897,6 @@ GameObject:
   m_Component:
   - component: {fileID: 988817858}
   - component: {fileID: 988817862}
-  - component: {fileID: 988817861}
   - component: {fileID: 988817860}
   - component: {fileID: 988817859}
   m_Layer: 0
@@ -25130,20 +25073,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &988817861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 988817857}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35978699eca0b3641b289aad1e5f9ede, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 
-  fallbackDisplayName: 
 --- !u!114 &988817862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25157,7 +25086,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: hamstring
-  fallbackDisplayName: 
+  fallbackDisplayName: Hamstring
 --- !u!114 &996468621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27223,7 +27152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: m_triceps_brachialis
-  fallbackDisplayName: 
+  fallbackDisplayName: M. Triceps Brachialis
 --- !u!114 &1072111652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30674,6 +30603,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 73949512329761232, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_TurnAmount
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 73949512329761232, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_DebounceTime
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 73949512329761232, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_LeftHandTurnInput.m_InputActionReference
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 336146345570184243, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_Layer
       value: 0
@@ -30898,6 +30839,10 @@ PrefabInstance:
       propertyPath: m_PositionInput.m_Reference
       value: 
       objectReference: {fileID: 1459181752}
+    - target: {fileID: 4399785403807940556, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4651071173864718261, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_Layer
       value: 0
@@ -30944,7 +30889,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7219359282390074199, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7277802327414017196, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_BackGroundColor.a
@@ -30969,6 +30914,18 @@ PrefabInstance:
     - target: {fileID: 7277802327849468127, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412079985589468698, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_MoveSpeed
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412079985589468698, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412079985589468698, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_RightHandMoveInput.m_InputActionReference
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7434851320941268098, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_AnchorMax.y
@@ -31180,10 +31137,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8404871649812681847, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_RequestedTrackingOriginMode
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8555033608917598493, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8555033608917598493, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8833969059611364245, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
@@ -31271,9 +31232,6 @@ PrefabInstance:
     - {fileID: 1994949203153378060, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
     - {fileID: 3831962442353154631, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 7277802327414017193, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 611277195}
     - targetCorrespondingSourceObject: {fileID: 7277802326798953675, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       insertIndex: -1
       addedObject: {fileID: 672430225}
@@ -31350,11 +31308,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rightInteractor: {fileID: 1197844849}
   leftInteractor: {fileID: 1197844850}
---- !u!4 &1197844853 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7277802327414017193, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
-  m_PrefabInstance: {fileID: 1197844848}
-  m_PrefabAsset: {fileID: 0}
 --- !u!20 &1197844854 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 7277802327414017196, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
@@ -33174,7 +33127,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -9.003, y: -26.281}
+  m_AnchoredPosition: {x: -9.003, y: -26.001}
   m_SizeDelta: {x: 236.0258, y: 150.9863}
   m_Pivot: {x: 0.49999997, y: 0.5}
 --- !u!114 &1260457849
@@ -34811,6 +34764,63 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 8857186494228095164, guid: b0ca12fcf1b5b1a40a30f4469659e32a, type: 3}
+--- !u!1001 &1346196563
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1507086520634593557, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_Name
+      value: Lab
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
 --- !u!64 &1348813241
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -36136,7 +36146,6 @@ GameObject:
   - component: {fileID: 1391401676}
   - component: {fileID: 1391401674}
   - component: {fileID: 1391401673}
-  - component: {fileID: 1391401675}
   m_Layer: 0
   m_Name: RHand_Carpals_PivotRoot
   m_TagString: Untagged
@@ -36324,20 +36333,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1391401675
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1391401671}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35978699eca0b3641b289aad1e5f9ede, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: ossa_carpi
-  fallbackDisplayName: 
 --- !u!114 &1391401676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36351,7 +36346,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: ossa_carpi_hand
-  fallbackDisplayName: 
+  fallbackDisplayName: Ossa Carpi
 --- !u!114 &1396010579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38981,6 +38976,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 874340242}
+  - {fileID: 611277195}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1572148934
@@ -39203,7 +39199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: m_biceps_brachialis
-  fallbackDisplayName: 
+  fallbackDisplayName: M. Biceps Brachialis
 --- !u!114 &1576279453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40544,8 +40540,8 @@ Transform:
   m_GameObject: {fileID: 1628042809}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.129, y: -0.21534, z: 1.0419}
-  m_LocalScale: {x: 1.9122, y: 1.9122, z: 1.9122}
+  m_LocalPosition: {x: 0.16527, y: 0.112, z: 0.94338}
+  m_LocalScale: {x: 1.5876806, y: 1.5876806, z: 1.5876806}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3381651046132434599}
@@ -42924,7 +42920,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: m_triceps_brachialis
-  fallbackDisplayName: 
+  fallbackDisplayName: M. Triceps Brachialis
 --- !u!114 &1718722231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45212,6 +45208,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 7263066586038132329, guid: 65847589f926b734d9eaed6e25f0046b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -47241,7 +47241,6 @@ GameObject:
   - component: {fileID: 1965651096}
   - component: {fileID: 1965651094}
   - component: {fileID: 1965651093}
-  - component: {fileID: 1965651095}
   m_Layer: 0
   m_Name: LHand_Carpals_PivotRoot
   m_TagString: Untagged
@@ -47429,20 +47428,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1965651095
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1965651091}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35978699eca0b3641b289aad1e5f9ede, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: ossa_carpi
-  fallbackDisplayName: 
 --- !u!114 &1965651096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47456,7 +47441,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: ossa_carpi_hand
-  fallbackDisplayName: 
+  fallbackDisplayName: Ossa Carpi
 --- !u!114 &1969186414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48041,63 +48026,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -8546830760912717206, guid: b0ca12fcf1b5b1a40a30f4469659e32a, type: 3}
---- !u!1001 &2001713650
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4167338179554339224, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_Name
-      value: Lab
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
 --- !u!114 &2005408620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53316,6 +53244,7 @@ GameObject:
   - component: {fileID: 1843220182}
   - component: {fileID: 1843220181}
   - component: {fileID: 1843220180}
+  - component: {fileID: 8576645754414763336}
   m_Layer: 0
   m_Name: Semitendinosus muscle.r.004
   m_TagString: Untagged
@@ -75419,7 +75348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_ethmoidale
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Ethmoidale
 --- !u!4 &4498907391123814671
 Transform:
   m_ObjectHideFlags: 0
@@ -77577,7 +77506,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_ulna
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Ulna
 --- !u!114 &4873498108458780532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79712,8 +79641,8 @@ Transform:
   m_GameObject: {fileID: 8825008953891272628}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.084, y: -0.405, z: 0.664}
-  m_LocalScale: {x: 1.7566, y: 1.7566, z: 1.7566}
+  m_LocalPosition: {x: 0.12527, y: -0.467, z: 0.63333}
+  m_LocalScale: {x: 1.4833432, y: 1.4833432, z: 1.4833432}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8208679127153837}
@@ -86150,8 +86079,8 @@ Transform:
   m_GameObject: {fileID: 5993262550037776761}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: 0.37012, y: 0.051804, z: 0.49722}
-  m_LocalScale: {x: 3.379335, y: 3.379335, z: 3.379335}
+  m_LocalPosition: {x: 0.37002, y: 0.32, z: 0.49846}
+  m_LocalScale: {x: 2.5429833, y: 2.5429833, z: 2.5429833}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1237918569139949565}
@@ -86619,7 +86548,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_patella
-  fallbackDisplayName: 
+  fallbackDisplayName: Patella
 --- !u!64 &6416495485927413896
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -87047,7 +86976,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_scapula
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Scapula
 --- !u!4 &6508006022054480644
 Transform:
   m_ObjectHideFlags: 0
@@ -87628,7 +87557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_scapula
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Scapula
 --- !u!4 &6568045828068092962
 Transform:
   m_ObjectHideFlags: 0
@@ -88763,7 +88692,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: m_teres_minor
-  fallbackDisplayName: 
+  fallbackDisplayName: Teres Minor
 --- !u!4 &6798733320852730229
 Transform:
   m_ObjectHideFlags: 0
@@ -89721,7 +89650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: m_deltoideus
-  fallbackDisplayName: 
+  fallbackDisplayName: "Deltoid Kas\u0131"
 --- !u!23 &7031832040641811855
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -90587,7 +90516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: m_deltoideus
-  fallbackDisplayName: 
+  fallbackDisplayName: "Deltoid Kas\u0131"
 --- !u!114 &7130543046828259173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91472,6 +91401,7 @@ GameObject:
   - component: {fileID: 1741614567}
   - component: {fileID: 1741614566}
   - component: {fileID: 1741614565}
+  - component: {fileID: 7277126631103842706}
   m_Layer: 0
   m_Name: Semimembranosus muscle.r.004
   m_TagString: Untagged
@@ -91479,6 +91409,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &7277126631103842706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7277126631103842705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35978699eca0b3641b289aad1e5f9ede, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 
+  fallbackDisplayName: 
 --- !u!1 &7285126230949145607
 GameObject:
   m_ObjectHideFlags: 0
@@ -91568,7 +91512,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_maxilla
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Maxilla
 --- !u!1 &7315923298237550945
 GameObject:
   m_ObjectHideFlags: 0
@@ -91724,7 +91668,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_sphenoidale
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Sphenoidale
 --- !u!4 &7318324855229470184
 Transform:
   m_ObjectHideFlags: 0
@@ -92698,7 +92642,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_frontale
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Frontale
 --- !u!33 &7539280472722419232
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -93521,7 +93465,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_coxa
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Coxa
 --- !u!54 &7699073230710182204
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -93684,7 +93628,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_fibula
-  fallbackDisplayName: 
+  fallbackDisplayName: Fibula
 --- !u!1 &7712270185130108374
 GameObject:
   m_ObjectHideFlags: 0
@@ -94401,7 +94345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_nasale
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Nasale
 --- !u!4 &7839385252955812673
 Transform:
   m_ObjectHideFlags: 0
@@ -94879,7 +94823,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: m_teres_major
-  fallbackDisplayName: 
+  fallbackDisplayName: Teres Major
 --- !u!23 &7937337240812959742
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -95013,7 +94957,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_humerus
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Humerus
 --- !u!1 &7956172224125442912
 GameObject:
   m_ObjectHideFlags: 0
@@ -96260,7 +96204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_tibia
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Tibia
 --- !u!4 &8239055738322649493
 Transform:
   m_ObjectHideFlags: 0
@@ -96541,7 +96485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_lacrimale
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Lacrimale
 --- !u!1 &8268823749576878804
 GameObject:
   m_ObjectHideFlags: 0
@@ -96987,7 +96931,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_fibula
-  fallbackDisplayName: 
+  fallbackDisplayName: Fibula
 --- !u!4 &8341283914689449306
 Transform:
   m_ObjectHideFlags: 0
@@ -97127,7 +97071,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_vomer
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Vomer
 --- !u!1 &8361055763801554036
 GameObject:
   m_ObjectHideFlags: 0
@@ -97416,7 +97360,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_coxa
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Coxa
 --- !u!23 &8425956525199729938
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -97992,7 +97936,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_humerus
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Humerus
 --- !u!4 &8514971362736186537
 Transform:
   m_ObjectHideFlags: 0
@@ -98088,7 +98032,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_mandibula
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Mandibula
 --- !u!4 &8527744540293254510
 Transform:
   m_ObjectHideFlags: 0
@@ -98182,7 +98126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_occipitale
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Occipitale
 --- !u!4 &8558628797121105030
 Transform:
   m_ObjectHideFlags: 0
@@ -98320,6 +98264,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 988817858}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8576645754414763336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324046781546786638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35978699eca0b3641b289aad1e5f9ede, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 
+  fallbackDisplayName: 
 --- !u!33 &8581888611434108737
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -98497,7 +98455,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_tibia
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Tibia
 --- !u!4 &8612511020259354331
 Transform:
   m_ObjectHideFlags: 0
@@ -98637,7 +98595,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_temporale
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Temporale
 --- !u!4 &8643924306141123303
 Transform:
   m_ObjectHideFlags: 0
@@ -98921,7 +98879,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: m_sartorius
-  fallbackDisplayName: 
+  fallbackDisplayName: M. Sartorius
 --- !u!33 &8712203592339585958
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -99027,7 +98985,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_clavicula
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Clavicula
 --- !u!1 &8733969964714113697
 GameObject:
   m_ObjectHideFlags: 0
@@ -99160,7 +99118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_palatinum
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Palatinum
 --- !u!4 &8757068293464923443
 Transform:
   m_ObjectHideFlags: 0
@@ -99307,7 +99265,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: m_brachialis
-  fallbackDisplayName: 
+  fallbackDisplayName: M. Brachialis
 --- !u!1 &8769433862085546806
 GameObject:
   m_ObjectHideFlags: 0
@@ -99474,7 +99432,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: m_teres_major
-  fallbackDisplayName: 
+  fallbackDisplayName: Teres Major
 --- !u!1 &8803018868683306467
 GameObject:
   m_ObjectHideFlags: 0
@@ -99646,7 +99604,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: m_teres_minor
-  fallbackDisplayName: 
+  fallbackDisplayName: Teres Minor
 --- !u!1 &8833569631754797006
 GameObject:
   m_ObjectHideFlags: 0
@@ -99776,7 +99734,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_parietale
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Parietale
 --- !u!33 &8857561538885251214
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -100187,7 +100145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_radius
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Radius
 --- !u!4 &8902073999031907180
 Transform:
   m_ObjectHideFlags: 0
@@ -100338,7 +100296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_ulna
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Ulna
 --- !u!4 &8916170720048960502
 Transform:
   m_ObjectHideFlags: 0
@@ -100526,7 +100484,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: m_brachialis
-  fallbackDisplayName: 
+  fallbackDisplayName: M. Brachialis
 --- !u!1 &8949086856818506765
 GameObject:
   m_ObjectHideFlags: 0
@@ -100778,7 +100736,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_femur
-  fallbackDisplayName: 
+  fallbackDisplayName: Femur
 --- !u!1 &9041745065002399728
 GameObject:
   m_ObjectHideFlags: 0
@@ -100870,7 +100828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_parietale
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Parietale
 --- !u!4 &9059069862717505302
 Transform:
   m_ObjectHideFlags: 0
@@ -100899,7 +100857,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_patella
-  fallbackDisplayName: 
+  fallbackDisplayName: Patella
 --- !u!4 &9062100081384592701
 Transform:
   m_ObjectHideFlags: 0
@@ -101044,7 +101002,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_zygomaticum
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Zygomaticum
 --- !u!23 &9081489487954085462
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -101103,7 +101061,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: m_sartorius
-  fallbackDisplayName: 
+  fallbackDisplayName: M. Sartorius
 --- !u!1 &9085385867221381096
 GameObject:
   m_ObjectHideFlags: 0
@@ -101262,7 +101220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_clavicula
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Clavicula
 --- !u!4 &9133609560696771234
 Transform:
   m_ObjectHideFlags: 0
@@ -101373,7 +101331,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_femur
-  fallbackDisplayName: 
+  fallbackDisplayName: Femur
 --- !u!4 &9159819083487473765
 Transform:
   m_ObjectHideFlags: 0
@@ -101635,7 +101593,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: os_radius
-  fallbackDisplayName: 
+  fallbackDisplayName: Os Radius
 --- !u!1 &9187799242212771785
 GameObject:
   m_ObjectHideFlags: 0
@@ -101952,7 +101910,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: concha_nasalis_inferior
-  fallbackDisplayName: 
+  fallbackDisplayName: Concha Nasalis Inferior
 --- !u!4 &9214908386670741135
 Transform:
   m_ObjectHideFlags: 0
@@ -102060,4 +102018,4 @@ SceneRoots:
   - {fileID: 600192224}
   - {fileID: 853136901}
   - {fileID: 639472797}
-  - {fileID: 2001713650}
+  - {fileID: 1346196563}

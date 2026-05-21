@@ -230,6 +230,10 @@ private void ApplyUiOpaqueMaterial(Graphic graphic)
         });
         BuildInfoRow(rt, new object[]
         {
+            "Klavye simgesine basarak sanal klavyeyi açıp sorunu yazabilirsin."
+        });
+        BuildInfoRow(rt, new object[]
+        {
             "Konuşmanın sonunda \"", "<b>cevapla</b>", "\" veya \"", "<b>tamam</b>", "\" diyerek"
         });
         BuildInfoRow(rt, false, new object[]
@@ -305,7 +309,7 @@ private void ApplyUiOpaqueMaterial(Graphic graphic)
         tmp.color = TextColor;
         tmp.fontSize = fontSize;
         tmp.alignment = alignment;
-        tmp.enableWordWrapping = false;
+        tmp.textWrappingMode = TextWrappingModes.NoWrap;
         tmp.enableAutoSizing = false;
         tmp.richText = richText;
         tmp.raycastTarget = false;

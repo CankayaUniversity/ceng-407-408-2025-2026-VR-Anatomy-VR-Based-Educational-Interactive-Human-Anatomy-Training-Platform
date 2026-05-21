@@ -1,15 +1,36 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using GLTFast;
 using UnityEngine;
 
 public class ChatAvatarController : MonoBehaviour
 {
-    [Header("Avatar Source (GLB)")]
-    [SerializeField] private string glbFileName = "model1.glb";
-    [SerializeField] private string maleGlbFileName = "model 2.glb";
+    [Header("Avatar Source (Inspector Prefab)")]
+    [Tooltip("Kadın avatar prefabını Project panelinden buraya sürükle.")]
+    [SerializeField] private GameObject femaleAvatarPrefab;
+
+    [Tooltip("Erkek avatar prefabını Project panelinden buraya sürükle.")]
+    [SerializeField] private GameObject maleAvatarPrefab;
+
+    [Tooltip("Avatarın instantiate edileceği parent. Boş kalırsa bu objenin transformu kullanılır.")]
+    [SerializeField] private Transform avatarSpawnParent;
+
+    [Tooltip("Prefab instantiate edilince local position/rotation/scale sıfırlansın mı?")]
+    [SerializeField] private bool resetPrefabLocalTransform = true;
+
+    [Header("TTS / Lip Sync Audio Source")]
+    [Tooltip("RagApiClient üzerindeki TTS AudioSource'u buraya atayabilirsin. Boş kalırsa otomatik RagApiClient aranır.")]
+    [SerializeField] private AudioSource ttsAudioSource;
+    [SerializeField] private bool autoFindRagApiClientAudioSource = true;
+
+    [Header("No-Blendshape Lip Sync Fallback")]
+    [Tooltip("Erkek modelde blendshape yoksa jaw/head bone ile sahte konuşma hareketi yapar.")]
+    [SerializeField] private bool enableTransformLipSyncFallback = true;
+    [Tooltip("Varsa erkek modelin Jaw/LowerJaw kemiğini elle buraya atayabilirsin. Boşsa otomatik aranır.")]
+    [SerializeField] private Transform manualJawBone;
+    [Tooltip("Jaw yoksa konuşma hareketi için Head/Neck gibi bir hedefi buraya atayabilirsin. Boşsa otomatik aranır.")]
+    [SerializeField] private Transform manualSpeechMotionTarget;
+    [SerializeField] private Vector3 fallbackJawOpenEulerOffset = new Vector3(-14f, 0f, 0f);
+    [SerializeField] private Vector3 fallbackHeadSpeechEulerOffset = new Vector3(2.5f, 0f, 0f);
+    [SerializeField] private float fallbackTransformLipSyncMultiplier = 1f;
 
     [Header("Male Avatar Alignment")]
     [SerializeField] private bool alignMaleFeetToAvatarRoot = true;
@@ -51,10 +72,11 @@ public class ChatAvatarController : MonoBehaviour
     [SerializeField] private float mouthMaxWeight = 1.5f;
     [SerializeField] private float visemeMaxWeight = 4f;
 
-    private GltfAsset _gltfAsset;
+    private GameObject _currentAvatarInstance;
     private Transform _cameraTransform;
     private bool _loaded;
     private bool _isMaleAvatar;
+    private bool _useExistingSceneAvatar;
     private Transform _maleModelRoot;
     private Transform _maleRightFoot;
     private Transform _maleRightToe;
@@ -84,6 +106,13 @@ public class ChatAvatarController : MonoBehaviour
     private bool _hasVisemes;
     private SkinnedMeshRenderer _visemeSkin;
 
+    // ── Transform / bone fallback lip sync ──
+    private bool _useTransformLipSync;
+    private Transform _jawBone;
+    private Transform _speechMotionTarget;
+    private Quaternion _jawClosedLocalRotation;
+    private Quaternion _speechClosedLocalRotation;
+
     // ── Blendshape anim state ──
     private float _nextBlink, _blinkT;
     private bool _blinking;
@@ -95,78 +124,86 @@ public class ChatAvatarController : MonoBehaviour
     private float _prevVisemeWeight, _nextVisemeWeight;
     private float[] _samples = new float[256];
 
-    private async void Start()
+    public void ConfigureExistingSceneAvatar(AudioSource ttsAudioSource, bool isMaleAvatar)
+    {
+        _useExistingSceneAvatar = true;
+        _isMaleAvatar = isMaleAvatar;
+        _ttsAudio = ttsAudioSource;
+    }
+
+    public void SetLipSyncAudioSource(AudioSource ttsAudioSource)
+    {
+        _ttsAudio = ttsAudioSource;
+    }
+
+    private void Start()
     {
         _cameraTransform = Camera.main != null ? Camera.main.transform : null;
-        glbFileName = ResolveAvatarFileName();
-        _isMaleAvatar = IsMaleAvatarFile(glbFileName);
-        await LoadAvatar();
+
+        if (_useExistingSceneAvatar)
+        {
+            InitExistingSceneAvatar();
+            return;
+        }
+
+        _isMaleAvatar = ResolveIsMaleAvatarSelected();
+
+        if (!InstantiateSelectedAvatarPrefab())
+            return;
+
+        StartCoroutine(SetupAfterLoad());
     }
 
-    private string ResolveAvatarFileName()
+    private void InitExistingSceneAvatar()
     {
-        // SettingsManager yoksa da son seçimi PlayerPrefs'ten okuyarak avatarı koru.
-        if (SettingsManager.Instance != null &&
-            SettingsManager.Instance.SelectedAvatarType == SettingsManager.AvatarType.Male)
-        {
-            return maleGlbFileName;
-        }
+        InitFace();
+        _loaded = true;
+        Debug.Log("[ChatAvatar] Sahnedeki mevcut avatar yüz animasyonu için hazır.");
+    }
+
+    private bool ResolveIsMaleAvatarSelected()
+    {
+        if (SettingsManager.Instance != null)
+            return SettingsManager.Instance.SelectedAvatarType == SettingsManager.AvatarType.Male;
 
         int rawValue = PlayerPrefs.GetInt("AvatarType", (int)SettingsManager.AvatarType.Female);
-        return rawValue == (int)SettingsManager.AvatarType.Male ? maleGlbFileName : glbFileName;
+        return rawValue == (int)SettingsManager.AvatarType.Male;
     }
 
-    private async Task LoadAvatar()
+    private bool InstantiateSelectedAvatarPrefab()
     {
-        _gltfAsset = gameObject.AddComponent<GltfAsset>();
-        _gltfAsset.LoadOnStartup = false;
+        GameObject selectedPrefab = _isMaleAvatar ? maleAvatarPrefab : femaleAvatarPrefab;
 
-        bool success = await TryLoadAvatarFromKnownPaths(glbFileName);
-
-        if (success)
+        if (selectedPrefab == null)
         {
-            Debug.Log("[ChatAvatar] GLB yüklendi, setup başlıyor...");
-            StartCoroutine(SetupAfterLoad());
-        }
-        else
-        {
-            Debug.LogError($"[ChatAvatar] Avatar yüklenemedi: {glbFileName}");
-        }
-    }
-
-    private async Task<bool> TryLoadAvatarFromKnownPaths(string fileName)
-    {
-        var candidates = new List<(bool useStreamingAsset, string url)>
-        {
-            (true, fileName),
-            (true, $"Avatars/{fileName}")
-        };
-
-        string streamingPath = Path.Combine(Application.dataPath, "StreamingAssets", fileName);
-        string avatarsPath = Path.Combine(Application.dataPath, "Avatars", fileName);
-
-        if (File.Exists(streamingPath))
-            candidates.Add((false, $"file:///{streamingPath.Replace("\\", "/")}"));
-
-        if (File.Exists(avatarsPath))
-            candidates.Add((false, $"file:///{avatarsPath.Replace("\\", "/")}"));
-
-        for (int i = 0; i < candidates.Count; i++)
-        {
-            var candidate = candidates[i];
-            _gltfAsset.StreamingAsset = candidate.useStreamingAsset;
-            _gltfAsset.Url = candidate.url;
-
-            string fullUrl = _gltfAsset.FullUrl;
-            bool loaded = await _gltfAsset.Load(fullUrl);
-            if (loaded)
-            {
-                Debug.Log($"[ChatAvatar] Avatar yüklendi: {fullUrl}");
-                return true;
-            }
+            Debug.LogError(
+                _isMaleAvatar
+                    ? "[ChatAvatar] Erkek avatar prefabı Inspector'da atanmamış."
+                    : "[ChatAvatar] Kadın avatar prefabı Inspector'da atanmamış.",
+                this
+            );
+            return false;
         }
 
-        return false;
+        Transform parent = avatarSpawnParent != null ? avatarSpawnParent : transform;
+
+        if (_currentAvatarInstance != null)
+            Destroy(_currentAvatarInstance);
+
+        _currentAvatarInstance = Instantiate(selectedPrefab, parent);
+        _currentAvatarInstance.name = selectedPrefab.name + "_Instance";
+
+        if (resetPrefabLocalTransform)
+        {
+            _currentAvatarInstance.transform.localPosition = Vector3.zero;
+            _currentAvatarInstance.transform.localRotation = Quaternion.identity;
+            _currentAvatarInstance.transform.localScale = Vector3.one;
+        }
+
+        _currentAvatarInstance.SetActive(true);
+
+        Debug.Log($"[ChatAvatar] Avatar prefab instantiate edildi: {_currentAvatarInstance.name} | Male: {_isMaleAvatar}", this);
+        return true;
     }
 
     private IEnumerator SetupAfterLoad()
@@ -180,11 +217,11 @@ public class ChatAvatarController : MonoBehaviour
         InitFace();
 
         _loaded = true;
-        Debug.Log("[ChatAvatar] Avatar tamamen hazır.");
+        Debug.Log("[ChatAvatar] Avatar prefab tamamen hazır.");
     }
 
     // ═══════════════════════════════════════════════════════════
-    //  ANİMASYON — GLB içindeki animasyonları bul ve oynat
+    //  ANİMASYON — prefab içindeki animasyonları bul ve oynat
     // ═══════════════════════════════════════════════════════════
 
     private void SetupAnimation()
@@ -225,12 +262,7 @@ public class ChatAvatarController : MonoBehaviour
             return;
         }
 
-        Debug.LogWarning("[ChatAvatar] GLB'de animasyon bulunamadı.");
-    }
-
-    private bool IsMaleAvatarFile(string fileName)
-    {
-        return string.Equals(Path.GetFileName(fileName), maleGlbFileName, System.StringComparison.OrdinalIgnoreCase);
+        Debug.LogWarning("[ChatAvatar] Prefab içinde animasyon bulunamadı.");
     }
 
     private void ApplyAvatarModelAlignment()
@@ -470,23 +502,134 @@ public class ChatAvatarController : MonoBehaviour
         }
 
         DetectVisemes();
+        ResolveTtsAudioSource();
+        SetupTransformLipSyncFallback();
 
-        AudioSource[] audioSources = FindObjectsOfType<AudioSource>();
-        foreach (var a in audioSources)
-        {
-            if (a.gameObject != gameObject) { _ttsAudio = a; break; }
-        }
-        if (_ttsAudio == null && audioSources.Length > 0)
-            _ttsAudio = audioSources[0];
+        _nextBlink = Time.time + UnityEngine.Random.Range(blinkIntervalMin, blinkIntervalMax);
+        _nextSmile = Time.time + UnityEngine.Random.Range(smileIntervalMin, smileIntervalMax);
 
-        _nextBlink = Time.time + Random.Range(blinkIntervalMin, blinkIntervalMax);
-        _nextSmile = Time.time + Random.Range(smileIntervalMin, smileIntervalMax);
-
-        _faceReady = _useSingleMesh
+        bool blendshapeFaceReady = _useSingleMesh
             ? (_primarySkin != null && (_primaryJawOpen >= 0 || _primaryMouthOpen >= 0 || _primarySmileL >= 0))
             : (_headSkin != null && (_headMouthOpen >= 0 || _headSmile >= 0));
 
-        Debug.Log(_faceReady ? "[Face] Yüz animasyonu hazır!" : "[Face] Blendshape bulunamadı — yüz devre dışı.");
+        _faceReady = blendshapeFaceReady || _useTransformLipSync;
+
+        if (blendshapeFaceReady)
+            Debug.Log("[Face] Blendshape yüz animasyonu hazır!");
+        else if (_useTransformLipSync)
+            Debug.Log("[Face] Blendshape yok; transform/bone fallback lip sync hazır.");
+        else
+            Debug.Log("[Face] Blendshape veya jaw/head fallback bulunamadı — yüz/lip sync devre dışı.");
+    }
+
+    private void ResolveTtsAudioSource()
+    {
+        if (ttsAudioSource != null)
+        {
+            _ttsAudio = ttsAudioSource;
+            Debug.Log("[ChatAvatar] TTS AudioSource Inspector üzerinden kullanılıyor: " + _ttsAudio.name, this);
+            return;
+        }
+
+        if (_ttsAudio != null) return;
+
+        if (autoFindRagApiClientAudioSource)
+        {
+            RagApiClient ragApiClient = FindFirstObjectByType<RagApiClient>();
+            if (ragApiClient == null)
+                ragApiClient = FindAnyObjectByType<RagApiClient>(FindObjectsInactive.Include);
+
+            if (ragApiClient != null)
+            {
+                _ttsAudio = ragApiClient.GetComponent<AudioSource>();
+                if (_ttsAudio == null)
+                    _ttsAudio = ragApiClient.gameObject.AddComponent<AudioSource>();
+
+                Debug.Log("[ChatAvatar] TTS AudioSource RagApiClient üzerinden bulundu: " + _ttsAudio.name, this);
+                return;
+            }
+        }
+
+        AudioSource[] audioSources = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
+        foreach (var a in audioSources)
+        {
+            if (a == null) continue;
+            if (_currentAvatarInstance != null && a.transform.IsChildOf(_currentAvatarInstance.transform)) continue;
+            if (a.gameObject == gameObject) continue;
+
+            _ttsAudio = a;
+            Debug.LogWarning("[ChatAvatar] RagApiClient bulunamadı; fallback AudioSource seçildi: " + _ttsAudio.name, this);
+            return;
+        }
+
+        Debug.LogWarning("[ChatAvatar] Lip sync için AudioSource bulunamadı.", this);
+    }
+
+    private void SetupTransformLipSyncFallback()
+    {
+        _useTransformLipSync = false;
+        if (!enableTransformLipSyncFallback) return;
+
+        bool hasMouthBlendshape = _hasVisemes ||
+            (_useSingleMesh && (_primaryJawOpen >= 0 || _primaryMouthOpen >= 0)) ||
+            (!_useSingleMesh && ((_headSkin != null && _headMouthOpen >= 0) || (_teethSkin != null && _teethMouthOpen >= 0)));
+
+        if (hasMouthBlendshape) return;
+
+        Transform searchRoot = _currentAvatarInstance != null ? _currentAvatarInstance.transform : transform;
+
+        _jawBone = manualJawBone != null
+            ? manualJawBone
+            : FindChildByAnyKeyword(searchRoot, "jaw", "lowerjaw", "lower_jaw", "mandible", "cc_base_jaw");
+
+        if (_jawBone != null)
+        {
+            _jawClosedLocalRotation = _jawBone.localRotation;
+            _useTransformLipSync = true;
+            Debug.Log("[ChatAvatar] Jaw bone fallback bulundu: " + _jawBone.name, this);
+            return;
+        }
+
+        _speechMotionTarget = manualSpeechMotionTarget != null
+            ? manualSpeechMotionTarget
+            : FindChildByAnyKeyword(searchRoot, "head", "neck");
+
+        if (_speechMotionTarget != null)
+        {
+            _speechClosedLocalRotation = _speechMotionTarget.localRotation;
+            _useTransformLipSync = true;
+            Debug.LogWarning("[ChatAvatar] Jaw bulunamadı; Head/Neck hareketi ile fallback lip sync kullanılacak: " + _speechMotionTarget.name, this);
+        }
+    }
+
+    private Transform FindChildByAnyKeyword(Transform root, params string[] keywords)
+    {
+        if (root == null) return null;
+
+        string normalized = NormalizeName(root.name);
+        foreach (string keyword in keywords)
+        {
+            if (normalized.Contains(NormalizeName(keyword)))
+                return root;
+        }
+
+        for (int i = 0; i < root.childCount; i++)
+        {
+            Transform match = FindChildByAnyKeyword(root.GetChild(i), keywords);
+            if (match != null) return match;
+        }
+
+        return null;
+    }
+
+    private string NormalizeName(string value)
+    {
+        if (string.IsNullOrEmpty(value)) return string.Empty;
+        return value.ToLowerInvariant()
+            .Replace(" ", "")
+            .Replace("_", "")
+            .Replace("-", "")
+            .Replace(":", "");
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -544,7 +687,7 @@ public class ChatAvatarController : MonoBehaviour
     {
         if (!_loaded) return;
 
-        if (lookAtCamera && _cameraTransform != null)
+        if (!_useExistingSceneAvatar && lookAtCamera && _cameraTransform != null)
         {
             Vector3 dir = _cameraTransform.position - transform.position;
             dir.y = 0f;
@@ -557,8 +700,11 @@ public class ChatAvatarController : MonoBehaviour
             }
         }
 
-        StabilizeMaleRightFootAfterAnimation();
-        GroundMaleAvatarAfterAnimation();
+        if (!_useExistingSceneAvatar)
+        {
+            StabilizeMaleRightFootAfterAnimation();
+            GroundMaleAvatarAfterAnimation();
+        }
 
         if (!_faceReady) return;
 
@@ -626,7 +772,7 @@ public class ChatAvatarController : MonoBehaviour
         {
             w = 0f;
             _blinking = false;
-            _nextBlink = Time.time + Random.Range(blinkIntervalMin, blinkIntervalMax);
+            _nextBlink = Time.time + UnityEngine.Random.Range(blinkIntervalMin, blinkIntervalMax);
         }
 
         if (_useSingleMesh)
@@ -686,7 +832,7 @@ public class ChatAvatarController : MonoBehaviour
         {
             w = 0f;
             _smiling = false;
-            _nextSmile = Time.time + Random.Range(smileIntervalMin, smileIntervalMax);
+            _nextSmile = Time.time + UnityEngine.Random.Range(smileIntervalMin, smileIntervalMax);
         }
 
         if (_useSingleMesh)
@@ -783,6 +929,16 @@ public class ChatAvatarController : MonoBehaviour
         _mouthWeight = Mathf.Lerp(_mouthWeight, mouthTarget,
             mouthTarget > _mouthWeight ? openSpeed : closeSpeed);
 
+        bool hasBlendshapeMouthTarget = _useSingleMesh
+            ? (_primaryJawOpen >= 0 || _primaryMouthOpen >= 0)
+            : ((_headSkin != null && _headMouthOpen >= 0) || (_teethSkin != null && _teethMouthOpen >= 0));
+
+        if (!hasBlendshapeMouthTarget && _useTransformLipSync)
+        {
+            DoTransformLipSync(speaking, amplitude);
+            return;
+        }
+
         if (_useSingleMesh)
         {
             if (_primaryJawOpen >= 0)
@@ -796,6 +952,25 @@ public class ChatAvatarController : MonoBehaviour
                 _headSkin.SetBlendShapeWeight(_headMouthOpen, _jawWeight);
             if (_teethSkin != null && _teethMouthOpen >= 0)
                 _teethSkin.SetBlendShapeWeight(_teethMouthOpen, _jawWeight * 0.5f);
+        }
+    }
+
+    private void DoTransformLipSync(bool speaking, float amplitude)
+    {
+        float target = speaking ? amplitude * fallbackTransformLipSyncMultiplier : 0f;
+        float lerpSpeed = Time.deltaTime * (speaking ? lipSyncSmooth : lipSyncCloseSpeed);
+
+        if (_jawBone != null)
+        {
+            Quaternion openRotation = _jawClosedLocalRotation * Quaternion.Euler(fallbackJawOpenEulerOffset * target);
+            _jawBone.localRotation = Quaternion.Slerp(_jawBone.localRotation, openRotation, lerpSpeed);
+            return;
+        }
+
+        if (_speechMotionTarget != null)
+        {
+            Quaternion speechRotation = _speechClosedLocalRotation * Quaternion.Euler(fallbackHeadSpeechEulerOffset * target);
+            _speechMotionTarget.localRotation = Quaternion.Slerp(_speechMotionTarget.localRotation, speechRotation, lerpSpeed);
         }
     }
 

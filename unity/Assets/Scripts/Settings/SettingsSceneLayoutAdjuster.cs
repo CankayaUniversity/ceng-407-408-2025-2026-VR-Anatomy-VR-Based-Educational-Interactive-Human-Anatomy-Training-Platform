@@ -170,7 +170,7 @@ public static class SettingsSceneLayoutAdjuster
         label.text = labelText;
         label.fontSize = compact ? 17f : 18f;
         label.enableAutoSizing = false;
-        label.enableWordWrapping = false;
+        label.textWrappingMode = TextWrappingModes.NoWrap;
         label.alignment = TextAlignmentOptions.MidlineLeft;
         label.color = Color.white;
         label.lineSpacing = 0f;

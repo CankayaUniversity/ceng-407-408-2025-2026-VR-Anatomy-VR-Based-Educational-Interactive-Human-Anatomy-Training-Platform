@@ -4,82 +4,147 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class CirculationFreeExploreInteractionController : MonoBehaviour
 {
-    [Header("Display Root")]
-    [SerializeField] private Transform displayRoot;
+    [Header("Interaction Root")]
+    [Tooltip("Dolaşım model objelerinin ana root'u. Boş bırakılırsa bu objenin altı taranır.")]
+    [SerializeField] private Transform interactionRoot;
 
-    private readonly List<XRGrabInteractable> _allGrabInteractables = new List<XRGrabInteractable>();
+    [Header("Optional Collider Control")]
+    [Tooltip("Açıksa interaction target olmayan objelerin colliderlarını da kapatır. İlk testte kapalı kalsın.")]
+    [SerializeField] private bool disableInactiveColliders = false;
+
+    private readonly List<XRBaseInteractable> allInteractables = new();
+    private readonly Dictionary<Collider, bool> originalColliderStates = new();
 
     private void Awake()
     {
-        CacheInteractables();
+        RefreshCache();
     }
 
-    public void CacheInteractables()
+    private void RefreshCache()
     {
-        _allGrabInteractables.Clear();
+        allInteractables.Clear();
+        originalColliderStates.Clear();
 
-        if (displayRoot == null)
-        {
-            Debug.LogWarning("[FreeExploreInteractionController] displayRoot is missing.");
-            return;
-        }
+        Transform root = interactionRoot != null ? interactionRoot : transform;
 
-        XRGrabInteractable[] grabs = displayRoot.GetComponentsInChildren<XRGrabInteractable>(true);
-        for (int i = 0; i < grabs.Length; i++)
+        XRBaseInteractable[] interactables = root.GetComponentsInChildren<XRBaseInteractable>(true);
+
+        foreach (XRBaseInteractable interactable in interactables)
         {
-            if (grabs[i] != null && !_allGrabInteractables.Contains(grabs[i]))
+            if (interactable == null)
+                continue;
+
+            allInteractables.Add(interactable);
+
+            Collider[] colliders = interactable.GetComponentsInChildren<Collider>(true);
+
+            foreach (Collider col in colliders)
             {
-                _allGrabInteractables.Add(grabs[i]);
+                if (col == null)
+                    continue;
+
+                if (!originalColliderStates.ContainsKey(col))
+                    originalColliderStates.Add(col, col.enabled);
             }
         }
     }
 
     public void DisableAllInteractions()
     {
-        if (_allGrabInteractables.Count == 0)
-            CacheInteractables();
+        RefreshCache();
 
-        for (int i = 0; i < _allGrabInteractables.Count; i++)
+        foreach (XRBaseInteractable interactable in allInteractables)
         {
-            XRGrabInteractable grab = _allGrabInteractables[i];
-            if (grab == null) continue;
-            grab.enabled = false;
+            if (interactable == null)
+                continue;
+
+            interactable.enabled = false;
         }
-    }
 
-    public void EnableOnly(List<GameObject> interactionTargets)
-    {
-        DisableAllInteractions();
-
-        if (interactionTargets == null || interactionTargets.Count == 0)
-            return;
-
-        HashSet<XRGrabInteractable> allowed = CollectGrabInteractables(interactionTargets);
-
-        foreach (XRGrabInteractable grab in allowed)
+        if (disableInactiveColliders)
         {
-            if (grab == null) continue;
-            grab.enabled = true;
-        }
-    }
-
-    private HashSet<XRGrabInteractable> CollectGrabInteractables(List<GameObject> roots)
-    {
-        HashSet<XRGrabInteractable> result = new HashSet<XRGrabInteractable>();
-
-        for (int i = 0; i < roots.Count; i++)
-        {
-            GameObject go = roots[i];
-            if (go == null) continue;
-
-            XRGrabInteractable[] grabs = go.GetComponentsInChildren<XRGrabInteractable>(true);
-            for (int j = 0; j < grabs.Length; j++)
+            foreach (KeyValuePair<Collider, bool> pair in originalColliderStates)
             {
-                if (grabs[j] != null)
-                    result.Add(grabs[j]);
+                if (pair.Key != null)
+                    pair.Key.enabled = false;
+            }
+        }
+    }
+
+    public void EnableOnly(List<GameObject> allowedRoots)
+    {
+        RefreshCache();
+
+        HashSet<XRBaseInteractable> allowedInteractables = BuildAllowedInteractableSet(allowedRoots);
+
+        foreach (XRBaseInteractable interactable in allInteractables)
+        {
+            if (interactable == null)
+                continue;
+
+            bool isAllowed = allowedInteractables.Contains(interactable);
+            interactable.enabled = isAllowed;
+
+            if (disableInactiveColliders)
+            {
+                Collider[] colliders = interactable.GetComponentsInChildren<Collider>(true);
+
+                foreach (Collider col in colliders)
+                {
+                    if (col == null)
+                        continue;
+
+                    col.enabled = isAllowed;
+                }
             }
         }
 
+        Debug.Log("[InteractionController] Enabled interactables: " + allowedInteractables.Count);
+    }
+
+    private HashSet<XRBaseInteractable> BuildAllowedInteractableSet(List<GameObject> allowedRoots)
+    {
+        HashSet<XRBaseInteractable> result = new();
+
+        if (allowedRoots == null)
+            return result;
+
+        foreach (GameObject root in allowedRoots)
+        {
+            if (root == null)
+                continue;
+
+            XRBaseInteractable[] interactables = root.GetComponentsInChildren<XRBaseInteractable>(true);
+
+            foreach (XRBaseInteractable interactable in interactables)
+            {
+                if (interactable != null)
+                    result.Add(interactable);
+            }
+
+            XRBaseInteractable parentInteractable = root.GetComponentInParent<XRBaseInteractable>();
+
+            if (parentInteractable != null && IsUnderAllowedRoot(parentInteractable.gameObject, root))
+                result.Add(parentInteractable);
+        }
+
         return result;
+    }
+
+    private bool IsUnderAllowedRoot(GameObject interactableObject, GameObject allowedRoot)
+    {
+        if (interactableObject == null || allowedRoot == null)
+            return false;
+
+        if (interactableObject == allowedRoot)
+            return true;
+
+        if (interactableObject.transform.IsChildOf(allowedRoot.transform))
+            return true;
+
+        if (allowedRoot.transform.IsChildOf(interactableObject.transform))
+            return true;
+
+        return false;
     }
 }

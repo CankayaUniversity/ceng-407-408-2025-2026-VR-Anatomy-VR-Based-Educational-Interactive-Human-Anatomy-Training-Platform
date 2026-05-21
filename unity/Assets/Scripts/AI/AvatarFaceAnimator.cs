@@ -163,7 +163,7 @@ public class AvatarFaceAnimator : MonoBehaviour
         {
             audioSource = GetComponentInChildren<AudioSource>();
             if (audioSource == null)
-                audioSource = FindObjectOfType<AudioSource>();
+                audioSource = Object.FindFirstObjectByType<AudioSource>();
             if (audioSource != null)
                 Debug.Log($"[AvatarFaceAnimator] AudioSource otomatik bulundu: '{audioSource.gameObject.name}'");
             else

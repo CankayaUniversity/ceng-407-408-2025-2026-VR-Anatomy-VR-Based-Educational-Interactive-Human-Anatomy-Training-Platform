@@ -11,8 +11,9 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from app.learning_review import router as learning_review_router
 
-from rag_core import answer_question
+from app.rag_core import answer_question
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +27,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(learning_review_router)
 
 @app.get("/health")
 def health():
@@ -106,8 +108,6 @@ class TtsRequest(BaseModel):
 
 @app.post("/tts")
 async def text_to_speech(req: TtsRequest):
-    import edge_tts
-
     if not req.text or not req.text.strip():
         return Response(status_code=400, content=b"", media_type="text/plain")
 
