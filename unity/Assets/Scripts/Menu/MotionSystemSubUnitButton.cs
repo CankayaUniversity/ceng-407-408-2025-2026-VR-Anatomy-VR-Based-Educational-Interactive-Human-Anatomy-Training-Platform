@@ -29,32 +29,32 @@ public class MotionSystemSubUnitButton : MonoBehaviour
         }
 
         MotionSubUnit selectedSubUnit = (MotionSubUnit)subUnitInt;
-        LessonUIReader.LessonSection lessonSection = ResolveLessonSection(selectedSubUnit);
+        //LessonUIReader.LessonSection lessonSection = ResolveLessonSection(selectedSubUnit);
         Debug.Log(
-            $"[MotionSystemSubUnitButton] Basılan bölüm='{gameObject.name}' | MotionSubUnit={selectedSubUnit} ({subUnitInt}) | LessonSection={lessonSection}",
+            $"[MotionSystemSubUnitButton] Basılan bölüm='{gameObject.name}' | MotionSubUnit={selectedSubUnit} ({subUnitInt}) //",
             this);
 
         sceneLoader.LoadMotionSystemSubUnit(subUnitInt);
     }
 
-    private static LessonUIReader.LessonSection ResolveLessonSection(MotionSubUnit subUnit)
-    {
-        switch (subUnit)
-        {
-            case MotionSubUnit.HeadFaceBones:
-                return LessonUIReader.LessonSection.HeadAndFaceBones;
-            case MotionSubUnit.Rib:
-            case MotionSubUnit.Spine:
-                return LessonUIReader.LessonSection.TrunkBones;
-            case MotionSubUnit.UpperExtremityBones:
-                return LessonUIReader.LessonSection.UpperExtremityBones;
-            case MotionSubUnit.LowerExtremityBones:
-                return LessonUIReader.LessonSection.LowerExtremityBones;
-            case MotionSubUnit.UpperExtremityMuscles:
-            case MotionSubUnit.LowerExtremityMuscles:
-                return LessonUIReader.LessonSection.SkeletalMuscles;
-            default:
-                return LessonUIReader.LessonSection.Auto;
-        }
-    }
+    //private static LessonUIReader.LessonSection ResolveLessonSection(MotionSubUnit subUnit)
+    //{
+    //    switch (subUnit)
+    //    {
+    //        case MotionSubUnit.HeadFaceBones:
+    //            return LessonUIReader.LessonSection.HeadAndFaceBones;
+    //        case MotionSubUnit.Rib:
+    //        case MotionSubUnit.Spine:
+    //            return LessonUIReader.LessonSection.TrunkBones;
+    //        case MotionSubUnit.UpperExtremityBones:
+    //            return LessonUIReader.LessonSection.UpperExtremityBones;
+    //        case MotionSubUnit.LowerExtremityBones:
+    //            return LessonUIReader.LessonSection.LowerExtremityBones;
+    //        case MotionSubUnit.UpperExtremityMuscles:
+    //        case MotionSubUnit.LowerExtremityMuscles:
+    //            return LessonUIReader.LessonSection.SkeletalMuscles;
+    //        default:
+    //            return LessonUIReader.LessonSection.Auto;
+    //    }
+    //}
 }
