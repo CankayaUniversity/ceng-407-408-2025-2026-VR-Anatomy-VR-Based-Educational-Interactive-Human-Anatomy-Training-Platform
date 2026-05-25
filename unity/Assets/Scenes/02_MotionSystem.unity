@@ -20810,11 +20810,11 @@ MonoBehaviour:
     image: {fileID: 21300000, guid: 6153e54cfa52777469eabfd8ebbee660, type: 3}
   - title: "\u0130sim Kartlar\u0131"
     body: "Sa\u011F kolda bulunan A tu\u015Funa basarak elinizde tuttu\u011Funuz
-      ismini g\xF6r\xFCnt\xFC\xFCleyip kapatabilirsiniz."
+      ismini g\xF6r\xFCnt\xFCleyip kapatabilirsiniz."
     image: {fileID: 21300000, guid: 5d3df920f3720094294050c33f88dfff, type: 3}
   - title: "S\u0131f\u0131rlama"
     body: "Sol kolda bulunan Y tu\u015Funa basarak inceledi\u011Finiz modeli ilk
-      hline d\xF6nd\xFCrebilirsiniz."
+      haline d\xF6nd\xFCrebilirsiniz."
     image: {fileID: 21300000, guid: 30dae1ba0f04fb841b73f0d0c3ab6b5f, type: 3}
   tutorialRoot: {fileID: 805896072}
   titleText: {fileID: 1041249463}

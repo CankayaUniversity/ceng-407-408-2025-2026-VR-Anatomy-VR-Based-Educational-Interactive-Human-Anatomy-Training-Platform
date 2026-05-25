@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(TMP_InputField))]
-public class OpenVRKeyboardOnInputClick : MonoBehaviour, IPointerClickHandler, ISelectHandler
+public class OpenVRKeyboardOnInputClick : MonoBehaviour, IPointerClickHandler
 {
     [Header("Keyboard")]
     [SerializeField] private VRAnatomyVirtualKeyboard keyboard;
@@ -25,11 +25,6 @@ public class OpenVRKeyboardOnInputClick : MonoBehaviour, IPointerClickHandler, I
         OpenKeyboard();
     }
 
-    public void OnSelect(BaseEventData eventData)
-    {
-        OpenKeyboard();
-    }
-
     public void OpenKeyboard()
     {
         if (keyboard == null)
@@ -37,6 +32,9 @@ public class OpenVRKeyboardOnInputClick : MonoBehaviour, IPointerClickHandler, I
             Debug.LogError("[OpenVRKeyboardOnInputClick] Keyboard Inspector'da atanmamış.");
             return;
         }
+
+        if (inputField == null)
+            inputField = GetComponent<TMP_InputField>();
 
         keyboard.ShowForInput(inputField, submitButtonForThisInput);
     }

@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -34,6 +35,7 @@ public class VRAnatomyVirtualKeyboard : MonoBehaviour
 
     private GameObject virtualKeyboardPanel;
     private bool keyboardVisible;
+    private Coroutine selectInputRoutine;
 
     private static Sprite runtimeRoundedSprite;
 
@@ -74,8 +76,34 @@ public class VRAnatomyVirtualKeyboard : MonoBehaviour
         ForceInputLeftToRight(activeInput);
         MoveCaretToEnd(activeInput);
 
-        if (EventSystem.current != null)
-            EventSystem.current.SetSelectedGameObject(activeInput.gameObject);
+        if (selectInputRoutine != null)
+            StopCoroutine(selectInputRoutine);
+
+        selectInputRoutine = StartCoroutine(SelectInputNextFrame(activeInput));
+    }
+
+    private IEnumerator SelectInputNextFrame(TMP_InputField inputField)
+    {
+        // OnSelect / OnPointerDown sırasında Unity zaten seçim işlemi yapıyor olabilir.
+        // Bir frame bekleyince "while already selecting an object" hatası kesilir.
+        yield return null;
+
+        if (inputField == null || !inputField.gameObject.activeInHierarchy)
+        {
+            selectInputRoutine = null;
+            yield break;
+        }
+
+        if (EventSystem.current != null &&
+            EventSystem.current.currentSelectedGameObject != inputField.gameObject)
+        {
+            EventSystem.current.SetSelectedGameObject(inputField.gameObject);
+        }
+
+        inputField.ActivateInputField();
+        MoveCaretToEnd(inputField);
+
+        selectInputRoutine = null;
     }
 
     public void HideKeyboard()
@@ -86,6 +114,12 @@ public class VRAnatomyVirtualKeyboard : MonoBehaviour
     private void SetKeyboardVisible(bool visible)
     {
         keyboardVisible = visible;
+
+        if (!visible && selectInputRoutine != null)
+        {
+            StopCoroutine(selectInputRoutine);
+            selectInputRoutine = null;
+        }
 
         if (visible)
             EnsureVirtualKeyboardPanel();

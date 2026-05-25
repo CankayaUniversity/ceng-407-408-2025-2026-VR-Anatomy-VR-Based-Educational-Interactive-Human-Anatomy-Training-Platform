@@ -305,7 +305,7 @@ private void ApplyUiOpaqueMaterial(Graphic graphic)
         tmp.color = TextColor;
         tmp.fontSize = fontSize;
         tmp.alignment = alignment;
-        tmp.enableWordWrapping = false;
+        tmp.textWrappingMode = TMPro.TextWrappingModes.NoWrap;
         tmp.enableAutoSizing = false;
         tmp.richText = richText;
         tmp.raycastTarget = false;
@@ -445,10 +445,65 @@ private void ApplyUiOpaqueMaterial(Graphic graphic)
 
     private Sprite ResolveRoundedButtonSprite()
     {
-        if (_roundedButtonSprite != null) return _roundedButtonSprite;
-        _roundedButtonSprite = Resources.GetBuiltinResource<Sprite>("UI/Skin/UISprite.psd");
+        if (_roundedButtonSprite != null)
+            return _roundedButtonSprite;
+
+        // Eski Unity built-in sprite yolu bazı sürümlerde bulunmuyor:
+        // Resources.GetBuiltinResource<Sprite>("UI/Skin/UISprite.psd")
+        // Bu yüzden butonlar için runtime'da kendi rounded sprite'ımızı üretiyoruz.
+        _roundedButtonSprite = CreateRuntimeRoundedSprite(
+            "AIChatIntroRoundedButtonSprite",
+            96,
+            24f,
+            26f
+        );
 
         return _roundedButtonSprite;
+    }
+
+    private static Sprite CreateRuntimeRoundedSprite(string spriteName, int size, float radius, float border)
+    {
+        Texture2D tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
+        tex.name = spriteName + "_Texture";
+        tex.wrapMode = TextureWrapMode.Clamp;
+        tex.filterMode = FilterMode.Bilinear;
+
+        float half = size * 0.5f;
+
+        for (int y = 0; y < size; y++)
+        {
+            for (int x = 0; x < size; x++)
+            {
+                float px = x + 0.5f - half;
+                float py = y + 0.5f - half;
+
+                float qx = Mathf.Abs(px) - (half - radius);
+                float qy = Mathf.Abs(py) - (half - radius);
+
+                float outsideX = Mathf.Max(qx, 0f);
+                float outsideY = Mathf.Max(qy, 0f);
+                float outsideDistance = Mathf.Sqrt(outsideX * outsideX + outsideY * outsideY);
+                float insideDistance = Mathf.Min(Mathf.Max(qx, qy), 0f);
+                float signedDistance = outsideDistance + insideDistance - radius;
+
+                float alpha = 1f - Mathf.SmoothStep(0f, 2f, signedDistance);
+                alpha = Mathf.Clamp01(alpha);
+
+                tex.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
+            }
+        }
+
+        tex.Apply();
+
+        return Sprite.Create(
+            tex,
+            new Rect(0f, 0f, size, size),
+            new Vector2(0.5f, 0.5f),
+            100f,
+            0,
+            SpriteMeshType.FullRect,
+            new Vector4(border, border, border, border)
+        );
     }
 
     private Sprite ResolveMicIconSprite()
