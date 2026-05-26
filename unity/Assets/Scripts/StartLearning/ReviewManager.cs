@@ -9,7 +9,8 @@ public class ReviewManager : MonoBehaviour
     public TextMeshProUGUI reviewDescriptionText;
 
     [Header("Lesson UI Buttons")]
-    public GameObject skipButton;
+    public GameObject nextButton;
+    public GameObject previousButton;
     public GameObject anladimButton;
 
     [Header("UI Panels")]
@@ -22,43 +23,34 @@ public class ReviewManager : MonoBehaviour
 
     public void OpenReview()
     {
-        //stop the last bone audio
         if (TTSClient.Instance != null) TTSClient.Instance.Stop();
 
         lessonPanel.SetActive(false);
         reviewPanel.SetActive(true);
 
-
-        // Reset bones to original mat
         if (BoneVisualManager.Active != null && LessonManager.Instance != null)
         {
             BoneVisualManager.Active.ResetAllBones(LessonManager.Instance.bones);
-
         }
         else
         {
             Debug.LogError("[REVIEW] Reset failed. Active Visuals or LessonInstance is null!");
         }
 
-
-
         if (reviewDescriptionText != null && !string.IsNullOrWhiteSpace(reviewDescriptionText.text))
         {
             TTSClient.Instance.Speak(reviewDescriptionText.text);
         }
 
-
         PopulateButtons();
 
-
-        skipButton.SetActive(false);
-        anladimButton.SetActive(true);
-
+        if (nextButton != null) nextButton.SetActive(false);
+        if (previousButton != null) previousButton.SetActive(false);
+        if (anladimButton != null) GridSetActive(anladimButton, true);
     }
 
     private void PopulateButtons()
     {
-
         foreach (Transform child in buttonContainer)
             Destroy(child.gameObject);
 
@@ -66,17 +58,12 @@ public class ReviewManager : MonoBehaviour
 
         for (int i = 0; i < bones.Count; i++)
         {
-
             GameObject btnObj = Instantiate(buttonPrefab, buttonContainer);
-
-
             btnObj.layer = LayerMask.NameToLayer("UI");
-
 
             RectTransform rt = btnObj.GetComponent<RectTransform>();
             rt.localScale = Vector3.one;
             rt.anchoredPosition = Vector2.zero;
-
 
             Image img = btnObj.GetComponent<Image>();
             Button btn = btnObj.GetComponent<Button>();
@@ -89,16 +76,14 @@ public class ReviewManager : MonoBehaviour
                 txt.enabled = true;
                 txt.gameObject.SetActive(true);
 
-
                 BoneIdentity identity = bones[i].GetComponent<BoneIdentity>();
                 txt.text = (identity != null && !string.IsNullOrEmpty(identity.fallbackDisplayName))
                            ? identity.fallbackDisplayName
                            : bones[i].name;
             }
 
-
             int index = i;
-            btn.onClick.AddListener(() => SelectBone(index)); //instead of dragging buttons OnClick() one by one we do this
+            btn.onClick.AddListener(() => SelectBone(index));
         }
     }
 
@@ -107,12 +92,22 @@ public class ReviewManager : MonoBehaviour
         reviewPanel.SetActive(false);
         lessonPanel.SetActive(true);
 
+        // 1. Activate the model step data first
+        LessonManager.Instance.ActivateStep(index);
 
+        // 2. Keep this false during the temporary inspection window
         LessonManager.Instance.IsReviewMode = false;
 
-        LessonManager.Instance.ActivateStep(index);
+        // 3. Force structural visibility updates LAST so it cannot be overridden by LessonManager
+        if (nextButton != null) nextButton.SetActive(false);
+        if (previousButton != null) previousButton.SetActive(false);
+        if (anladimButton != null) anladimButton.SetActive(true);
     }
 
+    private void GridSetActive(GameObject go, bool value)
+    {
+        if (go != null) go.SetActive(value);
+    }
 
     public void ReturnToReview()
     {
@@ -121,12 +116,9 @@ public class ReviewManager : MonoBehaviour
         lessonPanel.SetActive(false);
         reviewPanel.SetActive(true);
 
-
-        // Reset bones to original mat
         if (BoneVisualManager.Active != null && LessonManager.Instance != null)
         {
             BoneVisualManager.Active.ResetAllBones(LessonManager.Instance.bones);
-
         }
         else
         {
@@ -139,10 +131,7 @@ public class ReviewManager : MonoBehaviour
         {
             TTSClient.Instance.Speak(reviewDescriptionText.text);
         }
-
-
     }
-
 
     public void ExitReviewMode()
     {
@@ -154,13 +143,10 @@ public class ReviewManager : MonoBehaviour
         LessonManager.Instance.ResetLesson();
 
         if (anladimButton != null) anladimButton.SetActive(false);
-        if (skipButton != null) skipButton.SetActive(true);
-
+        if (nextButton != null) nextButton.SetActive(true);
+        if (previousButton != null) previousButton.SetActive(true);
 
         foreach (Transform child in buttonContainer)
             Destroy(child.gameObject);
-
     }
-
-
 }

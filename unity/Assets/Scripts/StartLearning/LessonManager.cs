@@ -30,11 +30,15 @@ public class LessonManager : MonoBehaviour
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI infoText;
     public Button nextButton;
-    public Button previousButton; // --- DRAG YOUR NEW PREVIOUS BUTTON HERE ---
+    public Button previousButton;
 
     [Header("Bone Sequence")]
     public List<GameObject> bones;
     public BoneVisualManager visualsManager;
+
+    [Header("Data Configuration")]
+    [Tooltip("Type the path relative to the Resources folder WITHOUT the .json extension. (e.g., JsonFiles/StartLearning/circulation_system_data)")]
+    public string jsonFilePath = "JsonFiles/StartLearning/motion_system_education_data";
 
     private Dictionary<string, BoneData> dataLookup = new Dictionary<string, BoneData>();
     private int currentIndex = 0;
@@ -44,14 +48,12 @@ public class LessonManager : MonoBehaviour
     {
         Instance = this;
 
-        // 1. SETUP NEXT BUTTON LISTENER
         if (nextButton != null)
         {
             nextButton.onClick.RemoveAllListeners();
             nextButton.onClick.AddListener(NextStep);
         }
 
-        // 2. SETUP PREVIOUS BUTTON LISTENER
         if (previousButton != null)
         {
             previousButton.onClick.RemoveAllListeners();
@@ -68,15 +70,8 @@ public class LessonManager : MonoBehaviour
     void OnDisable()
     {
         if (Instance == this) Instance = null;
-
-        // Clean up listeners safely to avoid memory leaks
         if (nextButton != null) nextButton.onClick.RemoveAllListeners();
         if (previousButton != null) previousButton.onClick.RemoveAllListeners();
-    }
-
-    void Start()
-    {
-        // Handled via OnEnable sequence
     }
 
     private void StartLesson()
@@ -94,8 +89,15 @@ public class LessonManager : MonoBehaviour
 
     void LoadJsonData()
     {
-        if (dataLookup.Count > 0) return;
-        TextAsset jsonAsset = Resources.Load<TextAsset>("JsonFiles/StartLearning/motion_system_education_data");
+        dataLookup.Clear();
+
+        if (string.IsNullOrEmpty(jsonFilePath))
+        {
+            Debug.LogError("[LessonManager] JSON File Path is missing in the Inspector!", this);
+            return;
+        }
+
+        TextAsset jsonAsset = Resources.Load<TextAsset>(jsonFilePath);
         if (jsonAsset != null)
         {
             BoneList loadedData = JsonUtility.FromJson<BoneList>(jsonAsset.text);
@@ -104,6 +106,11 @@ public class LessonManager : MonoBehaviour
                 if (!dataLookup.ContainsKey(data.id))
                     dataLookup.Add(data.id, data);
             }
+            Debug.Log($"[LessonManager] Successfully loaded {dataLookup.Count} entries from {jsonFilePath}.");
+        }
+        else
+        {
+            Debug.LogError($"[LessonManager] Could not find JSON file at path: Resources/{jsonFilePath}", this);
         }
     }
 
@@ -124,7 +131,6 @@ public class LessonManager : MonoBehaviour
 
     public void PreviousStep()
     {
-        // Block going backward if we are in review dashboard mode
         if (IsReviewMode) return;
 
         if (currentIndex > 0)
@@ -155,17 +161,22 @@ public class LessonManager : MonoBehaviour
             {
                 fullDescription += "\n\n";
                 foreach (string step in data.steps)
-                    fullDescription += "� " + step + "\n";
+                    fullDescription += "• " + step + "\n";
             }
             infoText.text = fullDescription;
         }
-
-        // --- OPTIONAL POLISH: DYNAMIC BUTTON VISIBILITY ---
-        // Automatically hide the previous button on the very first bone, 
-        // and show it when scrolling forward.
-        if (previousButton != null)
+        else
         {
-            previousButton.gameObject.SetActive(currentIndex > 0);
+            titleText.text = "Data Missing";
+            infoText.text = "Check ID: " + (identity != null ? identity.id : "No Script");
+        }
+
+        // --- FIX HAPPENS HERE ---
+        // Only update standard button navigation states if we are NOT viewing bones through the review workflow
+        if (reviewManager != null && reviewManager.reviewPanel.activeSelf == false && IsReviewMode == false)
+        {
+            if (previousButton != null) previousButton.gameObject.SetActive(currentIndex > 0);
+            if (nextButton != null) nextButton.gameObject.SetActive(true);
         }
     }
 }

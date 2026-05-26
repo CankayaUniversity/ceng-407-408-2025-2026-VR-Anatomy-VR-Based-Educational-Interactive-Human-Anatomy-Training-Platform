@@ -7,6 +7,10 @@ public class BoneVisualManager : MonoBehaviour
     [Header("Material Settings")]
     public Material ghostMaterial;
 
+    [Header("Exclusion Configuration")]
+    [Tooltip("Renderers with this tag will be entirely ignored by material alterations.")]
+    public string ignoreTag = "IgnoreVisuals";
+
     private Dictionary<Renderer, Material> _originalMaterials = new Dictionary<Renderer, Material>();
 
     public static BoneVisualManager Active;
@@ -28,13 +32,20 @@ public class BoneVisualManager : MonoBehaviour
         Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
         foreach (Renderer r in renderers)
         {
-            if (r != null && !_originalMaterials.ContainsKey(r))
+            if (r == null) continue;
+
+            // PERFORMANCE OPTIMIZATION: Flat comparison because all child objects are tagged in the inspector
+            if (r.CompareTag(ignoreTag))
+            {
+                continue; // Skip caching this renderer completely
+            }
+
+            if (!_originalMaterials.ContainsKey(r))
             {
                 // We use sharedMaterial to get the actual asset reference
                 _originalMaterials[r] = r.sharedMaterial;
             }
         }
-
     }
 
     private void SetAllToGhost()
@@ -68,6 +79,7 @@ public class BoneVisualManager : MonoBehaviour
         Renderer[] targetRenderers = targetBone.GetComponentsInChildren<Renderer>(true);
         foreach (Renderer r in targetRenderers)
         {
+            // If it's a dummy bone, it was never cached in the dictionary, so this safely evaluates to false!
             if (_originalMaterials.ContainsKey(r))
             {
                 r.sharedMaterial = _originalMaterials[r];
@@ -88,6 +100,5 @@ public class BoneVisualManager : MonoBehaviour
                 r.sharedMaterial = originalMat;
             }
         }
-
     }
 }
