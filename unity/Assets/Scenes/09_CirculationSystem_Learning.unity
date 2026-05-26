@@ -15196,7 +15196,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7981514964708312862, guid: 2eabf1ec890f0a24791702dea86913b3, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -6601043233671942095, guid: 2eabf1ec890f0a24791702dea86913b3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -18541,7 +18541,7 @@ AudioSource:
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
-  m_Pitch: 1
+  m_Pitch: 1.07
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -19011,9 +19011,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 977497613}
+  - component: {fileID: 977497614}
   - component: {fileID: 977497612}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: AIBackend
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19053,6 +19054,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &977497614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977497611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1441607f0605394ba9f2f6874aa4512, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  titleSlot: {fileID: 8777015957708029154}
+  descriptionSlot: {fileID: 2831077547328853405}
+  lessonPanel: {fileID: 8167192262107474737}
 --- !u!1 &984062387
 GameObject:
   m_ObjectHideFlags: 0
@@ -26806,7 +26822,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1389113608}
   - component: {fileID: 1389113607}
-  - component: {fileID: 1389113605}
   m_Layer: 0
   m_Name: UnitIntroManager
   m_TagString: Untagged
@@ -26814,21 +26829,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1389113605
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1389113604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1441607f0605394ba9f2f6874aa4512, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  titleSlot: {fileID: 8777015957708029154}
-  descriptionSlot: {fileID: 2831077547328853405}
-  lessonPanel: {fileID: 8167192262107474737}
 --- !u!114 &1389113607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34235,7 +34235,7 @@ AudioSource:
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
-  m_Pitch: 1
+  m_Pitch: 1.02
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -34711,7 +34711,7 @@ AudioSource:
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
-  m_Pitch: 1
+  m_Pitch: 1.02
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -39892,7 +39892,7 @@ AudioSource:
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
-  m_Pitch: 1
+  m_Pitch: 1.07
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -41070,6 +41070,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2085284092}
   - component: {fileID: 2085284091}
+  - component: {fileID: 2085284093}
   m_Layer: 0
   m_Name: AvatarModels
   m_TagString: Untagged
@@ -41090,7 +41091,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ttsUrl: http://127.0.0.1:8001/tts
-  useFemaleVoice: 1
   femaleVoice: tr-TR-EmelNeural
   maleVoice: tr-TR-AhmetNeural
   audioSourceSearchRoot: {fileID: 2085284092}
@@ -41103,8 +41103,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2085284090}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.9189952, z: -0, w: 0.39426878}
-  m_LocalPosition: {x: 2.8, y: 0.423, z: 2.03}
+  m_LocalRotation: {x: -0, y: 0.9133524, z: -0, w: 0.40717}
+  m_LocalPosition: {x: -1.88, y: 0.423, z: 0.64}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -41113,7 +41113,23 @@ Transform:
   - {fileID: 2043091393}
   - {fileID: 965933133}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -133.559, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 131.946, z: 0}
+--- !u!114 &2085284093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2085284090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f85097883defc2459ec81ab3fee9831, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  femaleAvatar: {fileID: 1754635365}
+  maleAvatar: {fileID: 1776787534}
+  youngFemaleAvatar: {fileID: 2043091392}
+  youngMaleAvatar: {fileID: 965933132}
 --- !u!1 &2087854998
 GameObject:
   m_ObjectHideFlags: 0
@@ -152666,9 +152682,9 @@ SceneRoots:
   - {fileID: 1194332829}
   - {fileID: 487145003749308456}
   - {fileID: 492840977}
+  - {fileID: 1815150451}
   - {fileID: 149889375}
   - {fileID: 212386924}
   - {fileID: 1389113608}
   - {fileID: 2085284092}
   - {fileID: 977497613}
-  - {fileID: 1815150451}

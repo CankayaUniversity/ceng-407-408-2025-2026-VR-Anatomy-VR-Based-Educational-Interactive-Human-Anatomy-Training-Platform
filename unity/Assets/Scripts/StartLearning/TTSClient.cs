@@ -12,7 +12,7 @@ public class TTSClient : MonoBehaviour
     [SerializeField] private string ttsUrl = "http://127.0.0.1:8001/tts";
 
     [Header("Voice Settings")]
-    [SerializeField] private bool useFemaleVoice = true;
+    public bool UseFemaleVoice { get; set; } = true;
 
     [SerializeField] private string femaleVoice = "tr-TR-EmelNeural";
     [SerializeField] private string maleVoice = "tr-TR-AhmetNeural";
@@ -153,7 +153,7 @@ public class TTSClient : MonoBehaviour
 
     private IEnumerator SpeakRoutine(string text, int requestId)
     {
-        string voice = useFemaleVoice ? femaleVoice : maleVoice;
+        string voice = UseFemaleVoice ? femaleVoice : maleVoice;
 
         string cleanText = text.Trim()
             .Replace("\n", " ")
