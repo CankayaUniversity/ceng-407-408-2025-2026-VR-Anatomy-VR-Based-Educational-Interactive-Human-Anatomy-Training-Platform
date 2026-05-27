@@ -6336,7 +6336,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reviewDescriptionText: {fileID: 703161270}
-  reviewBaseMessage: "b\xF6l\xFCm\xFC bitti {0}, istersen kemiklere geri d\xF6nebilirsin."
   nextButton: {fileID: 2251649202945690102}
   previousButton: {fileID: 1869807253}
   anladimButton: {fileID: 893753130}
@@ -47819,6 +47818,8 @@ MonoBehaviour:
     introText: "\xDCst ekstremite atar damarlar b\xF6l\xFCm\xFCne ho\u015F geldiniz. "
   - unitID: 3
     introText: "Alt ekstremite atar damarlar b\xF6l\xFCm\xFCne ho\u015F geldiniz. "
+  - unitID: 6
+    introText: "Nab\u0131z al\u0131nan damarlar b\xF6l\xFCm\xFCne ho\u015F geldiniz. "
   - unitID: 5
     introText: "\xDCst ekstremite toplar damarlar b\xF6l\xFCm\xFCne ho\u015F geldiniz. "
   - unitID: 6
