@@ -287,6 +287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reviewDescriptionText: {fileID: 703161270}
+  reviewBaseMessage: "b\xF6l\xFCm\xFC bitti {0}, istersen kemiklere geri d\xF6nebilirsin."
   nextButton: {fileID: 2251649202945690102}
   previousButton: {fileID: 1869807253}
   anladimButton: {fileID: 893753130}
@@ -980,8 +981,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Anlamad\u0131\u011F\u0131n\u0131z bir k\u0131s\u0131m varsa, tekrar incelemek
-    istedi\u011Finiz kemi\u011Fi se\xE7ebilirsiniz."
+  m_text: "Akl\u0131na tak\u0131lan bir yap\u0131 kald\u0131ysa, buradaki butonlar\u0131
+    kullanarak tekrar g\xF6zden ge\xE7irebilirsin."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3955,36 +3956,36 @@ MonoBehaviour:
   initializer: {fileID: 149889374}
   introList:
   - unitID: 0
-    introText: "Ba\u015F ve y\xFCz kemikleri b\xF6l\xFCm\xFCne ho\u015F geldiniz.
-      Bu b\xF6l\xFCmde kafatas\u0131n\u0131 olu\u015Fturan temel kemikleri ve y\xFCz
-      b\xF6lgesindeki \xF6nemli yap\u0131lar\u0131 inceleyeceksiniz. Bilgi kartlar\u0131
-      s\u0131rayla ekrana gelecek. S\u0131radaki butonuna basarak bir sonraki bilgi
-      kart\u0131na ge\xE7ebilirsiniz. Haz\u0131rsan\u0131z ba\u015Flayal\u0131m."
+    introText: "Ba\u015F ve y\xFCz kemikleri b\xF6l\xFCm\xFCnde  kafatas\u0131n\u0131
+      olu\u015Fturan temel kemikleri ve y\xFCz b\xF6lgesindeki \xF6nemli yap\u0131lar\u0131
+      inceleyeceksin. Bilgi kartlar\u0131 s\u0131rayla ekrana gelecek. Sa\u011F ok
+      tu\u015Funa basarak bir sonraki bilgi kart\u0131na ge\xE7ebilirsin. Haz\u0131rsan
+      ba\u015Flayal\u0131m."
   - unitID: 1
-    introText: "G\xF6vde kemikleri b\xF6l\xFCm\xFCne ho\u015F geldiniz. Bu b\xF6l\xFCmde
-      omurga, g\xF6\u011F\xFCs kafesi ve g\xF6vdeyi destekleyen temel kemik yap\u0131lar\u0131
-      inceleyeceksiniz. Her bilgi kart\u0131nda ilgili kemi\u011Fe ait k\u0131sa
-      a\xE7\u0131klamalar yer alacak. S\u0131radaki butonuna basarak kartlar aras\u0131nda
-      ilerleyebilirsiniz. Haz\u0131rsan\u0131z ilk yap\u0131 ile ba\u015Flayal\u0131m."
+    introText: "G\xF6vde kemikleri b\xF6l\xFCm\xFCnde omurga, g\xF6\u011F\xFCs kafesi
+      ve g\xF6vdeyi destekleyen temel kemik yap\u0131lar\u0131 inceleyeceksin. Bilgi
+      kartlar\u0131 s\u0131rayla ekrana gelecek. Sa\u011F ok tu\u015Funa basarak
+      bir sonraki bilgi kart\u0131na ge\xE7ebilirsin. Haz\u0131rsan ba\u015Flayal\u0131m."
   - unitID: 2
-    introText: "\xDCst ekstremite kemikleri b\xF6l\xFCm\xFCne ho\u015F geldiniz.
-      Bu b\xF6l\xFCmde omuz, kol, \xF6n kol ve el b\xF6lgesindeki kemikleri inceleyeceksiniz.
-      Bilgi kartlar\u0131 size kemiklerin konumunu ve g\xF6revini k\u0131sa \u015Fekilde
-      anlatacak. S\u0131radaki butonuna basarak s\u0131radaki karta ge\xE7ebilirsiniz.
-      Hadi \xFCst ekstremite kemiklerini ke\u015Ffedelim."
+    introText: "\xDCst ekstremite kemikleri b\xF6l\xFCm\xFCnde omuz, kol, \xF6n kol
+      ve el b\xF6lgesindeki kemikleri inceleyeceksin. Bilgi kartlar\u0131 s\u0131rayla
+      ekrana gelecek. Sa\u011F ok tu\u015Funa basarak bir sonraki bilgi kart\u0131na
+      ge\xE7ebilirsin. Haz\u0131rsan ba\u015Flayal\u0131m."
   - unitID: 3
-    introText: "Alt ekstremite kemikleri b\xF6l\xFCm\xFCne ho\u015F geldiniz. Bu
-      b\xF6l\xFCmde kal\xE7a, uyluk, bacak ve ayak b\xF6lgesindeki kemik yap\u0131lar\u0131n\u0131
-      inceleyeceksiniz. Bilgi kartlar\u0131 ekrana s\u0131rayla gelecek ve her kartta
-      ilgili kemi\u011Fin temel bilgileri yer alacak. S\u0131radaki butonuna basarak
-      ilerleyebilirsiniz. Haz\u0131rsan\u0131z ba\u015Flayal\u0131m."
+    introText: "Alt ekstremite kemikleri b\xF6l\xFCm\xFCnde kal\xE7a, uyluk, bacak
+      ve ayak b\xF6lgesindeki kemik yap\u0131lar\u0131n\u0131 inceleyeceksin. Bilgi
+      kartlar\u0131 s\u0131rayla ekrana gelecek. Sa\u011F ok tu\u015Funa basarak
+      bir sonraki bilgi kart\u0131na ge\xE7ebilirsin. Haz\u0131rsan ba\u015Flayal\u0131m."
   - unitID: 4
-    introText: "\u0130skelet kaslar\u0131 b\xF6l\xFCm\xFCne ho\u015F geldiniz. Bu
-      b\xF6l\xFCmde v\xFCcudun hareket etmesini sa\u011Flayan temel kas gruplar\u0131n\u0131
-      inceleyeceksiniz. Bilgi kartlar\u0131nda kaslar\u0131n bulundu\u011Fu b\xF6lge
-      ve genel g\xF6revleri k\u0131sa \u015Fekilde anlat\u0131lacak. S\u0131radaki
-      butonuna basarak bir sonraki karta ge\xE7ebilirsiniz. Haz\u0131rsan\u0131z
-      kas sistemini tan\u0131maya ba\u015Flayal\u0131m."
+    introText: "\u0130skelet kaslar\u0131 b\xF6l\xFCm\xFCnde v\xFCcudun hareket etmesini
+      sa\u011Flayan temel kas gruplar\u0131n\u0131 inceleyeceksin. Bilgi kartlar\u0131
+      s\u0131rayla ekrana gelecek. Sa\u011F ok tu\u015Funa basarak bir sonraki bilgi
+      kart\u0131na ge\xE7ebilirsin. Haz\u0131rsan ba\u015Flayal\u0131m."
+  - unitID: 5
+    introText: "\u0130skelet kaslar\u0131 b\xF6l\xFCm\xFCnde v\xFCcudun hareket etmesini
+      sa\u011Flayan temel kas gruplar\u0131n\u0131 inceleyeceksin. Bilgi kartlar\u0131
+      s\u0131rayla ekrana gelecek. Sa\u011F ok tu\u015Funa basarak bir sonraki bilgi
+      kart\u0131na ge\xE7ebilirsin. Haz\u0131rsan ba\u015Flayal\u0131m."
   lessonPanel: {fileID: 8167192262107474737}
   startDelay: 1
 --- !u!4 &1389113608

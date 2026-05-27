@@ -8,13 +8,15 @@ public class UnitIntroManager : MonoBehaviour
     public struct IntroMapping
     {
         public int unitID;
-        [TextArea(3, 10)] public string introText;
+        [TextArea(3, 10)] public string introText; 
     }
 
     public UnitInitializer initializer;
     public List<IntroMapping> introList;
     public GameObject lessonPanel;
     public float startDelay = 1.0f;
+
+    private const string StudentNamePrefKey = "StudentName";
 
     void Start()
     {
@@ -44,10 +46,19 @@ public class UnitIntroManager : MonoBehaviour
 
         yield return new WaitForSeconds(startDelay);
 
-        // request speech
+        // affectionate name
+        string studentName = PlayerPrefs.GetString(StudentNamePrefKey, "").Trim();
+        if (!string.IsNullOrEmpty(studentName))
+        {
+            string affectionateName = BuildAffectionateName(studentName);
+            
+            textToRead = $"Merhaba {affectionateName}, hoþ geldin. " + textToRead;
+        }
+
+        // Request speech
         TTSClient.Instance.Speak(textToRead);
 
-        // wait until the AI actually starts talking (Handshaking)
+        
         float timeout = 4.0f;
         while (!TTSClient.Instance.IsSpeaking() && timeout > 0)
         {
@@ -55,13 +66,13 @@ public class UnitIntroManager : MonoBehaviour
             yield return null;
         }
 
-        // wait until it stops talking
+        
         while (TTSClient.Instance.IsSpeaking())
         {
             yield return null;
         }
 
-        // final safety buffer
+        
         yield return new WaitForSeconds(0.3f);
 
         EnableSystems();
@@ -84,5 +95,65 @@ public class UnitIntroManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    
+    private static string BuildAffectionateName(string rawName)
+    {
+        string name = rawName.Trim();
+        if (string.IsNullOrEmpty(name)) return "";
+
+        string firstName = name.Split(' ')[0];
+        char lastVowel = FindLastTurkishVowel(firstName);
+        string suffix;
+
+        switch (lastVowel)
+        {
+            case 'a':
+            case 'A':
+            case 'ý':
+            case 'I':
+                suffix = "cýðým";
+                break;
+            case 'e':
+            case 'E':
+            case 'i':
+            case 'Ý':
+                suffix = "ciðim";
+                break;
+            case 'o':
+            case 'O':
+            case 'u':
+            case 'U':
+                suffix = "cuðum";
+                break;
+            case 'ö':
+            case 'Ö':
+            case 'ü':
+            case 'Ü':
+                suffix = "cüðüm";
+                break;
+            default:
+                suffix = "cýðým";
+                break;
+        }
+
+        return firstName + suffix;
+    }
+
+    private static char FindLastTurkishVowel(string text)
+    {
+        if (string.IsNullOrEmpty(text)) return '\0';
+        for (int i = text.Length - 1; i >= 0; i--)
+        {
+            char c = text[i];
+            if (c == 'a' || c == 'A' || c == 'e' || c == 'E' || c == 'ý' || c == 'I' ||
+                c == 'i' || c == 'Ý' || c == 'o' || c == 'O' || c == 'ö' || c == 'Ö' ||
+                c == 'u' || c == 'U' || c == 'ü' || c == 'Ü')
+            {
+                return c;
+            }
+        }
+        return '\0';
     }
 }

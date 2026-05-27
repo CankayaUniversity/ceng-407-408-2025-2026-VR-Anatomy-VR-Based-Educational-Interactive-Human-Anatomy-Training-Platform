@@ -6336,6 +6336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reviewDescriptionText: {fileID: 703161270}
+  reviewBaseMessage: "b\xF6l\xFCm\xFC bitti {0}, istersen kemiklere geri d\xF6nebilirsin."
   nextButton: {fileID: 2251649202945690102}
   previousButton: {fileID: 1869807253}
   anladimButton: {fileID: 893753130}
@@ -20587,8 +20588,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Anlamad\u0131\u011F\u0131n\u0131z bir k\u0131s\u0131m varsa, tekrar incelemek
-    istedi\u011Finiz damar\u0131 se\xE7ebilirsiniz."
+  m_text: "Akl\u0131na tak\u0131lan bir yap\u0131 kald\u0131ysa, buradaki butonlar\u0131
+    kullanarak tekrar g\xF6zden ge\xE7irebilirsin."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -47815,8 +47816,7 @@ MonoBehaviour:
     introText: "Kalbin d\u0131\u015F yap\u0131s\u0131 b\xF6l\xFCm\xFCne ho\u015F
       geldiniz. "
   - unitID: 2
-    introText: "\xDCst ekstremite atar damarlar b\xF6l\xFCm\xFCne ho\u015F geldiniz.
-      bilgi kart\u0131na ge\xE7ebilirsiniz. Haz\u0131rsan\u0131z ba\u015Flayal\u0131m."
+    introText: "\xDCst ekstremite atar damarlar b\xF6l\xFCm\xFCne ho\u015F geldiniz. "
   - unitID: 3
     introText: "Alt ekstremite atar damarlar b\xF6l\xFCm\xFCne ho\u015F geldiniz. "
   - unitID: 5

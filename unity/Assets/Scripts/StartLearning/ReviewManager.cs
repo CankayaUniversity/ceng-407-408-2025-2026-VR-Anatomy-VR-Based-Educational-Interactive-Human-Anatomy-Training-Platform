@@ -5,7 +5,8 @@ using TMPro;
 
 public class ReviewManager : MonoBehaviour
 {
-    [Header("Review AI Settings")]
+    [Header("Review UI Layout")]
+    [Tooltip("The component that will display the final combined paragraph on screen.")]
     public TextMeshProUGUI reviewDescriptionText;
 
     [Header("Lesson UI Buttons")]
@@ -21,6 +22,11 @@ public class ReviewManager : MonoBehaviour
     public GameObject buttonPrefab;
     public Transform buttonContainer;
 
+    private const string StudentNamePrefKey = "StudentName";
+
+    
+    private const string ReviewSentenceTemplate = "Bölümün sonuna geldik {0}. Aklına takılan bir yapı kaldıysa, buradaki butonları kullanarak tekrar gözden geçirebilirsin.";
+
     public void OpenReview()
     {
         if (TTSClient.Instance != null) TTSClient.Instance.Stop();
@@ -30,7 +36,6 @@ public class ReviewManager : MonoBehaviour
 
         if (BoneVisualManager.Active != null && LessonManager.Instance != null)
         {
-            // Reset materials and snap ALL pulled transforms back straight to the skeleton structure
             BoneVisualManager.Active.ResetAllBones(LessonManager.Instance.bones);
             BoneVisualManager.Active.SnapAllBonesToInitialTransforms();
         }
@@ -39,9 +44,33 @@ public class ReviewManager : MonoBehaviour
             Debug.LogError("[REVIEW] Reset failed. Active Visuals or LessonInstance is null!");
         }
 
-        if (reviewDescriptionText != null && !string.IsNullOrWhiteSpace(reviewDescriptionText.text))
+        // Fetch the student's name from storage
+        string studentName = PlayerPrefs.GetString(StudentNamePrefKey, "").Trim();
+        string finalSpeechText = "";
+
+        // Generate the dynamic affectionate name prefix 
+        if (!string.IsNullOrEmpty(studentName))
         {
-            TTSClient.Instance.Speak(reviewDescriptionText.text);
+            string affectionateName = BuildAffectionateName(studentName);
+            
+            finalSpeechText = string.Format(ReviewSentenceTemplate, affectionateName);
+        }
+        else
+        {
+            
+            finalSpeechText = string.Format(ReviewSentenceTemplate, " ");
+        }
+
+        // update the text component on screen
+        if (reviewDescriptionText != null)
+        {
+            reviewDescriptionText.text = finalSpeechText;
+        }
+
+        
+        if (!string.IsNullOrWhiteSpace(finalSpeechText) && TTSClient.Instance != null)
+        {
+            TTSClient.Instance.Speak(finalSpeechText);
         }
 
         PopulateButtons();
@@ -94,13 +123,9 @@ public class ReviewManager : MonoBehaviour
         reviewPanel.SetActive(false);
         lessonPanel.SetActive(true);
 
-        // Activate the model step data first
         LessonManager.Instance.ActivateStep(index);
-
-        // Keep this false during the temporary inspection window
         LessonManager.Instance.IsReviewMode = false;
 
-        // Force structural visibility updates LAST so it cannot be overridden by LessonManager
         if (nextButton != null) nextButton.SetActive(false);
         if (previousButton != null) previousButton.SetActive(false);
         if (anladimButton != null) anladimButton.SetActive(true);
@@ -113,7 +138,6 @@ public class ReviewManager : MonoBehaviour
 
     public void ReturnToReview()
     {
-        // --- THIS EXECUTES WHEN THE STUDENT CLICKS 'ANLADIM' ---
         if (TTSClient.Instance != null) TTSClient.Instance.Stop();
 
         lessonPanel.SetActive(false);
@@ -121,7 +145,6 @@ public class ReviewManager : MonoBehaviour
 
         if (BoneVisualManager.Active != null && LessonManager.Instance != null)
         {
-            // Restore materials and snap whatever bone they just dropped back into place!
             BoneVisualManager.Active.ResetAllBones(LessonManager.Instance.bones);
             BoneVisualManager.Active.SnapAllBonesToInitialTransforms();
         }
@@ -132,7 +155,7 @@ public class ReviewManager : MonoBehaviour
 
         LessonManager.Instance.IsReviewMode = true;
 
-        if (reviewDescriptionText != null)
+        if (reviewDescriptionText != null && TTSClient.Instance != null)
         {
             TTSClient.Instance.Speak(reviewDescriptionText.text);
         }
@@ -153,5 +176,64 @@ public class ReviewManager : MonoBehaviour
 
         foreach (Transform child in buttonContainer)
             Destroy(child.gameObject);
+    }
+
+    private static string BuildAffectionateName(string rawName)
+    {
+        string name = rawName.Trim();
+        if (string.IsNullOrEmpty(name)) return "";
+
+        string firstName = name.Split(' ')[0];
+        char lastVowel = FindLastTurkishVowel(firstName);
+        string suffix;
+
+        switch (lastVowel)
+        {
+            case 'a':
+            case 'A':
+            case 'ı':
+            case 'I':
+                suffix = "cığım";
+                break;
+            case 'e':
+            case 'E':
+            case 'i':
+            case 'İ':
+                suffix = "ciğim";
+                break;
+            case 'o':
+            case 'O':
+            case 'u':
+            case 'U':
+                suffix = "cuğum";
+                break;
+            case 'ö':
+            case 'Ö':
+            case 'ü':
+            case 'Ü':
+                suffix = "cüğüm";
+                break;
+            default:
+                suffix = "cığım";
+                break;
+        }
+
+        return firstName + suffix;
+    }
+
+    private static char FindLastTurkishVowel(string text)
+    {
+        if (string.IsNullOrEmpty(text)) return '\0';
+        for (int i = text.Length - 1; i >= 0; i--)
+        {
+            char c = text[i];
+            if (c == 'a' || c == 'A' || c == 'e' || c == 'E' || c == 'ı' || c == 'I' ||
+                c == 'i' || c == 'İ' || c == 'o' || c == 'O' || c == 'ö' || c == 'Ö' ||
+                c == 'u' || c == 'U' || c == 'ü' || c == 'Ü')
+            {
+                return c;
+            }
+        }
+        return '\0';
     }
 }
