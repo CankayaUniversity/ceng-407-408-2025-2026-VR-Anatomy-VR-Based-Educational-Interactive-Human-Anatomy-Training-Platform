@@ -30,7 +30,9 @@ public class ReviewManager : MonoBehaviour
 
         if (BoneVisualManager.Active != null && LessonManager.Instance != null)
         {
+            // Reset materials and snap ALL pulled transforms back straight to the skeleton structure
             BoneVisualManager.Active.ResetAllBones(LessonManager.Instance.bones);
+            BoneVisualManager.Active.SnapAllBonesToInitialTransforms();
         }
         else
         {
@@ -92,13 +94,13 @@ public class ReviewManager : MonoBehaviour
         reviewPanel.SetActive(false);
         lessonPanel.SetActive(true);
 
-        // 1. Activate the model step data first
+        // Activate the model step data first
         LessonManager.Instance.ActivateStep(index);
 
-        // 2. Keep this false during the temporary inspection window
+        // Keep this false during the temporary inspection window
         LessonManager.Instance.IsReviewMode = false;
 
-        // 3. Force structural visibility updates LAST so it cannot be overridden by LessonManager
+        // Force structural visibility updates LAST so it cannot be overridden by LessonManager
         if (nextButton != null) nextButton.SetActive(false);
         if (previousButton != null) previousButton.SetActive(false);
         if (anladimButton != null) anladimButton.SetActive(true);
@@ -111,6 +113,7 @@ public class ReviewManager : MonoBehaviour
 
     public void ReturnToReview()
     {
+        // --- THIS EXECUTES WHEN THE STUDENT CLICKS 'ANLADIM' ---
         if (TTSClient.Instance != null) TTSClient.Instance.Stop();
 
         lessonPanel.SetActive(false);
@@ -118,7 +121,9 @@ public class ReviewManager : MonoBehaviour
 
         if (BoneVisualManager.Active != null && LessonManager.Instance != null)
         {
+            // Restore materials and snap whatever bone they just dropped back into place!
             BoneVisualManager.Active.ResetAllBones(LessonManager.Instance.bones);
+            BoneVisualManager.Active.SnapAllBonesToInitialTransforms();
         }
         else
         {

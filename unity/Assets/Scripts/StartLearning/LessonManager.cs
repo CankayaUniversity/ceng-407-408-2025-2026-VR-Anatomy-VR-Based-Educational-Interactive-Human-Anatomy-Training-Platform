@@ -18,6 +18,7 @@ public class BoneList
     public List<BoneData> entries;
 }
 
+
 public class LessonManager : MonoBehaviour
 {
     public static LessonManager Instance;
@@ -37,12 +38,23 @@ public class LessonManager : MonoBehaviour
     public BoneVisualManager visualsManager;
 
     [Header("Data Configuration")]
-    [Tooltip("Type the path relative to the Resources folder WITHOUT the .json extension. (e.g., JsonFiles/StartLearning/circulation_system_data)")]
+    [Tooltip("Type the path relative to the Resources folder WITHOUT the .json extension.")]
     public string jsonFilePath = "JsonFiles/StartLearning/motion_system_education_data";
 
     private Dictionary<string, BoneData> dataLookup = new Dictionary<string, BoneData>();
     private int currentIndex = 0;
     public bool IsReviewMode = false;
+
+    
+    public GameObject CurrentActiveBone
+    {
+        get
+        {
+            if (bones != null && currentIndex >= 0 && currentIndex < bones.Count)
+                return bones[currentIndex];
+            return null;
+        }
+    }
 
     void OnEnable()
     {
@@ -84,6 +96,10 @@ public class LessonManager : MonoBehaviour
     {
         IsReviewMode = false;
         currentIndex = 0;
+
+        
+        if (visualsManager != null) visualsManager.SnapAllBonesToInitialTransforms();
+
         ActivateStep(currentIndex);
     }
 
@@ -117,6 +133,10 @@ public class LessonManager : MonoBehaviour
     public void NextStep()
     {
         if (IsReviewMode) return;
+
+        
+        if (visualsManager != null) visualsManager.SnapBoneToInitialTransform(CurrentActiveBone);
+
         if (currentIndex < bones.Count - 1)
         {
             currentIndex++;
@@ -132,6 +152,9 @@ public class LessonManager : MonoBehaviour
     public void PreviousStep()
     {
         if (IsReviewMode) return;
+
+        
+        if (visualsManager != null) visualsManager.SnapBoneToInitialTransform(CurrentActiveBone);
 
         if (currentIndex > 0)
         {
@@ -171,8 +194,6 @@ public class LessonManager : MonoBehaviour
             infoText.text = "Check ID: " + (identity != null ? identity.id : "No Script");
         }
 
-        // --- FIX HAPPENS HERE ---
-        // Only update standard button navigation states if we are NOT viewing bones through the review workflow
         if (reviewManager != null && reviewManager.reviewPanel.activeSelf == false && IsReviewMode == false)
         {
             if (previousButton != null) previousButton.gameObject.SetActive(currentIndex > 0);

@@ -11,14 +11,23 @@ public class BoneVisualManager : MonoBehaviour
     [Tooltip("Renderers with this tag will be entirely ignored by material alterations.")]
     public string ignoreTag = "IgnoreVisuals";
 
+    
+    private struct TransformData
+    {
+        public Vector3 localPosition;
+        public Quaternion localRotation;
+    }
+
     private Dictionary<Renderer, Material> _originalMaterials = new Dictionary<Renderer, Material>();
+    private Dictionary<Transform, TransformData> _originalTransforms = new Dictionary<Transform, TransformData>();
 
     public static BoneVisualManager Active;
 
     void Awake()
     {
-        // Cache materials here so they are ready before anything else happens
+        
         CacheOriginalMaterials();
+        CacheOriginalTransforms();
     }
 
     void OnEnable()
@@ -28,22 +37,91 @@ public class BoneVisualManager : MonoBehaviour
 
     private void CacheOriginalMaterials()
     {
-        // Get all renderers including inactive ones
         Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
         foreach (Renderer r in renderers)
         {
             if (r == null) continue;
-
-            // PERFORMANCE OPTIMIZATION: Flat comparison because all child objects are tagged in the inspector
-            if (r.CompareTag(ignoreTag))
-            {
-                continue; // Skip caching this renderer completely
-            }
+            if (r.CompareTag(ignoreTag)) continue;
 
             if (!_originalMaterials.ContainsKey(r))
             {
-                // We use sharedMaterial to get the actual asset reference
                 _originalMaterials[r] = r.sharedMaterial;
+            }
+        }
+    }
+
+    private void CacheOriginalTransforms()
+    {
+        
+        Transform[] allTransforms = GetComponentsInChildren<Transform>(true);
+        foreach (Transform t in allTransforms)
+        {
+            // Do not cache the unit root container itself
+            if (t == this.transform || t == null) continue;
+            if (t.CompareTag(ignoreTag)) continue;
+
+            if (!_originalTransforms.ContainsKey(t))
+            {
+                _originalTransforms[t] = new TransformData
+                {
+                    localPosition = t.localPosition,
+                    localRotation = t.localRotation
+                };
+            }
+        }
+    }
+
+   
+    public void SnapBoneToInitialTransform(GameObject boneRoot)
+    {
+        if (boneRoot == null) return;
+
+
+        Transform[] targetTransforms = boneRoot.GetComponentsInChildren<Transform>(true);
+
+        foreach (Transform t in targetTransforms)
+        {
+            if (t == null) continue;
+
+            
+            if (_originalTransforms.ContainsKey(t))
+            {
+                TransformData original = _originalTransforms[t];
+
+                //sometimes it flies away bc of physic engine
+                Rigidbody rb = t.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.linearVelocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                }
+
+                
+                t.localPosition = original.localPosition;
+                t.localRotation = original.localRotation;
+            }
+        }
+    }
+
+  
+    public void SnapAllBonesToInitialTransforms()
+    {
+        foreach (var pair in _originalTransforms)
+        {
+            Transform t = pair.Key;
+            TransformData original = pair.Value;
+
+            if (t != null)
+            {
+                Rigidbody rb = t.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.linearVelocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                }
+
+                t.localPosition = original.localPosition;
+                t.localRotation = original.localRotation;
             }
         }
     }
@@ -60,7 +138,7 @@ public class BoneVisualManager : MonoBehaviour
     {
         SetAllToGhost();
 
-        // 1. Disable ALL grab components in the entire unit first
+        
         foreach (GameObject bone in allBones)
         {
             if (bone == null) continue;
@@ -68,18 +146,17 @@ public class BoneVisualManager : MonoBehaviour
             foreach (var g in allGrabs) g.enabled = false;
         }
 
-        // 2. Enable ONLY the grab components belonging to the targetBone hierarchy
+        
         XRGrabInteractable[] targetGrabs = targetBone.GetComponentsInChildren<XRGrabInteractable>(true);
         foreach (var g in targetGrabs)
         {
             g.enabled = true;
         }
 
-        // 3. Handle Visuals: Set target hierarchy back to original materials
+        
         Renderer[] targetRenderers = targetBone.GetComponentsInChildren<Renderer>(true);
         foreach (Renderer r in targetRenderers)
         {
-            // If it's a dummy bone, it was never cached in the dictionary, so this safely evaluates to false!
             if (_originalMaterials.ContainsKey(r))
             {
                 r.sharedMaterial = _originalMaterials[r];
@@ -89,7 +166,6 @@ public class BoneVisualManager : MonoBehaviour
 
     public void ResetAllBones(List<GameObject> allBones)
     {
-        // Loop through every cached renderer and restore its original material
         foreach (var item in _originalMaterials)
         {
             Renderer r = item.Key;
