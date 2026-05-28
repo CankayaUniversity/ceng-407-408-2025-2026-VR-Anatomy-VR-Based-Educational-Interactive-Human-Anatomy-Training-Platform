@@ -47810,20 +47810,41 @@ MonoBehaviour:
   initializer: {fileID: 149889374}
   introList:
   - unitID: 0
-    introText: "Kalbin i\xE7 yap\u0131s\u0131 b\xF6l\xFCm\xFCne ho\u015F geldiniz. "
+    introText: "Kalbin i\xE7 yap\u0131s\u0131 b\xF6l\xFCm\xFCnde kalbin odac\u0131klar\u0131n\u0131,
+      kapak\xE7\u0131k sistemlerini ve i\xE7 dokular\u0131n\u0131 inceleyeceksin.
+      Bilgi kartlar\u0131 s\u0131rayla ekrana gelecek. Sa\u011F ok tu\u015Funa basarak
+      bir sonraki bilgi kart\u0131na ge\xE7ebilirsin. Haz\u0131rsan ba\u015Flayal\u0131m."
   - unitID: 1
-    introText: "Kalbin d\u0131\u015F yap\u0131s\u0131 b\xF6l\xFCm\xFCne ho\u015F
-      geldiniz. "
+    introText: "Kalbin d\u0131\u015F yap\u0131s\u0131 b\xF6l\xFCm\xFCnde kalbin d\u0131\u015F
+      y\xFCzeyini, ana damar giri\u015F \xE7\u0131k\u0131\u015Flar\u0131n\u0131 inceleyeceksin.
+      Bilgi kartlar\u0131 s\u0131rayla ekrana gelecek. Sa\u011F ok tu\u015Funa basarak
+      bir sonraki bilgi kart\u0131na ge\xE7ebilirsin. Haz\u0131rsan ba\u015Flayal\u0131m."
   - unitID: 2
-    introText: "\xDCst ekstremite atar damarlar b\xF6l\xFCm\xFCne ho\u015F geldiniz. "
+    introText: "\xDCst ekstremite arterleri b\xF6l\xFCm\xFCnde kollar ve ellere temiz
+      kan ta\u015F\u0131yan ana atardamarlar\u0131 inceleyeceksin. Bilgi kartlar\u0131
+      s\u0131rayla ekrana gelecek. Sa\u011F ok tu\u015Funa basarak bir sonraki bilgi
+      kart\u0131na ge\xE7ebilirsin. Haz\u0131rsan ba\u015Flayal\u0131m."
   - unitID: 3
-    introText: "Alt ekstremite atar damarlar b\xF6l\xFCm\xFCne ho\u015F geldiniz. "
-  - unitID: 6
-    introText: "Nab\u0131z al\u0131nan damarlar b\xF6l\xFCm\xFCne ho\u015F geldiniz. "
+    introText: "Alt ekstremite arterleri b\xF6l\xFCm\xFCnde bacaklar ve ayaklara
+      temiz kan sa\u011Flayan atardamarlar\u0131 inceleyeceksin. Bilgi kartlar\u0131
+      s\u0131rayla ekrana gelecek. Sa\u011F ok tu\u015Funa basarak bir sonraki bilgi
+      kart\u0131na ge\xE7ebilirsin. Haz\u0131rsan ba\u015Flayal\u0131m."
+  - unitID: 4
+    introText: "Nab\u0131z al\u0131nabilen arterler b\xF6l\xFCm\xFCnde y\xFCzeye
+      yak\u0131n olan ve ritmik kalp at\u0131\u015Flar\u0131n\u0131n hissedilebildi\u011Fi
+      kritik atardamar noktalar\u0131n\u0131 inceleyeceksin. Bilgi kartlar\u0131
+      s\u0131rayla ekrana gelecek. Sa\u011F ok tu\u015Funa basarak bir sonraki bilgi
+      kart\u0131na ge\xE7ebilirsin. Haz\u0131rsan ba\u015Flayal\u0131m."
   - unitID: 5
-    introText: "\xDCst ekstremite toplar damarlar b\xF6l\xFCm\xFCne ho\u015F geldiniz. "
+    introText: "\xDCst ekstremite venleri b\xF6l\xFCm\xFCnde kollardaki kirli kan\u0131
+      kalbe geri ta\u015F\u0131yan toplamar sistemini inceleyeceksin. Bilgi kartlar\u0131
+      s\u0131rayla ekrana gelecek. Sa\u011F ok tu\u015Funa basarak bir sonraki bilgi
+      kart\u0131na ge\xE7ebilirsin. Haz\u0131rsan ba\u015Flayal\u0131m."
   - unitID: 6
-    introText: "Alt ekstremite toplar damarlar b\xF6l\xFCm\xFCne ho\u015F geldiniz. "
+    introText: "Alt ekstremite venleri b\xF6l\xFCm\xFCnde bacaklardaki kan\u0131
+      yer \xE7ekimine kar\u015F\u0131 kalbe geri ileten toplardamarlar\u0131 inceleyeceksin.
+      Bilgi kartlar\u0131 s\u0131rayla ekrana gelecek. Sa\u011F ok tu\u015Funa basarak
+      bir sonraki bilgi kart\u0131na ge\xE7ebilirsin. Haz\u0131rsan ba\u015Flayal\u0131m."
   lessonPanel: {fileID: 8167192262107474737}
   startDelay: 1
 --- !u!4 &1389113608
