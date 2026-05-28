@@ -76,7 +76,7 @@ public static class AIChatVoiceSettingsInstaller
 
         var voiceBinder = newRow.AddComponent<AIChatVoiceToggleBinder>();
         voiceBinder.Initialize(enabledToggle, disabledToggle, label);
-        SettingsSceneLayoutAdjuster.ApplyLayout();
+       // SettingsSceneLayoutAdjuster.ApplyLayout();
     }
 
     private static void AlignTitleWithOptions(TMP_Text label)

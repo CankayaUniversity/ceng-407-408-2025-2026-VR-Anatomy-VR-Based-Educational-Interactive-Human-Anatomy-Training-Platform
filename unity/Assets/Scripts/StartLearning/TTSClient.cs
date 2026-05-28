@@ -20,7 +20,6 @@ public class TTSClient : MonoBehaviour
     [Header("Audio Source Search")]
     [SerializeField] private Transform audioSourceSearchRoot;
 
-
     [SerializeField] private bool refreshAudioSourceBeforeSpeaking = true;
 
     private AudioSource _audio;
@@ -47,6 +46,24 @@ public class TTSClient : MonoBehaviour
     {
         if (string.IsNullOrWhiteSpace(text)) return;
 
+        
+        bool voiceIsEnabled = true;
+        if (SettingsManager.Instance != null)
+        {
+            voiceIsEnabled = SettingsManager.Instance.AIChatVoiceEnabled;
+        }
+        else
+        {
+            // Safety fallback default to true if SettingsManager isn't instantiated yet in current scene context
+            voiceIsEnabled = PlayerPrefs.GetInt("AIChatVoiceEnabled", 1) == 1;
+        }
+
+        if (!voiceIsEnabled)
+        {
+            Debug.Log("[TTSClient] AI Voice is disabled in settings menu. Skipping network voice generation request entirely.");
+            return;
+        }
+
         if (refreshAudioSourceBeforeSpeaking)
         {
             RefreshActiveAudioSource();
@@ -61,7 +78,6 @@ public class TTSClient : MonoBehaviour
         if (_audio.isPlaying)
         {
             _audio.Stop();
-
         }
 
         _currentRequestId++;
@@ -75,19 +91,16 @@ public class TTSClient : MonoBehaviour
 
         if (audioSourceSearchRoot == null)
         {
-
             _audio = GetComponent<AudioSource>();
 
             if (_audio != null)
             {
                 ConfigureAudioSource(_audio);
             }
-
             return;
         }
 
         AudioSource[] audioSources = audioSourceSearchRoot.GetComponentsInChildren<AudioSource>(false);
-
         int activeAudioSourceCount = 0;
 
         foreach (AudioSource source in audioSources)
@@ -115,7 +128,6 @@ public class TTSClient : MonoBehaviour
         }
 
         ConfigureAudioSource(_audio);
-
     }
 
     private void ConfigureAudioSource(AudioSource audioSource)
@@ -124,6 +136,16 @@ public class TTSClient : MonoBehaviour
 
         audioSource.playOnAwake = false;
 
+        
+        if (SettingsManager.Instance != null)
+        {
+            audioSource.volume = SettingsManager.Instance.MasterVolume;
+        }
+        else
+        {
+            // Safety fallback context read from disk
+            audioSource.volume = PlayerPrefs.GetFloat("MasterVolume", 1f);
+        }
     }
 
     public bool IsSpeaking()
@@ -148,6 +170,31 @@ public class TTSClient : MonoBehaviour
         if (_audio != null && _audio.isPlaying)
         {
             _audio.Stop();
+        }
+    }
+
+    private void OnEnable()
+    {
+        
+        if (SettingsManager.Instance != null)
+        {
+            SettingsManager.Instance.OnMasterVolumeChanged += OnVolumeConfigChanged;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (SettingsManager.Instance != null)
+        {
+            SettingsManager.Instance.OnMasterVolumeChanged -= OnVolumeConfigChanged;
+        }
+    }
+
+    private void OnVolumeConfigChanged(float newVolume)
+    {
+        if (_audio != null)
+        {
+            _audio.volume = newVolume;
         }
     }
 
@@ -203,10 +250,11 @@ public class TTSClient : MonoBehaviour
                     yield break;
                 }
 
+                // Ensure actual clip plays with the current volume value just in case it updated mid-request
+                if (SettingsManager.Instance != null) _audio.volume = SettingsManager.Instance.MasterVolume;
+
                 _audio.clip = clip;
                 _audio.Play();
-
-
             }
         }
     }
@@ -223,12 +271,10 @@ public class TTSClient : MonoBehaviour
         if (_audio.isPlaying)
         {
             _audio.Pause();
-
         }
         else if (_audio.clip != null && _audio.time > 0)
         {
             _audio.UnPause();
-
         }
     }
 

@@ -46,7 +46,7 @@ public class AIChatVoiceToggleBinder : MonoBehaviour
         }
 
         if (titleText != null)
-            titleText.text = "Yapay Zekâ ile Konuş Avatar Sesi";
+            titleText.text = "Avatar Sesi";
 
         UpdateToggleVisuals(SettingsManager.Instance.AIChatVoiceEnabled);
 
