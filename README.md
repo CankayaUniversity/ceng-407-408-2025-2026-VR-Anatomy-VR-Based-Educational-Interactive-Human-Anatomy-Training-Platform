@@ -6,7 +6,7 @@
 
 <div align="center">
 
-# 🧠 VR Anatomy
+# VR Anatomy
 
 ### VR-Based Educational Interactive Human Anatomy Training Platform
 
