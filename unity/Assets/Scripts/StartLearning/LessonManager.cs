@@ -89,6 +89,7 @@ public class LessonManager : MonoBehaviour
     private void StartLesson()
     {
         currentIndex = 0;
+        ResetActiveUnitRotation();
         ActivateStep(currentIndex);
     }
 
@@ -134,8 +135,10 @@ public class LessonManager : MonoBehaviour
     {
         if (IsReviewMode) return;
 
-        
-        if (visualsManager != null) visualsManager.SnapBoneToInitialTransform(CurrentActiveBone);
+        // Reset bone translations
+        if (visualsManager != null) visualsManager.SnapAllBonesToInitialTransforms();
+
+        ResetActiveUnitRotation();
 
         if (currentIndex < bones.Count - 1)
         {
@@ -153,8 +156,10 @@ public class LessonManager : MonoBehaviour
     {
         if (IsReviewMode) return;
 
-        
-        if (visualsManager != null) visualsManager.SnapBoneToInitialTransform(CurrentActiveBone);
+        // Reset bone translations
+        if (visualsManager != null) visualsManager.SnapAllBonesToInitialTransforms();
+
+        ResetActiveUnitRotation();
 
         if (currentIndex > 0)
         {
@@ -200,4 +205,20 @@ public class LessonManager : MonoBehaviour
             if (nextButton != null) nextButton.gameObject.SetActive(true);
         }
     }
+
+
+
+    public void ResetActiveUnitRotation()
+    {
+        if (visualsManager != null)
+        {
+            RotateUnit currentRotator = visualsManager.GetComponent<RotateUnit>();
+            if (currentRotator != null)
+            {
+                currentRotator.ResetToInitialRotation();
+            }
+        }
+    }
+
+
 }

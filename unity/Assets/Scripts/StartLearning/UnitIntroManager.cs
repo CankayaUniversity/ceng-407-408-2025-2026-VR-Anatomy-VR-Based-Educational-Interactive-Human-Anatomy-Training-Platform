@@ -8,7 +8,7 @@ public class UnitIntroManager : MonoBehaviour
     public struct IntroMapping
     {
         public int unitID;
-        [TextArea(3, 10)] public string introText; 
+        [TextArea(3, 10)] public string introText;
     }
 
     public UnitInitializer initializer;
@@ -51,14 +51,12 @@ public class UnitIntroManager : MonoBehaviour
         if (!string.IsNullOrEmpty(studentName))
         {
             string affectionateName = BuildAffectionateName(studentName);
-            
             textToRead = $"Merhaba {affectionateName}, hoþ geldin. " + textToRead;
         }
 
         // Request speech
         TTSClient.Instance.Speak(textToRead);
 
-        
         float timeout = 4.0f;
         while (!TTSClient.Instance.IsSpeaking() && timeout > 0)
         {
@@ -66,13 +64,11 @@ public class UnitIntroManager : MonoBehaviour
             yield return null;
         }
 
-        
         while (TTSClient.Instance.IsSpeaking())
         {
             yield return null;
         }
 
-        
         yield return new WaitForSeconds(0.3f);
 
         EnableSystems();
@@ -91,13 +87,15 @@ public class UnitIntroManager : MonoBehaviour
                 if (mapping.unitID == selectedID && mapping.lessonManager != null)
                 {
                     mapping.lessonManager.enabled = true;
+
+                    // FIXED: Instantly clear any rotations applied during the intro sequence
+                    mapping.lessonManager.ResetActiveUnitRotation();
                     return;
                 }
             }
         }
     }
 
-    
     private static string BuildAffectionateName(string rawName)
     {
         string name = rawName.Trim();
@@ -109,33 +107,11 @@ public class UnitIntroManager : MonoBehaviour
 
         switch (lastVowel)
         {
-            case 'a':
-            case 'A':
-            case 'ý':
-            case 'I':
-                suffix = "cýðým";
-                break;
-            case 'e':
-            case 'E':
-            case 'i':
-            case 'Ý':
-                suffix = "ciðim";
-                break;
-            case 'o':
-            case 'O':
-            case 'u':
-            case 'U':
-                suffix = "cuðum";
-                break;
-            case 'ö':
-            case 'Ö':
-            case 'ü':
-            case 'Ü':
-                suffix = "cüðüm";
-                break;
-            default:
-                suffix = "cýðým";
-                break;
+            case 'a': case 'A': case 'ý': case 'I': suffix = "cýðým"; break;
+            case 'e': case 'E': case 'i': case 'Ý': suffix = "ciðim"; break;
+            case 'o': case 'O': case 'u': case 'U': suffix = "cuðum"; break;
+            case 'ö': case 'Ö': case 'ü': case 'Ü': suffix = "cüðüm"; break;
+            default: suffix = "cýðým"; break;
         }
 
         return firstName + suffix;

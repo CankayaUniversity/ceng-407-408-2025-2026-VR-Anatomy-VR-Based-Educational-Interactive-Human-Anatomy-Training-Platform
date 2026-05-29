@@ -23,8 +23,6 @@ public class ReviewManager : MonoBehaviour
     public Transform buttonContainer;
 
     private const string StudentNamePrefKey = "StudentName";
-
-    
     private const string ReviewSentenceTemplate = "Bölümün sonuna geldik {0}. Aklýna takýlan bir yapý kaldýysa, buradaki butonlarý kullanarak tekrar gözden geçirebilirsin.";
 
     public void OpenReview()
@@ -38,43 +36,31 @@ public class ReviewManager : MonoBehaviour
         {
             BoneVisualManager.Active.ResetAllBones(LessonManager.Instance.bones);
             BoneVisualManager.Active.SnapAllBonesToInitialTransforms();
+
+            LessonManager.Instance.ResetActiveUnitRotation();
         }
         else
         {
             Debug.LogError("[REVIEW] Reset failed. Active Visuals or LessonInstance is null!");
         }
 
-        // Fetch the student's name from storage
+       
         string studentName = PlayerPrefs.GetString(StudentNamePrefKey, "").Trim();
         string finalSpeechText = "";
-
-        // Generate the dynamic affectionate name prefix 
         if (!string.IsNullOrEmpty(studentName))
         {
             string affectionateName = BuildAffectionateName(studentName);
-            
             finalSpeechText = string.Format(ReviewSentenceTemplate, affectionateName);
         }
         else
         {
-            
             finalSpeechText = string.Format(ReviewSentenceTemplate, " ");
         }
-
-        // update the text component on screen
-        if (reviewDescriptionText != null)
-        {
-            reviewDescriptionText.text = finalSpeechText;
-        }
-
-        
-        if (!string.IsNullOrWhiteSpace(finalSpeechText) && TTSClient.Instance != null)
-        {
-            TTSClient.Instance.Speak(finalSpeechText);
-        }
-
+        if (reviewDescriptionText != null) reviewDescriptionText.text = finalSpeechText;
+        if (!string.IsNullOrWhiteSpace(finalSpeechText) && TTSClient.Instance != null) TTSClient.Instance.Speak(finalSpeechText);
+       
         PopulateButtons();
-
+        
         if (nextButton != null) nextButton.SetActive(false);
         if (previousButton != null) previousButton.SetActive(false);
         if (anladimButton != null) GridSetActive(anladimButton, true);
@@ -120,6 +106,18 @@ public class ReviewManager : MonoBehaviour
 
     private void SelectBone(int index)
     {
+        // Reset structural layout before loading the single review asset card
+        if (BoneVisualManager.Active != null)
+        {
+            BoneVisualManager.Active.SnapAllBonesToInitialTransforms();
+        }
+
+      
+        if (LessonManager.Instance != null)
+        {
+            LessonManager.Instance.ResetActiveUnitRotation();
+        }
+
         reviewPanel.SetActive(false);
         lessonPanel.SetActive(true);
 
@@ -147,6 +145,8 @@ public class ReviewManager : MonoBehaviour
         {
             BoneVisualManager.Active.ResetAllBones(LessonManager.Instance.bones);
             BoneVisualManager.Active.SnapAllBonesToInitialTransforms();
+
+            LessonManager.Instance.ResetActiveUnitRotation();
         }
         else
         {
@@ -189,33 +189,11 @@ public class ReviewManager : MonoBehaviour
 
         switch (lastVowel)
         {
-            case 'a':
-            case 'A':
-            case 'ý':
-            case 'I':
-                suffix = "cýðým";
-                break;
-            case 'e':
-            case 'E':
-            case 'i':
-            case 'Ý':
-                suffix = "ciðim";
-                break;
-            case 'o':
-            case 'O':
-            case 'u':
-            case 'U':
-                suffix = "cuðum";
-                break;
-            case 'ö':
-            case 'Ö':
-            case 'ü':
-            case 'Ü':
-                suffix = "cüðüm";
-                break;
-            default:
-                suffix = "cýðým";
-                break;
+            case 'a': case 'A': case 'ý': case 'I': suffix = "cýðým"; break;
+            case 'e': case 'E': case 'i': case 'Ý': suffix = "ciðim"; break;
+            case 'o': case 'O': case 'u': case 'U': suffix = "cuðum"; break;
+            case 'ö': case 'Ö': case 'ü': case 'Ü': suffix = "cüðüm"; break;
+            default: suffix = "cýðým"; break;
         }
 
         return firstName + suffix;
