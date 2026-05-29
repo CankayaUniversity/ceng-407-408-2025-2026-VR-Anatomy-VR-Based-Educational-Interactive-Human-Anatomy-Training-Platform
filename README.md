@@ -27,7 +27,7 @@ An immersive virtual reality anatomy learning platform that combines 3D interact
 **Senior Capstone Project · Çankaya University**
 **Supported by TÜBİTAK 2209-A**
 
-[Demo Video](YOUR_DEMO_LINK) · [Project Website](https://app.vr-anatomy.com/home)
+[Demo Video](https://youtu.be/9TWsxnPI4KQ) · [Project Website](https://app.vr-anatomy.com/home)
 
 </div>
 
