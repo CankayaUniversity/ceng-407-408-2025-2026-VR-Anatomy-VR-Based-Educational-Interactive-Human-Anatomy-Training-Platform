@@ -23,7 +23,10 @@ public class CUnitResetManager : MonoBehaviour
 
     [Header("Reset Input")]
     [SerializeField] private InputActionReference resetAction;
-    [SerializeField] private KeyCode debugKey = KeyCode.R;
+
+    [Header("Editor Debug Input")]
+    [SerializeField] private bool enableEditorDebugKey = true;
+    [SerializeField] private Key debugKey = Key.R;
 
     private readonly Dictionary<Transform, List<ItemData>> cache = new();
 
@@ -56,14 +59,28 @@ public class CUnitResetManager : MonoBehaviour
     private void Update()
     {
 #if UNITY_EDITOR
-        if (debugKey != KeyCode.None && Input.GetKeyDown(debugKey))
+        if (!enableEditorDebugKey)
+            return;
+
+        if (Keyboard.current == null)
+            return;
+
+        if (Keyboard.current[debugKey].wasPressedThisFrame)
+        {
             ResetCurrentUnit();
+        }
 #endif
     }
 
     private void CacheUnits()
     {
         cache.Clear();
+
+        if (unitsRoot == null)
+        {
+            Debug.LogWarning("[CUnitResetManager] unitsRoot atanmadı.");
+            return;
+        }
 
         for (int i = 0; i < unitsRoot.childCount; i++)
         {
@@ -127,7 +144,7 @@ public class CUnitResetManager : MonoBehaviour
             }
         }
 
-        Debug.LogWarning("[UnitResetManager] Resetlenecek aktif ünite bulunamadı.");
+        Debug.LogWarning("[CUnitResetManager] Resetlenecek aktif ünite bulunamadı.");
     }
 
     private void ResetUnit(Transform unitRoot)
@@ -139,7 +156,7 @@ public class CUnitResetManager : MonoBehaviour
 
         if (!cache.TryGetValue(unitRoot, out List<ItemData> list))
         {
-            Debug.LogWarning("[UnitResetManager] Cache yok: " + unitRoot.name);
+            Debug.LogWarning("[CUnitResetManager] Cache yok: " + unitRoot.name);
             return;
         }
 
@@ -161,7 +178,7 @@ public class CUnitResetManager : MonoBehaviour
 
         Physics.SyncTransforms();
 
-        Debug.Log("[UnitResetManager] Resetlendi: " + unitRoot.name);
+        Debug.Log("[CUnitResetManager] Resetlendi: " + unitRoot.name);
     }
 
     private void ForceReleaseGrabbedObjects(Transform unitRoot)

@@ -51,7 +51,7 @@ public class UnitIntroManager : MonoBehaviour
         if (!string.IsNullOrEmpty(studentName))
         {
             string affectionateName = BuildAffectionateName(studentName);
-            textToRead = $"Merhaba {affectionateName}, hoþ geldin. " + textToRead;
+            textToRead = $"Merhaba {affectionateName}, ho\u015F geldin. " + textToRead;
         }
 
         // Request speech
@@ -97,39 +97,87 @@ public class UnitIntroManager : MonoBehaviour
     }
 
     private static string BuildAffectionateName(string rawName)
+{
+    string name = rawName.Trim();
+    if (string.IsNullOrEmpty(name)) return "";
+
+    string firstName = name.Split(' ')[0];
+    char lastVowel = FindLastTurkishVowel(firstName);
+
+    string suffix;
+
+    switch (lastVowel)
     {
-        string name = rawName.Trim();
-        if (string.IsNullOrEmpty(name)) return "";
+        // a, Ä± -> cÄ±ÄŸÄ±m
+        case 'a':
+        case 'A':
+        case '\u0131': // Ä±
+        case 'I':
+            suffix = "c\u0131\u011F\u0131m"; // cÄ±ÄŸÄ±m
+            break;
 
-        string firstName = name.Split(' ')[0];
-        char lastVowel = FindLastTurkishVowel(firstName);
-        string suffix;
+        // e, i -> ciÄŸim
+        case 'e':
+        case 'E':
+        case 'i':
+        case '\u0130': // Ä°
+            suffix = "ci\u011Fim"; // ciÄŸim
+            break;
 
-        switch (lastVowel)
-        {
-            case 'a': case 'A': case 'ý': case 'I': suffix = "cýðým"; break;
-            case 'e': case 'E': case 'i': case 'Ý': suffix = "ciðim"; break;
-            case 'o': case 'O': case 'u': case 'U': suffix = "cuðum"; break;
-            case 'ö': case 'Ö': case 'ü': case 'Ü': suffix = "cüðüm"; break;
-            default: suffix = "cýðým"; break;
-        }
+        // o, u -> cuÄŸum
+        case 'o':
+        case 'O':
+        case 'u':
+        case 'U':
+            suffix = "cu\u011Fum"; // cuÄŸum
+            break;
 
-        return firstName + suffix;
+        // Ã¶, Ã¼ -> cÃ¼ÄŸÃ¼m
+        case '\u00F6': // Ã¶
+        case '\u00D6': // Ã–
+        case '\u00FC': // Ã¼
+        case '\u00DC': // Ãœ
+            suffix = "c\u00FC\u011F\u00FCm"; // cÃ¼ÄŸÃ¼m
+            break;
+
+        default:
+            suffix = "c\u0131\u011F\u0131m"; // cÄ±ÄŸÄ±m
+            break;
     }
 
-    private static char FindLastTurkishVowel(string text)
+    return firstName + suffix;
+}
+
+private static char FindLastTurkishVowel(string text)
+{
+    if (string.IsNullOrEmpty(text)) return '\0';
+
+    for (int i = text.Length - 1; i >= 0; i--)
     {
-        if (string.IsNullOrEmpty(text)) return '\0';
-        for (int i = text.Length - 1; i >= 0; i--)
+        char c = text[i];
+
+        switch (c)
         {
-            char c = text[i];
-            if (c == 'a' || c == 'A' || c == 'e' || c == 'E' || c == 'ý' || c == 'I' ||
-                c == 'i' || c == 'Ý' || c == 'o' || c == 'O' || c == 'ö' || c == 'Ö' ||
-                c == 'u' || c == 'U' || c == 'ü' || c == 'Ü')
-            {
+            case 'a':
+            case 'A':
+            case 'e':
+            case 'E':
+            case '\u0131': // Ä±
+            case 'I':
+            case 'i':
+            case '\u0130': // Ä°
+            case 'o':
+            case 'O':
+            case '\u00F6': // Ã¶
+            case '\u00D6': // Ã–
+            case 'u':
+            case 'U':
+            case '\u00FC': // Ã¼
+            case '\u00DC': // Ãœ
                 return c;
-            }
         }
-        return '\0';
     }
+
+    return '\0';
+}
 }

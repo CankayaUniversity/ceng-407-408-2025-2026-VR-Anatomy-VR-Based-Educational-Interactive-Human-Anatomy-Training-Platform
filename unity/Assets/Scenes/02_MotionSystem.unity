@@ -19935,8 +19935,8 @@ MonoBehaviour:
   backButton: {fileID: 1925973691}
   nextButton: {fileID: 725695906}
   startButton: {fileID: 352714393}
-  leftRayObject: {fileID: 0}
-  rightRayObject: {fileID: 0}
+  leftRayObject: {fileID: 1236206700}
+  rightRayObject: {fileID: 437395725}
   freeExploreController: {fileID: 533893953}
   startSubUnit: 2
 --- !u!114 &866399482
@@ -36332,7 +36332,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1625353898
 Transform:
   m_ObjectHideFlags: 0

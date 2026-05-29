@@ -5236,7 +5236,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1625353898
 Transform:
   m_ObjectHideFlags: 0
@@ -5925,6 +5925,7 @@ MonoBehaviour:
   unitsRoot: {fileID: 1815150451}
   currentUnitRoot: {fileID: 0}
   resetAction: {fileID: 1792352782}
+  enableEditorDebugKey: 1
   debugKey: 111
 --- !u!1 &1844728494
 GameObject:
