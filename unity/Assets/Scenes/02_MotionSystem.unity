@@ -25211,8 +25211,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bb4a3d7c9e8eb34092f0a1b70e0e063, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightInteractor: {fileID: 0}
-  leftInteractor: {fileID: 0}
+  rightInteractor: {fileID: 1995032688}
+  leftInteractor: {fileID: 1995032679}
   toggleAction: {fileID: 131140412}
   panelRoot: {fileID: 916321112}
   nameText: {fileID: 1083699379}
