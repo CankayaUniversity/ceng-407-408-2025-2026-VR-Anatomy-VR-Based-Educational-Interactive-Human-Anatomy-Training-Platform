@@ -473,6 +473,12 @@ It is not intended for medical diagnosis, medical treatment, or professional cli
 
 ## 📄 License
 
-This project is licensed under the terms specified in the `LICENSE` file.
+This project is licensed under the **Apache License 2.0**.
+
+You may use, modify, and distribute this project in accordance with the terms of the Apache License, Version 2.0.
+
+See the [Apache-2.0 license](https://github.com/CankayaUniversity/ceng-407-408-2025-2026-VR-Anatomy-VR-Based-Educational-Interactive-Human-Anatomy-Training-Platform?tab=Apache-2.0-1-ov-file#) file for more details.
+
+Copyright 2026 VR Anatomy Team.
 
 ---
