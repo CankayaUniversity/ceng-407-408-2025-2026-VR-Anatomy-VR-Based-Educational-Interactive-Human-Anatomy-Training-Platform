@@ -21,6 +21,12 @@ public class FreeExploreHeldNameUI : MonoBehaviour
     [Header("Data")]
     public MovementSystemDatabase movementDb;
 
+    [Header("Voice")]
+    [SerializeField] private FreeExploreBoneNameSpeaker nameSpeaker;
+    [SerializeField] private bool speakNameWhenShown = true;
+
+    private string _lastSpokenKey;
+
     private bool _isOpen;
 
     // ✅ Panel açıkken hangi objeyi göstereceğiz? En son seçilen.
@@ -91,7 +97,11 @@ public class FreeExploreHeldNameUI : MonoBehaviour
     private void OnSelectExited(SelectExitEventArgs args)
     {
         var exited = args.interactableObject as XRBaseInteractable;
-        if (_active == exited) _active = null;
+        if (_active == exited)
+        {
+            _active = null;
+            ClearSpokenStateAndStop();
+        }
 
         if (_isOpen) RefreshUI();
     }
@@ -115,6 +125,10 @@ public class FreeExploreHeldNameUI : MonoBehaviour
         {
             RefreshUI();
         }
+        else
+        {
+            ClearSpokenStateAndStop();
+        }
     }
 
     private void RefreshUI()
@@ -123,24 +137,25 @@ public class FreeExploreHeldNameUI : MonoBehaviour
 
         GameObject selectedGO = null;
 
-        // 1) Önce “aktif” seçim varsa onu kullan
         if (_active != null)
         {
             selectedGO = _active.gameObject;
         }
 
-        // 2) Aktif yoksa, ellerden selection bul (fallback)
         if (selectedGO == null)
             selectedGO = GetSelectedObject();
 
-        // 3) UI bas
         if (selectedGO == null)
         {
             nameText.text = "";
+            ClearSpokenStateAndStop();
             return;
         }
 
-        nameText.text = ResolveDisplayName(selectedGO);
+        string displayName = ResolveDisplayName(selectedGO);
+        nameText.text = displayName;
+
+        TrySpeakSelectedName(selectedGO, displayName);
     }
 
     private GameObject GetSelectedObject()
@@ -166,18 +181,26 @@ public class FreeExploreHeldNameUI : MonoBehaviour
     }
 
     private string ResolveDisplayName(GameObject selectedGO)
+{
+    BoneIdentity identity = FindBoneIdentity(selectedGO.transform);
+
+    if (identity != null)
     {
-        var identity = FindBoneIdentity(selectedGO.transform);
-        if (identity != null && !string.IsNullOrWhiteSpace(identity.id) && movementDb != null)
+        if (!string.IsNullOrWhiteSpace(identity.id) && movementDb != null)
         {
             if (movementDb.TryGetTitle(identity.id, out var title) && !string.IsNullOrWhiteSpace(title))
-                return title;
-
-            return identity.id;
+                return title.Trim();
         }
 
-        return selectedGO.name;
+        if (!string.IsNullOrWhiteSpace(identity.fallbackDisplayName))
+            return identity.fallbackDisplayName.Trim();
+
+        if (!string.IsNullOrWhiteSpace(identity.id))
+            return identity.id.Trim();
     }
+
+    return selectedGO.name;
+}
 
     private BoneIdentity FindBoneIdentity(Transform t)
     {
@@ -196,4 +219,39 @@ public class FreeExploreHeldNameUI : MonoBehaviour
 
         return t.GetComponentInChildren<BoneIdentity>(true);
     }
+
+    private void TrySpeakSelectedName(GameObject selectedGO, string displayName)
+{
+    if (!speakNameWhenShown) return;
+    if (nameSpeaker == null) return;
+    if (selectedGO == null) return;
+    if (string.IsNullOrWhiteSpace(displayName)) return;
+
+    string key = GetStableBoneKey(selectedGO, displayName);
+
+    // Aynı kemik için RefreshUI tekrar çalışırsa sesi tekrar tekrar patlatmasın.
+    if (_lastSpokenKey == key)
+        return;
+
+    _lastSpokenKey = key;
+    nameSpeaker.SpeakBoneName(displayName);
+}
+
+private string GetStableBoneKey(GameObject selectedGO, string displayName)
+{
+    BoneIdentity identity = FindBoneIdentity(selectedGO.transform);
+
+    if (identity != null && !string.IsNullOrWhiteSpace(identity.id))
+        return identity.id.Trim();
+
+    return displayName.Trim();
+}
+
+private void ClearSpokenStateAndStop()
+{
+    _lastSpokenKey = "";
+
+    if (nameSpeaker != null)
+        nameSpeaker.StopSpeaking();
+}
 }

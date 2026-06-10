@@ -155,8 +155,6 @@ private void ApplyUiOpaqueMaterial(Graphic graphic)
         }
         panelImg.raycastTarget = true;
 
-        panelImg.raycastTarget = true;
-
         BuildIntroText(rt);
         BuildBackButton(rt);
         BuildContinueButton(rt);
@@ -305,7 +303,7 @@ private void ApplyUiOpaqueMaterial(Graphic graphic)
         tmp.color = TextColor;
         tmp.fontSize = fontSize;
         tmp.alignment = alignment;
-        tmp.enableWordWrapping = false;
+        tmp.textWrappingMode = TextWrappingModes.NoWrap;
         tmp.enableAutoSizing = false;
         tmp.richText = richText;
         tmp.raycastTarget = false;
@@ -392,8 +390,8 @@ private void ApplyUiOpaqueMaterial(Graphic graphic)
         go.AddComponent<CanvasRenderer>();
 
         var img = go.AddComponent<Image>();
-        img.sprite = ResolveRoundedButtonSprite();
-        img.type = Image.Type.Sliced;
+        img.sprite = null;
+        img.type = Image.Type.Simple;
         img.preserveAspect = false;
         img.color = ButtonFillColor;
         img.raycastTarget = true;
@@ -444,12 +442,9 @@ private void ApplyUiOpaqueMaterial(Graphic graphic)
     }
 
     private Sprite ResolveRoundedButtonSprite()
-    {
-        if (_roundedButtonSprite != null) return _roundedButtonSprite;
-        _roundedButtonSprite = Resources.GetBuiltinResource<Sprite>("UI/Skin/UISprite.psd");
-
-        return _roundedButtonSprite;
-    }
+{
+    return null;
+}
 
     private Sprite ResolveMicIconSprite()
     {

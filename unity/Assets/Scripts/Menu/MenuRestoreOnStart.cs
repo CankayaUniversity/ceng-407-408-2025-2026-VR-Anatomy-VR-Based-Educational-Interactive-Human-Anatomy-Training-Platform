@@ -23,24 +23,39 @@ public class MenuRestoreOnStart : MonoBehaviour
 
         string target = NavigationState.ReturnMenuPanelName;
 
+        // Eğer geri dönülecek özel bir panel adı varsa onu aç
         if (!string.IsNullOrEmpty(target))
         {
             foreach (var p in allPanels)
             {
                 if (p != null && p.name == target)
                 {
-                    Debug.Log($"[MenuRestore] wanted='{target}'");
+                    Debug.Log($"[MenuRestore] Restored panel: '{target}'");
+
                     p.SetActive(true);
                     NavigationState.ReturnMenuPanelName = "";
                     return;
                 }
             }
+
+            // Target boş değil ama listede bulunamadıysa bu gerçekten warning olabilir
+            Debug.LogWarning($"[MenuRestore] Panel not found: '{target}'. Falling back to MainMenu.");
+        }
+        else
+        {
+            // Target zaten boşsa bu normal başlangıçtır, warning basmaya gerek yok
+            Debug.Log("[MenuRestore] No return panel set. Opening MainMenu.");
         }
 
         if (mainMenuPanel != null)
         {
-            Debug.LogWarning($"[MenuRestore] Panel not found: '{target}'. Falling back to MainMenu.");
             mainMenuPanel.SetActive(true);
         }
+        else
+        {
+            Debug.LogWarning("[MenuRestore] MainMenuPanel is not assigned.");
+        }
+
+        NavigationState.ReturnMenuPanelName = "";
     }
 }
