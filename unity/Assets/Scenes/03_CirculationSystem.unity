@@ -5552,6 +5552,7 @@ MonoBehaviour:
   unitsRoot: {fileID: 1815150451}
   currentUnitRoot: {fileID: 0}
   resetAction: {fileID: 1792352782}
+  enableEditorDebugKey: 1
   debugKey: 111
 --- !u!1 &1844728494
 GameObject:
@@ -6781,6 +6782,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 336146347630461287, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 905229015085933311, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1782646182773897190, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1994949203153378060, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
