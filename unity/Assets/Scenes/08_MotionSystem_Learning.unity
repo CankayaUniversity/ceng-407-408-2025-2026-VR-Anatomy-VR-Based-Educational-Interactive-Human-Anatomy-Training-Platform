@@ -2996,7 +2996,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c5a9d4e71fb4c6a9f2d3b0e5a18c7d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backendUrl: https://vr-anatomy-backend2.onrender.com/learning/simple-bone-explanation
+  backendUrl: https://vr-anatomy-backend.onrender.com/learning/simple-bone-explanation
   timeoutSeconds: 120
   infoTitleText: {fileID: 8777015957708029154}
   infoBodyText: {fileID: 2831077547328853405}

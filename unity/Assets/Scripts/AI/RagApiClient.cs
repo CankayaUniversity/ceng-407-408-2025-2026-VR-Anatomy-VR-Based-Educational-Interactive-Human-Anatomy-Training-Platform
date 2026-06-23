@@ -41,11 +41,11 @@ public class RagApiClient : MonoBehaviour
     [SerializeField] private Vector2 answerToggleSizeOverride = Vector2.zero;
 
     [Header("API")]
-    [SerializeField] private string apiUrl = "https://vr-anatomy-backend2.onrender.com/ask";
+    [SerializeField] private string apiUrl = "https://vr-anatomy-backend.onrender.com/ask";
 
     [Header("Speech API")]
-    [SerializeField] private string sttUrl = "https://vr-anatomy-backend2.onrender.com/stt";
-    [SerializeField] private string ttsUrl = "https://vr-anatomy-backend2.onrender.com/tts";
+    [SerializeField] private string sttUrl = "https://vr-anatomy-backend.onrender.com/stt";
+    [SerializeField] private string ttsUrl = "https://vr-anatomy-backend.onrender.com/tts";
 
     [Header("Kayıt Ayarları")]
     [SerializeField] private int maxRecordSeconds = 30;

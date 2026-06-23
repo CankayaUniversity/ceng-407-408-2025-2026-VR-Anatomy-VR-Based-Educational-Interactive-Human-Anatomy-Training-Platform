@@ -7,7 +7,7 @@ public class BackendWarmupManager : MonoBehaviour
     public static BackendWarmupManager Instance { get; private set; }
 
     [Header("Backend")]
-    [SerializeField] private string backendBaseUrl = "https://vr-anatomy-backend2.onrender.com";
+    [SerializeField] private string backendBaseUrl = "https://vr-anatomy-backend.onrender.com";
     [SerializeField] private float timeoutSeconds = 15f;
 
     public bool IsBackendReady { get; private set; }

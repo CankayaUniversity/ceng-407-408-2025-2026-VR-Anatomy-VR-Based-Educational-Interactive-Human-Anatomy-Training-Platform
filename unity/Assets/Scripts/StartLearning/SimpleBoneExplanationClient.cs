@@ -26,7 +26,7 @@ public class SimpleBoneExplanationResponse
 public class SimpleBoneExplanationClient : MonoBehaviour
 {
     [Header("Backend")]
-    [SerializeField] private string backendUrl = "https://vr-anatomy-backend2.onrender.com/learning/simple-bone-explanation";
+    [SerializeField] private string backendUrl = "https://vr-anatomy-backend.onrender.com/learning/simple-bone-explanation";
     [SerializeField] private int timeoutSeconds = 30;
 
     [Header("Lesson UI")]

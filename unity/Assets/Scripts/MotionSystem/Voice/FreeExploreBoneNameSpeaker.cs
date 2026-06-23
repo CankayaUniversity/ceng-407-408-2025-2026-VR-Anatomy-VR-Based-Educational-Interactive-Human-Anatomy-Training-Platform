@@ -9,7 +9,7 @@ using UnityEngine.Networking;
 public class FreeExploreBoneNameSpeaker : MonoBehaviour
 {
     [Header("Render TTS Endpoint")]
-    [Tooltip("Render'daki TTS endpoint URL'i. Örn: https://vr-anatomy-backend2.onrender.com/tts")]
+    [Tooltip("Render'daki TTS endpoint URL'i. Örn: https://vr-anatomy-backend.onrender.com/tts")]
     [SerializeField] private string ttsEndpointUrl;
 
     [Tooltip("Backend MP3 dönüyorsa MPEG, WAV dönüyorsa WAV seç.")]
