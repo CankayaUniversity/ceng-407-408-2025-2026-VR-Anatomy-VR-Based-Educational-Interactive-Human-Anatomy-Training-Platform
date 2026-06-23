@@ -36,10 +36,6 @@ public class MenuIntroManager : MonoBehaviour
     private GameObject _skipButtonGO;
     private GameObject _menuInputBlocker;
     private GameObject _userNamePanelGO;
-    private TMP_InputField _studentNameInput;
-    private TMP_InputField _studentNumberInput;
-    private Button _userNameContinueButton;
-    private bool _waitingForUserInfo;
 
     private const string UserNamePanelName = "UserNamePanel";
     private const string StudentNamePrefKey = "StudentName";
@@ -112,9 +108,6 @@ public class MenuIntroManager : MonoBehaviour
         if (_skipButton != null)
             _skipButton.onClick.RemoveListener(SkipIntro);
 
-        if (_userNameContinueButton != null)
-            _userNameContinueButton.onClick.RemoveListener(OnUserInfoContinueClicked);
-
         if (_skipButtonGO != null)
             Destroy(_skipButtonGO);
 
@@ -153,7 +146,8 @@ public class MenuIntroManager : MonoBehaviour
         else
             Debug.Log($"[MenuIntro] Welcome clip OK: {_welcomeClip.length:F1}s");
 
-        ConfigureUserNamePanel(canvas);
+        DisableUserNamePanel(canvas);
+        ClearStudentInfoPrefs();
 
         var list = new List<IntroStep>();
         for (int i = 0; i < ButtonNames.Length; i++)
@@ -410,9 +404,7 @@ public class MenuIntroManager : MonoBehaviour
         ShowSkipButton(false);
         ForceClearEventSystemSelection();
 
-        if (TryShowUserNamePanel())
-            return;
-
+        DisableUserNamePanel(FindMenuCanvas());
         SetMenuInputLocked(false);
     }
 
@@ -432,19 +424,13 @@ public class MenuIntroManager : MonoBehaviour
         ShowSkipButton(false);
         ForceClearEventSystemSelection();
 
-        if (TryShowUserNamePanel())
-            return;
-
+        DisableUserNamePanel(FindMenuCanvas());
         SetMenuInputLocked(false);
     }
 
-    private void ConfigureUserNamePanel(Canvas canvas)
+    private void DisableUserNamePanel(Canvas canvas)
     {
         _userNamePanelGO = null;
-        _studentNameInput = null;
-        _studentNumberInput = null;
-        _userNameContinueButton = null;
-        _waitingForUserInfo = false;
 
         if (canvas == null)
             return;
@@ -452,69 +438,36 @@ public class MenuIntroManager : MonoBehaviour
         Transform userPanelTransform = FindChildRecursive(canvas.transform, UserNamePanelName);
         if (userPanelTransform == null)
         {
-            Debug.LogWarning($"[MenuIntro] {UserNamePanelName} bulunamadı, intro sonrası normal akış devam edecek.");
+            Debug.Log($"[MenuIntro] {UserNamePanelName} bulunamadı. Ad/kod ekranı zaten devre dışı.");
             return;
         }
 
         _userNamePanelGO = userPanelTransform.gameObject;
         _userNamePanelGO.SetActive(false);
-
-        var fields = _userNamePanelGO.GetComponentsInChildren<TMP_InputField>(true);
-        if (fields != null && fields.Length > 0)
-            _studentNameInput = fields[0];
-        if (fields != null && fields.Length > 1)
-            _studentNumberInput = fields[1];
-
-        _userNameContinueButton = _userNamePanelGO.GetComponentInChildren<Button>(true);
-        if (_userNameContinueButton != null)
-        {
-            _userNameContinueButton.onClick.RemoveListener(OnUserInfoContinueClicked);
-            _userNameContinueButton.onClick.AddListener(OnUserInfoContinueClicked);
-        }
-        else
-        {
-            Debug.LogWarning($"[MenuIntro] {UserNamePanelName} içinde devam/ok butonu bulunamadı.");
-        }
+        Debug.Log($"[MenuIntro] {UserNamePanelName} devre dışı bırakıldı. Intro sonrası ana menü aktif kalacak.");
     }
 
-    private bool TryShowUserNamePanel()
+    private static void ClearStudentInfoPrefs()
     {
-        if (_userNamePanelGO == null || _userNameContinueButton == null)
-            return false;
+        bool changed = false;
 
-        _waitingForUserInfo = true;
-        SetMenuInputLocked(true);
+        if (PlayerPrefs.HasKey(StudentNamePrefKey))
+        {
+            PlayerPrefs.DeleteKey(StudentNamePrefKey);
+            changed = true;
+        }
 
-        if (_studentNameInput != null)
-            _studentNameInput.text = string.Empty;
+        if (PlayerPrefs.HasKey(StudentNumberPrefKey))
+        {
+            PlayerPrefs.DeleteKey(StudentNumberPrefKey);
+            changed = true;
+        }
 
-        if (_studentNumberInput != null)
-            _studentNumberInput.text = string.Empty;
-
-        _userNamePanelGO.SetActive(true);
-        _userNamePanelGO.transform.SetAsLastSibling();
-        ForceClearEventSystemSelection();
-        return true;
-    }
-
-    private void OnUserInfoContinueClicked()
-    {
-        if (!_waitingForUserInfo)
-            return;
-
-        string studentName = _studentNameInput != null ? _studentNameInput.text.Trim() : string.Empty;
-        string studentNumber = _studentNumberInput != null ? _studentNumberInput.text.Trim() : string.Empty;
-
-        PlayerPrefs.SetString(StudentNamePrefKey, studentName);
-        PlayerPrefs.SetString(StudentNumberPrefKey, studentNumber);
-        PlayerPrefs.Save();
-
-        _waitingForUserInfo = false;
-        if (_userNamePanelGO != null)
-            _userNamePanelGO.SetActive(false);
-
-        SetMenuInputLocked(false);
-        ForceClearEventSystemSelection();
+        if (changed)
+        {
+            PlayerPrefs.Save();
+            Debug.Log("[MenuIntro] Eski öğrenci adı/kodu kayıtları temizlendi.");
+        }
     }
 
     private static Canvas FindMenuCanvas()
