@@ -39,8 +39,23 @@ public class TTSClient : MonoBehaviour
             Instance = this;
         }
 
+
+    }
+
+
+    void Start()
+    {
+        StartCoroutine(DelayedInitialize());
+    }
+
+    private IEnumerator DelayedInitialize()
+    {
+        yield return null; // Wait for the first frame to pass
         RefreshActiveAudioSource();
     }
+
+
+
 
     public void Speak(string text)
     {
