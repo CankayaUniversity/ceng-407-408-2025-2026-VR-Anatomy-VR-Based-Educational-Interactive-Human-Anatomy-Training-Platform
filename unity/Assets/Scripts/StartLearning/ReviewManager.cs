@@ -21,11 +21,8 @@ public class ReviewManager : MonoBehaviour
     [Header("Button Settings")]
     public GameObject buttonPrefab;
     public Transform buttonContainer;
-
-    private const string StudentNamePrefKey = "StudentName";
-
-    private const string ReviewSentenceTemplate =
-        "B\u00F6l\u00FCm\u00FCn sonuna geldik {0}. Akl\u0131na tak\u0131lan bir yap\u0131 kald\u0131ysa, buradaki butonlar\u0131 kullanarak tekrar g\u00F6zden ge\u00E7irebilirsin.";
+    private const string ReviewSentence =
+        "Bölümün sonuna geldiniz. Aklınıza takılan bir yapı kaldıysa, buradaki butonları kullanarak tekrar gözden geçirebilirsiniz.";
 
     public void OpenReview()
     {
@@ -56,18 +53,7 @@ public class ReviewManager : MonoBehaviour
             Debug.LogError("[REVIEW] Reset failed. Active Visuals or LessonInstance is null!");
         }
 
-        string studentName = PlayerPrefs.GetString(StudentNamePrefKey, "").Trim();
-        string finalSpeechText;
-
-        if (!string.IsNullOrEmpty(studentName))
-        {
-            string affectionateName = BuildAffectionateName(studentName);
-            finalSpeechText = string.Format(ReviewSentenceTemplate, affectionateName);
-        }
-        else
-        {
-            finalSpeechText = string.Format(ReviewSentenceTemplate, "");
-        }
+        string finalSpeechText = ReviewSentence;
 
         if (reviewDescriptionText != null)
         {
@@ -310,91 +296,4 @@ public class ReviewManager : MonoBehaviour
         }
     }
 
-    private static string BuildAffectionateName(string rawName)
-    {
-        string name = rawName.Trim();
-
-        if (string.IsNullOrEmpty(name))
-        {
-            return "";
-        }
-
-        string firstName = name.Split(' ')[0];
-        char lastVowel = FindLastTurkishVowel(firstName);
-
-        string suffix;
-
-        switch (lastVowel)
-        {
-            case 'a':
-            case 'A':
-            case '\u0131':
-            case 'I':
-                suffix = "c\u0131\u011F\u0131m";
-                break;
-
-            case 'e':
-            case 'E':
-            case 'i':
-            case '\u0130':
-                suffix = "ci\u011Fim";
-                break;
-
-            case 'o':
-            case 'O':
-            case 'u':
-            case 'U':
-                suffix = "cu\u011Fum";
-                break;
-
-            case '\u00F6':
-            case '\u00D6':
-            case '\u00FC':
-            case '\u00DC':
-                suffix = "c\u00FC\u011F\u00FCm";
-                break;
-
-            default:
-                suffix = "c\u0131\u011F\u0131m";
-                break;
-        }
-
-        return firstName + suffix;
-    }
-
-    private static char FindLastTurkishVowel(string text)
-    {
-        if (string.IsNullOrEmpty(text))
-        {
-            return '\0';
-        }
-
-        for (int i = text.Length - 1; i >= 0; i--)
-        {
-            char c = text[i];
-
-            switch (c)
-            {
-                case 'a':
-                case 'A':
-                case 'e':
-                case 'E':
-                case '\u0131':
-                case 'I':
-                case 'i':
-                case '\u0130':
-                case 'o':
-                case 'O':
-                case '\u00F6':
-                case '\u00D6':
-                case 'u':
-                case 'U':
-                case '\u00FC':
-                case '\u00DC':
-                    return c;
-            }
-        }
-
-        return '\0';
-    }
 }

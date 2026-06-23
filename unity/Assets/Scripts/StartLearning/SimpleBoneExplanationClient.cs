@@ -38,7 +38,7 @@ public class SimpleBoneExplanationClient : MonoBehaviour
     [SerializeField] private bool speakGeneratedExplanation = true;
     [SerializeField] private bool speakFallbackOriginalText = false;
 
-    private const string LoadingMessage = "Daha basit anlatım hazırlanıyor...";
+    private const string LoadingMessage = "Sadeleştirilmiş anlatım hazırlanıyor...";
 
     private Coroutine _requestRoutine;
     private int _requestId;
@@ -194,7 +194,7 @@ public class SimpleBoneExplanationClient : MonoBehaviour
             string simpleExplanation = response.simple_explanation.Trim();
 
             if (infoTitleText != null)
-                infoTitleText.text = responseBoneName + " - Basit Anlatım";
+                infoTitleText.text = responseBoneName + " - Sadeleştirilmiş Anlatım";
 
             if (infoBodyText != null)
                 infoBodyText.text = simpleExplanation;
@@ -250,6 +250,9 @@ public class SimpleBoneExplanationClient : MonoBehaviour
         if (string.IsNullOrEmpty(title))
             return "";
 
+        title = title.Replace(" - Sadeleştirilmiş Anlatım", "");
+        title = title.Replace("- Sadeleştirilmiş Anlatım", "");
+        title = title.Replace("Sadeleştirilmiş Anlatım", "");
         title = title.Replace(" - Basit Anlatım", "");
         title = title.Replace("- Basit Anlatım", "");
         title = title.Replace("Basit Anlatım", "");
