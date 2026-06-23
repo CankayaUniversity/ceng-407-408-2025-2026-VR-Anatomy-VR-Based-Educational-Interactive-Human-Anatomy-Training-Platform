@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
@@ -19,6 +18,7 @@ public class BoneList
     public List<BoneData> entries;
 }
 
+
 public class LessonManager : MonoBehaviour
 {
     public static LessonManager Instance;
@@ -30,190 +30,91 @@ public class LessonManager : MonoBehaviour
     [Header("UI References")]
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI infoText;
-
-    
     public Button nextButton;
-
-    [Header("Simple Explanation")]
-    [SerializeField] private Button simpleExplanationButton;
-    [SerializeField] private SimpleBoneExplanationClient simpleExplanationClient;
+    public Button previousButton;
 
     [Header("Bone Sequence")]
     public List<GameObject> bones;
     public BoneVisualManager visualsManager;
 
+    [Header("Data Configuration")]
+    [Tooltip("Type the path relative to the Resources folder WITHOUT the .json extension.")]
+    public string jsonFilePath = "JsonFiles/StartLearning/motion_system_education_data";
+
     private Dictionary<string, BoneData> dataLookup = new Dictionary<string, BoneData>();
     private int currentIndex = 0;
     public bool IsReviewMode = false;
 
-    public bool TryGetBoneReviewPayload(int index, out string boneName, out string unitName, out string originalText)
+    
+    public GameObject CurrentActiveBone
     {
-        boneName = "";
-        unitName = GetSelectedUnitName();
-        originalText = "";
-
-        if (index < 0 || index >= bones.Count)
-            return false;
-
-        GameObject selectedBone = bones[index];
-        BoneIdentity identity = selectedBone != null ? selectedBone.GetComponent<BoneIdentity>() : null;
-
-        if (identity != null && !string.IsNullOrEmpty(identity.id) && dataLookup.TryGetValue(identity.id, out BoneData data))
+        get
         {
-            boneName = data.title;
-            originalText = BuildFullDescription(data);
-            return !string.IsNullOrWhiteSpace(boneName) && !string.IsNullOrWhiteSpace(originalText);
+            if (bones != null && currentIndex >= 0 && currentIndex < bones.Count)
+                return bones[currentIndex];
+            return null;
         }
-
-        boneName = identity != null && !string.IsNullOrEmpty(identity.fallbackDisplayName)
-            ? identity.fallbackDisplayName
-            : selectedBone != null ? selectedBone.name : "";
-
-        originalText = infoText != null ? infoText.text : "";
-        return !string.IsNullOrWhiteSpace(boneName) && !string.IsNullOrWhiteSpace(originalText);
-    }
-
-    public bool TryGetCurrentBonePayload(out string boneName, out string unitName, out string originalText)
-    {
-        return TryGetBoneReviewPayload(currentIndex, out boneName, out unitName, out originalText);
     }
 
     void OnEnable()
     {
         Instance = this;
-        EnsureLessonVoiceReader();
 
-        // Automatically wire up the button when this unit becomes active
         if (nextButton != null)
         {
             nextButton.onClick.RemoveAllListeners();
             nextButton.onClick.AddListener(NextStep);
         }
 
-        WireSimpleExplanationButton();
+        if (previousButton != null)
+        {
+            previousButton.onClick.RemoveAllListeners();
+            previousButton.onClick.AddListener(PreviousStep);
+        }
+
+        LoadJsonData();
+        if (bones != null && bones.Count > 0)
+        {
+            StartLesson();
+        }
     }
 
     void OnDisable()
     {
         if (Instance == this) Instance = null;
-
-        // Clean up the button to prevent cross-talk
-        if (nextButton != null)
-            nextButton.onClick.RemoveAllListeners();
-
-        if (simpleExplanationButton != null)
-            simpleExplanationButton.onClick.RemoveListener(HandleSimpleExplanationClicked);
-    }
-
-    private void EnsureLessonVoiceReader()
-    {
-        if (GetComponent<LessonUIReader>() != null)
-            return;
-
-        if (FindFirstObjectByType<LessonUIReader>() != null)
-            return;
-
-        gameObject.AddComponent<LessonUIReader>();
-        Debug.Log("[LessonManager] LessonUIReader bulunamad?; bu LessonManager �zerine otomatik eklendi.", this);
-    }
-
-    private void WireSimpleExplanationButton()
-    {
-        SimpleBoneExplanationClient client = ResolveSimpleExplanationClient();
-        Button button = ResolveSimpleExplanationButton();
-        if (client == null || button == null)
-            return;
-
-        button.onClick.RemoveListener(HandleSimpleExplanationClicked);
-        button.onClick.AddListener(HandleSimpleExplanationClicked);
-    }
-
-    private void HandleSimpleExplanationClicked()
-    {
-        SimpleBoneExplanationClient client = ResolveSimpleExplanationClient();
-        if (client == null)
-        {
-            Debug.LogError("[LessonManager] SimpleBoneExplanationClient bulunamadi; basit anlatim baslatilamadi.", this);
-            return;
-        }
-
-        LessonUIReader reader = GetComponent<LessonUIReader>();
-        if (reader == null)
-            reader = FindFirstObjectByType<LessonUIReader>();
-
-        client.Initialize(titleText, infoText, reader);
-        client.RequestCurrentBoneSimpleExplanation();
-    }
-
-    private SimpleBoneExplanationClient ResolveSimpleExplanationClient()
-    {
-        if (simpleExplanationClient != null)
-            return simpleExplanationClient;
-
-        simpleExplanationClient = GetComponent<SimpleBoneExplanationClient>();
-        if (simpleExplanationClient == null)
-            simpleExplanationClient = gameObject.AddComponent<SimpleBoneExplanationClient>();
-
-        return simpleExplanationClient;
-    }
-
-    private Button ResolveSimpleExplanationButton()
-    {
-        if (simpleExplanationButton != null)
-            return simpleExplanationButton;
-
-        GameObject buttonObject = GameObject.Find("BasitAnlatButton");
-        if (buttonObject != null)
-            simpleExplanationButton = buttonObject.GetComponent<Button>();
-
-        if (simpleExplanationButton == null)
-        {
-            Button[] buttons = FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            foreach (Button button in buttons)
-            {
-                if (button != null && button.name == "BasitAnlatButton")
-                {
-                    simpleExplanationButton = button;
-                    break;
-                }
-            }
-        }
-
-        return simpleExplanationButton;
-    }
-
-    void Start()
-    {
-        LoadJsonData();
-        if (bones.Count > 0)
-            Invoke(nameof(StartLesson), 0.1f);
+        if (nextButton != null) nextButton.onClick.RemoveAllListeners();
+        if (previousButton != null) previousButton.onClick.RemoveAllListeners();
     }
 
     private void StartLesson()
     {
         currentIndex = 0;
+        ResetActiveUnitRotation();
         ActivateStep(currentIndex);
     }
 
     public void ResetLesson()
     {
         IsReviewMode = false;
-
         currentIndex = 0;
 
-        //Reenable the button listener just in case
-        if (nextButton != null)
-        {
-            nextButton.onClick.RemoveAllListeners();
-            nextButton.onClick.AddListener(NextStep);
-        }
+        
+        if (visualsManager != null) visualsManager.SnapAllBonesToInitialTransforms();
 
         ActivateStep(currentIndex);
     }
 
     void LoadJsonData()
     {
-        TextAsset jsonAsset = Resources.Load<TextAsset>("JsonFiles/StartLearning/motion_system_education_data");
+        dataLookup.Clear();
+
+        if (string.IsNullOrEmpty(jsonFilePath))
+        {
+            Debug.LogError("[LessonManager] JSON File Path is missing in the Inspector!", this);
+            return;
+        }
+
+        TextAsset jsonAsset = Resources.Load<TextAsset>(jsonFilePath);
         if (jsonAsset != null)
         {
             BoneList loadedData = JsonUtility.FromJson<BoneList>(jsonAsset.text);
@@ -222,24 +123,22 @@ public class LessonManager : MonoBehaviour
                 if (!dataLookup.ContainsKey(data.id))
                     dataLookup.Add(data.id, data);
             }
+            Debug.Log($"[LessonManager] Successfully loaded {dataLookup.Count} entries from {jsonFilePath}.");
+        }
+        else
+        {
+            Debug.LogError($"[LessonManager] Could not find JSON file at path: Resources/{jsonFilePath}", this);
         }
     }
-
-    void Update()
-{
-    if (Keyboard.current == null)
-        return;
-
-    if (Keyboard.current.spaceKey.wasPressedThisFrame)
-        NextStep();
-
-    if (Keyboard.current.backspaceKey.wasPressedThisFrame)
-        PreviousStep();
-}
 
     public void NextStep()
     {
         if (IsReviewMode) return;
+
+        // Reset bone translations
+        if (visualsManager != null) visualsManager.SnapAllBonesToInitialTransforms();
+
+        ResetActiveUnitRotation();
 
         if (currentIndex < bones.Count - 1)
         {
@@ -249,15 +148,19 @@ public class LessonManager : MonoBehaviour
         else
         {
             IsReviewMode = true;
-            if (reviewManager != null)
-            {
-                reviewManager.OpenReview();
-            }
+            if (reviewManager != null) reviewManager.OpenReview();
         }
     }
 
     public void PreviousStep()
     {
+        if (IsReviewMode) return;
+
+        // Reset bone translations
+        if (visualsManager != null) visualsManager.SnapAllBonesToInitialTransforms();
+
+        ResetActiveUnitRotation();
+
         if (currentIndex > 0)
         {
             currentIndex--;
@@ -274,74 +177,48 @@ public class LessonManager : MonoBehaviour
 
         OnBoneChanged?.Invoke(currentBone.transform);
 
-        if (visualsManager != null)
-        {
-            visualsManager.FocusBone(currentBone, bones);
-        }
+        if (visualsManager != null) visualsManager.FocusBone(currentBone, bones);
 
         BoneIdentity identity = currentBone.GetComponent<BoneIdentity>();
         if (identity != null && dataLookup.ContainsKey(identity.id))
         {
             BoneData data = dataLookup[identity.id];
             titleText.text = data.title;
-            infoText.text = BuildFullDescription(data);
+            string fullDescription = data.body;
+            if (data.steps != null && data.steps.Length > 0)
+            {
+                fullDescription += "\n\n";
+                foreach (string step in data.steps)
+                    fullDescription += "• " + step + "\n";
+            }
+            infoText.text = fullDescription;
+        }
+        else
+        {
+            titleText.text = "Data Missing";
+            infoText.text = "Check ID: " + (identity != null ? identity.id : "No Script");
+        }
+
+        if (reviewManager != null && reviewManager.reviewPanel.activeSelf == false && IsReviewMode == false)
+        {
+            if (previousButton != null) previousButton.gameObject.SetActive(currentIndex > 0);
+            if (nextButton != null) nextButton.gameObject.SetActive(true);
         }
     }
 
-    private static string BuildFullDescription(BoneData data)
+
+
+    public void ResetActiveUnitRotation()
     {
-        if (data == null)
-            return "";
-
-        string fullDescription = data.body;
-        if (data.steps != null && data.steps.Length > 0)
+        if (visualsManager != null)
         {
-            fullDescription += "\n\n";
-            foreach (string step in data.steps)
-                fullDescription += "� " + step + "\n";
-        }
-
-        return fullDescription;
-    }
-
-    private static string GetSelectedUnitName()
-    {
-        switch (AnatomyState.SelectedLessonSection)
-        {
-            case LessonUIReader.LessonSection.HeadAndFaceBones:
-                return "Ba\u015f ve Y\u00fcz Kemikleri";
-            case LessonUIReader.LessonSection.TrunkBones:
-                return "G\u00f6vde Kemikleri";
-            case LessonUIReader.LessonSection.UpperExtremityBones:
-                return "\u00dcst Ekstremite Kemikleri";
-            case LessonUIReader.LessonSection.LowerExtremityBones:
-                return "Alt Ekstremite Kemikleri";
-            case LessonUIReader.LessonSection.SkeletalMuscles:
-                return "\u0130skelet Kaslar\u0131";
-            case LessonUIReader.LessonSection.HeartStructure:
-                return "Kalbin Yap\u0131s\u0131";
-            case LessonUIReader.LessonSection.Vessels:
-                return "Damarlar";
-        }
-
-        switch (AnatomyState.SelectedAnatomyUnitID)
-        {
-            case 1:
-                return "Ba\u015f ve Y\u00fcz Kemikleri";
-            case 2:
-                return "G\u00f6vde Kemikleri";
-            case 3:
-                return "\u00dcst Ekstremite Kemikleri";
-            case 4:
-                return "Alt Ekstremite Kemikleri";
-            case 5:
-                return "\u0130skelet Kaslar\u0131";
-            case 6:
-                return "Kalbin Yap\u0131s\u0131";
-            case 7:
-                return "Damarlar";
-            default:
-                return "Bilinmeyen \u00dcnite";
+            RotateUnit currentRotator = visualsManager.GetComponent<RotateUnit>();
+            if (currentRotator != null)
+            {
+                currentRotator.ResetToInitialRotation();
+            }
         }
     }
+
+
 }

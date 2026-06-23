@@ -1,57 +1,53 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class SkeletonInitializer : MonoBehaviour
+public class UnitInitializer : MonoBehaviour
 {
     [System.Serializable]
     public struct UnitMapping
     {
-        public int unitID;      
-        public GameObject unitRoot; 
+        public int unitID;
+        public GameObject unitRoot;
+        public LessonManager lessonManager;
     }
 
     [Header("Setup")]
     public List<UnitMapping> unitList;
 
-
-
-    public GameObject lessonPanel; 
-    public GameObject reviewPanel;
-
-
     void Start()
     {
-        
+
         foreach (var mapping in unitList)
         {
             if (mapping.unitRoot != null)
                 mapping.unitRoot.SetActive(false);
+
+            if (mapping.lessonManager != null)
+            {
+                mapping.lessonManager.enabled = false;
+
+            }
+            else
+            {
+                Debug.LogError("[INITIALIZER] WARNING: LessonManager slot is NULL for ID: " + mapping.unitID);
+            }
         }
 
-       
-
         int selectedID = AnatomyState.SelectedAnatomyUnitID;
-        Debug.Log(
-            $"[SkeletonInitializer] StartLearning unit seçimi | AnatomyUnitID={selectedID} | " +
-            $"LessonSection={AnatomyState.SelectedLessonSection}");
 
-       
+
         foreach (var mapping in unitList)
         {
             if (mapping.unitID == selectedID)
             {
                 if (mapping.unitRoot != null)
+                {
                     mapping.unitRoot.SetActive(true);
-                return; 
+
+                }
+                return;
             }
         }
-
-        Debug.LogWarning("No unit found for ID: " + selectedID);
-
-
-
-        if (lessonPanel != null) lessonPanel.SetActive(true);
-        if (reviewPanel != null) reviewPanel.SetActive(false);
-
+        Debug.LogError("[INITIALIZER] CRITICAL: Could not find a match for ID " + selectedID + " in the list!");
     }
 }

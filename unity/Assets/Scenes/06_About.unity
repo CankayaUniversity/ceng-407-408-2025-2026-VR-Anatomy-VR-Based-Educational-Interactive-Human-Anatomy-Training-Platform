@@ -853,6 +853,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1094646062366960407, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1507086520634593557, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
       propertyPath: m_Name
       value: Lab

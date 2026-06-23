@@ -14,29 +14,29 @@ public class SceneLoader : MonoBehaviour
         Debug.Log("[SceneLoader] Mode set edildi: Learn");
     }
 
-    public void LoadMotionSystemLearnUnit(string sceneName, int unitInt)
-    {
-        LoadMotionSystemLearnUnit(sceneName, unitInt, LessonUIReader.LessonSection.Auto, "Unknown");
-    }
+    //public void LoadMotionSystemLearnUnit(string sceneName, int unitInt)
+    //{
+    //    LoadMotionSystemLearnUnit(sceneName, unitInt, LessonUIReader.LessonSection.Auto, "Unknown");
+    //}
 
-    public void LoadMotionSystemLearnUnit(
-        string sceneName,
-        int unitInt,
-        LessonUIReader.LessonSection lessonSection,
-        string pressedSectionName)
-    {
-        AnatomyState.SelectedAnatomyUnitID = unitInt;
-        AnatomyState.SelectedLessonSection = lessonSection;
-        NavigationState.CurrentEntryMode = EntryMode.Learn;
-        NavigationState.SelectedMotionSubUnit = MotionSubUnit.None;
-        NavigationState.SelectedCirculationSubUnit = CirculationSubUnit.None;
+    //public void LoadMotionSystemLearnUnit(
+    //    string sceneName,
+    //    int unitInt,
+    //    LessonUIReader.LessonSection lessonSection,
+    //    string pressedSectionName)
+    //{
+    //    AnatomyState.SelectedAnatomyUnitID = unitInt;
+    //    AnatomyState.SelectedLessonSection = lessonSection;
+    //    NavigationState.CurrentEntryMode = EntryMode.Learn;
+    //    NavigationState.SelectedMotionSubUnit = MotionSubUnit.None;
+    //    NavigationState.SelectedCirculationSubUnit = CirculationSubUnit.None;
 
-        Debug.Log(
-            $"[SceneLoader] Learning unit yükleniyor | Basılan bölüm='{pressedSectionName}' | AnatomyUnitID={unitInt} | " +
-            $"MotionSubUnit={NavigationState.SelectedMotionSubUnit} | CirculationSubUnit={NavigationState.SelectedCirculationSubUnit} | LessonSection={lessonSection}");
+    //    Debug.Log(
+    //        $"[SceneLoader] Learning unit yükleniyor | Basılan bölüm='{pressedSectionName}' | AnatomyUnitID={unitInt} | " +
+    //        $"MotionSubUnit={NavigationState.SelectedMotionSubUnit} | CirculationSubUnit={NavigationState.SelectedCirculationSubUnit} | LessonSection={lessonSection}");
 
-        SceneManager.LoadScene(sceneName);
-    }//
+    //    SceneManager.LoadScene(sceneName);
+    //}//
 
     public void SetModeFreeExplore()
     {
@@ -50,12 +50,12 @@ public class SceneLoader : MonoBehaviour
         NavigationState.SelectedMotionSubUnit = selectedSubUnit;
         NavigationState.SelectedCirculationSubUnit = CirculationSubUnit.None;
         AnatomyState.SelectedAnatomyUnitID = -1;
-        AnatomyState.SelectedLessonSection = ResolveLessonSection(selectedSubUnit);
+       // AnatomyState.SelectedLessonSection = ResolveLessonSection(selectedSubUnit);
 
         Debug.Log(
             $"[SceneLoader] Motion subunit yükleniyor | MotionSubUnit={selectedSubUnit} ({subUnitInt}) | " +
-            $"CirculationSubUnit={NavigationState.SelectedCirculationSubUnit} | AnatomyUnitID={AnatomyState.SelectedAnatomyUnitID} | " +
-            $"LessonSection={AnatomyState.SelectedLessonSection}");
+            $"CirculationSubUnit={NavigationState.SelectedCirculationSubUnit} | AnatomyUnitID={AnatomyState.SelectedAnatomyUnitID} | " 
+            /*+$"LessonSection={AnatomyState.SelectedLessonSection}"*/);
 
         SceneManager.LoadScene("02_MotionSystem");
     }
@@ -77,12 +77,12 @@ public class SceneLoader : MonoBehaviour
         NavigationState.SelectedCirculationSubUnit = selectedSubUnit;
         NavigationState.SelectedMotionSubUnit = MotionSubUnit.None;
         AnatomyState.SelectedAnatomyUnitID = -1;
-        AnatomyState.SelectedLessonSection = ResolveLessonSection(selectedSubUnit);
+        //AnatomyState.SelectedLessonSection = ResolveLessonSection(selectedSubUnit);
 
         Debug.Log(
             $"[SceneLoader] Circulation subunit yükleniyor | CirculationSubUnit={selectedSubUnit} ({subUnitInt}) | " +
-            $"MotionSubUnit={NavigationState.SelectedMotionSubUnit} | AnatomyUnitID={AnatomyState.SelectedAnatomyUnitID} | " +
-            $"LessonSection={AnatomyState.SelectedLessonSection}");
+            $"MotionSubUnit={NavigationState.SelectedMotionSubUnit} | AnatomyUnitID={AnatomyState.SelectedAnatomyUnitID} | " /*+
+            $"LessonSection={AnatomyState.SelectedLessonSection}"*/);
 
         SceneManager.LoadScene("03_CirculationSystem");
     }
@@ -207,45 +207,45 @@ public class SceneLoader : MonoBehaviour
         Application.Quit();
     }
 
-    private static LessonUIReader.LessonSection ResolveLessonSection(MotionSubUnit subUnit)
-    {
-        switch (subUnit)
-        {
-            case MotionSubUnit.HeadFaceBones:
-                return LessonUIReader.LessonSection.HeadAndFaceBones;
-            case MotionSubUnit.Rib:
-            case MotionSubUnit.Spine:
-                return LessonUIReader.LessonSection.TrunkBones;
-            case MotionSubUnit.UpperExtremityBones:
-                return LessonUIReader.LessonSection.UpperExtremityBones;
-            case MotionSubUnit.LowerExtremityBones:
-                return LessonUIReader.LessonSection.LowerExtremityBones;
-            case MotionSubUnit.UpperExtremityMuscles:
-            case MotionSubUnit.LowerExtremityMuscles:
-                return LessonUIReader.LessonSection.SkeletalMuscles;
-            default:
-                return LessonUIReader.LessonSection.Auto;
-        }
-    }
+    //private static LessonUIReader.LessonSection ResolveLessonSection(MotionSubUnit subUnit)
+    //{
+    //    switch (subUnit)
+    //    {
+    //        case MotionSubUnit.HeadFaceBones:
+    //            return LessonUIReader.LessonSection.HeadAndFaceBones;
+    //        case MotionSubUnit.Rib:
+    //        case MotionSubUnit.Spine:
+    //            return LessonUIReader.LessonSection.TrunkBones;
+    //        case MotionSubUnit.UpperExtremityBones:
+    //            return LessonUIReader.LessonSection.UpperExtremityBones;
+    //        case MotionSubUnit.LowerExtremityBones:
+    //            return LessonUIReader.LessonSection.LowerExtremityBones;
+    //        case MotionSubUnit.UpperExtremityMuscles:
+    //        case MotionSubUnit.LowerExtremityMuscles:
+    //            return LessonUIReader.LessonSection.SkeletalMuscles;
+    //        default:
+    //            return LessonUIReader.LessonSection.Auto;
+    //    }
+    //}
 
-    private static LessonUIReader.LessonSection ResolveLessonSection(CirculationSubUnit subUnit)
-    {
-        switch (subUnit)
-        {
-            case CirculationSubUnit.HeartInnerStructure:
-            case CirculationSubUnit.HeartOuterStructure:
-                return LessonUIReader.LessonSection.HeartStructure;
-            case CirculationSubUnit.UpperExtremityArteries:
-            case CirculationSubUnit.AbdominalAortaBranches:
-            case CirculationSubUnit.LowerExtremityArteries:
-            case CirculationSubUnit.PalpableArteries:
-            case CirculationSubUnit.UpperExtremityVeins:
-            case CirculationSubUnit.LowerExtremityVeins:
-            case CirculationSubUnit.SystemicCirculation:
-            case CirculationSubUnit.PulmonaryCirculation:
-                return LessonUIReader.LessonSection.Vessels;
-            default:
-                return LessonUIReader.LessonSection.Auto;
-        }
-    }
+    //private static LessonUIReader.LessonSection ResolveLessonSection(CirculationSubUnit subUnit)
+    //{
+    //    switch (subUnit)
+    //    {
+    //        case CirculationSubUnit.HeartInnerStructure:
+    //        case CirculationSubUnit.HeartOuterStructure:
+    //            return LessonUIReader.LessonSection.HeartStructure;
+    //        case CirculationSubUnit.UpperExtremityArteries:
+    //        case CirculationSubUnit.AbdominalAortaBranches:
+    //        case CirculationSubUnit.LowerExtremityArteries:
+    //        case CirculationSubUnit.PalpableArteries:
+    //        case CirculationSubUnit.UpperExtremityVeins:
+    //        case CirculationSubUnit.LowerExtremityVeins:
+    //        case CirculationSubUnit.SystemicCirculation:
+    //        case CirculationSubUnit.PulmonaryCirculation:
+    //            return LessonUIReader.LessonSection.Vessels;
+    //        default:
+    //            return LessonUIReader.LessonSection.Auto;
+    //    }
+    //}
 }

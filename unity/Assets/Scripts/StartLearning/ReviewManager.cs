@@ -1,308 +1,400 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using TMPro; 
+using TMPro;
 
 public class ReviewManager : MonoBehaviour
 {
-    private const string ReviewTitleMessage = "Tekrar İncele";
-    private const string ReviewPromptMessage = "Anlamadığınız bir kısım varsa, tekrar incelemek istediğiniz kemiği seçebilirsiniz.";
-    private const string StudentNamePrefKey = "StudentName";
-    private const string ReviewWelcomeWithNameTemplate = "Çok güzel ilerledin {0}. Aklında kalan bir yer varsa buradan tekrar inceleyebilirsin.";
-    private const string ReviewWelcomeWithoutName = "Çok güzel ilerledin. Aklında kalan bir yer varsa buradan tekrar inceleyebilirsin.";
+    [Header("Review UI Layout")]
+    [Tooltip("The component that will display the final combined paragraph on screen.")]
+    public TextMeshProUGUI reviewDescriptionText;
 
     [Header("Lesson UI Buttons")]
-    public GameObject skipButton;
+    public GameObject nextButton;
+    public GameObject previousButton;
     public GameObject anladimButton;
 
     [Header("UI Panels")]
     public GameObject lessonPanel;
     public GameObject reviewPanel;
-    [SerializeField] private TextMeshProUGUI reviewTitleText;
-    [SerializeField] private TextMeshProUGUI reviewPromptText;
 
     [Header("Button Settings")]
     public GameObject buttonPrefab;
     public Transform buttonContainer;
 
-    private bool _hasSpokenReviewPrompt;
+    private const string StudentNamePrefKey = "StudentName";
+
+    private const string ReviewSentenceTemplate =
+        "B\u00F6l\u00FCm\u00FCn sonuna geldik {0}. Akl\u0131na tak\u0131lan bir yap\u0131 kald\u0131ysa, buradaki butonlar\u0131 kullanarak tekrar g\u00F6zden ge\u00E7irebilirsin.";
 
     public void OpenReview()
     {
-        lessonPanel.SetActive(false);
-        reviewPanel.SetActive(true);
-        SetReviewStaticTexts();
+        if (TTSClient.Instance != null)
+        {
+            TTSClient.Instance.Stop();
+        }
+
+        if (lessonPanel != null)
+        {
+            lessonPanel.SetActive(false);
+        }
+
+        if (reviewPanel != null)
+        {
+            reviewPanel.SetActive(true);
+        }
+
+        if (BoneVisualManager.Active != null && LessonManager.Instance != null)
+        {
+            BoneVisualManager.Active.ResetAllBones(LessonManager.Instance.bones);
+            BoneVisualManager.Active.SnapAllBonesToInitialTransforms();
+
+            LessonManager.Instance.ResetActiveUnitRotation();
+        }
+        else
+        {
+            Debug.LogError("[REVIEW] Reset failed. Active Visuals or LessonInstance is null!");
+        }
+
+        string studentName = PlayerPrefs.GetString(StudentNamePrefKey, "").Trim();
+        string finalSpeechText;
+
+        if (!string.IsNullOrEmpty(studentName))
+        {
+            string affectionateName = BuildAffectionateName(studentName);
+            finalSpeechText = string.Format(ReviewSentenceTemplate, affectionateName);
+        }
+        else
+        {
+            finalSpeechText = string.Format(ReviewSentenceTemplate, "");
+        }
+
+        if (reviewDescriptionText != null)
+        {
+            reviewDescriptionText.text = finalSpeechText;
+        }
+
+        if (!string.IsNullOrWhiteSpace(finalSpeechText) && TTSClient.Instance != null)
+        {
+            TTSClient.Instance.Speak(finalSpeechText);
+        }
 
         PopulateButtons();
-        SpeakReviewPromptOnce();
 
+        if (nextButton != null)
+        {
+            nextButton.SetActive(false);
+        }
 
-        skipButton.SetActive(false);
-        anladimButton.SetActive(true);
+        if (previousButton != null)
+        {
+            previousButton.SetActive(false);
+        }
 
+        if (anladimButton != null)
+        {
+            GridSetActive(anladimButton, true);
+        }
     }
 
     private void PopulateButtons()
     {
-       
+        if (buttonContainer == null)
+        {
+            Debug.LogError("[REVIEW] Button container is null!");
+            return;
+        }
+
+        if (buttonPrefab == null)
+        {
+            Debug.LogError("[REVIEW] Button prefab is null!");
+            return;
+        }
+
+        if (LessonManager.Instance == null || LessonManager.Instance.bones == null)
+        {
+            Debug.LogError("[REVIEW] LessonManager.Instance or bones list is null!");
+            return;
+        }
+
         foreach (Transform child in buttonContainer)
+        {
             Destroy(child.gameObject);
+        }
 
         List<GameObject> bones = LessonManager.Instance.bones;
 
         for (int i = 0; i < bones.Count; i++)
         {
-           
             GameObject btnObj = Instantiate(buttonPrefab, buttonContainer);
-
-          
             btnObj.layer = LayerMask.NameToLayer("UI");
 
-           
             RectTransform rt = btnObj.GetComponent<RectTransform>();
-            rt.localScale = Vector3.one;
-            rt.anchoredPosition = Vector2.zero;
+            if (rt != null)
+            {
+                rt.localScale = Vector3.one;
+                rt.anchoredPosition = Vector2.zero;
+            }
 
-            
             Image img = btnObj.GetComponent<Image>();
             Button btn = btnObj.GetComponent<Button>();
-            if (img != null) img.enabled = true;
-            if (btn != null) btn.enabled = true;
+
+            if (img != null)
+            {
+                img.enabled = true;
+            }
+
+            if (btn != null)
+            {
+                btn.enabled = true;
+            }
 
             TextMeshProUGUI txt = btnObj.GetComponentInChildren<TextMeshProUGUI>();
+
             if (txt != null)
             {
                 txt.enabled = true;
-                txt.gameObject.SetActive(true); 
+                txt.gameObject.SetActive(true);
 
-               
                 BoneIdentity identity = bones[i].GetComponent<BoneIdentity>();
-                txt.text = (identity != null && !string.IsNullOrEmpty(identity.fallbackDisplayName))
-                           ? identity.fallbackDisplayName
-                           : bones[i].name;
+
+                txt.text = identity != null && !string.IsNullOrEmpty(identity.fallbackDisplayName)
+                    ? identity.fallbackDisplayName
+                    : bones[i].name;
             }
 
-            
             int index = i;
-            btn.onClick.AddListener(() => SelectBone(index)); //instead of dragging buttons OnClick() one by one we do this
+
+            if (btn != null)
+            {
+                btn.onClick.AddListener(() => SelectBone(index));
+            }
         }
     }
-
-    private void SetReviewStaticTexts()
-    {
-        SetReviewTitleText();
-        SetReviewPromptText();
-    }
-
-    private void SetReviewTitleText()
-    {
-        if (reviewTitleText == null)
-            reviewTitleText = ResolveReviewTitleText();
-
-        if (reviewTitleText != null)
-            reviewTitleText.text = ReviewTitleMessage;
-    }
-
-    private void SetReviewPromptText()
-    {
-        if (reviewPromptText == null)
-            reviewPromptText = ResolveReviewPromptText();
-
-        if (reviewPromptText != null)
-            reviewPromptText.text = ReviewPromptMessage;
-    }
-
-    private TextMeshProUGUI ResolveReviewTitleText()
-    {
-        if (reviewPanel == null) return null;
-
-        TextMeshProUGUI[] texts = reviewPanel.GetComponentsInChildren<TextMeshProUGUI>(true);
-        foreach (TextMeshProUGUI text in texts)
-        {
-            if (text != null && text.name == "TitleText")
-                return text;
-        }
-
-        foreach (TextMeshProUGUI text in texts)
-        {
-            if (text != null && text.text == "Review")
-                return text;
-        }
-
-        return null;
-    }
-
-    private TextMeshProUGUI ResolveReviewPromptText()
-    {
-        if (reviewPanel == null) return null;
-
-        TextMeshProUGUI[] texts = reviewPanel.GetComponentsInChildren<TextMeshProUGUI>(true);
-        foreach (TextMeshProUGUI text in texts)
-        {
-            if (text != null && text.name == "DescriptionText")
-                return text;
-        }
-
-        foreach (TextMeshProUGUI text in texts)
-        {
-            if (text != null && text.text.Contains("Would you like to review"))
-                return text;
-        }
-
-        return null;
-    }
-
-    private void SpeakReviewPromptOnce()
-    {
-        if (_hasSpokenReviewPrompt)
-            return;
-
-        LessonUIReader lessonUIReader = ResolveLessonUIReader(LessonManager.Instance);
-        if (lessonUIReader == null)
-            return;
-
-        _hasSpokenReviewPrompt = true;
-        lessonUIReader.SpeakReviewText(BuildReviewWelcomeSpeech());
-    }
-
-    private static string BuildReviewWelcomeSpeech()
-{
-    string studentName = PlayerPrefs.GetString(StudentNamePrefKey, "").Trim();
-    if (string.IsNullOrEmpty(studentName))
-        return ReviewWelcomeWithoutName;
-
-    return string.Format(ReviewWelcomeWithNameTemplate, BuildAffectionateName(studentName));
-}
-private static string BuildAffectionateName(string rawName)
-{
-    string name = rawName.Trim();
-
-    if (string.IsNullOrEmpty(name))
-        return "";
-
-    string firstName = name.Split(' ')[0];
-
-    char lastVowel = FindLastTurkishVowel(firstName);
-
-    string suffix;
-
-    switch (lastVowel)
-    {
-        case 'a':
-        case 'A':
-        case 'ı':
-        case 'I':
-            suffix = "cığım";
-            break;
-
-        case 'e':
-        case 'E':
-        case 'i':
-        case 'İ':
-            suffix = "ciğim";
-            break;
-
-        case 'o':
-        case 'O':
-        case 'u':
-        case 'U':
-            suffix = "cuğum";
-            break;
-
-        case 'ö':
-        case 'Ö':
-        case 'ü':
-        case 'Ü':
-            suffix = "cüğüm";
-            break;
-
-        default:
-            suffix = "cığım";
-            break;
-    }
-
-    return firstName + suffix;
-}
-
-private static char FindLastTurkishVowel(string text)
-{
-    if (string.IsNullOrEmpty(text))
-        return '\0';
-
-    for (int i = text.Length - 1; i >= 0; i--)
-    {
-        char c = text[i];
-
-        if (IsTurkishVowel(c))
-            return c;
-    }
-
-    return '\0';
-}
-
-private static bool IsTurkishVowel(char c)
-{
-    return c == 'a' || c == 'A'
-        || c == 'e' || c == 'E'
-        || c == 'ı' || c == 'I'
-        || c == 'i' || c == 'İ'
-        || c == 'o' || c == 'O'
-        || c == 'ö' || c == 'Ö'
-        || c == 'u' || c == 'U'
-        || c == 'ü' || c == 'Ü';
-}
 
     private void SelectBone(int index)
     {
-        reviewPanel.SetActive(false);
-        lessonPanel.SetActive(true);
-
-        LessonManager lessonManager = LessonManager.Instance;
-        if (lessonManager == null)
+        if (BoneVisualManager.Active != null)
         {
-            Debug.LogError("[ReviewManager] LessonManager bulunamadı; review kemik seçimi yapılamadı.", this);
-            return;
+            BoneVisualManager.Active.SnapAllBonesToInitialTransforms();
         }
 
-        lessonManager.IsReviewMode = false;
-        lessonManager.ActivateStep(index);
+        if (LessonManager.Instance != null)
+        {
+            LessonManager.Instance.ResetActiveUnitRotation();
+        }
+
+        if (reviewPanel != null)
+        {
+            reviewPanel.SetActive(false);
+        }
+
+        if (lessonPanel != null)
+        {
+            lessonPanel.SetActive(true);
+        }
+
+        if (LessonManager.Instance != null)
+        {
+            LessonManager.Instance.ActivateStep(index);
+            LessonManager.Instance.IsReviewMode = false;
+        }
+
+        if (nextButton != null)
+        {
+            nextButton.SetActive(false);
+        }
+
+        if (previousButton != null)
+        {
+            previousButton.SetActive(false);
+        }
+
+        if (anladimButton != null)
+        {
+            anladimButton.SetActive(true);
+        }
     }
 
-    private LessonUIReader ResolveLessonUIReader(LessonManager lessonManager)
+    private void GridSetActive(GameObject go, bool value)
     {
-        LessonUIReader reader = lessonManager != null ? lessonManager.GetComponent<LessonUIReader>() : null;
-        if (reader != null)
-            return reader;
-
-        return FindFirstObjectByType<LessonUIReader>();
+        if (go != null)
+        {
+            go.SetActive(value);
+        }
     }
 
     public void ReturnToReview()
     {
-        lessonPanel.SetActive(false);
-        reviewPanel.SetActive(true);
-        SetReviewStaticTexts();
+        if (TTSClient.Instance != null)
+        {
+            TTSClient.Instance.Stop();
+        }
 
-        LessonManager.Instance.IsReviewMode = true;
+        if (lessonPanel != null)
+        {
+            lessonPanel.SetActive(false);
+        }
+
+        if (reviewPanel != null)
+        {
+            reviewPanel.SetActive(true);
+        }
+
+        if (BoneVisualManager.Active != null && LessonManager.Instance != null)
+        {
+            BoneVisualManager.Active.ResetAllBones(LessonManager.Instance.bones);
+            BoneVisualManager.Active.SnapAllBonesToInitialTransforms();
+
+            LessonManager.Instance.ResetActiveUnitRotation();
+        }
+        else
+        {
+            Debug.LogError("[REVIEW] Reset failed. Active Visuals or LessonInstance is null!");
+        }
+
+        if (LessonManager.Instance != null)
+        {
+            LessonManager.Instance.IsReviewMode = true;
+        }
+
+        if (reviewDescriptionText != null && TTSClient.Instance != null)
+        {
+            TTSClient.Instance.Speak(reviewDescriptionText.text);
+        }
     }
-
 
     public void ExitReviewMode()
     {
-        reviewPanel.SetActive(false);
-        lessonPanel.SetActive(false);
+        if (TTSClient.Instance != null)
+        {
+            TTSClient.Instance.Stop();
+        }
 
-        LessonManager.Instance.ResetLesson();
-        _hasSpokenReviewPrompt = false;
+        if (reviewPanel != null)
+        {
+            reviewPanel.SetActive(false);
+        }
 
-        if (anladimButton != null) anladimButton.SetActive(false);
-        if (skipButton != null) skipButton.SetActive(true);
+        if (lessonPanel != null)
+        {
+            lessonPanel.SetActive(false);
+        }
 
+        if (LessonManager.Instance != null)
+        {
+            LessonManager.Instance.ResetLesson();
+        }
 
-        foreach (Transform child in buttonContainer)
-            Destroy(child.gameObject);
+        if (anladimButton != null)
+        {
+            anladimButton.SetActive(false);
+        }
 
+        if (nextButton != null)
+        {
+            nextButton.SetActive(true);
+        }
+
+        if (previousButton != null)
+        {
+            previousButton.SetActive(true);
+        }
+
+        if (buttonContainer != null)
+        {
+            foreach (Transform child in buttonContainer)
+            {
+                Destroy(child.gameObject);
+            }
+        }
     }
 
+    private static string BuildAffectionateName(string rawName)
+    {
+        string name = rawName.Trim();
 
+        if (string.IsNullOrEmpty(name))
+        {
+            return "";
+        }
+
+        string firstName = name.Split(' ')[0];
+        char lastVowel = FindLastTurkishVowel(firstName);
+
+        string suffix;
+
+        switch (lastVowel)
+        {
+            case 'a':
+            case 'A':
+            case '\u0131':
+            case 'I':
+                suffix = "c\u0131\u011F\u0131m";
+                break;
+
+            case 'e':
+            case 'E':
+            case 'i':
+            case '\u0130':
+                suffix = "ci\u011Fim";
+                break;
+
+            case 'o':
+            case 'O':
+            case 'u':
+            case 'U':
+                suffix = "cu\u011Fum";
+                break;
+
+            case '\u00F6':
+            case '\u00D6':
+            case '\u00FC':
+            case '\u00DC':
+                suffix = "c\u00FC\u011F\u00FCm";
+                break;
+
+            default:
+                suffix = "c\u0131\u011F\u0131m";
+                break;
+        }
+
+        return firstName + suffix;
+    }
+
+    private static char FindLastTurkishVowel(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return '\0';
+        }
+
+        for (int i = text.Length - 1; i >= 0; i--)
+        {
+            char c = text[i];
+
+            switch (c)
+            {
+                case 'a':
+                case 'A':
+                case 'e':
+                case 'E':
+                case '\u0131':
+                case 'I':
+                case 'i':
+                case '\u0130':
+                case 'o':
+                case 'O':
+                case '\u00F6':
+                case '\u00D6':
+                case 'u':
+                case 'U':
+                case '\u00FC':
+                case '\u00DC':
+                    return c;
+            }
+        }
+
+        return '\0';
+    }
 }

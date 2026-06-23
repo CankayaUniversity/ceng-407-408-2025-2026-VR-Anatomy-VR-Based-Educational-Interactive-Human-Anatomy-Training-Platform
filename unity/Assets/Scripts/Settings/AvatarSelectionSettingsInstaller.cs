@@ -90,7 +90,7 @@ public static class AvatarSelectionSettingsInstaller
 
         var avatarBinder = newRow.AddComponent<AvatarSelectionToggleBinder>();
         avatarBinder.Initialize(femaleToggle, maleToggle, youngFemToggle, youngMaleToggle, label);
-        SettingsSceneLayoutAdjuster.ApplyLayout();
+        //SettingsSceneLayoutAdjuster.ApplyLayout();
     }
 
     private static void AlignTitleWithOptions(TMP_Text label)

@@ -27,32 +27,32 @@ public class CirculationSystemSubUnitButton : MonoBehaviour
         }
 
         CirculationSubUnit selectedSubUnit = (CirculationSubUnit)subUnitInt;
-        LessonUIReader.LessonSection lessonSection = ResolveLessonSection(selectedSubUnit);
+        //LessonUIReader.LessonSection lessonSection = ResolveLessonSection(selectedSubUnit);
         Debug.Log(
-            $"[CirculationSystemSubUnitButton] Basılan bölüm='{gameObject.name}' | CirculationSubUnit={selectedSubUnit} ({subUnitInt}) | LessonSection={lessonSection}",
+            $"[CirculationSystemSubUnitButton] Basılan bölüm='{gameObject.name}' | CirculationSubUnit={selectedSubUnit} ({subUnitInt}) ",
             this);
 
         sceneLoader.LoadCirculationSystemSubUnit(subUnitInt);
     }
 
-    private static LessonUIReader.LessonSection ResolveLessonSection(CirculationSubUnit subUnit)
-    {
-        switch (subUnit)
-        {
-            case CirculationSubUnit.HeartInnerStructure:
-            case CirculationSubUnit.HeartOuterStructure:
-                return LessonUIReader.LessonSection.HeartStructure;
-            case CirculationSubUnit.UpperExtremityArteries:
-            case CirculationSubUnit.AbdominalAortaBranches:
-            case CirculationSubUnit.LowerExtremityArteries:
-            case CirculationSubUnit.PalpableArteries:
-            case CirculationSubUnit.UpperExtremityVeins:
-            case CirculationSubUnit.LowerExtremityVeins:
-            case CirculationSubUnit.SystemicCirculation:
-            case CirculationSubUnit.PulmonaryCirculation:
-                return LessonUIReader.LessonSection.Vessels;
-            default:
-                return LessonUIReader.LessonSection.Auto;
-        }
-    }
+    //private static LessonUIReader.LessonSection ResolveLessonSection(CirculationSubUnit subUnit)
+    //{
+    //    switch (subUnit)
+    //    {
+    //        case CirculationSubUnit.HeartInnerStructure:
+    //        case CirculationSubUnit.HeartOuterStructure:
+    //            return LessonUIReader.LessonSection.HeartStructure;
+    //        case CirculationSubUnit.UpperExtremityArteries:
+    //        case CirculationSubUnit.AbdominalAortaBranches:
+    //        case CirculationSubUnit.LowerExtremityArteries:
+    //        case CirculationSubUnit.PalpableArteries:
+    //        case CirculationSubUnit.UpperExtremityVeins:
+    //        case CirculationSubUnit.LowerExtremityVeins:
+    //        case CirculationSubUnit.SystemicCirculation:
+    //        case CirculationSubUnit.PulmonaryCirculation:
+    //            return LessonUIReader.LessonSection.Vessels;
+    //        default:
+    //            return LessonUIReader.LessonSection.Auto;
+    //    }
+    //}
 }

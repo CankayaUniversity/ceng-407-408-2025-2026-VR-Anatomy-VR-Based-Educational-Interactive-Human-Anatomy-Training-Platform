@@ -34,23 +34,68 @@ public class SimpleBoneExplanationClient : MonoBehaviour
     [SerializeField] private TMP_Text infoBodyText;
 
     [Header("Speech")]
-    [SerializeField] private LessonUIReader lessonUIReader;
+    [SerializeField] private bool stopCurrentSpeechBeforeRequest = true;
+    [SerializeField] private bool speakGeneratedExplanation = true;
+    [SerializeField] private bool speakFallbackOriginalText = false;
 
     private const string LoadingMessage = "Daha basit anlatım hazırlanıyor...";
 
     private Coroutine _requestRoutine;
     private int _requestId;
 
-    public void Initialize(TMP_Text titleText, TMP_Text bodyText, LessonUIReader reader)
+    public void Initialize(TMP_Text titleText, TMP_Text bodyText, LessonUIReader reader = null)
     {
         if (infoTitleText == null)
             infoTitleText = titleText;
 
         if (infoBodyText == null)
             infoBodyText = bodyText;
+    }
 
-        if (lessonUIReader == null)
-            lessonUIReader = reader;
+    public void RequestCurrentBoneSimpleExplanation()
+    {
+        LessonManager lessonManager = LessonManager.Instance;
+
+        if (lessonManager == null)
+            lessonManager = FindFirstObjectByType<LessonManager>();
+
+        if (lessonManager == null)
+        {
+            Debug.LogError("[SimpleBoneExplanationClient] Aktif LessonManager bulunamadı; basit anlatım isteği gönderilemedi.", this);
+            return;
+        }
+
+        Initialize(lessonManager.titleText, lessonManager.infoText);
+
+        if (infoTitleText == null || infoBodyText == null)
+        {
+            Debug.LogError("[SimpleBoneExplanationClient] Title veya body text referansı eksik.", this);
+            return;
+        }
+
+        string boneName = CleanBoneTitle(infoTitleText.text);
+        string unitName = "";
+        string originalText = SafeTrim(infoBodyText.text);
+
+        if (string.IsNullOrWhiteSpace(boneName))
+        {
+            Debug.LogError("[SimpleBoneExplanationClient] Kemik adı bulunamadı.", this);
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(originalText))
+        {
+            Debug.LogError("[SimpleBoneExplanationClient] Açıklama metni bulunamadı.", this);
+            return;
+        }
+
+        if (originalText == LoadingMessage)
+        {
+            Debug.LogWarning("[SimpleBoneExplanationClient] Zaten basit anlatım hazırlanıyor.", this);
+            return;
+        }
+
+        RequestSimpleExplanation(boneName, unitName, originalText);
     }
 
     public void RequestSimpleExplanation(string boneName, string unitName, string originalText)
@@ -65,30 +110,6 @@ public class SimpleBoneExplanationClient : MonoBehaviour
         _requestRoutine = StartCoroutine(RequestSimpleExplanationRoutine(requestId, boneName, unitName, originalText));
     }
 
-    public void RequestCurrentBoneSimpleExplanation()
-    {
-        LessonManager lessonManager = LessonManager.Instance;
-        if (lessonManager == null)
-            lessonManager = FindFirstObjectByType<LessonManager>();
-
-        if (lessonManager == null)
-        {
-            Debug.LogError("[SimpleBoneExplanationClient] Aktif LessonManager bulunamadı; basit anlatım isteği gönderilemedi.", this);
-            return;
-        }
-
-        ResolveLessonUIReader();
-        Initialize(lessonManager.titleText, lessonManager.infoText, lessonUIReader);
-
-        if (!lessonManager.TryGetCurrentBonePayload(out string boneName, out string unitName, out string originalText))
-        {
-            Debug.LogError("[SimpleBoneExplanationClient] Aktif bilgi kartı verisi bulunamadı; basit anlatım isteği gönderilemedi.", this);
-            return;
-        }
-
-        RequestSimpleExplanation(boneName, unitName, originalText);
-    }
-
     private IEnumerator RequestSimpleExplanationRoutine(int requestId, string boneName, string unitName, string originalText)
     {
         boneName = SafeTrim(boneName);
@@ -101,9 +122,10 @@ public class SimpleBoneExplanationClient : MonoBehaviour
         if (infoBodyText != null)
             infoBodyText.text = LoadingMessage;
 
-        ResolveLessonUIReader();
-        if (lessonUIReader != null)
-            lessonUIReader.StopCurrentSpeech();
+        if (stopCurrentSpeechBeforeRequest && TTSClient.Instance != null)
+        {
+            TTSClient.Instance.Stop();
+        }
 
         SimpleBoneExplanationRequest payload = new SimpleBoneExplanationRequest
         {
@@ -118,6 +140,7 @@ public class SimpleBoneExplanationClient : MonoBehaviour
         using (UnityWebRequest request = new UnityWebRequest(backendUrl, "POST"))
         {
             byte[] bodyRaw = Encoding.UTF8.GetBytes(requestJson);
+
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
@@ -137,7 +160,9 @@ public class SimpleBoneExplanationClient : MonoBehaviour
                 ApplyFallback(
                     boneName,
                     originalText,
-                    $"Gemini basit anlatım alınamadı: {request.error} | HTTP {request.responseCode}");
+                    $"Gemini basit anlatım alınamadı: {request.error} | HTTP {request.responseCode}"
+                );
+
                 yield break;
             }
 
@@ -145,6 +170,7 @@ public class SimpleBoneExplanationClient : MonoBehaviour
             Debug.Log($"[SimpleBoneExplanationClient] Response JSON: {responseJson}", this);
 
             SimpleBoneExplanationResponse response;
+
             try
             {
                 response = JsonUtility.FromJson<SimpleBoneExplanationResponse>(responseJson);
@@ -161,18 +187,23 @@ public class SimpleBoneExplanationClient : MonoBehaviour
                 yield break;
             }
 
-            string responseBoneName = string.IsNullOrWhiteSpace(response.bone_name) ? boneName : response.bone_name.Trim();
+            string responseBoneName = string.IsNullOrWhiteSpace(response.bone_name)
+                ? boneName
+                : response.bone_name.Trim();
+
+            string simpleExplanation = response.simple_explanation.Trim();
 
             if (infoTitleText != null)
                 infoTitleText.text = responseBoneName + " - Basit Anlatım";
 
             if (infoBodyText != null)
-                infoBodyText.text = response.simple_explanation.Trim();
+                infoBodyText.text = simpleExplanation;
 
-            string speechText = ResolveSimpleExplanationSpeechText(response);
-            ResolveLessonUIReader();
-            if (lessonUIReader != null)
-                lessonUIReader.SpeakReviewText(speechText);
+            if (speakGeneratedExplanation && TTSClient.Instance != null)
+            {
+                string speechText = ResolveSimpleExplanationSpeechText(response);
+                TTSClient.Instance.Speak(speechText);
+            }
 
             _requestRoutine = null;
         }
@@ -188,34 +219,42 @@ public class SimpleBoneExplanationClient : MonoBehaviour
         if (infoBodyText != null)
             infoBodyText.text = originalText;
 
-        ResolveLessonUIReader();
-        if (lessonUIReader != null)
-            lessonUIReader.SpeakReviewText(originalText);
+        if (speakFallbackOriginalText && TTSClient.Instance != null)
+        {
+            TTSClient.Instance.Speak(originalText);
+        }
 
         _requestRoutine = null;
     }
 
-    private void ResolveLessonUIReader()
-    {
-        if (lessonUIReader != null)
-            return;
-
-        lessonUIReader = FindFirstObjectByType<LessonUIReader>();
-    }
-
     private static bool IsValidResponse(SimpleBoneExplanationResponse response)
-{
-    return response != null
-           && !string.IsNullOrWhiteSpace(response.simple_explanation);
-}
+    {
+        return response != null
+               && !string.IsNullOrWhiteSpace(response.simple_explanation);
+    }
 
     private static string ResolveSimpleExplanationSpeechText(SimpleBoneExplanationResponse response)
     {
         string speechText = response != null ? SafeTrim(response.speech_text) : "";
+
         if (!string.IsNullOrEmpty(speechText))
             return speechText;
 
         return response != null ? SafeTrim(response.simple_explanation) : "";
+    }
+
+    private static string CleanBoneTitle(string title)
+    {
+        title = SafeTrim(title);
+
+        if (string.IsNullOrEmpty(title))
+            return "";
+
+        title = title.Replace(" - Basit Anlatım", "");
+        title = title.Replace("- Basit Anlatım", "");
+        title = title.Replace("Basit Anlatım", "");
+
+        return title.Trim();
     }
 
     private static string SafeTrim(string value)

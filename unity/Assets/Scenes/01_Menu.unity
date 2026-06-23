@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.05
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.60784316, g: 0.60784316, b: 0.60784316, a: 1}
+  m_AmbientSkyColor: {r: 0.82641506, g: 0.82641506, b: 0.82641506, a: 1}
   m_AmbientEquatorColor: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
   m_AmbientGroundColor: {r: 1, g: 1, b: 1, a: 1}
   m_AmbientIntensity: 1
@@ -1761,19 +1761,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 129956328}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 129956330}
-        m_TargetAssemblyTypeName: GenericUnitButton, Assembly-CSharp
-        m_MethodName: Click
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &129956328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1821,13 +1809,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 129956325}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1d5d66bfcf4c7547917a86092d3688a, type: 3}
+  m_Script: {fileID: 11500000, guid: b0000b9cf06c8c8448d184307418a1ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneLoader: {fileID: 1774060356}
-  targetSceneName: StartLearningDemo
   unitID: 2
-  lessonSection: 0
+  targetSceneName: 08_MotionSystem_Learning
 --- !u!1 &174913578
 GameObject:
   m_ObjectHideFlags: 0
@@ -1977,7 +1963,7 @@ GameObject:
   - component: {fileID: 177811952}
   - component: {fileID: 177811951}
   - component: {fileID: 177811950}
-  - component: {fileID: 177811949}
+  - component: {fileID: 177811953}
   m_Layer: 0
   m_Name: UstEkstremiteArterleri
   m_TagString: Untagged
@@ -2005,22 +1991,6 @@ RectTransform:
   m_AnchoredPosition: {x: -69.7, y: 35}
   m_SizeDelta: {x: 180, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &177811949
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 177811947}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce916f2470c59cc4d9b30279ca0f67c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneLoader: {fileID: 1774060356}
-  subUnitInt: 3
-  returnMenuPanelName: AtardamarlarPaneli
-  setReturnPanel: 1
 --- !u!114 &177811950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2064,19 +2034,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 177811951}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 177811949}
-        m_TargetAssemblyTypeName: CirculationSystemSubUnitButton, Assembly-CSharp
-        m_MethodName: Click
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: SkeletalMusclesPanel
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &177811951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2115,6 +2073,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 177811947}
   m_CullTransparentMesh: 1
+--- !u!114 &177811953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 177811947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0000b9cf06c8c8448d184307418a1ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitID: 2
+  targetSceneName: 09_CirculationSystem_Learning
 --- !u!1 &181474301
 GameObject:
   m_ObjectHideFlags: 0
@@ -2264,7 +2236,7 @@ GameObject:
   - component: {fileID: 182722746}
   - component: {fileID: 182722745}
   - component: {fileID: 182722744}
-  - component: {fileID: 182722743}
+  - component: {fileID: 182722747}
   m_Layer: 0
   m_Name: UstEkstremiteVenleri
   m_TagString: Untagged
@@ -2292,22 +2264,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 35}
   m_SizeDelta: {x: 180, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &182722743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 182722741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce916f2470c59cc4d9b30279ca0f67c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneLoader: {fileID: 1774060356}
-  subUnitInt: 7
-  returnMenuPanelName: ToplardamarlarPaneli
-  setReturnPanel: 1
 --- !u!114 &182722744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2351,19 +2307,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 182722745}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 182722743}
-        m_TargetAssemblyTypeName: CirculationSystemSubUnitButton, Assembly-CSharp
-        m_MethodName: Click
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &182722745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2402,6 +2346,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 182722741}
   m_CullTransparentMesh: 1
+--- !u!114 &182722747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182722741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0000b9cf06c8c8448d184307418a1ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitID: 5
+  targetSceneName: 09_CirculationSystem_Learning
 --- !u!1 &189666941
 GameObject:
   m_ObjectHideFlags: 0
@@ -3436,115 +3394,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 242607393}
   m_CullTransparentMesh: 1
---- !u!1 &248276617
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 248276621}
-  - component: {fileID: 248276620}
-  - component: {fileID: 248276619}
-  - component: {fileID: 248276618}
-  m_Layer: 0
-  m_Name: Plane
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!64 &248276618
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 248276617}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &248276619
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 248276617}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &248276620
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 248276617}
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &248276621
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 248276617}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &248357532
 GameObject:
   m_ObjectHideFlags: 0
@@ -5418,7 +5267,7 @@ GameObject:
   - component: {fileID: 396171452}
   - component: {fileID: 396171451}
   - component: {fileID: 396171450}
-  - component: {fileID: 396171453}
+  - component: {fileID: 396171454}
   m_Layer: 0
   m_Name: BonesoftheLowerExtremities
   m_TagString: Untagged
@@ -5489,19 +5338,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 396171451}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 396171453}
-        m_TargetAssemblyTypeName: GenericUnitButton, Assembly-CSharp
-        m_MethodName: Click
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &396171451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5540,7 +5377,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 396171448}
   m_CullTransparentMesh: 1
---- !u!114 &396171453
+--- !u!114 &396171454
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5549,13 +5386,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 396171448}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1d5d66bfcf4c7547917a86092d3688a, type: 3}
+  m_Script: {fileID: 11500000, guid: b0000b9cf06c8c8448d184307418a1ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneLoader: {fileID: 1774060356}
-  targetSceneName: StartLearningDemo
   unitID: 3
-  lessonSection: 0
+  targetSceneName: 08_MotionSystem_Learning
 --- !u!1001 &397261426
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5610,7 +5445,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8110,7 +7945,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.83396226, g: 0.78518337, b: 0.78518337, a: 0.49019608}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -8886,6 +8721,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 661007939}
   m_CullTransparentMesh: 1
+--- !u!1001 &675766619
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1507086520634593557, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_Name
+      value: Lab
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.30021
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 2823603156136413437, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8a315e2433c3eef44bcf1dae0a4897e9, type: 3}
 --- !u!1 &690809883
 GameObject:
   m_ObjectHideFlags: 0
@@ -11378,63 +11270,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 927207593}
   m_CullTransparentMesh: 1
---- !u!1001 &942304044
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2.30021
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647505933358215970, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4167338179554339224, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
-      propertyPath: m_Name
-      value: Lab
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: bdb5b43c45658cb48820e8911fba3197, type: 3}
 --- !u!1 &947458013
 GameObject:
   m_ObjectHideFlags: 0
@@ -11918,7 +11753,7 @@ GameObject:
   - component: {fileID: 972306261}
   - component: {fileID: 972306260}
   - component: {fileID: 972306259}
-  - component: {fileID: 972306258}
+  - component: {fileID: 972306262}
   m_Layer: 0
   m_Name: AltEkstremiteArterleri
   m_TagString: Untagged
@@ -11946,22 +11781,6 @@ RectTransform:
   m_AnchoredPosition: {x: 68.3, y: 35}
   m_SizeDelta: {x: 180, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &972306258
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 972306256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce916f2470c59cc4d9b30279ca0f67c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneLoader: {fileID: 1774060356}
-  subUnitInt: 5
-  returnMenuPanelName: AtardamarlarPaneli
-  setReturnPanel: 1
 --- !u!114 &972306259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12005,19 +11824,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 972306260}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 972306258}
-        m_TargetAssemblyTypeName: CirculationSystemSubUnitButton, Assembly-CSharp
-        m_MethodName: Click
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: SkeletalMusclesPanel
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &972306260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12056,6 +11863,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 972306256}
   m_CullTransparentMesh: 1
+--- !u!114 &972306262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 972306256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0000b9cf06c8c8448d184307418a1ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitID: 3
+  targetSceneName: 09_CirculationSystem_Learning
 --- !u!1 &998841836
 GameObject:
   m_ObjectHideFlags: 0
@@ -12068,7 +11889,7 @@ GameObject:
   - component: {fileID: 998841841}
   - component: {fileID: 998841840}
   - component: {fileID: 998841839}
-  - component: {fileID: 998841838}
+  - component: {fileID: 998841842}
   m_Layer: 0
   m_Name: "D\u0131sYap\u0131s\u0131"
   m_TagString: Untagged
@@ -12096,22 +11917,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -10}
   m_SizeDelta: {x: 180, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &998841838
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 998841836}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce916f2470c59cc4d9b30279ca0f67c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneLoader: {fileID: 1774060356}
-  subUnitInt: 2
-  returnMenuPanelName: KalbinYapisiPaneli
-  setReturnPanel: 1
 --- !u!114 &998841839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12155,19 +11960,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 998841840}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 998841838}
-        m_TargetAssemblyTypeName: CirculationSystemSubUnitButton, Assembly-CSharp
-        m_MethodName: Click
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &998841840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12206,6 +11999,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 998841836}
   m_CullTransparentMesh: 1
+--- !u!114 &998841842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998841836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0000b9cf06c8c8448d184307418a1ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitID: 1
+  targetSceneName: 09_CirculationSystem_Learning
 --- !u!1 &1041461788
 GameObject:
   m_ObjectHideFlags: 0
@@ -12617,54 +12424,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1060810385}
   m_CullTransparentMesh: 1
---- !u!1 &1078126704
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1078126706}
-  - component: {fileID: 1078126705}
-  m_Layer: 0
-  m_Name: BoundaryManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1078126705
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1078126704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18c6208df9f6dc8478ead90653b99fc2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  xrOriginRoot: {fileID: 1295740913}
-  head: {fileID: 1295740912}
-  roomBounds: {fileID: 1572335577}
-  margin: 0.15
---- !u!4 &1078126706
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1078126704}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.123581, y: 0.55338526, z: 4.0386477}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1106653506
 GameObject:
   m_ObjectHideFlags: 0
@@ -15634,16 +15393,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
---- !u!4 &1295740912 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 657184242118504721, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
-  m_PrefabInstance: {fileID: 1295740911}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1295740913 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2218496723442559053, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
-  m_PrefabInstance: {fileID: 1295740911}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1300732165
 GameObject:
   m_ObjectHideFlags: 0
@@ -16149,8 +15898,8 @@ Transform:
   m_GameObject: {fileID: 1369630643}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.107, z: 0.84}
-  m_LocalScale: {x: 6.07, y: 6.07, z: 6.07}
+  m_LocalPosition: {x: 0, y: 0.11, z: 2.39}
+  m_LocalScale: {x: 5.082836, y: 5.082836, z: 5.082836}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -18756,114 +18505,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1569920187}
   m_CullTransparentMesh: 1
---- !u!1 &1572335576
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1572335580}
-  - component: {fileID: 1572335579}
-  - component: {fileID: 1572335578}
-  - component: {fileID: 1572335577}
-  m_Layer: 0
-  m_Name: RoomBoundaryVolume
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!65 &1572335577
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1572335576}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 9.955219, y: 3.493939, z: 7.114851}
-  m_Center: {x: 3.4143693, y: 0.93463206, z: -3.3426914}
---- !u!23 &1572335578
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1572335576}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1572335579
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1572335576}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &1572335580
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1572335576}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.4551497, y: 0.77758735, z: 5.680628}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1577346695
 GameObject:
   m_ObjectHideFlags: 0
@@ -18876,7 +18517,7 @@ GameObject:
   - component: {fileID: 1577346700}
   - component: {fileID: 1577346699}
   - component: {fileID: 1577346698}
-  - component: {fileID: 1577346697}
+  - component: {fileID: 1577346701}
   m_Layer: 0
   m_Name: NabizAlinabilenArterler
   m_TagString: Untagged
@@ -18904,22 +18545,6 @@ RectTransform:
   m_AnchoredPosition: {x: 1.7000031, y: -10}
   m_SizeDelta: {x: 180, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1577346697
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1577346695}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce916f2470c59cc4d9b30279ca0f67c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneLoader: {fileID: 1774060356}
-  subUnitInt: 6
-  returnMenuPanelName: AtardamarlarPaneli
-  setReturnPanel: 1
 --- !u!114 &1577346698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18963,19 +18588,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1577346699}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1577346697}
-        m_TargetAssemblyTypeName: CirculationSystemSubUnitButton, Assembly-CSharp
-        m_MethodName: Click
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: SkeletalMusclesPanel
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1577346699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19014,6 +18627,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1577346695}
   m_CullTransparentMesh: 1
+--- !u!114 &1577346701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1577346695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0000b9cf06c8c8448d184307418a1ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitID: 4
+  targetSceneName: 09_CirculationSystem_Learning
 --- !u!1 &1579255705
 GameObject:
   m_ObjectHideFlags: 0
@@ -20059,7 +19686,7 @@ GameObject:
   - component: {fileID: 1660699228}
   - component: {fileID: 1660699227}
   - component: {fileID: 1660699226}
-  - component: {fileID: 1660699229}
+  - component: {fileID: 1660699230}
   m_Layer: 0
   m_Name: BonesoftheHeadandFace
   m_TagString: Untagged
@@ -20130,19 +19757,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1660699227}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1660699229}
-        m_TargetAssemblyTypeName: GenericUnitButton, Assembly-CSharp
-        m_MethodName: Click
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: HareketSistemiPaneli
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1660699227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20181,7 +19796,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1660699224}
   m_CullTransparentMesh: 1
---- !u!114 &1660699229
+--- !u!114 &1660699230
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20190,13 +19805,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1660699224}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1d5d66bfcf4c7547917a86092d3688a, type: 3}
+  m_Script: {fileID: 11500000, guid: b0000b9cf06c8c8448d184307418a1ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneLoader: {fileID: 1774060356}
-  targetSceneName: StartLearningDemo
   unitID: 0
-  lessonSection: 0
+  targetSceneName: 08_MotionSystem_Learning
 --- !u!1 &1663503678
 GameObject:
   m_ObjectHideFlags: 0
@@ -21720,7 +21333,7 @@ GameObject:
   - component: {fileID: 1788383119}
   - component: {fileID: 1788383118}
   - component: {fileID: 1788383117}
-  - component: {fileID: 1788383116}
+  - component: {fileID: 1788383120}
   m_Layer: 0
   m_Name: AltEkstremiteVenleri
   m_TagString: Untagged
@@ -21748,22 +21361,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -10}
   m_SizeDelta: {x: 180, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1788383116
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1788383114}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce916f2470c59cc4d9b30279ca0f67c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneLoader: {fileID: 1774060356}
-  subUnitInt: 8
-  returnMenuPanelName: ToplardamarlarPaneli
-  setReturnPanel: 1
 --- !u!114 &1788383117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21808,7 +21405,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1788383116}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CirculationSystemSubUnitButton, Assembly-CSharp
         m_MethodName: Click
         m_Mode: 1
@@ -21858,6 +21455,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1788383114}
   m_CullTransparentMesh: 1
+--- !u!114 &1788383120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788383114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0000b9cf06c8c8448d184307418a1ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitID: 6
+  targetSceneName: 09_CirculationSystem_Learning
 --- !u!1 &1794196589
 GameObject:
   m_ObjectHideFlags: 0
@@ -23228,18 +22839,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1909617812}
-        m_TargetAssemblyTypeName: GenericUnitButton, Assembly-CSharp
-        m_MethodName: Click
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 344162259}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
@@ -23311,13 +22910,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1909617807}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1d5d66bfcf4c7547917a86092d3688a, type: 3}
+  m_Script: {fileID: 11500000, guid: b0000b9cf06c8c8448d184307418a1ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneLoader: {fileID: 1774060356}
-  targetSceneName: StartLearningDemo
   unitID: 1
-  lessonSection: 0
+  targetSceneName: 08_MotionSystem_Learning
 --- !u!1 &1912571297
 GameObject:
   m_ObjectHideFlags: 0
@@ -23617,7 +23214,7 @@ GameObject:
   - component: {fileID: 1932274877}
   - component: {fileID: 1932274876}
   - component: {fileID: 1932274875}
-  - component: {fileID: 1932274874}
+  - component: {fileID: 1932274878}
   m_Layer: 0
   m_Name: IcYapisi
   m_TagString: Untagged
@@ -23645,22 +23242,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 35}
   m_SizeDelta: {x: 180, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1932274874
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1932274872}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce916f2470c59cc4d9b30279ca0f67c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneLoader: {fileID: 1774060356}
-  subUnitInt: 1
-  returnMenuPanelName: KalbinYapisiPaneli
-  setReturnPanel: 1
 --- !u!114 &1932274875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23704,19 +23285,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1932274876}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1932274874}
-        m_TargetAssemblyTypeName: CirculationSystemSubUnitButton, Assembly-CSharp
-        m_MethodName: Click
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1932274876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23755,6 +23324,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1932274872}
   m_CullTransparentMesh: 1
+--- !u!114 &1932274878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932274872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0000b9cf06c8c8448d184307418a1ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitID: 0
+  targetSceneName: 09_CirculationSystem_Learning
 --- !u!1 &1934300948
 GameObject:
   m_ObjectHideFlags: 0
@@ -25159,7 +24742,7 @@ GameObject:
   - component: {fileID: 2077520764}
   - component: {fileID: 2077520763}
   - component: {fileID: 2077520762}
-  - component: {fileID: 2077520765}
+  - component: {fileID: 2077520766}
   m_Layer: 0
   m_Name: MusclesoftheLowerExtremities
   m_TagString: Untagged
@@ -25230,19 +24813,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2077520763}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2077520765}
-        m_TargetAssemblyTypeName: GenericUnitButton, Assembly-CSharp
-        m_MethodName: Click
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2077520763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25281,7 +24852,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2077520760}
   m_CullTransparentMesh: 1
---- !u!114 &2077520765
+--- !u!114 &2077520766
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -25290,13 +24861,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2077520760}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1d5d66bfcf4c7547917a86092d3688a, type: 3}
+  m_Script: {fileID: 11500000, guid: b0000b9cf06c8c8448d184307418a1ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneLoader: {fileID: 1774060356}
-  targetSceneName: StartLearningDemo
   unitID: 5
-  lessonSection: 0
+  targetSceneName: 08_MotionSystem_Learning
 --- !u!1 &2105548721
 GameObject:
   m_ObjectHideFlags: 0
@@ -25446,7 +25015,7 @@ GameObject:
   - component: {fileID: 2129284811}
   - component: {fileID: 2129284810}
   - component: {fileID: 2129284809}
-  - component: {fileID: 2129284812}
+  - component: {fileID: 2129284813}
   m_Layer: 0
   m_Name: MusclesoftheUpperExtremities
   m_TagString: Untagged
@@ -25517,19 +25086,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2129284810}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2129284812}
-        m_TargetAssemblyTypeName: GenericUnitButton, Assembly-CSharp
-        m_MethodName: Click
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2129284810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25568,7 +25125,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2129284807}
   m_CullTransparentMesh: 1
---- !u!114 &2129284812
+--- !u!114 &2129284813
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -25577,13 +25134,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2129284807}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1d5d66bfcf4c7547917a86092d3688a, type: 3}
+  m_Script: {fileID: 11500000, guid: b0000b9cf06c8c8448d184307418a1ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneLoader: {fileID: 1774060356}
-  targetSceneName: StartLearningDemo
   unitID: 4
-  lessonSection: 0
+  targetSceneName: 08_MotionSystem_Learning
 --- !u!1 &2141302857
 GameObject:
   m_ObjectHideFlags: 0
@@ -25874,12 +25429,9 @@ SceneRoots:
   - {fileID: 1730641144}
   - {fileID: 397261426}
   - {fileID: 605922677}
-  - {fileID: 248276621}
   - {fileID: 926984482}
   - {fileID: 1369630645}
   - {fileID: 1235706133}
   - {fileID: 800000702}
   - {fileID: 1111768752}
-  - {fileID: 942304044}
-  - {fileID: 1572335580}
-  - {fileID: 1078126706}
+  - {fileID: 675766619}
