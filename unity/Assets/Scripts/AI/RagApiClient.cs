@@ -85,7 +85,7 @@ public class RagApiClient : MonoBehaviour
     private Scrollbar _answerScrollbar;
     private GameObject _virtualKeyboardPanel;
     private bool _keyboardVisible;
-
+    private bool _hasChatUi;
     private static readonly Regex CevaplaCommandRegex =
         new Regex(@"\b(cevapla|tamam)\b", RegexOptions.IgnoreCase | RegexOptions.Compiled);
     private static readonly Regex MultiSpaceRegex =
@@ -107,12 +107,19 @@ public class RagApiClient : MonoBehaviour
         public string rate;
     }
 
-    private void Awake()
+private void Awake()
 {
+    _hasChatUi = HasChatUiReferences();
+
+    if (!_hasChatUi)
+    {
+        Debug.Log(
+            "[RagApiClient] Chat UI referansları bu sahnede yok. UI işlemleri atlanacak, RagApiClient çalışmaya devam edecek."
+        );
+    }
+
     if (askButton != null)
         askButton.onClick.AddListener(OnAskClicked);
-    else
-        Debug.LogError("[RagApiClient] askButton Inspector'da atanmamış!");
 
     if (questionInput != null)
         questionInput.onValueChanged.AddListener(OnQuestionInputChanged);
@@ -121,15 +128,26 @@ public class RagApiClient : MonoBehaviour
     if (_audio == null)
         _audio = gameObject.AddComponent<AudioSource>();
 
-    CreateSpeechButtons();
+    if (_hasChatUi)
+        CreateSpeechButtons();
 
     if (SettingsManager.Instance != null)
         SettingsManager.Instance.OnAIChatVoiceEnabledChanged += OnAIChatVoiceEnabledChanged;
 
-    ApplyAIChatVoiceSetting(IsAIChatVoiceEnabled());
-    SetAnswerVisible(false);
-    RefreshInteractableState();
-    ShowIntroPanel();
+    if (_hasChatUi)
+    {
+        ApplyAIChatVoiceSetting(IsAIChatVoiceEnabled());
+        SetAnswerVisible(false);
+        RefreshInteractableState();
+        ShowIntroPanel();
+    }
+}
+
+private bool HasChatUiReferences()
+{
+    return questionInput != null &&
+           askButton != null &&
+           answerText != null;
 }
 
     private void OnDestroy()
@@ -205,21 +223,35 @@ public class RagApiClient : MonoBehaviour
     #region Ask (mevcut fonksiyon)
 
     private void OnAskClicked()
+{
+    if (_isAsking || _isSttRunning || _isRecording)
+        return;
+
+    if (questionInput == null)
     {
-        if (_isAsking || _isSttRunning || _isRecording) return;
-
-        string q = questionInput.text.Trim();
-
-        if (string.IsNullOrEmpty(q))
-        {
-            ShowAnswerMessage(EmptyQuestionFeedback);
-            return;
-        }
-
-        SetVirtualKeyboardVisible(false);
-        ShowAnswerMessage("Cevap hazırlanıyor...");
-        StartCoroutine(SendQuestion(q));
+        Debug.LogWarning("[RagApiClient] Question Input yok. UI üzerinden soru gönderilemedi.");
+        return;
     }
+
+    AskFromExternal(questionInput.text);
+}
+    public void AskFromExternal(string question)
+{
+    if (_isAsking || _isSttRunning || _isRecording)
+        return;
+
+    question = question != null ? question.Trim() : "";
+
+    if (string.IsNullOrEmpty(question))
+    {
+        ShowAnswerMessage(EmptyQuestionFeedback);
+        return;
+    }
+
+    SetVirtualKeyboardVisible(false);
+    ShowAnswerMessage("Cevap hazırlanıyor...");
+    StartCoroutine(SendQuestion(question));
+}
 
     private IEnumerator SendQuestion(string question)
     {
@@ -533,8 +565,11 @@ public class RagApiClient : MonoBehaviour
 
         byte[] wav = EncodeToWav(trimmed);
         _questionDraftBeforeStt = questionInput != null ? questionInput.text.Trim() : "";
-        questionInput.text = "Konuşma algılanıyor...";
-        StartCoroutine(RequestSTT(wav));
+
+if (questionInput != null)
+    questionInput.text = "Konuşma algılanıyor...";
+
+StartCoroutine(RequestSTT(wav));
     }
 
     private float ReadMicLevel(int micPosition)
@@ -562,95 +597,136 @@ public class RagApiClient : MonoBehaviour
         return sampleCount > 0 ? (sum / sampleCount) : 0f;
     }
 
+    private void SetQuestionInputText(string text)
+{
+    if (questionInput != null)
+        questionInput.text = text ?? "";
+}
+
+private string GetQuestionInputText()
+{
+    return questionInput != null ? questionInput.text.Trim() : "";
+}
+
     private IEnumerator RequestSTT(byte[] wavData)
+{
+    _isSttRunning = true;
+    RefreshInteractableState();
+
+    bool triggerAutoAsk = false;
+    string questionToAsk = "";
+
+    WWWForm form = new WWWForm();
+    form.AddBinaryData("file", wavData, "recording.wav", "audio/wav");
+
+    UnityWebRequest req = null;
+
+    try
     {
-        _isSttRunning = true;
-        RefreshInteractableState();
-        bool triggerAutoAsk = false;
+        req = UnityWebRequest.Post(sttUrl, form);
+        req.timeout = 60;
 
-        WWWForm form = new WWWForm();
-        form.AddBinaryData("file", wavData, "recording.wav", "audio/wav");
+        yield return req.SendWebRequest();
 
-        UnityWebRequest req = null;
-        try
+        if (req.result == UnityWebRequest.Result.Success)
         {
-            req = UnityWebRequest.Post(sttUrl, form);
-            req.timeout = 60;
-            yield return req.SendWebRequest();
+            SttResponse resp =
+                JsonUtility.FromJson<SttResponse>(req.downloadHandler.text);
 
-            if (req.result == UnityWebRequest.Result.Success)
+            string recognized = resp?.text ?? "";
+
+            if (string.IsNullOrWhiteSpace(recognized))
             {
-                SttResponse resp =
-                    JsonUtility.FromJson<SttResponse>(req.downloadHandler.text);
-                string recognized = resp?.text ?? "";
+                SetQuestionInputText("");
+                SetLatestAnswer("Konuşma anlaşılamadı, tekrar deneyin.");
+            }
+            else
+            {
+                bool hasCevapla = ContainsCevaplaCommand(recognized);
+                string cleaned = RemoveCevaplaCommand(recognized);
 
-                if (string.IsNullOrEmpty(recognized))
+                if (hasCevapla)
                 {
-                    questionInput.text = "";
-                    SetLatestAnswer("Konuşma anlaşılamadı, tekrar deneyin.");
-                }
-                else
-                {
-                    bool hasCevapla = ContainsCevaplaCommand(recognized);
-                    string cleaned = RemoveCevaplaCommand(recognized);
-
-                    if (hasCevapla)
+                    // Kullanıcı sadece "cevapla" veya "tamam" dediyse,
+                    // daha önce inputta yazan soruyu kullanmaya çalışır.
+                    if (string.IsNullOrWhiteSpace(cleaned))
                     {
-                        // "sadece cevapla" dendiğinde mevcut input draft'ını kullan.
-                        if (string.IsNullOrWhiteSpace(cleaned))
-                        {
-                            string draft = _questionDraftBeforeStt;
-                            if (string.IsNullOrWhiteSpace(draft) || draft == "Konuşma algılanıyor...")
-                                draft = questionInput != null ? questionInput.text.Trim() : "";
+                        string draft = _questionDraftBeforeStt;
 
-                            if (string.IsNullOrWhiteSpace(draft) || draft == "Konuşma algılanıyor...")
-                            {
-                                SetLatestAnswer("Gönderilecek bir soru bulunamadı. Önce sorunuzu söyleyin veya yazın.");
-                                questionInput.text = "";
-                            }
-                            else
-                            {
-                                questionInput.text = draft;
-                                triggerAutoAsk = true;
-                            }
+                        if (string.IsNullOrWhiteSpace(draft) ||
+                            draft == "Konuşma algılanıyor...")
+                        {
+                            draft = GetQuestionInputText();
+                        }
+
+                        if (string.IsNullOrWhiteSpace(draft) ||
+                            draft == "Konuşma algılanıyor...")
+                        {
+                            SetLatestAnswer("Gönderilecek bir soru bulunamadı. Önce sorunuzu söyleyin veya yazın.");
+                            SetQuestionInputText("");
                         }
                         else
                         {
-                            questionInput.text = cleaned;
+                            questionToAsk = draft;
+                            SetQuestionInputText(draft);
                             triggerAutoAsk = true;
                         }
                     }
                     else
                     {
-                        // Sadece soru söylendiyse input'a yaz, otomatik gönderme.
-                        questionInput.text = recognized.Trim();
-                        const string readyMessage = "Sorunuz hazır. Göndermek için 'cevapla' veya 'tamam' deyin ya da gönder butonuna basın.";
-                        SetLatestAnswer(readyMessage);
-                        StartAutomaticTTS(readyMessage);
+                        // Kullanıcı soru + cevapla komutunu birlikte söylediyse:
+                        // Örn: "Femur kemiği nedir cevapla"
+                        questionToAsk = cleaned;
+                        SetQuestionInputText(cleaned);
+                        triggerAutoAsk = true;
+                    }
+                }
+                else
+                {
+                    // Kullanıcı sadece soru söylediyse inputa yazılır.
+                    // Otomatik gönderilmez.
+                    string recognizedQuestion = recognized.Trim();
+
+                    SetQuestionInputText(recognizedQuestion);
+
+                    const string readyMessage =
+                        "Sorunuz hazır. Göndermek için 'cevapla' veya 'tamam' deyin ya da gönder butonuna basın.";
+
+                    SetLatestAnswer(readyMessage);
+                    StartAutomaticTTS(readyMessage);
+
+                    if (questionInput == null)
+                    {
+                        Debug.Log(
+                            "[RagApiClient] UI olmadığı için algılanan soru inputa yazılamadı: " +
+                            recognizedQuestion
+                        );
                     }
                 }
             }
-            else
-            {
-                questionInput.text = "";
-                SetLatestAnswer("Sunucuya bağlanamadı. Konuşma algılanamadı.");
-                Debug.LogWarning($"[RagApiClient] STT hatası: {req.error}");
-            }
         }
-        finally
+        else
         {
-            req?.Dispose();
-            _isSttRunning = false;
-            RefreshInteractableState();
-            _questionDraftBeforeStt = "";
-        }
-
-        if (triggerAutoAsk)
-        {
-            // STT bittiğinde Sor butonuna basılmış gibi gönder.
-            OnAskClicked();
+            SetQuestionInputText("");
+            SetLatestAnswer("Sunucuya bağlanamadı. Konuşma algılanamadı.");
+            Debug.LogWarning($"[RagApiClient] STT hatası: {req.error}");
         }
     }
+    finally
+    {
+        req?.Dispose();
+
+        _isSttRunning = false;
+        RefreshInteractableState();
+
+        _questionDraftBeforeStt = "";
+    }
+
+    if (triggerAutoAsk)
+    {
+        AskFromExternal(questionToAsk);
+    }
+}
 
     #endregion
 
