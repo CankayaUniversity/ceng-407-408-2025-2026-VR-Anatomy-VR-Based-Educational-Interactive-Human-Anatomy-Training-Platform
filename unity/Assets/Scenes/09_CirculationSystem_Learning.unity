@@ -76864,7 +76864,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3954e895a8d1e864bb06b7cfab7a446f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ttsUrl: http://127.0.0.1:8001/tts
+  ttsUrl: https://vr-anatomy-backend.onrender.com/tts
   femaleVoice: tr-TR-EmelNeural
   maleVoice: tr-TR-AhmetNeural
   audioSourceSearchRoot: {fileID: 2085284092}
