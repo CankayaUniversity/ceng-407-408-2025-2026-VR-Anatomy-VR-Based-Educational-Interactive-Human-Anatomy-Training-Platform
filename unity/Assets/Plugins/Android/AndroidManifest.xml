@@ -16,7 +16,8 @@
         <activity
             android:name="com.unity3d.player.UnityPlayerActivity"
             android:theme="@style/UnityThemeSelector"
-            android:excludeFromRecents="true">
+            android:excludeFromRecents="true"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -29,7 +30,8 @@
         <activity
             android:name="com.unity3d.player.UnityPlayerGameActivity"
             android:theme="@style/BaseUnityGameActivityTheme"
-            android:excludeFromRecents="true">
+            android:excludeFromRecents="true"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
